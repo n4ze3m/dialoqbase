@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ChatBot {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  prompt      String?
+  vectorSearchProvider String? @default("Chroma")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
