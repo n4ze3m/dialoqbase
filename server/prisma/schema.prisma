@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -20,11 +17,26 @@ model User {
 }
 
 model ChatBot {
-  id          String   @id @default(uuid())
-  name        String
-  description String?
-  prompt      String?
-  vectorSearchProvider String? @default("Chroma")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                   String             @id @default(uuid())
+  name                 String
+  description          String?
+  prompt               String?
+  vectorSearchProvider String?            @default("Faiss")
+  pineconeApiKey       String?
+  pineconeIndexId      String?
+  pineconeEnvironment  String?
+  knowledge            ChatBotKnowledge[]
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+}
+
+model ChatBotKnowledge {
+  id        String   @id @default(uuid())
+  chatBotId String
+  chat      ChatBot  @relation(fields: [chatBotId], references: [id])
+  type      String   @default("WEBSITE")
+  status    String   @default("PENDING")
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

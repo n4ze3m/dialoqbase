@@ -3,7 +3,8 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./routes/root";
-import DashboardLayout from "./components/Layout";
+import DashboardLayout from "./Layout";
+import NewRoot from "./routes/new/root";
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
       {
         element: <Root />,
         path: "/"
+      },
+      {
+        element: <NewRoot />,
+        path: "/new"
       }
     ]
   },
