@@ -8,20 +8,57 @@ import NewRoot from "./routes/new/root";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import BotLayout from "./Layout/BotLayout";
 import BotEmbedRoot from "./routes/bot/embed";
+import BotPreviewRoot from "./routes/bot/preview";
+import BotDSRoot from "./routes/bot/ds";
+import BotSettingsRoot from "./routes/bot/settings";
 const router = createHashRouter([
   {
-    element: <DashboardLayout><Root /></DashboardLayout>,
+    element: (
+      <DashboardLayout>
+        <Root />
+      </DashboardLayout>
+    ),
     path: "/",
   },
   {
-    element: <DashboardLayout><NewRoot /></DashboardLayout>,
+    element: (
+      <DashboardLayout>
+        <NewRoot />
+      </DashboardLayout>
+    ),
     path: "/new",
   },
   {
     path: "/bot/:id",
-    element: <BotLayout>
-      <BotEmbedRoot />
-    </BotLayout>
+    element: (
+      <BotLayout>
+        <BotEmbedRoot />
+      </BotLayout>
+    ),
+  },
+  {
+    path: "/bot/:id/preview",
+    element: (
+      <BotLayout>
+        <BotPreviewRoot />
+      </BotLayout>
+    ),
+  },
+  {
+    path: "/bot/:id/data-sources",
+    element: (
+      <BotLayout>
+        <BotDSRoot />
+      </BotLayout>
+    ),
+  },
+  {
+    path: "/bot/:id/settings",
+    element: (
+      <BotLayout>
+        <BotSettingsRoot />
+      </BotLayout>
+    ),
   },
 ]);
 const queryClient = new QueryClient();

@@ -8,22 +8,23 @@ import {
   CogIcon,
   ChatBubbleLeftIcon,
 } from "@heroicons/react/24/outline";
+import { Link, useParams, useLocation } from "react-router-dom";
 
 const navigation = [
-  { name: "Embed", href: "#", icon: TagIcon, current: false },
+  { name: "Embed", href: "/bot/:id", icon: TagIcon },
   {
     name: "Preview",
-    href: "#",
+    href: "/bot/:id/preview",
     icon: ChatBubbleLeftIcon,
   },
   {
     name: "Data Sources",
-    href: "#",
+    href: "/bot/:id/data-sources",
     icon: CircleStackIcon,
   },
   {
     name: "Settings",
-    href: "#",
+    href: "/bot/:id/settings",
     icon: CogIcon,
   },
 ];
@@ -35,6 +36,8 @@ function classNames(...classes) {
 
 export default function BotLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const params = useParams<{ id: string }>();
+  const location = useLocation();
 
   return (
     <>
@@ -101,11 +104,14 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
                   <div className="mt-5 h-0 flex-1 overflow-y-auto">
                     <nav className="space-y-1 px-2">
                       {navigation.map((item) => (
-                        <a
+                        <Link
                           key={item.name}
-                          href={item.href}
+                          to={{
+                            pathname: item.href.replace(":id", params.id!),
+                          }}
                           className={classNames(
-                            item.current
+                            location.pathname ===
+                              item.href.replace(":id", params.id!)
                               ? "bg-gray-100 text-gray-900"
                               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                             "group flex items-center px-2 py-2 text-base font-medium rounded-md"
@@ -113,7 +119,8 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
                         >
                           <item.icon
                             className={classNames(
-                              item.current
+                              location.pathname ===
+                                item.href.replace(":id", params.id!)
                                 ? "text-gray-500"
                                 : "text-gray-400 group-hover:text-gray-500",
                               "mr-4 flex-shrink-0 h-6 w-6"
@@ -121,7 +128,7 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
                             aria-hidden="true"
                           />
                           {item.name}
-                        </a>
+                        </Link>
                       ))}
                     </nav>
                   </div>
@@ -148,11 +155,13 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
             <div className="mt-5 flex flex-grow flex-col">
               <nav className="flex-1 space-y-1 px-2 pb-4">
                 {navigation.map((item) => (
-                  <a
+                  <Link
                     key={item.name}
-                    href={item.href}
+                    to={{
+                      pathname: item.href.replace(":id", params.id!),
+                    }}
                     className={classNames(
-                      item.current
+                      location.pathname === item.href.replace(":id", params.id!)
                         ? "bg-gray-100 text-gray-900"
                         : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
                       "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
@@ -160,7 +169,8 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
                   >
                     <item.icon
                       className={classNames(
-                        item.current
+                        location.pathname ===
+                          item.href.replace(":id", params.id!)
                           ? "text-gray-500"
                           : "text-gray-400 group-hover:text-gray-500",
                         "mr-3 flex-shrink-0 h-6 w-6"
@@ -168,7 +178,7 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
                       aria-hidden="true"
                     />
                     {item.name}
-                  </a>
+                  </Link>
                 ))}
               </nav>
             </div>
