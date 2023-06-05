@@ -7,6 +7,7 @@ import DashboardLayout from "./Layout";
 import NewRoot from "./routes/new/root";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import BotLayout from "./Layout/BotLayout";
+import BotEmbedRoot from "./routes/bot/embed";
 const router = createHashRouter([
   {
     element: <DashboardLayout><Root /></DashboardLayout>,
@@ -19,7 +20,7 @@ const router = createHashRouter([
   {
     path: "/bot/:id",
     element: <BotLayout>
-      <div>Bot</div>
+      <BotEmbedRoot />
     </BotLayout>
   },
 ]);
