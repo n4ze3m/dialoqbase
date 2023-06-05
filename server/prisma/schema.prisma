@@ -13,6 +13,8 @@ model Bot {
   name        String
   description String?
   createdAt   DateTime      @default(now())
+  temperature Float         @default(0.7)
+  model       String        @default("gpt-3.5-turbo")
   document    BotDocument[]
   source      BotSource[]
 }

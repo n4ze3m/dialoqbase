@@ -38,5 +38,7 @@ export interface UpdateBotById {
   };
   Body: {
     name: string;
+    temperature: number;
+    model: string;
   }
 }

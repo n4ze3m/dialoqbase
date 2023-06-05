@@ -134,7 +134,6 @@ export const getBotByIdHandler = async (
       message: "Bot not found",
     });
   }
-
   return {
     data: bot,
   };
