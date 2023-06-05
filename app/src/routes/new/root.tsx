@@ -5,7 +5,10 @@ import {
   // DocumentArrowUpIcon,
   DocumentTextIcon,
 } from "@heroicons/react/20/solid";
-import { Form } from "antd";
+import { Form, notification } from "antd";
+import { useNavigate } from "react-router-dom";
+import api from "../../services/api";
+import { useMutation } from "@tanstack/react-query";
 
 const availableSources = [
   { id: 1, title: "Website", icon: GlobeAltIcon },
@@ -19,6 +22,38 @@ function classNames(...classes) {
 
 export default function NewRoot() {
   const [selectedSource, setSelectedSource] = useState(availableSources[0]);
+  const navigate = useNavigate()
+  const [form] = Form.useForm();
+  const onSubmit = async (values: {
+    content: string;
+  }) => {
+    const response = await api.post("/bot", {
+      type: selectedSource.title.toLowerCase(),
+      ...values
+    });
+    return response.data;
+  };
+
+
+  const {
+    mutateAsync: createBot,
+    isLoading
+  } = useMutation(onSubmit, {
+    onSuccess: (data:any) => {
+      notification.success({
+        message: "Success",
+        description: "Bot created successfully."
+      });
+      navigate(`/bot/${data.id}`)
+    },
+    onError: (e) => {
+      console.log(e)
+      notification.error({
+        message: "Error",
+        description: "Something went wrong."
+      });
+    }
+  })
 
   return (
     <>
@@ -31,7 +66,9 @@ export default function NewRoot() {
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <Form className="space-y-6" action="#" method="POST">
+            <Form 
+            onFinish={createBot}
+            form={form} className="space-y-6" >
               <RadioGroup value={selectedSource} onChange={setSelectedSource}>
                 <RadioGroup.Label className="text-base font-medium text-gray-800">
                   Select a data source
@@ -109,9 +146,12 @@ export default function NewRoot() {
               <Form.Item>
                 <button
                   type="submit"
+                  disabled={isLoading}
                   className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
-                  Create
+                  {
+                    isLoading ? "Creating..." : "Create"
+                  }
                 </button>
               </Form.Item>
             </Form>

@@ -11,7 +11,7 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
   const data = job.data as BotSource[];
   try {
     for (const source of data) {
-      if (source.type.toLocaleLowerCase() === "website") {
+      if (source.type.toLowerCase() === "website") {
         await prisma.botSource.update({
           where: {
             id: source.id,
@@ -37,7 +37,48 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
           {
             botId: source.botId,
             sourceId: source.id,
+          }
+        );
+
+        await prisma.botSource.update({
+          where: {
+            id: source.id,
           },
+          data: {
+            status: "FINISHED",
+            isPending: false,
+          },
+        });
+      } else if (source.type.toLowerCase() === "text") {
+        await prisma.botSource.update({
+          where: {
+            id: source.id,
+          },
+          data: {
+            status: "PROCESSING",
+          },
+        });
+        const textSplitter = new RecursiveCharacterTextSplitter({
+          chunkSize: 1000,
+          chunkOverlap: 200,
+        });
+
+        const chunks = await textSplitter.splitDocuments([
+          {
+            pageContent: source.content!,
+            metadata: {
+              source: `text-${source.id}`,
+            },
+          },
+        ]);
+
+        await DialoqbaseVectorStore.fromDocuments(
+          chunks,
+          new OpenAIEmbeddings(),
+          {
+            botId: source.botId,
+            sourceId: source.id,
+          }
         );
 
         await prisma.botSource.update({

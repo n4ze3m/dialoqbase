@@ -1,6 +1,5 @@
 import { Disclosure } from "@headlessui/react";
 import { BellIcon } from "@heroicons/react/24/outline";
-import { Outlet } from "react-router-dom";
 const user = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -19,7 +18,11 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function DashboardLayout() {
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <>
       <div className="min-h-full">
@@ -92,8 +95,9 @@ export default function DashboardLayout() {
         <div className="py-10">
           <main>
             <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+              {children}
+
               {/* Replace with your content */}
-              <Outlet />
               {/* <div className="px-4 py-8 sm:px-0">
                 <div className="h-96 rounded-lg border-4 border-dashed border-gray-200" />
               </div> */}
