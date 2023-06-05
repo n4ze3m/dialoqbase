@@ -19,11 +19,15 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/autoload": "^5.0.0",
+    "@fastify/cors": "^8.3.0",
     "@fastify/sensible": "^5.0.0",
     "@prisma/client": "4.15.0",
+    "bull": "^4.10.4",
+    "fast-glob": "^3.2.12",
     "fastify": "^4.0.0",
     "fastify-cli": "^5.7.1",
     "fastify-plugin": "^4.0.0",
+    "ioredis": "^5.3.2",
     "langchain": "^0.0.90"
   },
   "devDependencies": {

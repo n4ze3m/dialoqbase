@@ -1,42 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Bot {
+  id          String      @id @default(cuid())
+  publicId    String      @unique @default(uuid())
+  name        String
+  description String?
+  source      BotSource[]
 }
 
-model ChatBot {
-  id                   String             @id @default(uuid())
-  name                 String
-  description          String?
-  prompt               String?
-  vectorSearchProvider String?            @default("Faiss")
-  pineconeApiKey       String?
-  pineconeIndexId      String?
-  pineconeEnvironment  String?
-  knowledge            ChatBotKnowledge[]
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt
-}
-
-model ChatBotKnowledge {
-  id        String   @id @default(uuid())
-  chatBotId String
-  chat      ChatBot  @relation(fields: [chatBotId], references: [id])
-  type      String   @default("WEBSITE")
-  status    String   @default("PENDING")
-  content   String
+model BotSource {
+  id        String   @id @default(cuid())
+  bot       Bot      @relation(fields: [botId], references: [id])
+  botId     String
+  type      String   @default("website")
+  content   String?
+  location  String?
+  isPending Boolean  @default(true)
+  status    String   @default("pending")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
