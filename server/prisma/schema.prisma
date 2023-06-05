@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,22 +8,36 @@ datasource db {
 }
 
 model Bot {
-  id          String      @id @default(cuid())
-  publicId    String      @unique @default(uuid())
+  id          String        @id @default(cuid())
+  publicId    String        @unique @default(uuid())
   name        String
   description String?
+  createdAt   DateTime      @default(now())
+  document    BotDocument[]
   source      BotSource[]
 }
 
 model BotSource {
-  id        String   @id @default(cuid())
-  bot       Bot      @relation(fields: [botId], references: [id])
+  id        String        @id @default(cuid())
   botId     String
-  type      String   @default("website")
+  type      String        @default("website")
   content   String?
   location  String?
-  isPending Boolean  @default(true)
-  status    String   @default("pending")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  isPending Boolean       @default(true)
+  status    String        @default("pending")
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  document  BotDocument[]
+  bot       Bot           @relation(fields: [botId], references: [id])
+}
+
+model BotDocument {
+  id        Int     @id @default(autoincrement())
+  sourceId  String
+  botId     String
+  content   String
+  embedding Unsupported("vector")
+  metadata  Json
+  bot       Bot                   @relation(fields: [botId], references: [id])
+  source    BotSource             @relation(fields: [sourceId], references: [id])
 }

@@ -2,6 +2,7 @@ import fp from "fastify-plugin";
 import { FastifyPluginAsync } from "fastify";
 
 import * as Queue from "bull";
+import { queueHandler } from "../queue";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -14,10 +15,7 @@ const bullPlugin: FastifyPluginAsync = fp(async (server, options) => {
 
   await queue.isReady();
 
-  queue.process((job, done) => {
-    console.log(job.data);
-    done();
-  });
+  queue.process(queueHandler);
 
   server.decorate("queue", queue);
 
