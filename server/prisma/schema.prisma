@@ -32,7 +32,7 @@ model BotSource {
 }
 
 model BotDocument {
-  id        Int     @id @default(autoincrement())
+  id        Int                   @id @default(autoincrement())
   sourceId  String
   botId     String
   content   String

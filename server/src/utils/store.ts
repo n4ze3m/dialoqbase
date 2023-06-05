@@ -1,18 +1,27 @@
 import { Document } from "langchain/dist/document";
 import { PrismaClient } from "@prisma/client";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
+import { Embeddings } from "langchain/embeddings/base";
+import { VectorStore } from "langchain/vectorstores/base";
 const prisma = new PrismaClient();
 export interface DialoqbaseLibArgs {
   botId: string;
-  sourceId: string;
+  sourceId: string | null;
 }
 
-export class DialoqbaseVectorStore {
-  botId: string;
-  sourceId: string;
-  embeddings: OpenAIEmbeddings;
+interface SearchEmbeddingsResponse {
+  id: number;
+  content: string;
+  metadata: object;
+  similarity: number;
+}
 
-  constructor(embeddings: OpenAIEmbeddings, args: DialoqbaseLibArgs) {
+export class DialoqbaseVectorStore extends VectorStore {
+  botId: string;
+  sourceId: string | null;
+  embeddings: Embeddings;
+
+  constructor(embeddings: Embeddings, args: DialoqbaseLibArgs) {
+    super(embeddings, args);
     this.botId = args.botId;
     this.sourceId = args.sourceId;
     this.embeddings = embeddings;
@@ -55,11 +64,60 @@ export class DialoqbaseVectorStore {
   }
   static async fromDocuments(
     docs: Document[],
-    embeddings: OpenAIEmbeddings,
+    embeddings: Embeddings,
     dbConfig: DialoqbaseLibArgs
   ) {
     const instance = new this(embeddings, dbConfig);
     await instance.addDocuments(docs);
     return instance;
+  }
+
+  static async fromTexts(
+    texts: string[],
+    metadatas: object[] | object,
+    embeddings: Embeddings,
+    dbConfig: DialoqbaseLibArgs
+  ) {
+    const docs = [];
+    for (let i = 0; i < texts.length; i += 1) {
+      const metadata = Array.isArray(metadatas) ? metadatas[i] : metadatas;
+      const newDoc = new Document({
+        pageContent: texts[i],
+        metadata,
+      });
+      docs.push(newDoc);
+    }
+    return this.fromDocuments(docs, embeddings, dbConfig);
+  }
+
+  static async fromExistingIndex(
+    embeddings: Embeddings,
+    dbConfig: DialoqbaseLibArgs
+  ) {
+    const instance = new this(embeddings, dbConfig);
+    return instance;
+  }
+
+  async similaritySearchVectorWithScore(
+    query: number[],
+    k: number,
+    filter?: this["FilterType"] | undefined
+  ): Promise<[Document<Record<string, any>>, number][]> {
+    const sqlQuery =
+      "SELECT * FROM match_documents(query_embedding := $1,botId := $2 ,match_count := $2);";
+
+    const data = await prisma.$queryRawUnsafe(sqlQuery, query, this.botId, k);
+
+    const result: [Document, number][] = (
+      data as SearchEmbeddingsResponse[]
+    ).map((resp) => [
+      new Document({
+        metadata: resp.metadata,
+        pageContent: resp.content,
+      }),
+      resp.similarity,
+    ]);
+
+    return result;
   }
 }
