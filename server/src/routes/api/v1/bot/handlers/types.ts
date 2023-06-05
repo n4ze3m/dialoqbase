@@ -1,7 +1,7 @@
 export interface CreateBotRequest {
-	Body: {
-        name?: string,
-        type: string,
-        content: string,
-	},
+  Body: {
+    name?: string;
+    type: string;
+    content: string;
+  };
 }

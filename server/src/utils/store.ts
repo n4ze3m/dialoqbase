@@ -1,4 +1,4 @@
-import { Document } from "langchain/dist/document";
+import { Document } from "langchain/document";
 import { PrismaClient } from "@prisma/client";
 import { Embeddings } from "langchain/embeddings/base";
 import { VectorStore } from "langchain/vectorstores/base";
@@ -48,7 +48,7 @@ export class DialoqbaseVectorStore extends VectorStore {
             row.embedding,
             row.metadata,
             row.botId,
-            row.sourceId
+            row.sourceId,
           );
         });
       } catch (e) {
@@ -65,7 +65,7 @@ export class DialoqbaseVectorStore extends VectorStore {
   static async fromDocuments(
     docs: Document[],
     embeddings: Embeddings,
-    dbConfig: DialoqbaseLibArgs
+    dbConfig: DialoqbaseLibArgs,
   ) {
     const instance = new this(embeddings, dbConfig);
     await instance.addDocuments(docs);
@@ -76,7 +76,7 @@ export class DialoqbaseVectorStore extends VectorStore {
     texts: string[],
     metadatas: object[] | object,
     embeddings: Embeddings,
-    dbConfig: DialoqbaseLibArgs
+    dbConfig: DialoqbaseLibArgs,
   ) {
     const docs = [];
     for (let i = 0; i < texts.length; i += 1) {
@@ -92,7 +92,7 @@ export class DialoqbaseVectorStore extends VectorStore {
 
   static async fromExistingIndex(
     embeddings: Embeddings,
-    dbConfig: DialoqbaseLibArgs
+    dbConfig: DialoqbaseLibArgs,
   ) {
     const instance = new this(embeddings, dbConfig);
     return instance;
@@ -101,12 +101,15 @@ export class DialoqbaseVectorStore extends VectorStore {
   async similaritySearchVectorWithScore(
     query: number[],
     k: number,
-    filter?: this["FilterType"] | undefined
+    filter?: this["FilterType"] | undefined,
   ): Promise<[Document<Record<string, any>>, number][]> {
-    const sqlQuery =
-      "SELECT * FROM match_documents(query_embedding := $1,botId := $2 ,match_count := $2);";
+    console.log(this.botId);
+    const vector = `[${query.join(",")}]`;
+    const bot_id = this.botId;
 
-    const data = await prisma.$queryRawUnsafe(sqlQuery, query, this.botId, k);
+    const data = await prisma.$queryRaw`
+     SELECT * FROM "similarity_search"(query_embedding := ${vector}::vector, botId := ${bot_id}::text,match_count := ${k}::int)
+    `;
 
     const result: [Document, number][] = (
       data as SearchEmbeddingsResponse[]
