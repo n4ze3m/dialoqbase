@@ -365,3 +365,20 @@ export const updateBotByIdHandler = async (
     id: bot.id,
   };
 };
+
+
+export const getAllBotsHandler = async (
+  request: FastifyRequest,
+  reply: FastifyReply,
+) => {
+
+  const prisma = request.server.prisma;
+
+  const bots = await prisma.bot.findMany({
+    orderBy: {
+      createdAt: "desc",
+    }
+  });
+
+  return bots;
+}

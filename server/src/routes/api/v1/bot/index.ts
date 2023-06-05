@@ -1,16 +1,22 @@
 import { FastifyPluginAsync } from "fastify";
 import {
+  addNewSourceByIdHandler,
   createBotHandler,
+  deleteBotByIdHandler,
+  deleteSourceByIdHandler,
   getBotByIdAllSourcesHandler,
   getBotByIdEmbeddingsHandler,
   getBotByIdHandler,
-  addNewSourceByIdHandler,
   refreshSourceByIdHandler,
-  deleteSourceByIdHandler,
-deleteBotByIdHandler  ,
-updateBotByIdHandler
+  updateBotByIdHandler,
+  getAllBotsHandler
 } from "./handlers";
-import { createBotSchema, getBotByIdSchema , addNewSourceByIdSchema, updateBotByIdSchema} from "./handlers/schema";
+import {
+  addNewSourceByIdSchema,
+  createBotSchema,
+  getBotByIdSchema,
+  updateBotByIdSchema,
+} from "./handlers/schema";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   fastify.post("/", {
@@ -31,11 +37,10 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     schema: getBotByIdSchema,
   }, getBotByIdHandler);
 
-  // add new source 
+  // add new source
   fastify.post("/:id/source", {
     schema: addNewSourceByIdSchema,
   }, addNewSourceByIdHandler);
-
 
   // refresh source
   fastify.post("/:id/source/:sourceId/refresh", {
@@ -48,7 +53,6 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     schema: getBotByIdSchema,
   }, deleteSourceByIdHandler);
 
-
   // delete project
 
   fastify.delete("/:id", {
@@ -60,6 +64,10 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     schema: updateBotByIdSchema,
   }, updateBotByIdHandler);
 
+  // get all bots
+  fastify.get("/", {},
+    getAllBotsHandler
+  );
 };
 
 export default root;
