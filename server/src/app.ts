@@ -22,13 +22,10 @@ const app: FastifyPluginAsync<AppOptions> = async (
     options: opts,
   });
 
-  // if (process.env.NODE_ENV !== "development") {
   fastify.register(fastifyStatic, {
-    root: join(__dirname, "app"),
+    root: join(__dirname, "public"),
     preCompressed: true,
   });
-
-  // }
 };
 
 export default app;

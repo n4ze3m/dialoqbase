@@ -4,6 +4,9 @@ import useQueryParams from "./hooks/useQueryParams";
 import { ModeSwitcher } from "./components/ModeSwitcher";
 // import useChatId from "./hooks/useChatId";
 import { useForm } from "@mantine/form";
+import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
+import { getUrl } from "./utils/getUrl";
 
 type Message = {
   isBot: boolean;
@@ -11,7 +14,10 @@ type Message = {
 };
 
 // human and bot
-type History = [string, string][];
+type History = {
+  type: string;
+  message: string;
+}[];
 
 function App() {
   const divRef = React.useRef<HTMLDivElement>(null);
@@ -41,29 +47,49 @@ function App() {
 
   const [history, setHistory] = React.useState<History>([]);
 
+  const onMessage = async (message: string) => {
+    const response = await axios.post(getUrl(), {
+      message,
+      history,
+    });
+
+    return response.data as {
+      bot: {
+        text: string;
+      };
+      history: History;
+    };
+  };
+
+  const { mutateAsync: sendMessage, isLoading: isSending } = useMutation(
+    onMessage,
+    {
+      onSuccess: (data) => {
+        setMessages((messages) => [
+          ...messages,
+          { isBot: true, message: data.bot.text },
+        ]);
+        setHistory(data.history);
+      },
+      onError: (error) => {
+        console.error(error);
+        setMessages((messages) => [
+          ...messages,
+          { isBot: true, message: "Unable to send message" },
+        ]);
+      },
+    }
+  );
+
   return (
     <ModeSwitcher mode={params?.mode}>
-      <div className="relative flex">
+      <div className="relative flex bg-white">
         <div
           className="grow flex flex-col md:translate-x-0 transition-transform duration-300 ease-in-out"
           style={{
             height: params?.mode === "iframe" ? "100vh" : "95vh",
           }}
         >
-          <div>
-            <div className="flex items-center justify-between bg-white border-b border-gray-200 px-4 py-4 sm:px-6">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <img
-                    className="h-10 w-10 rounded-full"
-                    src="https://em-content.zobj.net/thumbs/120/openmoji/338/high-voltage_26a1.png"
-                    alt="dialoqbase"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
           <div className="grow px-4 sm:px-6 md:px-5 py-6">
             {messages.map((message, index) => {
               return (
@@ -71,7 +97,7 @@ function App() {
                   key={index}
                   className={
                     message.isBot
-                      ? "flex w-full mt-2 space-x-3 max-w-xs"
+                      ? "flex w-full mt-2 space-x-3 "
                       : "flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end"
                   }
                 >
@@ -92,6 +118,16 @@ function App() {
               );
             })}
 
+            {isSending && (
+              <div className="flex w-full mt-2 space-x-3 max-w-xs">
+                <div>
+                  <div className="bg-gray-300 p-3 rounded-r-lg rounded-bl-lg">
+                    <p className="text-sm">Hold on, I'm looking...</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div ref={divRef} />
           </div>
 
@@ -102,27 +138,22 @@ function App() {
                   setMessages([
                     ...messages,
                     { message: value.message, isBot: false },
-                    {
-                      message:
-                        "Hi, I'm here to help. What can I do for you today?",
-                      isBot: true,
-                    },
                   ]);
                   form.reset();
-                  // await sendToBotAsync(value.message)
+                  await sendMessage(value.message);
                 })}
               >
                 <div className="flex-grow space-y-6">
                   <div className="flex">
                     <span className="mr-3">
                       <button
-                        // disabled={isSending || isSaving}
+                        disabled={isSending}
                         onClick={() => {
                           setHistory([]);
                           setMessages([
                             {
                               message:
-                                "Hi, I'm PageAssist. How can I help you?",
+                                "Hi, I'm here to help. What can I do for you today?",
                               isBot: true,
                             },
                           ]);
@@ -148,7 +179,7 @@ function App() {
                     </span>
                     <div className="flex-grow">
                       <input
-                        // disabled={isSending || isSaving}
+                        disabled={isSending}
                         className="flex items-center h-10 w-full rounded px-3 text-sm"
                         type="text"
                         required

@@ -12,19 +12,13 @@ export const chatRequestSchema: FastifySchema = {
     },
     body: {
         type: "object",
-        required: ["message", "history"],
+        required: ["message",],
         properties: {
             message: {
                 type: "string",
             },
             history: {
                 type: "array",
-                items: {
-                    type: "array",
-                    items: {
-                        type: "string",
-                    },
-                },
             },
         },
     },

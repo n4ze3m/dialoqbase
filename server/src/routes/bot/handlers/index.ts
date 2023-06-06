@@ -46,7 +46,14 @@ export const chatRequestHandler = async (
       },
       history: [
         ...history,
-        [message, "You are in the wrong place, buddy."],
+        {
+          type: "human",
+          text: message,
+        },
+        {
+          type: "ai",
+          text: "You are in the wrong place, buddy.",
+        },
       ],
     };
   }
@@ -80,11 +87,27 @@ export const chatRequestHandler = async (
 
   const response = await chain.call({
     question: sanitizedQuestion,
-    chat_history: history,
+    chat_history: history
+      .map((chatMessage) => {
+        if (chatMessage.type === "human") {
+          return `Human: ${chatMessage.text}`;
+        } else if (chatMessage.type === "ai") {
+          return `Assistant: ${chatMessage.text}`;
+        } else {
+          return `${chatMessage.text}`;
+        }
+      })
+      .join("\n"),
   });
 
   return {
     bot: response,
-    history: [...history, [message, response.text]],
+    history: [...history, {
+      type: "human",
+      text: message,
+    }, {
+      type: "ai",
+      text: response.text,
+    }],
   };
 };

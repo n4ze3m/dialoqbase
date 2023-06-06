@@ -24,14 +24,14 @@ export const EmbedBoard = ({ public_id }: Props) => {
       <EmbedBoardTitle
         title="Iframe"
         description="You can use this iframe to embed your bot"
-        content={`<iframe src="${hostUrl}/bot/${public_id}" width="400" height="500" />`}
+        content={`<iframe src="${hostUrl}/bot/${public_id}?mode=iframe" width="400" height="500" />`}
       />
 
-      <EmbedBoardTitle
+      {/* <EmbedBoardTitle
         title="Script"
         description="You can use this script to embed your bot"
         content={`<script src="http://todo" bot-url="${hostUrl}/bot/${public_id}"></script>`}
-      />
+      /> */}
     </div>
   );
 };
@@ -45,7 +45,7 @@ function EmbedBoardTitle({
   description: string;
 }) {
   return (
-    <div className="px-4 py-6 sm:p-6 lg:pb-8 mb-3">
+    <div className="px-4 py-6 sm:p-6 lg:pb-8 mb-3 bg-white border border-gray-200 rounded-lg shadow-sm">
       <div>
         <h2 className="text-lg font-medium leading-6 text-gray-900">{title}</h2>
         <p className="mt-1 text-sm text-gray-500">{description}</p>
