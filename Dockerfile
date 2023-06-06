@@ -41,4 +41,4 @@ RUN yarn install --production
 
 ENV NODE_ENV=production
 
-CMD ["pnpm", "start"]
+CMD ["yarn", "start"]
