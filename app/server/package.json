@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "npm run build:ts && tsc -p test/tsconfig.json && tap --ts \"test/**/*.test.ts\"",
-    "start": "npm run build:ts && fastify start -l info dist/app.js",
+    "start:test": "npm run build:ts && fastify start -l info dist/app.js",
+    "start": "node app.js",
     "build:ts": "tsc",
     "build": "tsc",
     "db": "prisma generate",
