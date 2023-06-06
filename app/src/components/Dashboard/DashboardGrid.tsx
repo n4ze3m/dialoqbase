@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import api from "../../services/api";
 import { ChevronRightIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { Empty } from "antd";
+import { Empty } from "antd"
 
 export const DashboardGrid = () => {
 

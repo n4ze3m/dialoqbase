@@ -1,5 +1,5 @@
-import { Fragment, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import React, { Fragment, useState } from "react";
+import { Dialog, Menu, Transition } from "@headlessui/react";
 import {
   Bars3BottomLeftIcon,
   XMarkIcon,
@@ -8,7 +8,12 @@ import {
   CogIcon,
   ChatBubbleLeftIcon,
 } from "@heroicons/react/24/outline";
-import { Link, useParams, useLocation } from "react-router-dom";
+const userNavigation = [
+  { name: "Settings", href: "#" },
+  { name: "Sign out", href: "#" },
+];
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const navigation = [
   { name: "Embed", href: "/bot/:id", icon: TagIcon },
@@ -38,6 +43,15 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const params = useParams<{ id: string }>();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const { isLogged, profile } = useAuth();
+
+  React.useEffect(() => {
+    if (!isLogged) {
+      navigate("/login");
+    }
+  }, [isLogged]);
 
   return (
     <>
@@ -94,13 +108,13 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
                       </button>
                     </div>
                   </Transition.Child>
-                  <div className="flex flex-shrink-0 items-center px-4">
+                  <Link to="/" className="flex flex-shrink-0 items-center px-4">
                     <img
                       className="h-8 w-auto"
                       src="https://em-content.zobj.net/thumbs/120/openmoji/338/high-voltage_26a1.png"
                       alt="Dialoqbase"
                     />
-                  </div>
+                  </Link>
                   <div className="mt-5 h-0 flex-1 overflow-y-auto">
                     <nav className="space-y-1 px-2">
                       {navigation.map((item) => (
@@ -141,17 +155,15 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
           </Dialog>
         </Transition.Root>
 
-        {/* Static sidebar for desktop */}
         <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
-          {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5">
-            <div className="flex flex-shrink-0 items-center px-4">
+            <Link to="/" className="flex flex-shrink-0 items-center px-4">
               <img
                 className="h-8 w-auto"
                 src="https://em-content.zobj.net/thumbs/120/openmoji/338/high-voltage_26a1.png"
                 alt="Dialoqbase"
               />
-            </div>
+            </Link>
             <div className="mt-5 flex flex-grow flex-col">
               <nav className="flex-1 space-y-1 px-2 pb-4">
                 {navigation.map((item) => (
@@ -205,13 +217,13 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
                 </button> */}
 
                 {/* Profile dropdown */}
-                {/* <Menu as="div" className="relative ml-3">
+                <Menu as="div" className="relative ml-3">
                   <div>
                     <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        src={profile?.avatar}
                         alt=""
                       />
                     </Menu.Button>
@@ -243,7 +255,7 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
                       ))}
                     </Menu.Items>
                   </Transition>
-                </Menu> */}
+                </Menu>
               </div>
             </div>
           </div>

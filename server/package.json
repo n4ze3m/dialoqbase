@@ -20,9 +20,11 @@
   "dependencies": {
     "@fastify/autoload": "^5.0.0",
     "@fastify/cors": "^8.3.0",
+    "@fastify/jwt": "^7.0.0",
     "@fastify/sensible": "^5.0.0",
     "@fastify/static": "^6.10.2",
     "@prisma/client": "4.15.0",
+    "bcryptjs": "^2.4.3",
     "bull": "^4.10.4",
     "cheerio": "1.0.0-rc.12",
     "fastify": "^4.0.0",
@@ -33,6 +35,7 @@
     "unique-names-generator": "^4.7.1"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/node": "^18.0.0",
     "@types/tap": "^15.0.5",
     "concurrently": "^7.0.0",

@@ -43,3 +43,10 @@ model BotDocument {
   bot       Bot                   @relation(fields: [botId], references: [id])
   source    BotSource             @relation(fields: [sourceId], references: [id])
 }
+
+model User {
+  user_id      Int     @id @default(autoincrement())
+  username     String
+  password     String
+  isFirstLogin Boolean @default(true)
+}

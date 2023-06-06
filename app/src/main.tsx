@@ -11,6 +11,8 @@ import BotEmbedRoot from "./routes/bot/embed";
 import BotPreviewRoot from "./routes/bot/preview";
 import BotDSRoot from "./routes/bot/ds";
 import BotSettingsRoot from "./routes/bot/settings";
+import LoginRoot from "./routes/login/root";
+import { AuthProvider } from "./context/AuthContext";
 const router = createHashRouter([
   {
     element: (
@@ -60,12 +62,18 @@ const router = createHashRouter([
       </BotLayout>
     ),
   },
+  {
+    path: "/login",
+    element: <LoginRoot />,
+  },
 ]);
 const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
