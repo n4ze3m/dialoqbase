@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  dialoqbase:
+    image: n4z3m/dialoqbase:latest
+    container_name: dialoqbase
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/dialoqbase
+      DB_REDIS_URL: redis://redis:6379
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: ankane/pgvector:latest
+    container_name: postgres
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dialoqbase
+    volumes:
+      - .postgres:/var/lib/postgresql/data
+      - ./scripts:/docker-entrypoint-initdb.d
+
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: unless-stopped
+    volumes:
+      - .redis:/data

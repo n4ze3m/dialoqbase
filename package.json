@@ -3,14 +3,12 @@
   "version": "0.0.1",
   "description": "Create chatbots with ease",
   "scripts": {
-    "server:dev": "pnpm run --filter server dev",
     "ui:dev": "pnpm run --filter ui dev",
     "widget:dev": "pnpm run --filter widget dev",
     "dev": "pnpm --stream -r run dev",
     "start": "pnpm --stream -r run dev",
     "db": "pnpm --stream -r run db",
     "build": "pnpm --stream -r run build",
-    "build:server": "pnpm run --filter server build",
     "build:ui": "pnpm run --filter ui build",
     "build:widget": "pnpm run --filter widget build"
   },
