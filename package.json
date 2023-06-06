@@ -1,11 +1,23 @@
 {
   "name": "dialoqbase",
   "version": "0.0.1",
-  "description": "",
+  "description": "Create chatbots with ease",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server:dev": "pnpm run --filter server dev",
+    "ui:dev": "pnpm run --filter ui dev",
+    "widget:dev": "pnpm run --filter widget dev",
+    "dev": "pnpm --stream -r run dev",
+    "start": "pnpm --stream -r run dev",
+    "db": "pnpm --stream -r run db",
+    "build": "pnpm --stream -r run build",
+    "build:server": "pnpm run --filter server build",
+    "build:ui": "pnpm run --filter ui build",
+    "build:widget": "pnpm run --filter widget build"
   },
   "keywords": [],
-  "author": "",
-  "license": "MIT"
+  "author": "n4ze3m",
+  "license": "MIT",
+  "dependencies": {
+    "npm-run-all": "^4.1.5"
+  }
 }

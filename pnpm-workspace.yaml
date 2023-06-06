@@ -1,4 +1,5 @@
+prefer-workspace-packages: true
 packages:
-  - 'app/*'
-  - 'server/*'
-  - 'widget/*'
+  - 'app/server'
+  - 'app/ui'
+  - 'app/widget'
