@@ -3,7 +3,6 @@ FROM node:18-slim as server
 WORKDIR /app
 
 RUN apt update
-RUN npm --no-update-notifier --no-fund --global install yarn
 
 COPY ./server/ .
 
