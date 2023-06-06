@@ -37,8 +37,7 @@ COPY --from=build /app/app/ui/dist/ ./public
 COPY --from=build /app/app/widget/dist/assets/ ./public/assets
 COPY --from=build /app/app/widget/dist/index.html ./public/bot.html
 
-RUN pnpm install -p
-
+RUN yarn install --production
 
 ENV NODE_ENV=production
 
