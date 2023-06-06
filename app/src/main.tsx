@@ -13,6 +13,7 @@ import BotDSRoot from "./routes/bot/ds";
 import BotSettingsRoot from "./routes/bot/settings";
 import LoginRoot from "./routes/login/root";
 import { AuthProvider } from "./context/AuthContext";
+import SettingsRoot from "./routes/settings/root";
 const router = createHashRouter([
   {
     element: (
@@ -66,6 +67,10 @@ const router = createHashRouter([
     path: "/login",
     element: <LoginRoot />,
   },
+  {
+    path: "/settings",
+    element: <DashboardLayout><SettingsRoot /></DashboardLayout>,
+  }
 ]);
 const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

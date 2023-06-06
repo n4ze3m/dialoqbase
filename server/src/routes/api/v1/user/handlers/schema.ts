@@ -15,3 +15,30 @@ export const userLoginSchema: FastifySchema = {
         },
     },
 }
+
+export const updateUsernameSchema: FastifySchema = {
+    body: {
+        type: "object",
+        required: ["username"],
+        properties: {
+            username: {
+                type: "string",
+            },
+        },
+    },
+}
+
+export const updatePasswordSchema: FastifySchema = {
+    body: {
+        type: "object",
+        required: ["oldPassword", "newPassword"],
+        properties: {
+            oldPassword: {
+                type: "string",
+            },
+            newPassword: {
+                type: "string",
+            },
+        },
+    },
+}
