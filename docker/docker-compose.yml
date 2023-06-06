@@ -11,7 +11,7 @@ services:
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/dialoqbase
       DB_REDIS_URL: redis://redis:6379
     env_file:
-      - .env
+      - imp.env
     depends_on:
       - postgres
       - redis

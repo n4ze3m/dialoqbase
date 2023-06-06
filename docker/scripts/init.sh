@@ -53,7 +53,7 @@ CREATE TABLE "public"."User" (
 ) WITH (oids = false);
 
 INSERT INTO "User" ("user_id", "username", "password", "isFirstLogin") VALUES
-(1, 'admin', '$2a$12$zY2slOG8LUQwzAkMQcooM.UVr0ArR/P0xD.8tyLIMs7Gevx5xHUI6', 'f');
+(1, 'admin', '$2a$12$zY2slOG8LUQwzAkMQcooM.UVr0ArR/P0xD.8tyLIMs7Gevx5xHUI6', 't');
 
 ALTER TABLE ONLY "public"."BotDocument" ADD CONSTRAINT "BotDocument_botId_fkey" FOREIGN KEY ("botId") REFERENCES "Bot"(id) ON UPDATE CASCADE ON DELETE RESTRICT NOT DEFERRABLE;
 ALTER TABLE ONLY "public"."BotDocument" ADD CONSTRAINT "BotDocument_sourceId_fkey" FOREIGN KEY ("sourceId") REFERENCES "BotSource"(id) ON UPDATE CASCADE ON DELETE RESTRICT NOT DEFERRABLE;
