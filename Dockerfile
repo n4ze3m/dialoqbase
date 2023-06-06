@@ -18,7 +18,7 @@ RUN apt update && apt -y install --no-install-recommends ca-certificates git git
 RUN apt-get clean autoclean && apt-get autoremove --yes && rm -rf /var/lib/{apt,dpkg,cache,log}/
 RUN npm --no-update-notifier --no-fund --global install pnpm
 # Copy API
-COPY --from=build /app/app/server/build/ .
+COPY --from=build /app/app/server/dist/ .
 COPY --from=build /app/app/server/prisma/ ./prisma
 COPY --from=build /app/app/server/package.json .
 # Copy UI
