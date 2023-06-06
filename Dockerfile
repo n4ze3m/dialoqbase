@@ -6,7 +6,7 @@ RUN apt update
 
 COPY ./server/ .
 
-RUN yarm install
+RUN yarn install
 
 RUN yarn build
 
