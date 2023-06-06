@@ -20,8 +20,6 @@ services:
     image: ankane/pgvector:latest
     container_name: postgres
     restart: unless-stopped
-    env_file:
-      - .env
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres

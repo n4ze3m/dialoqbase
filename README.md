@@ -13,7 +13,26 @@ cd dialoqbase/docker
 
 2. Edit the `imp.env` file and set the environment variables
 
+- On Linux
+
+```bash
+nano imp.env
+```
+or 
+
+```bash
+vim imp.env
+```
+
+- On Windows
+
+```bash
+notepad imp.env
+```
+
+
 `OPENAI_API_KEY` - OpenAI API key is required to use the OpenAI API. You can get one [here](https://platform.openai.com/account/api-keys)
+
 
 3. Run the docker-compose file
 
