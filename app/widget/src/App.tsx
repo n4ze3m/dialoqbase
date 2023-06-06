@@ -7,7 +7,9 @@ import { useForm } from "@mantine/form";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { getUrl } from "./utils/getUrl";
-
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { atomDark} from "react-syntax-highlighter/dist/esm/styles/prism";
+import remarkGfm from "remark-gfm";
 type Message = {
   isBot: boolean;
   message: string;
@@ -110,7 +112,38 @@ function App() {
                       }
                     >
                       <p className="text-sm">
-                        <ReactMarkdown>{message.message}</ReactMarkdown>
+                        <ReactMarkdown
+                          className="markdown"
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            code({
+                              node,
+                              inline,
+                              className,
+                              children,
+                              ...props
+                            }) {
+                              const match = /language-(\w+)/.exec(
+                                className || ""
+                              );
+                              return !inline && match ? (
+                                <SyntaxHighlighter
+                                  {...props}
+                                  children={String(children).replace(/\n$/, "")}
+                                  style={atomDark}
+                                  language={match[1]}
+                                  PreTag="div"
+                                />
+                              ) : (
+                                <code className={className} {...props}>
+                                  {children}
+                                </code>
+                              );
+                            },
+                          }}
+                        >
+                          {message.message}
+                        </ReactMarkdown>
                       </p>
                     </div>
                   </div>
