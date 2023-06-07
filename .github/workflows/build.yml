@@ -22,11 +22,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PWD }}
-      - name: Get current package version
-        uses: martinbeentjes/npm-get-version-action@v1.2.3
-        id: package-version
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          tags: n4z3m/dialoqbase:latest
+          tags: |
+            n4z3m/dialoqbase:latest
+            n4z3m/dialoqbase:${{ github.ref_name}}
           push: true
