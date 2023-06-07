@@ -7,6 +7,7 @@ import {
 } from "unique-names-generator";
 
 import {
+  AddNewPDFById,
   AddNewSourceById,
   CreateBotRequest,
   GetBotRequestById,
@@ -107,6 +108,7 @@ export const createBotPDFHandler = async (
     });
   }
 };
+
 export const getBotByIdEmbeddingsHandler = async (
   request: FastifyRequest<GetBotRequestById>,
   reply: FastifyReply,
@@ -227,6 +229,41 @@ export const addNewSourceByIdHandler = async (
   await request.server.queue.add([botSource]);
   return {
     id: bot.id,
+  };
+};
+
+export const addNewSourcePDFByIdHandler = async (
+  request: FastifyRequest<AddNewPDFById>,
+  reply: FastifyReply,
+) => {
+  const prisma = request.server.prisma;
+  const id = request.params.id;
+
+  const file = await request.file();
+
+  if (!file) {
+    return reply.status(400).send({
+      message: "File not found",
+    });
+  }
+  const fileName = `${randomUUID()}-${file.filename}`;
+  const path = `./uploads/${fileName}`;
+  await fs.promises.mkdir("./uploads", { recursive: true });
+  await pump(file.file, fs.createWriteStream(path));
+
+  const botSource = await prisma.botSource.create({
+    data: {
+      content: file.filename,
+      type: "PDF",
+      location: path,
+      botId: id,
+    },
+  });
+
+  await request.server.queue.add([botSource]);
+
+  return {
+    id: botSource.id,
   };
 };
 

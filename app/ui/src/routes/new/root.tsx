@@ -4,6 +4,7 @@ import api from "../../services/api";
 import { useMutation } from "@tanstack/react-query";
 import { BotForm } from "../../components/Common/BotForm";
 import { Form, notification } from "antd";
+import axios from "axios";
 
 export default function NewRoot() {
   const navigate = useNavigate();
@@ -36,6 +37,15 @@ export default function NewRoot() {
     },
     onError: (e) => {
       console.log(e);
+      if(axios.isAxiosError(e)) {
+        const message = e.response?.data?.message || e?.response?.data?.error || "Something went wrong.";
+        notification.error({
+          message: "Error",
+          description: message,
+        });
+        return;
+      }
+
       notification.error({
         message: "Error",
         description: "Something went wrong.",

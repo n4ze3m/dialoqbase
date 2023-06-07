@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import api from "../../../services/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BotForm } from "../../Common/BotForm";
+import axios from "axios";
 
 const availableSources = [
   { id: 1, title: "Website", icon: GlobeAltIcon },
@@ -25,7 +26,21 @@ export const NewDsForm = ({ onClose }: { onClose: () => void }) => {
   const params = useParams<{ id: string }>();
   const client = useQueryClient();
   const [form] = Form.useForm();
-  const onSubmit = async (values: { content: string }) => {
+  const onSubmit = async (values: any) => {
+    if (selectedSource.id == 2) {
+      const formData = new FormData();
+      formData.append("file", values.file[0].originFileObj);
+      const response = await api.post(
+        `/bot/${params.id}/source/pdf`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response.data;
+    }
     const response = await api.post(`/bot/${params.id}/source`, {
       type: selectedSource.title.toLowerCase(),
       ...values,
@@ -46,6 +61,17 @@ export const NewDsForm = ({ onClose }: { onClose: () => void }) => {
     },
     onError: (e) => {
       console.log(e);
+      if (axios.isAxiosError(e)) {
+        const message =
+          e.response?.data?.message ||
+          e?.response?.data?.error ||
+          "Something went wrong.";
+        notification.error({
+          message: "Error",
+          description: message,
+        });
+        return;
+      }
       notification.error({
         message: "Error",
         description: "Something went wrong.",

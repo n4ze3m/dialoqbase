@@ -81,7 +81,7 @@ _Important: After the first login, remember to change the default credentials._
 
 ## Disclaimer
 
-Dialoqbase is a side project and is not ready for production. It is still in the early stages of development and may contain bugs and security issues. Use it at your own risk.
+Dialoqbase is a side project and is not ready for production. It is still in the early stages of development and may contain bugs and security issues. Use it at your own risk. *Breaking changes may occur at any time without prior notice.*
 
 ## TODO
 

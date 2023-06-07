@@ -10,7 +10,8 @@ import {
   getBotByIdHandler,
   refreshSourceByIdHandler,
   updateBotByIdHandler,
-  createBotPDFHandler
+  createBotPDFHandler,
+  addNewSourcePDFByIdHandler
 } from "./handlers";
 import {
   addNewSourceByIdSchema,
@@ -45,6 +46,7 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   // add new source
   fastify.post("/:id/source", {
     schema: addNewSourceByIdSchema,
+    onRequest: [fastify.authenticate],
   }, addNewSourceByIdHandler);
 
   // refresh source
@@ -82,6 +84,12 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   fastify.post("/pdf", {
     onRequest: [fastify.authenticate],
   }, createBotPDFHandler);
+
+  // add new source
+  fastify.post("/:id/source/pdf", {
+    onRequest: [fastify.authenticate],
+  }, addNewSourcePDFByIdHandler);
+
 };
 
 export default root;
