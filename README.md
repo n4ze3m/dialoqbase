@@ -83,19 +83,44 @@ _Important: After the first login, remember to change the default credentials._
 
 Dialoqbase is a side project and is not ready for production. It is still in the early stages of development and may contain bugs and security issues. Use it at your own risk. *Breaking changes may occur at any time without prior notice.*
 
-## TODO
+## Roadmap
+
+### Data loaders 
+
+- [x] Website (*one page only*)
+- [x] Plane text 
+- [X] PDF
+- [ ] Web crawler and site map
+- [ ] Github repository
+- [ ] mp3
+- [ ] Notion
+
+and more...
+
+### Language models
+
+- [x] OpenAI 
+- [ ] Anthropic
+- [ ] Falcon-7B
+
+### Embedding models
+
+- [X] OpenAI 
+- [ ] TensorFlow
+- [ ] HuggingFace 
+- [ ] Cohere
 
 
-- [ ] Add more LLMs both free and paid
+### Application
 
-- [ ] Add more dataloaders
-
-- [ ] Support other embedding models
-
-- [ ] Fix the UI issues
-
-- [ ] Add more features
-
+- [x] Create chatbots
+- [x] Create knowledge base
+- [x] Generate responses
+- [x] Vector search
+- [ ] Chatbot API
+- [ ] Chatbot theme editor
+- [ ] Chatbot analytics
+- [ ] UI/UX improvements
 
 ## License
 
