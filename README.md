@@ -1,6 +1,12 @@
 # Dialoqbase
 
-Dialoqbase is a web application that allows you to create custom chatbots with your own knowledge base. Currently, it only supports OpenAI API but more LLMs will be added in the future.
+Dialoqbase is a web application that allows you to create custom chatbots with your own knowledge base. 
+
+*Currently, it only supports OpenAI API but more LLMs will be added in the future.*
+
+Here's a demo of how it works:
+
+[![DialoqBase Demo](https://img.youtube.com/vi/Kktfs8JI4yI/0.jpg)](https://www.youtube.com/watch?v=Kktfs8JI4yI)
 
 ## Installation
 
