@@ -2,17 +2,18 @@ import { useState } from "react";
 import { RadioGroup } from "@headlessui/react";
 import {
   GlobeAltIcon,
-  // DocumentArrowUpIcon,
+  DocumentArrowUpIcon,
   DocumentTextIcon,
 } from "@heroicons/react/20/solid";
-import { Form, notification } from "antd";
+import { Form, Upload, UploadProps, message, notification } from "antd";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
 import { useMutation } from "@tanstack/react-query";
+import { InboxIcon } from "@heroicons/react/24/outline";
 
 const availableSources = [
   { id: 1, title: "Website", icon: GlobeAltIcon },
-  // { id: 2, title: "PDF", icon: DocumentArrowUpIcon },
+  { id: 2, title: "PDF", icon: DocumentArrowUpIcon },
   { id: 3, title: "Text", icon: DocumentTextIcon },
 ];
 // @ts-ignore
@@ -22,38 +23,53 @@ function classNames(...classes) {
 
 export default function NewRoot() {
   const [selectedSource, setSelectedSource] = useState(availableSources[0]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [form] = Form.useForm();
-  const onSubmit = async (values: {
-    content: string;
-  }) => {
+  const onSubmit = async (values: any) => {
+    if (selectedSource.id == 2) {
+      // /bot/pdf multipart/form-data
+      const formData = new FormData();
+      formData.append("file", values.file[0].originFileObj);
+      const response = await api.post("/bot/pdf", formData, {
+        headers: {  
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    }
     const response = await api.post("/bot", {
       type: selectedSource.title.toLowerCase(),
-      ...values
+      ...values,
     });
     return response.data;
   };
-
-
-  const {
-    mutateAsync: createBot,
-    isLoading
-  } = useMutation(onSubmit, {
-    onSuccess: (data:any) => {
+  const { mutateAsync: createBot, isLoading } = useMutation(onSubmit, {
+    onSuccess: (data: any) => {
       notification.success({
         message: "Success",
-        description: "Bot created successfully."
+        description: "Bot created successfully.",
       });
-      navigate(`/bot/${data.id}`)
+      navigate(`/bot/${data.id}`);
     },
     onError: (e) => {
-      console.log(e)
+      console.log(e);
       notification.error({
         message: "Error",
-        description: "Something went wrong."
+        description: "Something went wrong.",
       });
-    }
-  })
+    },
+  });
+
+  const props: UploadProps = {
+    accept: ".pdf",
+    beforeUpload: (file) => {
+      const isPDF = file.type === "application/pdf";
+      if (!isPDF) {
+        message.error("You can only upload PDF file!");
+      }
+      return isPDF || Upload.LIST_IGNORE;
+    },
+  };
 
   return (
     <>
@@ -66,15 +82,13 @@ export default function NewRoot() {
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <Form 
-            onFinish={createBot}
-            form={form} className="space-y-6" >
+            <Form onFinish={createBot} form={form} className="space-y-6">
               <RadioGroup value={selectedSource} onChange={setSelectedSource}>
                 <RadioGroup.Label className="text-base font-medium text-gray-800">
                   Select a data source
                 </RadioGroup.Label>
 
-                <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
                   {availableSources.map((source) => (
                     <RadioGroup.Option
                       key={source.id}
@@ -123,8 +137,12 @@ export default function NewRoot() {
 
               <Form.Item
                 name="content"
+                hidden={selectedSource.id == 2}
                 rules={[
-                  { required: true, message: "Please input your content!" },
+                  {
+                    required: selectedSource.id != 2,
+                    message: "Please input your content!",
+                  },
                 ]}
               >
                 {selectedSource.id == 1 ? (
@@ -143,15 +161,46 @@ export default function NewRoot() {
                 ) : null}
               </Form.Item>
 
+              {selectedSource.id == 2 && (
+                <Form.Item
+                  name="file"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please upload your PDF!",
+                    },
+                  ]}
+                  getValueFromEvent={(e) => {
+                    console.log("Upload event:", e);
+                    if (Array.isArray(e)) {
+                      return e;
+                    }
+                    return e?.fileList;
+                  }}
+                >
+                  <Upload.Dragger {...props}>
+                    <div className="p-3">
+                      <p className="ant-upload-drag-icon justify-center flex">
+                        <InboxIcon className="h-10 w-10 text-gray-400" />
+                      </p>
+                      <p className="ant-upload-text">
+                        Click or drag PDF to this area to upload
+                      </p>
+                      <p className="ant-upload-hint">
+                        Ensure selectable and copyable PDF text for processing.
+                      </p>
+                    </div>
+                  </Upload.Dragger>
+                </Form.Item>
+              )}
+
               <Form.Item>
                 <button
                   type="submit"
                   disabled={isLoading}
                   className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
-                  {
-                    isLoading ? "Creating..." : "Create"
-                  }
+                  {isLoading ? "Creating..." : "Create"}
                 </button>
               </Form.Item>
             </Form>

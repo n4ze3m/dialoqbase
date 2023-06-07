@@ -2,10 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import api from "../../services/api";
 import { ChevronRightIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { Empty } from "antd"
+import { Empty } from "antd";
 
 export const DashboardGrid = () => {
-
   const { data, status } = useQuery(["getAllBots"], async () => {
     const response = await api.get("/bot");
     return response.data;
@@ -30,7 +29,9 @@ export const DashboardGrid = () => {
           ))}
         </div>
       )}
-      {status === "success" && data.length === 0 && <Empty />}
+      {status === "success" && data.length === 0 && (
+        <Empty description="No bots created yet" />
+      )}
       {status === "success" && data.length > 0 && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {data.map((bot: any) => (

@@ -3,6 +3,7 @@ import AutoLoad, { AutoloadPluginOptions } from "@fastify/autoload";
 import { FastifyPluginAsync } from "fastify";
 import cors from "@fastify/cors";
 import fastifyStatic from "@fastify/static";
+import fastifyMultipart from "@fastify/multipart";
 export type AppOptions = {} & Partial<AutoloadPluginOptions>;
 
 const options: AppOptions = {};
@@ -12,6 +13,9 @@ const app: FastifyPluginAsync<AppOptions> = async (
   opts,
 ): Promise<void> => {
   void fastify.register(cors);
+
+  void fastify.register(fastifyMultipart);
+
   void fastify.register(AutoLoad, {
     dir: join(__dirname, "plugins"),
     options: opts,

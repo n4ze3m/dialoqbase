@@ -68,3 +68,6 @@ prisma/dialoqbase.*
 # ui
 app
 widget
+
+# upload 
+uploads

@@ -13,6 +13,11 @@ import {
   GetSourceByIds,
   UpdateBotById,
 } from "./types";
+import * as fs from "fs";
+import * as util from "util";
+import { pipeline } from "stream";
+import { randomUUID } from "crypto";
+const pump = util.promisify(pipeline);
 
 export const createBotHandler = async (
   request: FastifyRequest<CreateBotRequest>,
@@ -25,7 +30,6 @@ export const createBotHandler = async (
   } = request.body;
 
   const prisma = request.server.prisma;
-  // const queue = request.server.queue;
 
   const shortName = uniqueNamesGenerator({
     dictionaries: [adjectives, animals, colors],
@@ -54,6 +58,55 @@ export const createBotHandler = async (
   };
 };
 
+export const createBotPDFHandler = async (
+  request: FastifyRequest,
+  reply: FastifyReply,
+) => {
+  try {
+    const prisma = request.server.prisma;
+
+    const file = await request.file();
+
+    if (!file) {
+      return reply.status(400).send({
+        message: "File not found",
+      });
+    }
+    const fileName = `${randomUUID()}-${file.filename}`;
+    const path = `./uploads/${fileName}`;
+    await fs.promises.mkdir("./uploads", { recursive: true });
+    await pump(file.file, fs.createWriteStream(path));
+
+    const name = uniqueNamesGenerator({
+      dictionaries: [adjectives, animals, colors],
+      length: 2,
+    });
+
+    const bot = await prisma.bot.create({
+      data: {
+        name,
+      },
+    });
+
+    const botSource = await prisma.botSource.create({
+      data: {
+        content: file.filename,
+        type: "PDF",
+        botId: bot.id,
+        location: path,
+      },
+    });
+
+    await request.server.queue.add([botSource]);
+    return {
+      id: bot.id,
+    };
+  } catch (err) {
+    return reply.status(500).send({
+      message: "Upload failed due to internal server error",
+    });
+  }
+};
 export const getBotByIdEmbeddingsHandler = async (
   request: FastifyRequest<GetBotRequestById>,
   reply: FastifyReply,
@@ -365,19 +418,17 @@ export const updateBotByIdHandler = async (
   };
 };
 
-
 export const getAllBotsHandler = async (
   request: FastifyRequest,
   reply: FastifyReply,
 ) => {
-
   const prisma = request.server.prisma;
 
   const bots = await prisma.bot.findMany({
     orderBy: {
       createdAt: "desc",
-    }
+    },
   });
 
   return bots;
-}
+};
