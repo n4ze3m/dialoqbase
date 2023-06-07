@@ -108,7 +108,7 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
                   <Link to="/" className="flex flex-shrink-0 items-center px-4">
                     <img
                       className="h-8 w-auto"
-                      src="https://em-content.zobj.net/thumbs/120/openmoji/338/high-voltage_26a1.png"
+                      src="/logo.png"
                       alt="Dialoqbase"
                     />
                   </Link>
@@ -157,7 +157,7 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
             <Link to="/" className="flex flex-shrink-0 items-center px-4">
               <img
                 className="h-8 w-auto"
-                src="https://em-content.zobj.net/thumbs/120/openmoji/338/high-voltage_26a1.png"
+                src="/logo.png"
                 alt="Dialoqbase"
               />
             </Link>

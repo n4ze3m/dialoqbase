@@ -23,6 +23,13 @@ export interface AddNewSourceById {
   }
 }
 
+export interface AddNewPDFById {
+  Params: {
+    id: string;
+  };
+}
+
+
 
 export interface GetSourceByIds {
   Params: {

@@ -35,12 +35,12 @@ export default function DashboardLayout({
                     <Link to="/" className="flex flex-shrink-0 items-center">
                       <img
                         className="block h-8 w-auto lg:hidden"
-                        src="https://em-content.zobj.net/thumbs/120/openmoji/338/high-voltage_26a1.png"
+                        src="/logo.png"
                         alt="Dialoqbase"
                       />
                       <img
                         className="hidden h-8 w-auto lg:block"
-                        src="https://em-content.zobj.net/thumbs/120/openmoji/338/high-voltage_26a1.png"
+                        src="/logo.png"
                         alt="Dialoqbase"
                       />
                     </Link>

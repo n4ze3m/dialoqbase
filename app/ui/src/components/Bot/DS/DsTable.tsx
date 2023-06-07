@@ -3,6 +3,7 @@ import {
   GlobeAltIcon,
   TrashIcon,
   ArrowPathIcon,
+  DocumentArrowUpIcon,
 } from "@heroicons/react/24/outline";
 import { Empty, Modal, Tag, notification } from "antd";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
@@ -29,8 +30,23 @@ export const DsTable = ({
         return "blue";
       case "failed":
         return "red";
+      case "processing":
+        return "yellow";
       default:
         return "blue";
+    }
+  };
+
+  const typeIcon = (type: string) => {
+    switch (type.toLowerCase()) {
+      case "website":
+        return <GlobeAltIcon className="h-10 w-10 text-gray-400" />;
+      case "pdf":
+        return <DocumentArrowUpIcon className="h-10 w-10 text-gray-400" />;
+      case "text":
+        return <DocumentTextIcon className="h-10 w-10 text-gray-400" />;
+      default:
+        return <DocumentTextIcon className="h-10 w-10 text-gray-400" />;
     }
   };
 
@@ -85,7 +101,7 @@ export const DsTable = ({
         </div>
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
           <button
-          onClick={() => setOpen(true)}
+            onClick={() => setOpen(true)}
             type="button"
             className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
           >
@@ -136,12 +152,7 @@ export const DsTable = ({
                     {data.map((source) => (
                       <tr key={source.id}>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                          {source.type.toLowerCase() === "website" && (
-                            <GlobeAltIcon className="h-10 w-10" />
-                          )}
-                          {source.type.toLowerCase() === "text" && (
-                            <DocumentTextIcon className="h-10 w-10" />
-                          )}
+                          {typeIcon(source.type)}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {source.content.length > 50
@@ -150,7 +161,7 @@ export const DsTable = ({
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           <Tag color={statusColor(source.status)}>
-                            {source.status}
+                            {source.status.toUpperCase()}
                           </Tag>
                         </td>
 

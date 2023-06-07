@@ -24,6 +24,7 @@
     "@fastify/autoload": "^5.0.0",
     "@fastify/cors": "^8.3.0",
     "@fastify/jwt": "^7.0.0",
+    "@fastify/multipart": "^7.6.0",
     "@fastify/sensible": "^5.0.0",
     "@fastify/static": "^6.10.2",
     "@prisma/client": "4.15.0",
@@ -35,6 +36,7 @@
     "fastify-plugin": "^4.0.0",
     "ioredis": "^5.3.2",
     "langchain": "^0.0.90",
+    "pdf-parse": "^1.1.1",
     "unique-names-generator": "^4.7.1"
   },
   "devDependencies": {

@@ -5,12 +5,14 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { DialoqbaseVectorStore } from "../utils/store";
 import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 
+const prisma = new PrismaClient();
 export const queueHandler = async (job: Job, done: DoneCallback) => {
   const data = job.data as BotSource[];
-  try {
-    for (const source of data) {
+
+  for (const source of data) {
+    try {
       if (source.type.toLowerCase() === "website") {
         await prisma.botSource.update({
           where: {
@@ -20,15 +22,14 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
             status: "PROCESSING",
           },
         });
-        const loader = new CheerioWebBaseLoader(source.content!);
 
+        const loader = new CheerioWebBaseLoader(source.content!);
         const docs = await loader.load();
 
         const textSplitter = new RecursiveCharacterTextSplitter({
           chunkSize: 1000,
           chunkOverlap: 200,
         });
-
         const chunks = await textSplitter.splitDocuments(docs);
 
         await DialoqbaseVectorStore.fromDocuments(
@@ -37,7 +38,7 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
           {
             botId: source.botId,
             sourceId: source.id,
-          }
+          },
         );
 
         await prisma.botSource.update({
@@ -58,11 +59,11 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
             status: "PROCESSING",
           },
         });
+
         const textSplitter = new RecursiveCharacterTextSplitter({
           chunkSize: 1000,
           chunkOverlap: 200,
         });
-
         const chunks = await textSplitter.splitDocuments([
           {
             pageContent: source.content!,
@@ -78,7 +79,46 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
           {
             botId: source.botId,
             sourceId: source.id,
-          }
+          },
+        );
+
+        await prisma.botSource.update({
+          where: {
+            id: source.id,
+          },
+          data: {
+            status: "FINISHED",
+            isPending: false,
+          },
+        });
+      } else if (source.type.toLowerCase() === "pdf") {
+        console.log("loading pdf");
+        await prisma.botSource.update({
+          where: {
+            id: source.id,
+          },
+          data: {
+            status: "PROCESSING",
+          },
+        });
+
+        const location = source.location!;
+        const loader = new PDFLoader(location);
+        const docs = await loader.load();
+
+        const textSplitter = new RecursiveCharacterTextSplitter({
+          chunkSize: 1000,
+          chunkOverlap: 200,
+        });
+        const chunks = await textSplitter.splitDocuments(docs);
+
+        await DialoqbaseVectorStore.fromDocuments(
+          chunks,
+          new OpenAIEmbeddings(),
+          {
+            botId: source.botId,
+            sourceId: source.id,
+          },
         );
 
         await prisma.botSource.update({
@@ -91,9 +131,19 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
           },
         });
       }
+    } catch (e) {
+      console.log(e);
+
+      await prisma.botSource.update({
+        where: {
+          id: source.id,
+        },
+        data: {
+          status: "FAILED",
+          isPending: false,
+        },
+      });
     }
-  } catch (e) {
-    console.log(e);
   }
 
   done();
