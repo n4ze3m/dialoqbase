@@ -71,6 +71,14 @@ _important: change the default credentials after the first login_
 
 - Using PostgreSQL for vector search and storing the knowledge base (you don't need another vector database)
 
+## Stack
+
+- [React](https://reactjs.org/)
+- [Node.js](https://nodejs.org/)
+- [Fastify](https://www.fastify.io/)
+- [LangChain](https://langchain.com/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Redis](https://redis.io/)
 
 ## TODO
 
