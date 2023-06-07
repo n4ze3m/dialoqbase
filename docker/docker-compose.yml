@@ -8,26 +8,20 @@ services:
     ports:
       - 3000:3000
     environment:
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/dialoqbase
+      DATABASE_URL: postgres://postgres:postgres@dialoqbase-pg:5432/dialoqbase
       DB_REDIS_URL: redis://redis:6379
     env_file:
       - imp.env
     depends_on:
-      - postgres
+      - dialoqbase-pg
       - redis
 
-  postgres:
-    image: ankane/pgvector:latest
-    container_name: postgres
+  dialoqbase-pg:
+    image: n4z3m/dialoqbase-pg:latest
+    container_name: dialoqbase-postgres
     restart: unless-stopped
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: dialoqbase
     volumes:
       - .postgres:/var/lib/postgresql/data
-      - ./scripts:/docker-entrypoint-initdb.d
-
 
   redis:
     image: redis:latest
