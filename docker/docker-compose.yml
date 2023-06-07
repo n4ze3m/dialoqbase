@@ -16,7 +16,7 @@ services:
       - dialoqbase-pg
       - redis
     volumes:
-      - uploads:/app/uploads
+      - .uploads:/app/uploads
 
   dialoqbase-pg:
     image: n4z3m/dialoqbase-pg:latest
