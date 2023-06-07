@@ -30,6 +30,8 @@ export const DsTable = ({
         return "blue";
       case "failed":
         return "red";
+      case "processing":
+        return "yellow";
       default:
         return "blue";
     }
@@ -150,7 +152,7 @@ export const DsTable = ({
                     {data.map((source) => (
                       <tr key={source.id}>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                         {typeIcon(source.type)}
+                          {typeIcon(source.type)}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {source.content.length > 50
@@ -159,7 +161,7 @@ export const DsTable = ({
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           <Tag color={statusColor(source.status)}>
-                            {source.status}
+                            {source.status.toUpperCase()}
                           </Tag>
                         </td>
 
