@@ -1,25 +1,24 @@
 # Dialoqbase
 
-Dialoqbase is a web application that allows you to create custom chatbots with your own knowledge base. 
-
-*Currently, it only supports OpenAI API but more LLMs will be added in the future.*
+Dialoqbase is a web application that allows you to create custom chatbots with your own knowledge base. It currently supports the OpenAI API, with plans to add more language models in the future.
 
 Here's a demo of how it works:
+
 
 [![DialoqBase Demo](https://img.youtube.com/vi/Kktfs8JI4yI/0.jpg)](https://www.youtube.com/watch?v=Kktfs8JI4yI)
 
 ## Installation
 
-1. Clone the repository and enter the docker directory
+1. Clone the repository and navigate to the docker directory:
 
 ```bash
 git clone https://github.com/n4ze3m/dialoqbase.git
 cd dialoqbase/docker
 ```
 
-2. Edit the `imp.env` file and set the environment variables
+2. Edit the `imp.env` file and set the following environment variables:
 
-- On Linux
+- On Linux:
 
 ```bash
 nano imp.env
@@ -30,17 +29,17 @@ or
 vim imp.env
 ```
 
-- On Windows
+- On Windows:
 
 ```bash
 notepad imp.env
 ```
 
 
-`OPENAI_API_KEY` - OpenAI API key is required to use the OpenAI API. You can get one [here](https://platform.openai.com/account/api-keys)
+Set the `OPENAI_API_KEY` variable to your OpenAI API key. You can obtain an API key [here](https://platform.openai.com/account/api-keys)
 
 
-3. Run the docker-compose file
+3. Run the docker-compose file:
 
 ```bash
 docker-compose up -d
@@ -52,24 +51,24 @@ or
 docker compose up -d
 ```
 
-4. Open the browser and go to `http://localhost:3000`
+4. Open your browser and go to `http://localhost:3000`.
 
-5. Login with the default credentials
+5. Log in using the default credentials:
 
 ```bash
 username: admin
 password: admin
 ```
 
-_important: change the default credentials after the first login_
+_Important: After the first login, remember to change the default credentials._
 
 ## Features
 
-- Create custom chatbots with your own knowledge base (website and text)
+- Create custom chatbots with your own knowledge base 
 
-- Use the power of powerful LLMs to generate responses (currently only supports OpenAI API)
+- Utilize powerful language models to generate responses 
 
-- Using PostgreSQL for vector search and storing the knowledge base (you don't need another vector database)
+- Utilize PostgreSQL for vector search and storing the knowledge base (eliminating the need for an additional vector database)
 
 ## Stack
 
@@ -80,7 +79,12 @@ _important: change the default credentials after the first login_
 - [PostgreSQL](https://www.postgresql.org/)
 - [Redis](https://redis.io/)
 
+## Disclaimer
+
+Dialoqbase is a side project and is not ready for production. It is still in the early stages of development and may contain bugs and security issues. Use it at your own risk.
+
 ## TODO
+
 
 - [ ] Add more LLMs both free and paid
 
