@@ -3,6 +3,7 @@ import React, { Fragment } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu } from "@headlessui/react";
+import { Avatar } from "antd";
 
 //@ts-ignore
 function classNames(...classes) {
@@ -49,13 +50,11 @@ export default function DashboardLayout({
                     {/* Profile dropdown */}
                     <Menu as="div" className="relative ml-3">
                       <div>
-                        <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm">
                           <span className="sr-only">Open user menu</span>
-                          <img
-                            className="h-8 w-8 rounded-full"
-                            src={profile?.avatar}
-                            alt=""
-                          />
+                          <Avatar shape="square">
+                            {profile?.username?.charAt(0).toUpperCase()}
+                          </Avatar>
                         </Menu.Button>
                       </div>
                       <Transition
@@ -108,11 +107,9 @@ export default function DashboardLayout({
                 <div className="border-t border-gray-200 pt-4 pb-3">
                   <div className="flex items-center px-4">
                     <div className="flex-shrink-0">
-                      <img
-                        className="h-10 w-10 rounded-full"
-                        src={profile?.avatar}
-                        alt=""
-                      />
+                      <Avatar shape="square">
+                        {profile?.username?.charAt(0).toUpperCase()}
+                      </Avatar>
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium text-gray-800">
