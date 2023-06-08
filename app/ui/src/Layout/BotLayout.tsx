@@ -11,6 +11,7 @@ import {
 
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { Avatar } from "antd";
 
 const navigation = [
   { name: "Embed", href: "/bot/:id", icon: TagIcon },
@@ -207,13 +208,11 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
               <div className="ml-4 flex items-center md:ml-6">
                 <Menu as="div" className="relative ml-3">
                   <div>
-                    <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm">
                       <span className="sr-only">Open user menu</span>
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src={profile?.avatar}
-                        alt=""
-                      />
+                      <Avatar shape="square">
+                            {profile?.username?.charAt(0).toUpperCase()}
+                          </Avatar>
                     </Menu.Button>
                   </div>
                   <Transition

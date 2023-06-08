@@ -1,4 +1,4 @@
-import { Form, FormInstance, Upload, UploadProps, message } from "antd";
+import { Form, FormInstance, Select, Upload, UploadProps, message } from "antd";
 import { RadioGroup } from "@headlessui/react";
 import {
   DocumentArrowUpIcon,
@@ -7,12 +7,15 @@ import {
   InboxIcon,
 } from "@heroicons/react/24/outline";
 import React from "react";
+import { availableEmbeddingTypes } from "../../utils/embeddings";
+
 
 type Props = {
   createBot: (values: any) => void;
   isLoading: boolean;
   setSelectedSource: React.Dispatch<React.SetStateAction<any>>;
   form: FormInstance<any>;
+  showEmbedding: boolean;
 };
 // @ts-ignore
 function classNames(...classes) {
@@ -29,6 +32,7 @@ export const BotForm = ({
   isLoading,
   setSelectedSource,
   form,
+  showEmbedding,
 }: Props) => {
   const [selectedSource, _setSelectedSource] = React.useState<any>(
     availableSources[0]
@@ -47,8 +51,18 @@ export const BotForm = ({
     },
   };
 
+  const embeddingType = Form.useWatch("embedding", form);
+
   return (
-    <Form onFinish={createBot} form={form} className="space-y-6">
+    <Form
+      layout="vertical"
+      onFinish={createBot}
+      form={form}
+      className="space-y-6"
+      initialValues={{
+        embedding: "openai",
+      }}
+    >
       <RadioGroup
         value={selectedSource}
         onChange={(e: any) => {
@@ -157,6 +171,28 @@ export const BotForm = ({
           </Upload.Dragger>
         </Form.Item>
       )}
+
+      <Form.Item
+        hidden={!showEmbedding}
+        label={
+          <span className="font-medium text-gray-800 text-sm">
+            Embedding method
+          </span>
+        }
+        name="embedding"
+        hasFeedback={embeddingType === "tensorflow"}
+        help={
+          embeddingType === "tensorflow"
+            ? "TensorFlow embeddings can be slow and memory-intensive."
+            : null
+        }
+        validateStatus={embeddingType === "tensorflow" ? "warning" : undefined}
+      >
+        <Select
+          placeholder="Select an embedding method"
+          options={availableEmbeddingTypes}
+        />
+      </Form.Item>
 
       <Form.Item>
         <button

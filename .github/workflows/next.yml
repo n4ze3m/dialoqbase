@@ -1,9 +1,8 @@
-name: Docker Image CI
+name: Docker Image CI (next)
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches: [ next ]
 
 jobs:
   docker:
@@ -25,6 +24,5 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           tags: |
-            n4z3m/dialoqbase:latest
-            n4z3m/dialoqbase:${{ github.ref_name}}
+            n4z3m/dialoqbase-next:latest
           push: true

@@ -13,11 +13,16 @@ import {
   GetBotRequestById,
   GetSourceByIds,
   UpdateBotById,
+  UploadPDF,
 } from "./types";
 import * as fs from "fs";
 import * as util from "util";
 import { pipeline } from "stream";
 import { randomUUID } from "crypto";
+import {
+  embeddingsValidation,
+  embeddingsValidationMessage,
+} from "../../../../../utils/validate";
 const pump = util.promisify(pipeline);
 
 export const createBotHandler = async (
@@ -28,9 +33,18 @@ export const createBotHandler = async (
     content,
     type,
     name: nameFromRequest,
+    embedding,
   } = request.body;
 
   const prisma = request.server.prisma;
+
+  const isEmbeddingsValid = embeddingsValidation(embedding);
+
+  if (!isEmbeddingsValid) {
+    return reply.status(400).send({
+      message: embeddingsValidationMessage(embedding),
+    });
+  }
 
   const shortName = uniqueNamesGenerator({
     dictionaries: [adjectives, animals, colors],
@@ -42,6 +56,7 @@ export const createBotHandler = async (
   const bot = await prisma.bot.create({
     data: {
       name,
+      embedding,
     },
   });
 
@@ -53,17 +68,28 @@ export const createBotHandler = async (
     },
   });
 
-  await request.server.queue.add([botSource]);
+  await request.server.queue.add([{
+    ...botSource,
+    embedding,
+  }]);
   return {
     id: bot.id,
   };
 };
 
 export const createBotPDFHandler = async (
-  request: FastifyRequest,
+  request: FastifyRequest<UploadPDF>,
   reply: FastifyReply,
 ) => {
   try {
+    const embedding = request.query.embedding;
+    const isEmbeddingsValid = embeddingsValidation(embedding);
+
+    if (!isEmbeddingsValid) {
+      return reply.status(400).send({
+        message: embeddingsValidationMessage(embedding),
+      });
+    }
     const prisma = request.server.prisma;
 
     const file = await request.file();
@@ -86,6 +112,7 @@ export const createBotPDFHandler = async (
     const bot = await prisma.bot.create({
       data: {
         name,
+        embedding,
       },
     });
 
@@ -98,7 +125,10 @@ export const createBotPDFHandler = async (
       },
     });
 
-    await request.server.queue.add([botSource]);
+    await request.server.queue.add([{
+      ...botSource,
+      embedding: bot.embedding,
+    }]);
     return {
       id: bot.id,
     };
@@ -130,7 +160,7 @@ export const getBotByIdEmbeddingsHandler = async (
 
   const source = await prisma.botSource.count({
     where: {
-      id,
+      botId: id,
       isPending: true,
     },
   });
@@ -226,7 +256,10 @@ export const addNewSourceByIdHandler = async (
     },
   });
 
-  await request.server.queue.add([botSource]);
+  await request.server.queue.add([{
+    ...botSource,
+    embedding: bot.embedding,
+  }]);
   return {
     id: bot.id,
   };
@@ -238,6 +271,18 @@ export const addNewSourcePDFByIdHandler = async (
 ) => {
   const prisma = request.server.prisma;
   const id = request.params.id;
+
+  const bot = await prisma.bot.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!bot) {
+    return reply.status(404).send({
+      message: "Bot not found",
+    });
+  }
 
   const file = await request.file();
 
@@ -260,7 +305,10 @@ export const addNewSourcePDFByIdHandler = async (
     },
   });
 
-  await request.server.queue.add([botSource]);
+  await request.server.queue.add([{
+    ...botSource,
+    embedding: bot.embedding,
+  }]);
 
   return {
     id: botSource.id,
@@ -316,7 +364,10 @@ export const refreshSourceByIdHandler = async (
       sourceId: source_id,
     },
   });
-  await request.server.queue.add([botSource]);
+  await request.server.queue.add([{
+    ...botSource,
+    embedding: bot.embedding,
+  }]);
 
   return {
     id: bot.id,
