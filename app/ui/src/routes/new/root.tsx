@@ -8,13 +8,17 @@ import axios from "axios";
 
 export default function NewRoot() {
   const navigate = useNavigate();
-  const [selectedSource, setSelectedSource] = useState<any>(null);
+  const [selectedSource, setSelectedSource] = useState<any>({
+    id: 1,
+    title: "Website",
+  });
   const [form] = Form.useForm();
   const onSubmit = async (values: any) => {
     if (selectedSource.id == 2) {
       const formData = new FormData();
       formData.append("file", values.file[0].originFileObj);
-      const response = await api.post("/bot/pdf", formData, {
+ 
+      const response = await api.post("/bot/pdf?embedding=" + values.embedding, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -37,8 +41,11 @@ export default function NewRoot() {
     },
     onError: (e) => {
       console.log(e);
-      if(axios.isAxiosError(e)) {
-        const message = e.response?.data?.message || e?.response?.data?.error || "Something went wrong.";
+      if (axios.isAxiosError(e)) {
+        const message =
+          e.response?.data?.message ||
+          e?.response?.data?.error ||
+          "Something went wrong.";
         notification.error({
           message: "Error",
           description: message,
@@ -64,6 +71,7 @@ export default function NewRoot() {
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
             <BotForm
+              showEmbedding={true}
               createBot={createBot}
               isLoading={isLoading}
               setSelectedSource={setSelectedSource}

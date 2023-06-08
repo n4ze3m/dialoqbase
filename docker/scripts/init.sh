@@ -13,6 +13,8 @@ CREATE TABLE "public"."Bot" (
     "createdAt" timestamp(3) DEFAULT CURRENT_TIMESTAMP NOT NULL,
     "temperature" double precision DEFAULT '0.7' NOT NULL,
     "model" text DEFAULT 'gpt-3.5-turbo' NOT NULL,
+    "provider" text DEFAULT 'openai' NOT NULL,
+    "embedding" text DEFAULT 'openai' NOT NULL,
     CONSTRAINT "Bot_pkey" PRIMARY KEY ("id"),
     CONSTRAINT "Bot_publicId_key" UNIQUE ("publicId")
 ) WITH (oids = false);
@@ -61,7 +63,7 @@ ALTER TABLE ONLY "public"."BotDocument" ADD CONSTRAINT "BotDocument_sourceId_fke
 ALTER TABLE ONLY "public"."BotSource" ADD CONSTRAINT "BotSource_botId_fkey" FOREIGN KEY ("botId") REFERENCES "Bot"(id) ON UPDATE CASCADE ON DELETE RESTRICT NOT DEFERRABLE;
 -- Functions
 CREATE OR REPLACE FUNCTION similarity_search (
-  query_embedding vector(1536),
+  query_embedding vector,
   botId text,
   match_count int DEFAULT null
 ) RETURNS TABLE (

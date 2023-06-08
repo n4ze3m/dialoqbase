@@ -22,7 +22,10 @@ function classNames(...classes) {
 }
 
 export const NewDsForm = ({ onClose }: { onClose: () => void }) => {
-  const [selectedSource, setSelectedSource] = useState<any>(null);
+  const [selectedSource, setSelectedSource] = useState<any>({
+    id: 1,
+    title: "Website",
+  });
   const params = useParams<{ id: string }>();
   const client = useQueryClient();
   const [form] = Form.useForm();
@@ -82,6 +85,7 @@ export const NewDsForm = ({ onClose }: { onClose: () => void }) => {
   return (
     <>
       <BotForm
+        showEmbedding={false}
         form={form}
         createBot={createBot}
         isLoading={isLoading}
