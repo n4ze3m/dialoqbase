@@ -14,7 +14,7 @@ interface QSource extends BotSource {
   embedding: string;
 }
 
-const queue = new Queue("vector", process.env.DB_REDIS_URL!, {});
+export const queue = new Queue("vector", process.env.DB_REDIS_URL!, {});
 export const queueHandler = async (job: Job, done: DoneCallback) => {
   const data = job.data as QSource[];
 

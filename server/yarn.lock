@@ -1112,6 +1112,11 @@ code-excerpt@^3.0.0:
   dependencies:
     convert-to-spaces "^1.0.1"
 
+cohere-ai@^6.2.1:
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/cohere-ai/-/cohere-ai-6.2.1.tgz#f483d5d1fb019698ac7de24ef84f79621fe172bc"
+  integrity sha512-um6QaNPrsTZWIf7SIefr3C1Ed2M7HubkcaRZERBLsrvawN1O+ClrGcoEcvdYVBwxQcKwoPr+D3PrDXCfoFQNjQ==
+
 color-convert@^1.9.0:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.3.tgz#bb71850690e1f136567de629d2d5471deda4c1e8"

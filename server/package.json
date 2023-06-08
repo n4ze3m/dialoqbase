@@ -9,15 +9,13 @@
   "scripts": {
     "test": "npm run build:ts && tsc -p test/tsconfig.json && tap --ts \"test/**/*.test.ts\"",
     "start:test": "npm run build:ts && fastify start -l info dist/app.js",
-    "prod": "fastify start -l info app.js",
-    "prod:queue": "node queue/index.js",
-    "start": "concurrently -p \"[{name}]\" -n \"Production,Queue\" -c \"green.bold,magenta.bold\" \"npm:prod\" \"npm:prod:queue\"",
+    "start": "fastify start -l info app.js",
     "build:ts": "tsc",
     "build": "tsc",
     "queue": "node dist/queue/index.js",
     "db": "prisma generate",
     "watch:ts": "tsc -w",
-    "dev": "npm run build:ts && concurrently -k -p \"[{name}]\" -n \"TypeScript,App,Queue\" -c \"yellow.bold,cyan.bold,magenta.bold\" \"npm:watch:ts\" \"npm:dev:start\" \"npm:queue\"",
+    "dev": "npm run build:ts && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"npm:watch:ts\" \"npm:dev:start\"",
     "dev:start": "fastify start --ignore-watch=.ts$ -w -l info -P dist/app.js"
   },
   "keywords": [],
@@ -38,13 +36,14 @@
     "bcryptjs": "^2.4.3",
     "bull": "^4.10.4",
     "cheerio": "1.0.0-rc.12",
+    "cohere-ai": "^6.2.1",
+    "concurrently": "^7.0.0",
     "fastify": "^4.0.0",
     "fastify-cli": "^5.7.1",
     "fastify-plugin": "^4.0.0",
     "ioredis": "^5.3.2",
     "langchain": "^0.0.90",
     "pdf-parse": "^1.1.1",
-    "concurrently": "^7.0.0",
     "unique-names-generator": "^4.7.1"
   },
   "devDependencies": {

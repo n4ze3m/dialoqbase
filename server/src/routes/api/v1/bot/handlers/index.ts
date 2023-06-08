@@ -19,6 +19,10 @@ import * as fs from "fs";
 import * as util from "util";
 import { pipeline } from "stream";
 import { randomUUID } from "crypto";
+import {
+  embeddingsValidation,
+  embeddingsValidationMessage,
+} from "../../../../../utils/validate";
 const pump = util.promisify(pipeline);
 
 export const createBotHandler = async (
@@ -33,6 +37,14 @@ export const createBotHandler = async (
   } = request.body;
 
   const prisma = request.server.prisma;
+
+  const isEmbeddingsValid = embeddingsValidation(embedding);
+
+  if (!isEmbeddingsValid) {
+    return reply.status(400).send({
+      message: embeddingsValidationMessage(embedding),
+    });
+  }
 
   const shortName = uniqueNamesGenerator({
     dictionaries: [adjectives, animals, colors],
@@ -70,6 +82,14 @@ export const createBotPDFHandler = async (
   reply: FastifyReply,
 ) => {
   try {
+    const embedding = request.query.embedding;
+    const isEmbeddingsValid = embeddingsValidation(embedding);
+
+    if (!isEmbeddingsValid) {
+      return reply.status(400).send({
+        message: embeddingsValidationMessage(embedding),
+      });
+    }
     const prisma = request.server.prisma;
 
     const file = await request.file();
@@ -83,7 +103,6 @@ export const createBotPDFHandler = async (
     const path = `./uploads/${fileName}`;
     await fs.promises.mkdir("./uploads", { recursive: true });
     await pump(file.file, fs.createWriteStream(path));
-    const embedding = request.query.embedding
 
     const name = uniqueNamesGenerator({
       dictionaries: [adjectives, animals, colors],
@@ -93,7 +112,7 @@ export const createBotPDFHandler = async (
     const bot = await prisma.bot.create({
       data: {
         name,
-        embedding
+        embedding,
       },
     });
 
