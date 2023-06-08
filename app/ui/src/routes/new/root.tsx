@@ -8,7 +8,10 @@ import axios from "axios";
 
 export default function NewRoot() {
   const navigate = useNavigate();
-  const [selectedSource, setSelectedSource] = useState<any>(null);
+  const [selectedSource, setSelectedSource] = useState<any>({
+    id: 1,
+    title: "Website",
+  });
   const [form] = Form.useForm();
   const onSubmit = async (values: any) => {
     if (selectedSource.id == 2) {
@@ -37,8 +40,11 @@ export default function NewRoot() {
     },
     onError: (e) => {
       console.log(e);
-      if(axios.isAxiosError(e)) {
-        const message = e.response?.data?.message || e?.response?.data?.error || "Something went wrong.";
+      if (axios.isAxiosError(e)) {
+        const message =
+          e.response?.data?.message ||
+          e?.response?.data?.error ||
+          "Something went wrong.";
         notification.error({
           message: "Error",
           description: message,
