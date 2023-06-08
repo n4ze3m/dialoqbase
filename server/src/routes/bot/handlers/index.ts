@@ -62,8 +62,10 @@ export const chatRequestHandler = async (
   const modelName = bot.model;
 
   const sanitizedQuestion = message.trim().replaceAll("\n", " ");
+  const embeddingModel = embeddings(bot.embedding)
+  
   const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
-    embeddings(bot.embedding),
+    embeddingModel,
     {
       botId: bot.id,
       sourceId: null,

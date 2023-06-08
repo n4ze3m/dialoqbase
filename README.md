@@ -106,7 +106,7 @@ and more...
 ### Embedding models
 
 - [X] OpenAI 
-- [ ] TensorFlow
+- [X] TensorFlow
 - [ ] HuggingFace 
 - [ ] Cohere
 

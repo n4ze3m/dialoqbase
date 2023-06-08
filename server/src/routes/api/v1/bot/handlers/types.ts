@@ -31,6 +31,11 @@ export interface AddNewPDFById {
 }
 
 
+export interface UploadPDF {
+  Querystring: {
+    embedding: string;
+  }
+}
 
 export interface GetSourceByIds {
   Params: {

@@ -9,12 +9,15 @@
   "scripts": {
     "test": "npm run build:ts && tsc -p test/tsconfig.json && tap --ts \"test/**/*.test.ts\"",
     "start:test": "npm run build:ts && fastify start -l info dist/app.js",
-    "start": "fastify start -l info app.js",
+    "prod": "fastify start -l info app.js",
+    "prod:queue": "node queue/index.js",
+    "start": "concurrently -p \"[{name}]\" -n \"Production,Queue\" -c \"green.bold,magenta.bold\" \"npm:prod\" \"npm:prod:queue\"",
     "build:ts": "tsc",
     "build": "tsc",
+    "queue": "node dist/queue/index.js",
     "db": "prisma generate",
     "watch:ts": "tsc -w",
-    "dev": "npm run build:ts && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"npm:watch:ts\" \"npm:dev:start\"",
+    "dev": "npm run build:ts && concurrently -k -p \"[{name}]\" -n \"TypeScript,App,Queue\" -c \"yellow.bold,cyan.bold,magenta.bold\" \"npm:watch:ts\" \"npm:dev:start\" \"npm:queue\"",
     "dev:start": "fastify start --ignore-watch=.ts$ -w -l info -P dist/app.js"
   },
   "keywords": [],
