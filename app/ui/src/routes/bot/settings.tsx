@@ -20,6 +20,7 @@ export default function BotSettingsRoot() {
           model: string;
           public_id: string;
           temperature: number;
+          embedding: string;
         };
       };
     },
