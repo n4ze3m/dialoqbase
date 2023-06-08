@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { ChatRequestBody } from "./types";
 import { DialoqbaseVectorStore } from "../../../utils/store";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { ConversationalRetrievalQAChain } from "langchain/chains";
 import { OpenAI } from "langchain/llms/openai";
+import { embeddings } from "../../../utils/embeddings";
 // prompt copied from https://github.com/mayooear/gpt4-pdf-chatbot-langchain
 const CONDENSE_PROMPT =
   `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
@@ -63,7 +63,7 @@ export const chatRequestHandler = async (
 
   const sanitizedQuestion = message.trim().replaceAll("\n", " ");
   const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
-    new OpenAIEmbeddings({}),
+    embeddings(bot.embedding),
     {
       botId: bot.id,
       sourceId: null,

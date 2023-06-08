@@ -3,6 +3,7 @@ export interface CreateBotRequest {
     name?: string;
     type: string;
     content: string;
+    embedding: string;
   };
 }
 

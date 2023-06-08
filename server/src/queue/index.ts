@@ -2,14 +2,19 @@ import { DoneCallback, Job } from "bull";
 import { BotSource } from "@prisma/client";
 import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { DialoqbaseVectorStore } from "../utils/store";
 import { PrismaClient } from "@prisma/client";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
+import { embeddings } from "../utils/embeddings";
 
 const prisma = new PrismaClient();
+
+interface QSource extends BotSource {
+  embedding: string;
+}
+
 export const queueHandler = async (job: Job, done: DoneCallback) => {
-  const data = job.data as BotSource[];
+  const data = job.data as QSource[];
 
   for (const source of data) {
     try {
@@ -34,7 +39,7 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
 
         await DialoqbaseVectorStore.fromDocuments(
           chunks,
-          new OpenAIEmbeddings(),
+          embeddings(source.embedding),
           {
             botId: source.botId,
             sourceId: source.id,
@@ -75,7 +80,7 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
 
         await DialoqbaseVectorStore.fromDocuments(
           chunks,
-          new OpenAIEmbeddings(),
+          embeddings(source.embedding),
           {
             botId: source.botId,
             sourceId: source.id,
@@ -114,7 +119,7 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
 
         await DialoqbaseVectorStore.fromDocuments(
           chunks,
-          new OpenAIEmbeddings(),
+          embeddings(source.embedding),
           {
             botId: source.botId,
             sourceId: source.id,
