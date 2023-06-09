@@ -85,7 +85,7 @@ export const NewDsForm = ({ onClose }: { onClose: () => void }) => {
   return (
     <>
       <BotForm
-        showEmbedding={false}
+        showEmbeddingAndModels={false}
         form={form}
         createBot={createBot}
         isLoading={isLoading}

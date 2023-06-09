@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../services/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { availableEmbeddingTypes } from "../../../utils/embeddings";
+import { availableChatModels } from "../../../utils/chatModels";
+import axios from "axios";
 
 export const SettingsCard = ({
   data,
@@ -34,7 +36,14 @@ export const SettingsCard = ({
         message: "Bot updated successfully",
       });
     },
-    onError: () => {
+    onError: (error:any) => {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.message || "Something went wrong";
+        notification.error({
+          message,
+        });
+        return;
+      }
       notification.error({
         message: "Something went wrong",
       });
@@ -58,7 +67,15 @@ export const SettingsCard = ({
         message: "Bot deleted successfully",
       });
     },
-    onError: () => {
+    onError: (error: any) => {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.message || "Something went wrong";
+        notification.error({
+          message,
+        });
+        return;
+      }
+
       notification.error({
         message: "Something went wrong",
       });
@@ -118,10 +135,7 @@ export const SettingsCard = ({
                   },
                 ]}
               >
-                <select className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-                  <option value="gpt-3.5-turbo">GPT 3.5 Turbo</option>
-                  <option value="gpt-4">GPT-4</option>
-                </select>
+                <Select options={availableChatModels} />
               </Form.Item>
 
               <Form.Item
@@ -160,7 +174,7 @@ export const SettingsCard = ({
                 }
               >
                 <Select
-                disabled
+                  disabled
                   placeholder="Select an embedding method"
                   options={availableEmbeddingTypes}
                 />
