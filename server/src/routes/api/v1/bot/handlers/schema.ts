@@ -17,7 +17,7 @@ export const createBotSchema: FastifySchema = {
       },
       embedding: {
         type: "string",
-        enum: ["tensorflow", "openai", "cohere"],
+        enum: ["tensorflow", "openai", "cohere", "huggingface-api"],
       }
     },
   },

@@ -124,7 +124,6 @@ export class DialoqbaseVectorStore extends VectorStore {
       }),
       resp.similarity,
     ]);
-
     return result;
   }
 }
