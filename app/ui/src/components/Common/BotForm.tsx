@@ -8,14 +8,14 @@ import {
 } from "@heroicons/react/24/outline";
 import React from "react";
 import { availableEmbeddingTypes } from "../../utils/embeddings";
-
+import { availableChatModels } from "../../utils/chatModels";
 
 type Props = {
   createBot: (values: any) => void;
   isLoading: boolean;
   setSelectedSource: React.Dispatch<React.SetStateAction<any>>;
   form: FormInstance<any>;
-  showEmbedding: boolean;
+  showEmbeddingAndModels: boolean;
 };
 // @ts-ignore
 function classNames(...classes) {
@@ -32,7 +32,7 @@ export const BotForm = ({
   isLoading,
   setSelectedSource,
   form,
-  showEmbedding,
+  showEmbeddingAndModels,
 }: Props) => {
   const [selectedSource, _setSelectedSource] = React.useState<any>(
     availableSources[0]
@@ -61,6 +61,7 @@ export const BotForm = ({
       className="space-y-6"
       initialValues={{
         embedding: "openai",
+        model: "gpt-3.5-turbo",
       }}
     >
       <RadioGroup
@@ -173,7 +174,20 @@ export const BotForm = ({
       )}
 
       <Form.Item
-        hidden={!showEmbedding}
+        hidden={!showEmbeddingAndModels}
+        label={
+          <span className="font-medium text-gray-800 text-sm">Chat Model</span>
+        }
+        name="model"
+      >
+        <Select
+          placeholder="Select a chat model"
+          options={availableChatModels}
+        />
+      </Form.Item>
+
+      <Form.Item
+        hidden={!showEmbeddingAndModels}
         label={
           <span className="font-medium text-gray-800 text-sm">
             Embedding method

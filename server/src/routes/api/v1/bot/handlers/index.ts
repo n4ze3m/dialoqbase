@@ -20,9 +20,10 @@ import * as util from "util";
 import { pipeline } from "stream";
 import { randomUUID } from "crypto";
 import {
-  embeddingsValidation,
-  embeddingsValidationMessage,
+  apiKeyValidaton,
+  apiKeyValidatonMessage,
 } from "../../../../../utils/validate";
+import { modelProviderName } from "../../../../../utils/provider";
 const pump = util.promisify(pipeline);
 
 export const createBotHandler = async (
@@ -34,15 +35,34 @@ export const createBotHandler = async (
     type,
     name: nameFromRequest,
     embedding,
+    model,
   } = request.body;
 
   const prisma = request.server.prisma;
 
-  const isEmbeddingsValid = embeddingsValidation(embedding);
+  const isEmbeddingsValid = apiKeyValidaton(embedding);
 
   if (!isEmbeddingsValid) {
     return reply.status(400).send({
-      message: embeddingsValidationMessage(embedding),
+      message: apiKeyValidatonMessage(embedding),
+    });
+  }
+
+  const providerName = modelProviderName(model);
+
+  const isModelValid = providerName !== "Unknown";
+
+  if (!isModelValid) {
+    return reply.status(400).send({
+      message: "Model not found",
+    });
+  }
+
+  const isAPIKeyAddedForProvider = apiKeyValidaton(providerName);
+
+  if (!isAPIKeyAddedForProvider) {
+    return reply.status(400).send({
+      message: apiKeyValidatonMessage(providerName),
     });
   }
 
@@ -57,6 +77,8 @@ export const createBotHandler = async (
     data: {
       name,
       embedding,
+      model,
+      provider: providerName,
     },
   });
 
@@ -83,13 +105,32 @@ export const createBotPDFHandler = async (
 ) => {
   try {
     const embedding = request.query.embedding;
-    const isEmbeddingsValid = embeddingsValidation(embedding);
+    const model = request.query.model;
+    const isEmbeddingsValid = apiKeyValidaton(embedding);
 
     if (!isEmbeddingsValid) {
       return reply.status(400).send({
-        message: embeddingsValidationMessage(embedding),
+        message: apiKeyValidatonMessage(embedding),
       });
     }
+
+    const providerName = modelProviderName(model);
+    const isModelValid = providerName !== "Unknown";
+
+    if (!isModelValid) {
+      return reply.status(400).send({
+        message: "Model not found",
+      });
+    }
+
+    const isAPIKeyAddedForProvider = apiKeyValidaton(providerName);
+
+    if (!isAPIKeyAddedForProvider) {
+      return reply.status(400).send({
+        message: apiKeyValidatonMessage(providerName),
+      });
+    }
+
     const prisma = request.server.prisma;
 
     const file = await request.file();
@@ -113,6 +154,8 @@ export const createBotPDFHandler = async (
       data: {
         name,
         embedding,
+        model,
+        provider: providerName,
       },
     });
 
@@ -493,12 +536,33 @@ export const updateBotByIdHandler = async (
     });
   }
 
+  const providerName = modelProviderName(request.body.model);
+
+  const isModelValid = providerName !== "Unknown";
+
+  if (!isModelValid) {
+    return reply.status(400).send({
+      message: "Model not found",
+    });
+  }
+
+  const isAPIKeyAddedForProvider = apiKeyValidaton(providerName);
+
+  if (!isAPIKeyAddedForProvider) {
+    return reply.status(400).send({
+      message: apiKeyValidatonMessage(providerName),
+    });
+  }
+
+  console.log("providerName", providerName);
+
   await prisma.bot.update({
     where: {
       id: bot.id,
     },
     data: {
       ...request.body,
+      provider:  providerName,
     },
   });
 

@@ -18,6 +18,10 @@ export const createBotSchema: FastifySchema = {
       embedding: {
         type: "string",
         enum: ["tensorflow", "openai", "cohere", "huggingface-api"],
+      },
+      model: {
+        type: "string",
+        enum: ["gpt-3.5-turbo", "gpt-4", "claude-1", "claude-instant-1"],
       }
     },
   },

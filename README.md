@@ -1,9 +1,8 @@
-# Dialoqbase
+# Dialoqbase ⚡
 
-Dialoqbase is a web application that allows you to create custom chatbots with your own knowledge base. It currently supports the OpenAI API, with plans to add more language models in the future.
+Dialoqbase is a web application that allows you to create custom chatbots with your own knowledge base.  It uses powerful language models to generate responses and PostgreSQL for vector search and storing the knowledge base (eliminating the need for an additional vector database 🌝).
 
-Here's a demo of how it works:
-
+Here's a demo of how it works (v0.0.1):
 
 [![DialoqBase Demo](https://img.youtube.com/vi/Kktfs8JI4yI/0.jpg)](https://www.youtube.com/watch?v=Kktfs8JI4yI)
 
@@ -68,7 +67,7 @@ _Important: After the first login, remember to change the default credentials._
 
 - Utilize powerful language models to generate responses 
 
-- Utilize PostgreSQL for vector search and storing the knowledge base (eliminating the need for an additional vector database)
+- Utilize PostgreSQL for vector search and storing the knowledge base.
 
 ## Stack
 
@@ -100,7 +99,9 @@ and more...
 ### Language models
 
 - [x] OpenAI 
-- [ ] Anthropic
+- [X] Anthropic
+
+open source chatmodels soon...
 
 ### Embedding models
 
@@ -109,6 +110,8 @@ and more...
 - [X] HuggingFace 
 - [X] Cohere
 
+
+need more ? create an issue...
 
 ### Application
 
