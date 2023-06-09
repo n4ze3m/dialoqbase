@@ -18,7 +18,7 @@ export default function NewRoot() {
       const formData = new FormData();
       formData.append("file", values.file[0].originFileObj);
  
-      const response = await api.post("/bot/pdf?embedding=" + values.embedding, formData, {
+      const response = await api.post(`/bot/pdf?embedding=${values.embedding}&model=${values.model}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
