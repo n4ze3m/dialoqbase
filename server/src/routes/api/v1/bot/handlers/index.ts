@@ -129,9 +129,10 @@ export const createBotPDFHandler = async (
       ...botSource,
       embedding: bot.embedding,
     }]);
-    return {
+
+    return reply.status(200).send({
       id: bot.id,
-    };
+    });
   } catch (err) {
     return reply.status(500).send({
       message: "Upload failed due to internal server error",

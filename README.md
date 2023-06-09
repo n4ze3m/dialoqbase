@@ -101,14 +101,13 @@ and more...
 
 - [x] OpenAI 
 - [ ] Anthropic
-- [ ] Falcon-7B
 
 ### Embedding models
 
 - [X] OpenAI 
 - [X] TensorFlow
-- [ ] HuggingFace 
-- [ ] Cohere
+- [X] HuggingFace 
+- [X] Cohere
 
 
 ### Application

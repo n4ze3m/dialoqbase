@@ -4,6 +4,7 @@ import { FastifyPluginAsync } from "fastify";
 import cors from "@fastify/cors";
 import fastifyStatic from "@fastify/static";
 import fastifyMultipart from "@fastify/multipart";
+
 export type AppOptions = {} & Partial<AutoloadPluginOptions>;
 
 const options: AppOptions = {};

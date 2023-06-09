@@ -42,14 +42,18 @@ export class DialoqbaseVectorStore extends VectorStore {
       // this is bad method right ?
       try {
         chunk.forEach(async (row) => {
-          await prisma.$executeRawUnsafe(
-            'INSERT INTO "BotDocument" ("content", "embedding", "metadata", "botId", "sourceId") VALUES ($1, $2, $3, $4, $5)',
-            row.content,
-            row.embedding,
-            row.metadata,
-            row.botId,
-            row.sourceId,
-          );
+          const vector = `[${row.embedding.join(",")}]`;
+
+          // console.log(vector.length)
+          // await prisma.$executeRawUnsafe(
+          //   'INSERT INTO "BotDocument" ("content", "embedding", "metadata", "botId", "sourceId") VALUES ($1, $2, $3, $4, $5)',
+          //   row.content,
+          //   vector,
+          //   row.metadata,
+          //   row.botId,
+          //   row.sourceId,
+          // );
+          await prisma.$executeRaw`INSERT INTO "BotDocument" ("content", "embedding", "metadata", "botId", "sourceId") VALUES (${row.content}, ${vector}::vector, ${row.metadata}, ${row.botId}, ${row.sourceId})`
         });
       } catch (e) {
         console.log(e);
@@ -120,7 +124,6 @@ export class DialoqbaseVectorStore extends VectorStore {
       }),
       resp.similarity,
     ]);
-
     return result;
   }
 }
