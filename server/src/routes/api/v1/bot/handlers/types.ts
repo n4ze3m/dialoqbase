@@ -4,6 +4,7 @@ export interface CreateBotRequest {
     type: string;
     content: string;
     embedding: string;
+    model: string;
   };
 }
 
@@ -34,6 +35,7 @@ export interface AddNewPDFById {
 export interface UploadPDF {
   Querystring: {
     embedding: string;
+    model: string;
   }
 }
 
