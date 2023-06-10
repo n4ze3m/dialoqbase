@@ -5,11 +5,9 @@ type Props = {
 
 export const ModeSwitcher: React.FC<Props> = ({ mode, children }) => {
   if (!mode) {
-    
-    return <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">{children}</div>
+    return <div className="flex bg-white flex-col min-h-screen px-8 mx-auto max-w-7xl">{children}</div>
   }
-
   return (
-    <>{children}</>
+    <div className="flex bg-white flex-col min-h-screen">{children}</div>
   );
 };
