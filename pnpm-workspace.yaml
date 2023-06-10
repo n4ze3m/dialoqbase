@@ -2,3 +2,4 @@ prefer-workspace-packages: true
 packages:
   - 'app/ui'
   - 'app/widget'
+  - 'app/script'
