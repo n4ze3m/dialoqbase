@@ -85,11 +85,33 @@ function App() {
 
   return (
     <>
-      <ModeSwitcher  mode={params?.mode} >
+      <ModeSwitcher mode={params?.mode}>
         <div className="sticky top-0 z-10">
           <div className="flex justify-between bg-white border-b border-gray-100 p-4 items-center">
             {/* bot name here instead of brand name */}
-            <p className="font-bold">DialoqBase ⚡</p>
+            <p className="font-bold text-lg">⚡</p>
+            {params?.mode === "iframe" && (
+              <button
+              onClick={() => {
+                window.parent.postMessage("db-iframe-close", "*");
+              }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
+              </button>
+            )}
           </div>
         </div>
         <div className="grow flex flex-col md:translate-x-0 transition-transform duration-300 ease-in-out">
@@ -161,7 +183,6 @@ function App() {
                 </div>
               </div>
             )}
-
             <div ref={divRef} />
           </div>
         </div>
@@ -192,7 +213,7 @@ function App() {
                           },
                         ]);
                       }}
-                      className="inline-flex items-center rounded-md border border-gray-700 bg-white px-3 h-12 text-sm font-medium text-gray-700  hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+                      className="inline-flex items-center rounded-md border border-gray-700 bg-white px-3 h-14 text-sm font-medium text-gray-700  hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                       type="button"
                     >
                       <svg
@@ -211,10 +232,9 @@ function App() {
                       </svg>
                     </button>
                   </span>
-                  <div className="flex-grow relative flex h-full flex-1 items-stretch md:flex-col">
-                    <div className="flex flex-col  w-full flex-grow  md:pl-4 relative  bg-white  rounded-md border border-gray-700 ">
+                  <div className="relative flex flex-grow">
+                    <div className="flex flex-col pt-2 w-full pl-4 relative  bg-white  rounded-md border border-gray-700 ">
                       <textarea
-                        style={{ maxHeight: "200px", overflowY: "hidden" }}
                         disabled={isSending}
                         onKeyDown={(e) => {
                           if (e.key === "Enter" && !e.shiftKey) {
@@ -229,14 +249,14 @@ function App() {
                             })();
                           }
                         }}
-                        className="m-0 w-full p-0 pr-11 resize-none border-0 bg-transparent  focus:ring-0 focus-visible:ring-0 "
+                        className="m-0 w-full p-0 pr-11 resize-none border-0 bg-transparent  focus:ring-0 focus-visible:ring-0 disabled:opacity-40"
                         required
                         placeholder="Type your message…"
                         {...form.getInputProps("message")}
                       />
                       <button
                         disabled={isSending}
-                        className="absolute rounded-md md:p-2 md:right-3  right-2 disabled:text-gray-400 enabled:bg-brand-purple text-gray-950 bottom-1.5 transition-colors disabled:opacity-40"
+                        className="absolute rounded-md md:p-2 md:right-3 right-2 disabled:text-gray-400 enabled:bg-brand-purple text-gray-950 bottom-1.5 transition-colors disabled:opacity-40"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
