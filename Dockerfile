@@ -36,6 +36,8 @@ COPY --from=build /app/app/ui/dist/ ./public
 # Copy widgets 
 COPY --from=build /app/app/widget/dist/assets/ ./public/assets
 COPY --from=build /app/app/widget/dist/index.html ./public/bot.html
+# Copy script
+COPY --from=build /app/app/script/dist/chat.min.js ./public/chat.min.js
 
 RUN yarn install --production
 
