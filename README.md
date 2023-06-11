@@ -108,7 +108,7 @@ open source chatmodels soon...
 
 - [X] OpenAI 
 - [X] TensorFlow
-- [X] HuggingFace 
+- [X] Hugging Face 
 - [X] Cohere
 
 
