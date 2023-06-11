@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "es2016",                               
+    "module": "commonjs",                     
+    "skipLibCheck": true,
+    "outDir": "dist",      
+    "rootDir": "src",                         
+  }
+}

@@ -8,7 +8,7 @@ import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { getUrl } from "./utils/getUrl";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark} from "react-syntax-highlighter/dist/esm/styles/prism";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
 type Message = {
   isBot: boolean;
@@ -84,14 +84,37 @@ function App() {
   );
 
   return (
-    <ModeSwitcher mode={params?.mode}>
-      <div className="relative flex bg-white">
-        <div
-          className="grow flex flex-col md:translate-x-0 transition-transform duration-300 ease-in-out"
-          style={{
-            height: params?.mode === "iframe" ? "100vh" : "95vh",
-          }}
-        >
+    <>
+      <ModeSwitcher mode={params?.mode}>
+        <div className="sticky top-0 z-10">
+          <div className="flex justify-between bg-white border-b border-gray-100 p-4 items-center">
+            {/* bot name here instead of brand name */}
+            <p className="font-bold text-lg">⚡</p>
+            {params?.mode === "iframe" && (
+              <button
+              onClick={() => {
+                window.parent.postMessage("db-iframe-close", "*");
+              }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+        <div className="grow flex flex-col md:translate-x-0 transition-transform duration-300 ease-in-out">
           <div className="grow px-4 sm:px-6 md:px-5 py-6">
             {messages.map((message, index) => {
               return (
@@ -160,74 +183,105 @@ function App() {
                 </div>
               </div>
             )}
-
             <div ref={divRef} />
           </div>
-
-          <div className="sticky bottom-0">
-            <div className="bg-gray-300 p-4">
-              <form
-                onSubmit={form.onSubmit(async (value) => {
-                  setMessages([
-                    ...messages,
-                    { message: value.message, isBot: false },
-                  ]);
-                  form.reset();
-                  await sendMessage(value.message);
-                })}
-              >
-                <div className="flex-grow space-y-6">
-                  <div className="flex">
-                    <span className="mr-3">
-                      <button
-                        disabled={isSending}
-                        onClick={() => {
-                          setHistory([]);
-                          setMessages([
-                            {
-                              message:
-                                "Hi, I'm here to help. What can I do for you today?",
-                              isBot: true,
-                            },
-                          ]);
-                        }}
-                        className="inline-flex items-center rounded-md border border-gray-700 bg-white px-3 h-10 text-sm font-medium text-gray-700  hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
-                        type="button"
+        </div>
+        <div className="sticky bottom-0">
+          <div className="bg-gray-300 p-3">
+            <form
+              onSubmit={form.onSubmit(async (value) => {
+                setMessages([
+                  ...messages,
+                  { message: value.message, isBot: false },
+                ]);
+                form.reset();
+                await sendMessage(value.message);
+              })}
+            >
+              <div className="flex-grow space-y-6">
+                <div className="flex">
+                  <span className="mr-3">
+                    <button
+                      disabled={isSending}
+                      onClick={() => {
+                        setHistory([]);
+                        setMessages([
+                          {
+                            message:
+                              "Hi, I'm here to help. What can I do for you today?",
+                            isBot: true,
+                          },
+                        ]);
+                      }}
+                      className="inline-flex items-center rounded-md border border-gray-700 bg-white px-3 h-14 text-sm font-medium text-gray-700  hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                      type="button"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="h-5 w-5 text-gray-600"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          className="h-5 w-5 text-gray-600"
-                        >
-                          <path d="M18.37 2.63 14 7l-1.59-1.59a2 2 0 0 0-2.82 0L8 7l9 9 1.59-1.59a2 2 0 0 0 0-2.82L17 10l4.37-4.37a2.12 2.12 0 1 0-3-3Z"></path>
-                          <path d="M9 8c-2 3-4 3.5-7 4l8 10c2-1 6-5 6-7"></path>
-                          <path d="M14.5 17.5 4.5 15"></path>
-                        </svg>
-                      </button>
-                    </span>
-                    <div className="flex-grow">
-                      <input
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                        />
+                      </svg>
+                    </button>
+                  </span>
+                  <div className="relative flex flex-grow">
+                    <div className="flex flex-col pt-2 w-full pl-4 relative  bg-white  rounded-md border border-gray-700 ">
+                      <textarea
                         disabled={isSending}
-                        className="flex items-center h-10 w-full rounded px-3 text-sm"
-                        type="text"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && !e.shiftKey) {
+                            e.preventDefault();
+                            form.onSubmit(async (value) => {
+                              setMessages([
+                                ...messages,
+                                { message: value.message, isBot: false },
+                              ]);
+                              form.reset();
+                              await sendMessage(value.message);
+                            })();
+                          }
+                        }}
+                        className="m-0 w-full p-0 pr-11 resize-none border-0 bg-transparent  focus:ring-0 focus-visible:ring-0 disabled:opacity-40"
                         required
                         placeholder="Type your message…"
                         {...form.getInputProps("message")}
                       />
+                      <button
+                        disabled={isSending}
+                        className="absolute rounded-md md:p-2 md:right-3 right-2 disabled:text-gray-400 enabled:bg-brand-purple text-gray-950 bottom-1.5 transition-colors disabled:opacity-40"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="h-6 w-6 m-1 md:m-0 text-gray-600"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
+                          />
+                        </svg>
+                      </button>
                     </div>
                   </div>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
-      </div>
-    </ModeSwitcher>
+      </ModeSwitcher>
+    </>
   );
 }
 

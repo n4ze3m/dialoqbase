@@ -1,6 +1,6 @@
 # Dialoqbase ⚡
 
-Dialoqbase is a web application that allows you to create custom chatbots with your own knowledge base.  It uses powerful language models to generate responses and PostgreSQL for vector search and storing the knowledge base (eliminating the need for an additional vector database 🌝).
+Dialoqbase is a web application that allows you to create custom chatbots with your own knowledge base.  It uses powerful language models to generate responses and PostgreSQL for vector search and storing the knowledge base
 
 Here's a demo of how it works (v0.0.1):
 
@@ -77,6 +77,7 @@ _Important: After the first login, remember to change the default credentials._
 - [LangChain](https://langchain.com/)
 - [PostgreSQL](https://www.postgresql.org/)
 - [Redis](https://redis.io/)
+- [Rspack](https://rspack.dev)
 
 ## Disclaimer
 
@@ -119,6 +120,8 @@ need more ? create an issue...
 - [x] Create knowledge base
 - [x] Generate responses
 - [x] Vector search
+- [x] Bot embed script for websites
+- [ ] Bot style editor
 - [ ] Chatbot API
 - [ ] Chatbot theme editor
 - [ ] Chatbot analytics

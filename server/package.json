@@ -20,7 +20,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@fastify/autoload": "^5.0.0",
     "@fastify/cors": "^8.3.0",

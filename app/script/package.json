@@ -1,0 +1,17 @@
+{
+  "name": "script",
+  "version": "1.0.0",
+  "description": "",
+  "main": "chat.js",
+  "scripts": {
+    "build": "rspack build"
+  },
+  "keywords": [],
+  "author": "n4ze3m",
+  "license": "MIT",
+  "devDependencies": {
+    "@rspack/cli": "^0.2.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.2"
+  }
+}

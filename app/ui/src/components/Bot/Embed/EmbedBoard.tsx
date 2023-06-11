@@ -27,11 +27,11 @@ export const EmbedBoard = ({ public_id }: Props) => {
         content={`<iframe src="${hostUrl}/bot/${public_id}?mode=iframe" width="400" height="500" />`}
       />
 
-      {/* <EmbedBoardTitle
+      <EmbedBoardTitle
         title="Script"
-        description="You can use this script to embed your bot"
-        content={`<script src="http://todo" bot-url="${hostUrl}/bot/${public_id}"></script>`}
-      /> */}
+        description="You can use this script to embed your bot to your website or web app"
+        content={`<script src="${hostUrl}/chat.min.js" data-chat-url="${hostUrl}/bot/${public_id}" data-btn-position="bottom-right" defer></script>`}
+      />
     </div>
   );
 };
