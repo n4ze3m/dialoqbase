@@ -29,8 +29,8 @@ export const EmbedBoard = ({ public_id }: Props) => {
 
       <EmbedBoardTitle
         title="Script"
-        description="Copy this script and paste it in your website"
-        content={`<script src="${hostUrl}/chat.min.js" data-chat-url="${hostUrl}/bot/${public_id}" defer></script>`}
+        description="You can use this script to embed your bot to your website or web app"
+        content={`<script src="${hostUrl}/chat.min.js" data-chat-url="${hostUrl}/bot/${public_id}" data-btn-position="bottom-right" defer></script>`}
       />
     </div>
   );

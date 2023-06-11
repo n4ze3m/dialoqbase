@@ -4,11 +4,11 @@ export interface WidgetContainerStyle extends CSSStyleDeclaration {
   height: string;
   position: string;
   bottom: string;
-  right: string;
   zIndex: string;
   width: string;
   transition: string;
   opacity: string;
+  right: string;
 }
 
 export interface IframeStyle extends CSSStyleDeclaration {

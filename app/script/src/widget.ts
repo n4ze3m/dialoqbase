@@ -13,21 +13,37 @@ export function createChatWidget(
   widgetContainer.setAttribute("id", "dialoq");
   let widgetContainerStyle: WidgetContainerStyle = widgetContainer.style;
   widgetContainerStyle.boxSizing = "border-box";
-  widgetContainerStyle.bottom = "80px";
   widgetContainerStyle.height = "80vh";
   widgetContainerStyle.position = "fixed";
   widgetContainerStyle.display = "none";
   widgetContainerStyle.zIndex = "99999999";
-  widgetContainerStyle.right = "20px";
   widgetContainerStyle.opacity = "0";
   widgetContainerStyle.transition = "opacity 0.3s ease-in-out";
+  const position = scriptElement.getAttribute("data-btn-position");
+
+  if (position === "bottom-left") {
+    widgetContainerStyle.bottom = "80px";
+    widgetContainerStyle.left = "20px";
+  } else if (position === "bottom-right") {
+    widgetContainerStyle.bottom = "80px";
+    widgetContainerStyle.right = "20px";
+  } else if (position === "top-left") {
+    widgetContainerStyle.top = "80px";
+    widgetContainerStyle.left = "20px";
+  } else if (position === "top-right") {
+    widgetContainerStyle.top = "80px";
+    widgetContainerStyle.right = "20px";
+  } else {
+    widgetContainerStyle.bottom = "80px";
+    widgetContainerStyle.right = "20px";
+  }
 
   let iframe: HTMLIFrameElement = document.createElement("iframe");
   let iframeStyle: IframeStyle = iframe.style;
-  iframeStyle.boxSizing = "border-box";
-  iframeStyle.position = "absolute";
   iframeStyle.right = "0";
   iframeStyle.top = "0";
+  iframeStyle.boxSizing = "border-box";
+  iframeStyle.position = "absolute";
   iframeStyle.width = "100%";
   iframeStyle.height = "100%";
   iframeStyle.border = "1px solid #e5e5e5";
@@ -49,11 +65,25 @@ export function createChatWidget(
     widgetContainerStyle.width = "400px";
   } else {
     widgetContainerStyle.width = "100%";
-    widgetContainerStyle.bottom = "0";
-    widgetContainerStyle.right = "0";
     widgetContainerStyle.height = "100%";
     iframeStyle.borderRadius = "0";
     iframeStyle.border = "0";
+    if (position === "bottom-left") {
+      widgetContainerStyle.bottom = "80px";
+      widgetContainerStyle.left = "20px";
+    } else if (position === "bottom-right") {
+      widgetContainerStyle.bottom = "80px";
+      widgetContainerStyle.right = "20px";
+    } else if (position === "top-left") {
+      widgetContainerStyle.top = "80px";
+      widgetContainerStyle.left = "20px";
+    } else if (position === "top-right") {
+      widgetContainerStyle.top = "80px";
+      widgetContainerStyle.right = "20px";
+    } else {
+      widgetContainerStyle.bottom = "80px";
+      widgetContainerStyle.right = "20px";
+    }
   }
   widgetContainer.appendChild(iframe);
   let chatbotUrl: string = scriptElement.getAttribute(

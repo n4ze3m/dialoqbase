@@ -6,12 +6,12 @@ function setupChatWidget(): void {
     .currentScript as HTMLScriptElement;
 
   if (document.readyState === "complete") {
-    createChatButton();
+    createChatButton(scriptElement);
     createChatWidget(scriptElement);
   } else {
     document.addEventListener("readystatechange", function () {
       if (document.readyState === "complete") {
-        createChatButton();
+        createChatButton(scriptElement);
         createChatWidget(scriptElement);
       }
     });

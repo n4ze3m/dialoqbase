@@ -1,13 +1,33 @@
 import { CLOSE_SVG, OPEN_SVG } from "./svg";
 import { ButtonContainerStyle, ChatButtonStyle } from "./types";
 
-export function createChatButton(): void {
+export function createChatButton(
+  scriptElement: HTMLScriptElement,
+): void {
   let buttonContainer: HTMLDivElement = document.createElement("div");
   let buttonContainerStyle: ButtonContainerStyle = buttonContainer.style;
   buttonContainerStyle.display = "block";
   buttonContainerStyle.position = "fixed";
-  buttonContainerStyle.bottom = "20px";
-  buttonContainerStyle.right = "20px";
+
+  const position = scriptElement.getAttribute("data-btn-position");
+
+  if (position === "bottom-left") {
+    buttonContainerStyle.bottom = "20px";
+    buttonContainerStyle.left = "20px";
+  } else if (position === "bottom-right") {
+    buttonContainerStyle.bottom = "20px";
+    buttonContainerStyle.right = "20px";
+  } else if (position === "top-left") {
+    buttonContainerStyle.top = "20px";
+    buttonContainerStyle.left = "20px";
+  } else if (position === "top-right") {
+    buttonContainerStyle.top = "20px";
+    buttonContainerStyle.right = "20px";
+  } else {
+    buttonContainerStyle.bottom = "20px";
+    buttonContainerStyle.right = "20px";
+  }
+
   buttonContainerStyle.zIndex = "999999";
   let chatButton: HTMLButtonElement = document.createElement("button");
   chatButton.setAttribute("id", "dialoq-btn");
