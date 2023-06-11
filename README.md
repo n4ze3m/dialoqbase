@@ -121,6 +121,7 @@ need more ? create an issue...
 - [x] Generate responses
 - [x] Vector search
 - [x] Bot embed script for websites
+- [ ] Supabase Integration 
 - [ ] Bot style editor
 - [ ] Chatbot API
 - [ ] Chatbot theme editor
