@@ -237,6 +237,9 @@ export const getBotByIdAllSourcesHandler = async (
   const sources = await prisma.botSource.findMany({
     where: {
       botId: id,
+      type: {
+        not: "crawler",
+      },
     },
   });
 
@@ -562,7 +565,7 @@ export const updateBotByIdHandler = async (
     },
     data: {
       ...request.body,
-      provider:  providerName,
+      provider: providerName,
     },
   });
 

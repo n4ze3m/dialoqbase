@@ -39,20 +39,9 @@ export class DialoqbaseVectorStore extends VectorStore {
 
     for (let i = 0; i < rows.length; i += chunkSize) {
       const chunk = rows.slice(i, i + chunkSize);
-      // this is bad method right ?
       try {
         chunk.forEach(async (row) => {
           const vector = `[${row.embedding.join(",")}]`;
-
-          // console.log(vector.length)
-          // await prisma.$executeRawUnsafe(
-          //   'INSERT INTO "BotDocument" ("content", "embedding", "metadata", "botId", "sourceId") VALUES ($1, $2, $3, $4, $5)',
-          //   row.content,
-          //   vector,
-          //   row.metadata,
-          //   row.botId,
-          //   row.sourceId,
-          // );
           await prisma.$executeRaw`INSERT INTO "BotDocument" ("content", "embedding", "metadata", "botId", "sourceId") VALUES (${row.content}, ${vector}::vector, ${row.metadata}, ${row.botId}, ${row.sourceId})`
         });
       } catch (e) {
