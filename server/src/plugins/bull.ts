@@ -11,7 +11,7 @@ declare module "fastify" {
 }
 
 const bullPlugin: FastifyPluginAsync = fp(async (server, options) => {
-  const redis_url = process.env.DB_REDIS_URL || process.env.REDISHOST;
+  const redis_url = process.env.DB_REDIS_URL || process.env.REDIS_URL;
   if (!redis_url) {
     throw new Error("Redis url is not defined");
   }
