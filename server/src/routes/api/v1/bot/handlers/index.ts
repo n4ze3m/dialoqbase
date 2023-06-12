@@ -93,6 +93,8 @@ export const createBotHandler = async (
   await request.server.queue.add([{
     ...botSource,
     embedding,
+    maxDepth: request.body.maxDepth,
+    maxLinks: request.body.maxLinks,
   }]);
   return {
     id: bot.id,
@@ -238,7 +240,7 @@ export const getBotByIdAllSourcesHandler = async (
     where: {
       botId: id,
       type: {
-        not: "crawler",
+        not: "crawl",
       },
     },
   });
@@ -295,6 +297,7 @@ export const addNewSourceByIdHandler = async (
     type,
   } = request.body;
 
+
   const botSource = await prisma.botSource.create({
     data: {
       content,
@@ -306,6 +309,8 @@ export const addNewSourceByIdHandler = async (
   await request.server.queue.add([{
     ...botSource,
     embedding: bot.embedding,
+    maxDepth: request.body.maxDepth,
+    maxLinks: request.body.maxLinks,
   }]);
   return {
     id: bot.id,
