@@ -5,9 +5,10 @@ export interface CreateBotRequest {
     content: string;
     embedding: string;
     model: string;
+    maxDepth?: number;
+    maxLinks?: number;
   };
 }
-
 
 export interface GetBotRequestById {
   Params: {
@@ -22,7 +23,9 @@ export interface AddNewSourceById {
   Body: {
     type: string;
     content: string;
-  }
+    maxDepth?: number;
+    maxLinks?: number;
+  };
 }
 
 export interface AddNewPDFById {
@@ -31,12 +34,11 @@ export interface AddNewPDFById {
   };
 }
 
-
 export interface UploadPDF {
   Querystring: {
     embedding: string;
     model: string;
-  }
+  };
 }
 
 export interface GetSourceByIds {
@@ -46,7 +48,6 @@ export interface GetSourceByIds {
   };
 }
 
-
 export interface UpdateBotById {
   Params: {
     id: string;
@@ -55,5 +56,5 @@ export interface UpdateBotById {
     name: string;
     temperature: number;
     model: string;
-  }
+  };
 }
