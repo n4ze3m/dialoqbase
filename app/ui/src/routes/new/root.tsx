@@ -10,7 +10,7 @@ export default function NewRoot() {
   const navigate = useNavigate();
   const [selectedSource, setSelectedSource] = useState<any>({
     id: 1,
-    title: "Website",
+    value: "Website",
   });
   const [form] = Form.useForm();
   const onSubmit = async (values: any) => {
@@ -26,7 +26,7 @@ export default function NewRoot() {
       return response.data;
     }
     const response = await api.post("/bot", {
-      type: selectedSource.title.toLowerCase(),
+      type: selectedSource.value.toLowerCase(),
       ...values,
     });
     return response.data;

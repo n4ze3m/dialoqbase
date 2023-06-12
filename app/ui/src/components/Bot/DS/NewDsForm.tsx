@@ -24,7 +24,7 @@ function classNames(...classes) {
 export const NewDsForm = ({ onClose }: { onClose: () => void }) => {
   const [selectedSource, setSelectedSource] = useState<any>({
     id: 1,
-    title: "Website",
+    value: "Website",
   });
   const params = useParams<{ id: string }>();
   const client = useQueryClient();
@@ -45,7 +45,7 @@ export const NewDsForm = ({ onClose }: { onClose: () => void }) => {
       return response.data;
     }
     const response = await api.post(`/bot/${params.id}/source`, {
-      type: selectedSource.title.toLowerCase(),
+      type: selectedSource.value.toLowerCase(),
       ...values,
     });
     return response.data;

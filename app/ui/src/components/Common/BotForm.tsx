@@ -1,4 +1,12 @@
-import { Form, FormInstance, Select, Upload, UploadProps, message } from "antd";
+import {
+  Divider,
+  Form,
+  FormInstance,
+  Select,
+  Upload,
+  UploadProps,
+  message,
+} from "antd";
 import { RadioGroup } from "@headlessui/react";
 import {
   DocumentArrowUpIcon,
@@ -9,6 +17,7 @@ import {
 import React from "react";
 import { availableEmbeddingTypes } from "../../utils/embeddings";
 import { availableChatModels } from "../../utils/chatModels";
+import { SpiderIcon } from "./SpiderIcon";
 
 type Props = {
   createBot: (values: any) => void;
@@ -23,9 +32,15 @@ function classNames(...classes) {
 }
 
 const availableSources = [
-  { id: 1, title: "Website", icon: GlobeAltIcon },
-  { id: 3, title: "Text", icon: DocumentTextIcon },
-  { id: 2, title: "PDF", icon: DocumentArrowUpIcon },
+  { id: 1, value: "website", title: "Webpage", icon: GlobeAltIcon },
+  { id: 3, value: "text", title: "Text", icon: DocumentTextIcon },
+  { id: 2, value: "pdf", title: "PDF (beta)", icon: DocumentArrowUpIcon },
+  {
+    id: 4,
+    value: "crawl",
+    title: "Crawler (beta)",
+    icon: SpiderIcon,
+  },
 ];
 export const BotForm = ({
   createBot,
@@ -62,6 +77,8 @@ export const BotForm = ({
       initialValues={{
         embedding: "openai",
         model: "gpt-3.5-turbo",
+        maxDepth: 2,
+        maxLinks: 10,
       }}
     >
       <RadioGroup
@@ -75,7 +92,7 @@ export const BotForm = ({
           Select a data source
         </RadioGroup.Label>
 
-        <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
+        <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
           {availableSources.map((source) => (
             <RadioGroup.Option
               key={source.id}
@@ -95,7 +112,10 @@ export const BotForm = ({
                       as="span"
                       className="block text-sm font-medium text-gray-900"
                     >
-                      <source.icon className="h-6 w-6" aria-hidden="true" />
+                      <source.icon
+                        className="h-6 w-6 mr-3"
+                        aria-hidden="true"
+                      />
                     </RadioGroup.Label>
                     {source.title}
                   </span>
@@ -138,40 +158,117 @@ export const BotForm = ({
             className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
           />
         ) : null}
+
+        {selectedSource.id === 4 ? (
+          <input
+            type="url"
+            placeholder="Enter the website URL"
+            className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+          />
+        ) : null}
       </Form.Item>
 
       {selectedSource.id === 2 && (
-        <Form.Item
-          name="file"
-          rules={[
-            {
-              required: true,
-              message: "Please upload your PDF!",
-            },
-          ]}
-          getValueFromEvent={(e) => {
-            console.log("Upload event:", e);
-            if (Array.isArray(e)) {
-              return e;
-            }
-            return e?.fileList;
-          }}
-        >
-          <Upload.Dragger {...props}>
-            <div className="p-3">
-              <p className="ant-upload-drag-icon justify-center flex">
-                <InboxIcon className="h-10 w-10 text-gray-400" />
-              </p>
-              <p className="ant-upload-text">
-                Click or drag PDF to this area to upload
-              </p>
-              <p className="ant-upload-hint">
-                Ensure selectable and copyable PDF text for processing.
-              </p>
-            </div>
-          </Upload.Dragger>
-        </Form.Item>
+        <>
+          <Form.Item
+            name="file"
+            rules={[
+              {
+                required: true,
+                message: "Please upload your PDF!",
+              },
+            ]}
+            getValueFromEvent={(e) => {
+              console.log("Upload event:", e);
+              if (Array.isArray(e)) {
+                return e;
+              }
+              return e?.fileList;
+            }}
+          >
+            <Upload.Dragger {...props}>
+              <div className="p-3">
+                <p className="ant-upload-drag-icon justify-center flex">
+                  <InboxIcon className="h-10 w-10 text-gray-400" />
+                </p>
+                <p className="ant-upload-text">
+                  Click or drag PDF to this area to upload
+                </p>
+                <p className="ant-upload-hint">
+                  Ensure selectable and copyable PDF text for processing.
+                </p>
+              </div>
+            </Upload.Dragger>
+          </Form.Item>
+          <p className="text-sm text-gray-500">
+            If you find any issues, please report them on{" "}
+            <a
+              href="https://github.com/n4ze3m/dialoqbase/issues/new?title=PDF%20upload%20issue&type=bug&labels=bug"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              GitHub
+            </a>
+            .
+          </p>
+        </>
       )}
+
+      {selectedSource.id === 4 && (
+        <>
+          <Form.Item
+            name="maxDepth"
+            help="The max depth of the website to crawl"
+            rules={[
+              {
+                required: true,
+                message: "Please input max depth!",
+              },
+            ]}
+          >
+            <input
+              type="number"
+              placeholder="Enter the max depth"
+              className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="maxLinks"
+            help="The max links to crawl"
+            rules={[
+              {
+                required: true,
+                message: "Please input max links count",
+              },
+            ]}
+          >
+            <input
+              type="number"
+              placeholder="Enter the max depth"
+              className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+            />
+          </Form.Item>
+
+          <p className="text-sm text-gray-500">
+            If you find any issues, please report them on{" "}
+            <a
+              href="https://github.com/n4ze3m/dialoqbase/issues/new?title=Crawler%20issue&labels=bug"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              GitHub
+            </a>
+            .
+          </p>
+        </>
+      )}
+
+      <Form.Item hidden={!showEmbeddingAndModels} noStyle>
+        <Divider />
+      </Form.Item>
 
       <Form.Item
         hidden={!showEmbeddingAndModels}
