@@ -9,7 +9,7 @@
   "scripts": {
     "test": "npm run build:ts && tsc -p test/tsconfig.json && tap --ts \"test/**/*.test.ts\"",
     "start:test": "npm run build:ts && fastify start -l info dist/app.js",
-    "start": "fastify start -l info app.js",
+    "start": "npx prisma migrate deploy && fastify start -l info app.js",
     "build:ts": "tsc",
     "build": "tsc",
     "queue": "node dist/queue/index.js",
@@ -30,6 +30,7 @@
     "@fastify/static": "^6.10.2",
     "@huggingface/inference": "1",
     "@prisma/client": "4.15.0",
+    "@supabase/supabase-js": "^2.24.0",
     "@tensorflow-models/universal-sentence-encoder": "^1.3.3",
     "@tensorflow/tfjs-backend-cpu": "^4.7.0",
     "@tensorflow/tfjs-converter": "^4.7.0",
