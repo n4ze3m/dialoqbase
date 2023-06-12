@@ -39,7 +39,6 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
             break;
           case "crawl":
             await crawlQueueController(
-              prisma,
               source,
             );
             break;
@@ -72,7 +71,7 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
     }
   } catch (e) {
     console.log(e);
-  } finally {
-    done();
   }
+
+  done();
 };
