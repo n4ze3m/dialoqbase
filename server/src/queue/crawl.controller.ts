@@ -2,9 +2,9 @@ import { PrismaClient } from "@prisma/client";
 import { QSource } from "./type";
 import { crawl } from "../utils/crawl";
 import { websiteQueueController } from "./website.controller";
+const prisma = new PrismaClient();
 
 export const crawlQueueController = async (
-  prisma: PrismaClient,
   source: QSource,
 ) => {
   let maxDepth = source.maxDepth || 1;
