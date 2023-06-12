@@ -7,14 +7,14 @@ import { PrismaClient } from "@prisma/client";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { embeddings } from "../utils/embeddings";
 
-import * as Queue from "bull";
+// import * as Queue from "bull";
 const prisma = new PrismaClient();
 
 interface QSource extends BotSource {
   embedding: string;
 }
 
-export const queue = new Queue("vector", process.env.DB_REDIS_URL!, {});
+// export const queue = new Queue("vector", process.env.DB_REDIS_URL!, {});
 export const queueHandler = async (job: Job, done: DoneCallback) => {
   const data = job.data as QSource[];
 
@@ -161,4 +161,4 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
   }
 };
 
-queue.process(queueHandler);
+// queue.process(queueHandler);
