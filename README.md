@@ -6,6 +6,15 @@ Here's a demo of how it works (v0.0.1):
 
 [![DialoqBase Demo](https://img.youtube.com/vi/Kktfs8JI4yI/0.jpg)](https://www.youtube.com/watch?v=Kktfs8JI4yI)
 
+
+## Quick Deployments
+
+### Railway with Supabase
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/TXdjD7?referralCode=olbszX)
+
+
+
 ## Installation
 
 1. Clone the repository and navigate to the docker directory:
