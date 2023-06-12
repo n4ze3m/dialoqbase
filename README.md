@@ -98,8 +98,9 @@ Dialoqbase is a side project and is not ready for production. It is still in the
 
 - [x] Website (*one page only*)
 - [x] Plane text 
-- [X] PDF
-- [ ] Web crawler and site map
+- [X] PDF (beta)
+- [X] Web crawler (beta)
+- [ ] site map
 - [ ] Github repository
 - [ ] mp3
 - [ ] Notion
