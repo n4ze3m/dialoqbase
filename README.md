@@ -13,7 +13,7 @@ Here's a demo of how it works (v0.0.1):
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/TXdjD7?referralCode=olbszX)
 
-
+for more details - [watch demo](https://twitter.com/n4ze3m/status/1668208861663354882)
 
 ## Installation
 
