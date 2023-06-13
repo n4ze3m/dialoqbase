@@ -1,0 +1,102 @@
+import { FastifyReply, FastifyRequest } from "fastify";
+
+import { GetBotRequestById, GetSourceByIds } from "./types";
+
+export const deleteSourceByIdHandler = async (
+  request: FastifyRequest<GetSourceByIds>,
+  reply: FastifyReply,
+) => {
+  const prisma = request.server.prisma;
+  const bot_id = request.params.id;
+  const source_id = request.params.sourceId;
+
+  const bot = await prisma.bot.findUnique({
+    where: {
+      id: bot_id,
+    },
+  });
+
+  if (!bot) {
+    return reply.status(404).send({
+      message: "Bot not found",
+    });
+  }
+
+  const botSource = await prisma.botSource.findFirst({
+    where: {
+      id: source_id,
+      botId: bot.id,
+    },
+  });
+
+  if (!botSource) {
+    return reply.status(404).send({
+      message: "Source not found",
+    });
+  }
+
+  if (botSource.isPending) {
+    return reply.status(400).send({
+      message: "Source is in progress",
+    });
+  }
+
+  await prisma.botDocument.deleteMany({
+    where: {
+      botId: bot.id,
+      sourceId: source_id,
+    },
+  });
+
+  await prisma.botSource.delete({
+    where: {
+      id: source_id,
+    },
+  });
+
+  return {
+    id: bot.id,
+  };
+};
+
+export const deleteBotByIdHandler = async (
+  request: FastifyRequest<GetBotRequestById>,
+  reply: FastifyReply,
+) => {
+  const prisma = request.server.prisma;
+  const id = request.params.id;
+
+  const bot = await prisma.bot.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!bot) {
+    return reply.status(404).send({
+      message: "Bot not found",
+    });
+  }
+
+  await prisma.botDocument.deleteMany({
+    where: {
+      botId: bot.id,
+    },
+  });
+
+  await prisma.botSource.deleteMany({
+    where: {
+      botId: bot.id,
+    },
+  });
+
+  await prisma.bot.delete({
+    where: {
+      id: bot.id,
+    },
+  });
+
+  return {
+    message: "Bot deleted",
+  };
+};

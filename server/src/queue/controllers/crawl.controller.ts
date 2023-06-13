@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import { QSource } from "./type";
-import { crawl } from "../utils/crawl";
+import { QSource } from "../type";
+import { crawl } from "../../utils/crawl";
 import { websiteQueueController } from "./website.controller";
 const prisma = new PrismaClient();
 

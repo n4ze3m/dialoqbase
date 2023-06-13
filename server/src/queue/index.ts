@@ -1,10 +1,12 @@
 import { DoneCallback, Job } from "bull";
 import { PrismaClient } from "@prisma/client";
 import { QSource } from "./type";
-import { pdfQueueController } from "./pdf.controller";
-import { textQueueController } from "./text.controller";
-import { websiteQueueController } from "./website.controller";
-import { crawlQueueController } from "./crawl.controller";
+import { pdfQueueController } from "./controllers/pdf.controller";
+import { textQueueController } from "./controllers/text.controller";
+import { websiteQueueController } from "./controllers/website.controller";
+import { crawlQueueController } from "./controllers/crawl.controller";
+import { DocxQueueController } from "./controllers/docx.controller";
+
 const prisma = new PrismaClient();
 
 export const queueHandler = async (job: Job, done: DoneCallback) => {
@@ -39,6 +41,12 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
             break;
           case "crawl":
             await crawlQueueController(
+              source,
+            );
+            break;
+
+          case "docx":
+            await DocxQueueController(
               source,
             );
             break;

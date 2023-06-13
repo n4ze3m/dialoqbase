@@ -1,6 +1,8 @@
 import { FastifyPluginAsync } from "fastify";
 import {
   addNewSourceByIdHandler,
+  addNewSourceFileByIdHandler,
+  createBotFileHandler,
   createBotHandler,
   deleteBotByIdHandler,
   deleteSourceByIdHandler,
@@ -10,15 +12,13 @@ import {
   getBotByIdHandler,
   refreshSourceByIdHandler,
   updateBotByIdHandler,
-  createBotPDFHandler,
-  addNewSourcePDFByIdHandler
 } from "./handlers";
 import {
   addNewSourceByIdSchema,
   createBotSchema,
   getBotByIdSchema,
   updateBotByIdSchema,
-} from "./handlers/schema";
+} from "./schema";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   fastify.post("/", {
@@ -80,16 +80,15 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     onRequest: [fastify.authenticate],
   }, getAllBotsHandler);
 
-  // upload pdf 
-  fastify.post("/pdf", {
+  // upload pdf
+  fastify.post("/upload/:type", {
     onRequest: [fastify.authenticate],
-  }, createBotPDFHandler);
+  }, createBotFileHandler);
 
   // add new source
-  fastify.post("/:id/source/pdf", {
+  fastify.post("/:id/source/upload/:type", {
     onRequest: [fastify.authenticate],
-  }, addNewSourcePDFByIdHandler);
-
+  }, addNewSourceFileByIdHandler);
 };
 
 export default root;
