@@ -1,6 +1,6 @@
-import { QSource } from "./type";
-import { DialoqbaseVectorStore } from "../utils/store";
-import { embeddings } from "../utils/embeddings";
+import { QSource } from "../type";
+import { DialoqbaseVectorStore } from "../../utils/store";
+import { embeddings } from "../../utils/embeddings";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 
 export const textQueueController = async (

@@ -1,8 +1,8 @@
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import { QSource } from "./type";
+import { QSource } from "../type";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { DialoqbaseVectorStore } from "../utils/store";
-import { embeddings } from "../utils/embeddings";
+import { DialoqbaseVectorStore } from "../../utils/store";
+import { embeddings } from "../../utils/embeddings";
 
 export const pdfQueueController = async (
   source: QSource,

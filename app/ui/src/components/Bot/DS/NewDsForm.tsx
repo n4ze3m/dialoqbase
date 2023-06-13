@@ -30,11 +30,11 @@ export const NewDsForm = ({ onClose }: { onClose: () => void }) => {
   const client = useQueryClient();
   const [form] = Form.useForm();
   const onSubmit = async (values: any) => {
-    if (selectedSource.id == 2) {
+    if (selectedSource.id == 2 || selectedSource.id == 5) {
       const formData = new FormData();
       formData.append("file", values.file[0].originFileObj);
       const response = await api.post(
-        `/bot/${params.id}/source/pdf`,
+        `/bot/${params.id}/source/upload/${selectedSource.value.toLowerCase()}`,
         formData,
         {
           headers: {

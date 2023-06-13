@@ -1,8 +1,8 @@
-import { QSource } from "./type";
+import { QSource } from "../type";
 import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { DialoqbaseVectorStore } from "../utils/store";
-import { embeddings } from "../utils/embeddings";
+import { DialoqbaseVectorStore } from "../../utils/store";
+import { embeddings } from "../../utils/embeddings";
 
 export const websiteQueueController = async (
 

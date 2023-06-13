@@ -8,7 +8,7 @@ import {
   userLoginSchema,
   updatePasswordSchema,
   updateUsernameSchema,
-} from "./handlers/schema";
+} from "./schema";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   fastify.post(

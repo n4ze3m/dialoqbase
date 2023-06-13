@@ -14,11 +14,11 @@ export default function NewRoot() {
   });
   const [form] = Form.useForm();
   const onSubmit = async (values: any) => {
-    if (selectedSource.id == 2) {
+    if (selectedSource.id == 2 || selectedSource.id == 5) {
       const formData = new FormData();
       formData.append("file", values.file[0].originFileObj);
  
-      const response = await api.post(`/bot/pdf?embedding=${values.embedding}&model=${values.model}`, formData, {
+      const response = await api.post(`/bot/upload/${selectedSource.value}?embedding=${values.embedding}&model=${values.model}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
