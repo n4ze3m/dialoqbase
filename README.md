@@ -99,7 +99,8 @@ Dialoqbase is a side project and is not ready for production. It is still in the
 - [x] Plane text
 - [x] PDF (beta)
 - [x] Web crawler (beta)
-- [ ] site map
+- [x] Microsoft Word documents
+- [ ] Sitemap
 - [ ] Github repository
 - [ ] mp3
 - [ ] Notion
@@ -136,18 +137,12 @@ need more ? create an issue...
 - [ ] Chatbot analytics
 - [ ] UI/UX improvements
 
+## Contributors ✨
+
+<a href="https://github.com/n4ze3m/dialoqbase/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=n4ze3m/dialoqbase" />
+</a>
+
 ## License
 
 [MIT](LICENSE)
-
-
-## Contributors
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
