@@ -4,7 +4,6 @@ import {
   FormInstance,
   Select,
   Upload,
-  UploadProps,
   message,
 } from "antd";
 import { RadioGroup } from "@headlessui/react";
@@ -13,6 +12,7 @@ import {
   DocumentTextIcon,
   GlobeAltIcon,
   InboxIcon,
+  DocumentPlusIcon,
 } from "@heroicons/react/24/outline";
 import React from "react";
 import { availableEmbeddingTypes } from "../../utils/embeddings";
@@ -32,14 +32,51 @@ function classNames(...classes) {
 }
 
 const availableSources = [
-  { id: 1, value: "website", title: "Webpage", icon: GlobeAltIcon },
-  { id: 3, value: "text", title: "Text", icon: DocumentTextIcon },
-  { id: 2, value: "pdf", title: "PDF (beta)", icon: DocumentArrowUpIcon },
+  {
+    id: 1,
+    value: "website",
+    title: "Webpage",
+    icon: GlobeAltIcon,
+    fileUploadTitle: null,
+    fileUploadDescription: null,
+    fileTypes: null,
+  },
+  {
+    id: 3,
+    value: "text",
+    title: "Text",
+    icon: DocumentTextIcon,
+    fileUploadTitle: null,
+    fileUploadDescription: null,
+    fileTypes: null,
+  },
+  {
+    id: 2,
+    value: "pdf",
+    title: "PDF (beta)",
+    icon: DocumentArrowUpIcon,
+    fileUploadTitle: "Click or drag PDF to this area to upload",
+    fileUploadDescription:
+      "Ensure selectable and copyable PDF text for processing.",
+    fileTypes: "application/pdf",
+  },
   {
     id: 4,
     value: "crawl",
     title: "Crawler (beta)",
     icon: SpiderIcon,
+    fileUploadTitle: null,
+    fileUploadDescription: null,
+    fileTypes: null,
+  },
+  {
+    id: 5,
+    value: "docx",
+    title: "Docx",
+    icon: DocumentPlusIcon,
+    fileUploadTitle: "Click or drag Docx to this area to upload",
+    fileUploadDescription: "Only support Docx file.",
+    fileTypes: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   },
 ];
 export const BotForm = ({
@@ -52,19 +89,6 @@ export const BotForm = ({
   const [selectedSource, _setSelectedSource] = React.useState<any>(
     availableSources[0]
   );
-
-  const props: UploadProps = {
-    accept: ".pdf",
-    multiple: false,
-    maxCount: 1,
-    beforeUpload: (file) => {
-      const isPDF = file.type === "application/pdf";
-      if (!isPDF) {
-        message.error("You can only upload PDF file!");
-      }
-      return false;
-    },
-  };
 
   const embeddingType = Form.useWatch("embedding", form);
 
@@ -134,12 +158,13 @@ export const BotForm = ({
           ))}
         </div>
       </RadioGroup>
+
       <Form.Item
         name="content"
-        hidden={selectedSource.id === 2}
+        hidden={selectedSource.id === 2 || selectedSource.id === 5}
         rules={[
           {
-            required: selectedSource.id !== 2,
+            required: !(selectedSource.id !== 2 || selectedSource.id !== 5),
             message: "Please input your content!",
           },
         ]}
@@ -168,14 +193,14 @@ export const BotForm = ({
         ) : null}
       </Form.Item>
 
-      {selectedSource.id === 2 && (
+      {(selectedSource.id === 2 || selectedSource.id === 5) && (
         <>
           <Form.Item
             name="file"
             rules={[
               {
                 required: true,
-                message: "Please upload your PDF!",
+                message: `Please upload your ${selectedSource.title}`,
               },
             ]}
             getValueFromEvent={(e) => {
@@ -186,16 +211,27 @@ export const BotForm = ({
               return e?.fileList;
             }}
           >
-            <Upload.Dragger {...props}>
+            <Upload.Dragger
+              accept={`.${selectedSource.value}`}
+              multiple={false}
+              maxCount={1}
+              beforeUpload={(file) => {
+                const isPDF = file.type === selectedSource.fileTypes;
+                if (!isPDF) {
+                  message.error(`You can only upload ${selectedSource.title}!`);
+                }
+                return false;
+              }}
+            >
               <div className="p-3">
                 <p className="ant-upload-drag-icon justify-center flex">
                   <InboxIcon className="h-10 w-10 text-gray-400" />
                 </p>
                 <p className="ant-upload-text">
-                  Click or drag PDF to this area to upload
+                  {selectedSource.fileUploadTitle}
                 </p>
                 <p className="ant-upload-hint">
-                  Ensure selectable and copyable PDF text for processing.
+                  {selectedSource.fileUploadDescription}
                 </p>
               </div>
             </Upload.Dragger>
@@ -203,7 +239,7 @@ export const BotForm = ({
           <p className="text-sm text-gray-500">
             If you find any issues, please report them on{" "}
             <a
-              href="https://github.com/n4ze3m/dialoqbase/issues/new?title=PDF%20upload%20issue&type=bug&labels=bug"
+              href={`https://github.com/n4ze3m/dialoqbase/issues/new?title=${selectedSource.title}%20upload%20issue&type=bug&labels=bug`}
               target="_blank"
               rel="noreferrer"
               className="font-medium text-indigo-600 hover:text-indigo-500"
