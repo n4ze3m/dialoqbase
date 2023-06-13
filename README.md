@@ -1,11 +1,10 @@
 # Dialoqbase ⚡
 
-Dialoqbase is a web application that allows you to create custom chatbots with your own knowledge base.  It uses powerful language models to generate responses and PostgreSQL for vector search and storing the knowledge base
+Dialoqbase is an open-source application designed to facilitate the creation of custom chatbots using a personalized knowledge base. The application leverages advanced language models to generate accurate and context-aware responses. Additionally, it utilizes PostgreSQL, a robust relational database management system, for efficient vector search operations and for storing the knowledge base.
 
 Here's a demo of how it works (v0.0.1):
 
 [![DialoqBase Demo](https://img.youtube.com/vi/Kktfs8JI4yI/0.jpg)](https://www.youtube.com/watch?v=Kktfs8JI4yI)
-
 
 ## Quick Deployments
 
@@ -31,7 +30,7 @@ cd dialoqbase/docker
 ```bash
 nano imp.env
 ```
-or 
+or
 
 ```bash
 vim imp.env
@@ -43,9 +42,7 @@ vim imp.env
 notepad imp.env
 ```
 
-
 Set the `OPENAI_API_KEY` variable to your OpenAI API key. You can obtain an API key [here](https://platform.openai.com/account/api-keys)
-
 
 3. Run the docker-compose file:
 
@@ -72,9 +69,9 @@ _Important: After the first login, remember to change the default credentials._
 
 ## Features
 
-- Create custom chatbots with your own knowledge base 
+- Create custom chatbots with your own knowledge base
 
-- Utilize powerful language models to generate responses 
+- Utilize powerful language models to generate responses
 
 - Utilize PostgreSQL for vector search and storing the knowledge base.
 
@@ -90,16 +87,16 @@ _Important: After the first login, remember to change the default credentials._
 
 ## Disclaimer
 
-Dialoqbase is a side project and is not ready for production. It is still in the early stages of development and may contain bugs and security issues. Use it at your own risk. *Breaking changes may occur at any time without prior notice.*
+Dialoqbase is a side project and is not ready for production. It is still in the early stages of development and may contain bugs and security issues. Use it at your own risk. _Breaking changes may occur at any time without prior notice._
 
 ## Roadmap
 
-### Data loaders 
+### Data loaders
 
-- [x] Website (*one page only*)
-- [x] Plane text 
-- [X] PDF (beta)
-- [X] Web crawler (beta)
+- [x] Website (_one page only_)
+- [x] Plane text
+- [x] PDF (beta)
+- [x] Web crawler (beta)
 - [ ] site map
 - [ ] Github repository
 - [ ] mp3
@@ -109,18 +106,17 @@ and more...
 
 ### Language models
 
-- [x] OpenAI 
-- [X] Anthropic
+- [x] OpenAI
+- [x] Anthropic
 
 open source chatmodels soon...
 
 ### Embedding models
 
-- [X] OpenAI 
-- [X] TensorFlow
-- [X] Hugging Face 
-- [X] Cohere
-
+- [x] OpenAI
+- [x] TensorFlow
+- [x] Hugging Face
+- [x] Cohere
 
 need more ? create an issue...
 
@@ -131,7 +127,7 @@ need more ? create an issue...
 - [x] Generate responses
 - [x] Vector search
 - [x] Bot embed script for websites
-- [ ] Supabase Integration 
+- [ ] Supabase Integration
 - [ ] Bot style editor
 - [ ] Chatbot API
 - [ ] Chatbot theme editor
