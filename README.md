@@ -131,7 +131,7 @@ need more ? create an issue...
 - [x] Vector search
 - [x] Bot embed script for websites
 - [ ] Supabase Integration
-- [ ] Bot style editor
+- [X] Prompt Editor
 - [ ] Chatbot API
 - [ ] Chatbot theme editor
 - [ ] Chatbot analytics
