@@ -1,10 +1,17 @@
-# Dialoqbase ⚡
+<center>
+<h1>⚡Dialoqbase ⚡</h1>
+
+[![Join dialoqbase #welcome](https://img.shields.io/badge/discord-join%20chat-blue.svg)](https://discord.gg/SPE3npH7Wu)
+[![Build Status](https://github.com/n4ze3m/dialoqbase/actions/workflows/build.yml/badge.svg)](https://github.com/n4ze3m/dialoqbase/actions/workflows/build.yml)
+[![License: MIT](https://img.shields.io/github/license/n4ze3m/dialoqbase)](https://github.com/n4ze3m/dialoqbase/blob/master/LICENSE)
+</center>
 
 Dialoqbase is an open-source application designed to facilitate the creation of custom chatbots using a personalized knowledge base. The application leverages advanced language models to generate accurate and context-aware responses. Additionally, it utilizes PostgreSQL, a robust relational database management system, for efficient vector search operations and for storing the knowledge base.
 
 Here's a demo of how it works (v0.0.1):
 
 [![DialoqBase Demo](https://img.youtube.com/vi/Kktfs8JI4yI/0.jpg)](https://www.youtube.com/watch?v=Kktfs8JI4yI)
+
 
 ## Quick Deployments
 
@@ -99,7 +106,7 @@ Dialoqbase is a side project and is not ready for production. It is still in the
 - [x] Plane text
 - [x] PDF (beta)
 - [x] Web crawler (beta)
-- [x] Microsoft Word documents
+- [x] Microsoft Word documents (beta)
 - [ ] Sitemap
 - [ ] Github repository
 - [ ] mp3
