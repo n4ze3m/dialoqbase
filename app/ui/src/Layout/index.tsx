@@ -142,7 +142,7 @@ export default function DashboardLayout({
         </Disclosure>
         <div className="py-10">
           <main>
-            <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">{children}</div>
+            <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">{children}</div>
           </main>
         </div>
       </div>

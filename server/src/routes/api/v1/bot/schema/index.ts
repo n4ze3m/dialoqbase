@@ -99,6 +99,12 @@ export const updateBotByIdSchema: FastifySchema = {
       model: {
         type: "string",
       },
+      questionGeneratorPrompt: {
+        type: "string",
+      },
+      qaPrompt: {
+        type: "string",
+      }
     },
   },
 };

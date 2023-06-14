@@ -21,6 +21,8 @@ export default function BotSettingsRoot() {
           public_id: string;
           temperature: number;
           embedding: string;
+          qaPrompt: string;
+          questionGeneratorPrompt: string;
         };
       };
     },

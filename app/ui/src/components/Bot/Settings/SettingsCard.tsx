@@ -16,6 +16,8 @@ export const SettingsCard = ({
     public_id: string;
     temperature: number;
     embedding: string;
+    qaPrompt: string;
+    questionGeneratorPrompt: string;
   };
 }) => {
   const [form] = Form.useForm();
@@ -36,7 +38,7 @@ export const SettingsCard = ({
         message: "Bot updated successfully",
       });
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       if (axios.isAxiosError(error)) {
         const message = error.response?.data?.message || "Something went wrong";
         notification.error({
@@ -92,6 +94,8 @@ export const SettingsCard = ({
           model: data.model,
           temperature: data.temperature,
           embedding: data.embedding,
+          qaPrompt: data.qaPrompt,
+          questionGeneratorPrompt: data.questionGeneratorPrompt,
         }}
         form={form}
         onFinish={updateBotSettings}
@@ -177,6 +181,27 @@ export const SettingsCard = ({
                   disabled
                   placeholder="Select an embedding method"
                   options={availableEmbeddingTypes}
+                />
+              </Form.Item>
+
+              <Form.Item
+                label={
+                  <span className="font-medium text-gray-800 text-sm">
+                    Question Answering Prompt (System Prompt)
+                  </span>
+                }
+                name="qaPrompt"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input a prompt!",
+                  },
+                ]}
+              >
+                <textarea
+                  className="mt-1 block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                  rows={5}
+                  placeholder=""
                 />
               </Form.Item>
             </div>

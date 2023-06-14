@@ -60,5 +60,7 @@ export interface UpdateBotById {
     name: string;
     temperature: number;
     model: string;
+    qaPrompt: string;
+    questionGeneratorPrompt: string;
   };
 }

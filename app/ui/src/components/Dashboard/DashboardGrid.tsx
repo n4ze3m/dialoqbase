@@ -40,11 +40,18 @@ export const DashboardGrid = () => {
               className="flex rounded-md shadow-sm hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
               key={bot.id}
             >
-              <div className="flex flex-1  items-center justify-between truncate rounded-md border border-gray-200 bg-white">
-                <div className="flex-1 truncate px-4 py-4 text-sm">
-                  <h3 className="font-medium text-gray-900 hover:text-gray-600">
+              <div className="pb-9 flex flex-1  items-center justify-between truncate rounded-md border border-gray-200 bg-white">
+                <div className="flex-1 truncate px-4 py-4">
+                  <h3 className="text-xl font-semibold text-gray-900 hover:text-gray-600 flex-shrink truncate">
                     {bot.name}
                   </h3>
+                  <div className="w-full">
+                    <div className="flex items-end justify-between">
+                      <span className="text-xs lowercase text-scale-1000 text-gray-600">
+                      {bot.model}
+                      </span>
+                    </div>
+                  </div>
                 </div>
                 <div className="flex-shrink-0 pr-2">
                   <button
