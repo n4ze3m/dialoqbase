@@ -32,22 +32,18 @@ export default function DashboardLayout({
             <>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 justify-between">
-                  <div className="flex">
-                    <Link to="/" className="flex flex-shrink-0 items-center">
-                      <img
-                        className="block h-8 w-auto lg:hidden"
-                        src="/logo.png"
-                        alt="Dialoqbase"
-                      />
-                      <img
-                        className="hidden h-8 w-auto lg:block"
-                        src="/logo.png"
-                        alt="Dialoqbase"
-                      />
-                    </Link>
-                  </div>
-                  <div className="hidden sm:ml-6 sm:flex sm:items-center">
-                    {/* Profile dropdown */}
+                  <Link
+                    to="/"
+                    className="focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700 flex items-center mr-4"
+                  >
+                    <img
+                      className="h-8 w-auto"
+                      src="/logo.png"
+                      alt="Dialoqbase"
+                    />
+                    <span className="ml-1 text-xl font-bold">Dialoqbase</span>
+                  </Link>
+                  <div className=" ml-6 flex items-center">
                     <Menu as="div" className="relative ml-3">
                       <div>
                         <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm">
@@ -142,7 +138,9 @@ export default function DashboardLayout({
         </Disclosure>
         <div className="py-10">
           <main>
-            <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">{children}</div>
+            <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
+              {children}
+            </div>
           </main>
         </div>
       </div>

@@ -32,9 +32,11 @@ export const NewDsForm = ({ onClose }: { onClose: () => void }) => {
   const onSubmit = async (values: any) => {
     if (selectedSource.id == 2 || selectedSource.id == 5) {
       const formData = new FormData();
-      formData.append("file", values.file[0].originFileObj);
+      values.file.forEach((file: any) => {
+        formData.append("file", file.originFileObj);
+      });
       const response = await api.post(
-        `/bot/${params.id}/source/upload/${selectedSource.value.toLowerCase()}`,
+        `/bot/${params.id}/source/upload`,
         formData,
         {
           headers: {

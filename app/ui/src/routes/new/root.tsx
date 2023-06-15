@@ -16,13 +16,18 @@ export default function NewRoot() {
   const onSubmit = async (values: any) => {
     if (selectedSource.id == 2 || selectedSource.id == 5) {
       const formData = new FormData();
-      formData.append("file", values.file[0].originFileObj);
- 
-      const response = await api.post(`/bot/upload/${selectedSource.value}?embedding=${values.embedding}&model=${values.model}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      values.file.forEach((file: any) => {
+        formData.append("file", file.originFileObj);
       });
+      const response = await api.post(
+        `/bot/upload?embedding=${values.embedding}&model=${values.model}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       return response.data;
     }
     const response = await api.post("/bot", {

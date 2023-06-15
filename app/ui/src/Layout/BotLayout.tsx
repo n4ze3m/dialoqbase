@@ -106,12 +106,17 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
                       </button>
                     </div>
                   </Transition.Child>
-                  <Link to="/" className="flex flex-shrink-0 items-center px-4">
+                  <Link
+                    to="/"
+                    className="focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700 flex items-center px-3"
+               
+                  >
                     <img
                       className="h-8 w-auto"
                       src="/logo.png"
                       alt="Dialoqbase"
                     />
+                    <span className="ml-1 text-xl font-bold">Dialoqbase</span>
                   </Link>
                   <div className="mt-5 h-0 flex-1 overflow-y-auto">
                     <nav className="space-y-1 px-2">
@@ -155,13 +160,17 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
 
         <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
           <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5">
-            <Link to="/" className="flex flex-shrink-0 items-center px-4">
-              <img
-                className="h-8 w-auto"
-                src="/logo.png"
-                alt="Dialoqbase"
-              />
-            </Link>
+         <Link
+                    to="/"
+                    className="focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700 flex items-center px-3"
+                  >
+                    <img
+                      className="h-8 w-auto"
+                      src="/logo.png"
+                      alt="Dialoqbase"
+                    />
+                    <span className="ml-1 text-xl font-bold">Dialoqbase</span>
+                  </Link>
             <div className="mt-5 flex flex-grow flex-col">
               <nav className="flex-1 space-y-1 px-2 pb-4">
                 {navigation.map((item) => (
