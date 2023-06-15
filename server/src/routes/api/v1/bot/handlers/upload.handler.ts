@@ -17,6 +17,7 @@ import {
 } from "../../../../../utils/validate";
 import { modelProviderName } from "../../../../../utils/provider";
 const pump = util.promisify(pipeline);
+import { fileTypeFinder } from "../../../../../utils/fileType";
 
 export const createBotFileHandler = async (
   request: FastifyRequest<UploadPDF>,
@@ -26,7 +27,6 @@ export const createBotFileHandler = async (
     const embedding = request.query.embedding;
     const model = request.query.model;
     const isEmbeddingsValid = apiKeyValidaton(embedding);
-    const type = request.params.type;
 
     if (!isEmbeddingsValid) {
       return reply.status(400).send({
@@ -50,25 +50,12 @@ export const createBotFileHandler = async (
         message: apiKeyValidatonMessage(providerName),
       });
     }
-
-    const prisma = request.server.prisma;
-
-    const file = await request.file();
-
-    if (!file) {
-      return reply.status(400).send({
-        message: "File not found",
-      });
-    }
-    const fileName = `${randomUUID()}-${file.filename}`;
-    const path = `./uploads/${fileName}`;
-    await fs.promises.mkdir("./uploads", { recursive: true });
-    await pump(file.file, fs.createWriteStream(path));
-
     const name = uniqueNamesGenerator({
       dictionaries: [adjectives, animals, colors],
       length: 2,
     });
+
+    const prisma = request.server.prisma;
 
     const bot = await prisma.bot.create({
       data: {
@@ -79,24 +66,35 @@ export const createBotFileHandler = async (
       },
     });
 
-    const botSource = await prisma.botSource.create({
-      data: {
-        content: file.filename,
-        type,
-        botId: bot.id,
-        location: path,
-      },
-    });
+    const files = request.files();
 
-    await request.server.queue.add([{
-      ...botSource,
-      embedding: bot.embedding,
-    }]);
+    for await (const file of files) {
+      const fileName = `${randomUUID()}-${file.filename}`;
+      const path = `./uploads/${fileName}`;
+      await fs.promises.mkdir("./uploads", { recursive: true });
+      await pump(file.file, fs.createWriteStream(path));
+      const type = fileTypeFinder(file.mimetype);
+
+      const botSource = await prisma.botSource.create({
+        data: {
+          content: file.filename,
+          type,
+          botId: bot.id,
+          location: path,
+        },
+      });
+
+      await request.server.queue.add([{
+        ...botSource,
+        embedding: bot.embedding,
+      }]);
+    }
 
     return reply.status(200).send({
       id: bot.id,
     });
   } catch (err) {
+    console.log(err);
     return reply.status(500).send({
       message: "Upload failed due to internal server error",
     });
@@ -109,7 +107,6 @@ export const addNewSourceFileByIdHandler = async (
 ) => {
   const prisma = request.server.prisma;
   const id = request.params.id;
-  const type = request.params.type;
 
   const bot = await prisma.bot.findUnique({
     where: {
@@ -123,33 +120,31 @@ export const addNewSourceFileByIdHandler = async (
     });
   }
 
-  const file = await request.file();
+  const files = request.files();
 
-  if (!file) {
-    return reply.status(400).send({
-      message: "File not found",
+  for await (const file of files) {
+    const fileName = `${randomUUID()}-${file.filename}`;
+    const path = `./uploads/${fileName}`;
+    await fs.promises.mkdir("./uploads", { recursive: true });
+    await pump(file.file, fs.createWriteStream(path));
+    const type = fileTypeFinder(file.mimetype);
+
+    const botSource = await prisma.botSource.create({
+      data: {
+        content: file.filename,
+        type,
+        location: path,
+        botId: id,
+      },
     });
+
+    await request.server.queue.add([{
+      ...botSource,
+      embedding: bot.embedding,
+    }]);
   }
-  const fileName = `${randomUUID()}-${file.filename}`;
-  const path = `./uploads/${fileName}`;
-  await fs.promises.mkdir("./uploads", { recursive: true });
-  await pump(file.file, fs.createWriteStream(path));
-
-  const botSource = await prisma.botSource.create({
-    data: {
-      content: file.filename,
-      type,
-      location: path,
-      botId: id,
-    },
-  });
-
-  await request.server.queue.add([{
-    ...botSource,
-    embedding: bot.embedding,
-  }]);
 
   return {
-    id: botSource.id,
+    id: bot.id,
   };
 };

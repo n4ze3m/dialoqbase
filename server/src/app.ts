@@ -15,7 +15,11 @@ const app: FastifyPluginAsync<AppOptions> = async (
 ): Promise<void> => {
   void fastify.register(cors);
 
-  void fastify.register(fastifyMultipart);
+  void fastify.register(fastifyMultipart, {
+    limits: {
+      files: 10,
+    }
+  });
 
   void fastify.register(AutoLoad, {
     dir: join(__dirname, "plugins"),
