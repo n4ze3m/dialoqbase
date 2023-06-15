@@ -31,14 +31,11 @@ export interface AddNewSourceById {
 export interface AddNewPDFById {
   Params: {
     id: string;
-    type: string;
   };
 }
 
 export interface UploadPDF {
-  Params: {
-    type: string;
-  },
+
   Querystring: {
     embedding: string;
     model: string;

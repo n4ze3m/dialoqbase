@@ -1,18 +1,10 @@
-import {
-  Divider,
-  Form,
-  FormInstance,
-  Select,
-  Upload,
-  message,
-} from "antd";
+import { Divider, Form, FormInstance, Select, Upload, message } from "antd";
 import { RadioGroup } from "@headlessui/react";
 import {
   DocumentArrowUpIcon,
   DocumentTextIcon,
   GlobeAltIcon,
   InboxIcon,
-  DocumentPlusIcon,
 } from "@heroicons/react/24/outline";
 import React from "react";
 import { availableEmbeddingTypes } from "../../utils/embeddings";
@@ -37,46 +29,24 @@ const availableSources = [
     value: "website",
     title: "Webpage",
     icon: GlobeAltIcon,
-    fileUploadTitle: null,
-    fileUploadDescription: null,
-    fileTypes: null,
   },
   {
     id: 3,
     value: "text",
     title: "Text",
     icon: DocumentTextIcon,
-    fileUploadTitle: null,
-    fileUploadDescription: null,
-    fileTypes: null,
   },
   {
     id: 2,
-    value: "pdf",
-    title: "PDF (beta)",
+    value: "file",
+    title: "File (beta)",
     icon: DocumentArrowUpIcon,
-    fileUploadTitle: "Click or drag PDF to this area to upload",
-    fileUploadDescription:
-      "Ensure selectable and copyable PDF text for processing.",
-    fileTypes: "application/pdf",
   },
   {
     id: 4,
     value: "crawl",
     title: "Crawler (beta)",
     icon: SpiderIcon,
-    fileUploadTitle: null,
-    fileUploadDescription: null,
-    fileTypes: null,
-  },
-  {
-    id: 5,
-    value: "docx",
-    title: "Docx",
-    icon: DocumentPlusIcon,
-    fileUploadTitle: "Click or drag Docx to this area to upload",
-    fileUploadDescription: "Only support Docx file.",
-    fileTypes: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   },
 ];
 export const BotForm = ({
@@ -161,10 +131,10 @@ export const BotForm = ({
 
       <Form.Item
         name="content"
-        hidden={selectedSource.id === 2 || selectedSource.id === 5}
+        hidden={selectedSource.id === 2}
         rules={[
           {
-            required: !(selectedSource.id !== 2 || selectedSource.id !== 5),
+            required: selectedSource.id !== 2,
             message: "Please input your content!",
           },
         ]}
@@ -193,7 +163,7 @@ export const BotForm = ({
         ) : null}
       </Form.Item>
 
-      {(selectedSource.id === 2 || selectedSource.id === 5) && (
+      {selectedSource.id === 2 && (
         <>
           <Form.Item
             name="file"
@@ -212,14 +182,25 @@ export const BotForm = ({
             }}
           >
             <Upload.Dragger
-              accept={`.${selectedSource.value}`}
-              multiple={false}
-              maxCount={1}
+              accept={`.pdf,.docx,.csv`}
+              multiple={true}
+              maxCount={10}
               beforeUpload={(file) => {
-                const isPDF = file.type === selectedSource.fileTypes;
-                if (!isPDF) {
-                  message.error(`You can only upload ${selectedSource.title}!`);
+                const allowedTypes = [
+                  "application/pdf",
+                  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                  "text/csv",
+                ]
+                  .map((type) => type.toLowerCase())
+                  .join(", ");
+
+                if (!allowedTypes.includes(file.type.toLowerCase())) {
+                  message.error(
+                    `File type not supported. Please upload a ${allowedTypes} file.`
+                  );
+                  return Upload.LIST_IGNORE;
                 }
+
                 return false;
               }}
             >
@@ -228,10 +209,11 @@ export const BotForm = ({
                   <InboxIcon className="h-10 w-10 text-gray-400" />
                 </p>
                 <p className="ant-upload-text">
-                  {selectedSource.fileUploadTitle}
+                  Click or drag PDF, Docx, or CSV files to this area
                 </p>
                 <p className="ant-upload-hint">
-                  {selectedSource.fileUploadDescription}
+                  Support for a single or bulk upload up to 10 files. File
+                  upload is in beta. Please report any issues.
                 </p>
               </div>
             </Upload.Dragger>

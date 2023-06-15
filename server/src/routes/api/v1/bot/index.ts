@@ -81,12 +81,12 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   }, getAllBotsHandler);
 
   // upload pdf
-  fastify.post("/upload/:type", {
+  fastify.post("/upload", {
     onRequest: [fastify.authenticate],
   }, createBotFileHandler);
 
   // add new source
-  fastify.post("/:id/source/upload/:type", {
+  fastify.post("/:id/source/upload", {
     onRequest: [fastify.authenticate],
   }, addNewSourceFileByIdHandler);
 };
