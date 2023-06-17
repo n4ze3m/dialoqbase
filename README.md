@@ -149,6 +149,18 @@ need more ? create an issue...
 - [ ] Chatbot analytics
 - [ ] UI/UX improvements
 
+
+### Integrations
+
+- [X] Web embed script
+- [ ] Telegram
+- [ ] Discord
+- [ ] Slack
+- [ ] Whatsapp
+- [ ] Facebook Messenger
+- [ ] Instagram
+
+need more ? create an issue...
 ## Contributors ✨
 
 <a href="https://github.com/n4ze3m/dialoqbase/graphs/contributors">
