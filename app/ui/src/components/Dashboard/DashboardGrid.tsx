@@ -17,14 +17,10 @@ export const DashboardGrid = () => {
           {/* create skelon loadinf */}
           {[1, 2, 3, 4, 5, 6].map((item) => (
             <div
-              className="flex rounded-md shadow-sm hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
+              className="flex animate-pulse h-28 px-3 py-4 bg-gray-400 rounded-md shadow-sm hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
               key={item}
             >
-              <div className="flex flex-1  items-center justify-between truncate rounded-md border border-gray-200 bg-white">
-                <div className="flex-1 truncate px-4 py-4 text-sm">
-                  <h3 className="animate-pulse h-4 bg-gray-400 font-medium text-gray-900 hover:text-gray-600" />
-                </div>
-              </div>
+              
             </div>
           ))}
         </div>
@@ -48,7 +44,7 @@ export const DashboardGrid = () => {
                   <div className="w-full">
                     <div className="flex items-end justify-between">
                       <span className="text-xs lowercase text-scale-1000 text-gray-600">
-                      {bot.model}
+                        {bot.model}
                       </span>
                     </div>
                   </div>

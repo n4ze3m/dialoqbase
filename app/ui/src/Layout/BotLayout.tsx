@@ -3,10 +3,11 @@ import { Dialog, Menu, Transition } from "@headlessui/react";
 import {
   Bars3BottomLeftIcon,
   XMarkIcon,
-  TagIcon,
   CircleStackIcon,
   CogIcon,
   ChatBubbleLeftIcon,
+  CodeBracketIcon,
+  PuzzlePieceIcon
 } from "@heroicons/react/24/outline";
 
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
@@ -14,7 +15,7 @@ import { useAuth } from "../context/AuthContext";
 import { Avatar } from "antd";
 
 const navigation = [
-  { name: "Embed", href: "/bot/:id", icon: TagIcon },
+  { name: "Embed", href: "/bot/:id", icon: CodeBracketIcon },
   {
     name: "Preview",
     href: "/bot/:id/preview",
@@ -24,6 +25,11 @@ const navigation = [
     name: "Data Sources",
     href: "/bot/:id/data-sources",
     icon: CircleStackIcon,
+  },
+  {
+    name: "Integrations (beta)",
+    href: "/bot/:id/integrations",
+    icon: PuzzlePieceIcon,
   },
   {
     name: "Settings",
@@ -109,7 +115,6 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
                   <Link
                     to="/"
                     className="focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700 flex items-center px-3"
-               
                   >
                     <img
                       className="h-8 w-auto"
@@ -160,17 +165,13 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
 
         <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
           <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5">
-         <Link
-                    to="/"
-                    className="focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700 flex items-center px-3"
-                  >
-                    <img
-                      className="h-8 w-auto"
-                      src="/logo.png"
-                      alt="Dialoqbase"
-                    />
-                    <span className="ml-1 text-xl font-bold">Dialoqbase</span>
-                  </Link>
+            <Link
+              to="/"
+              className="focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700 flex items-center px-3"
+            >
+              <img className="h-8 w-auto" src="/logo.png" alt="Dialoqbase" />
+              <span className="ml-1 text-xl font-bold">Dialoqbase</span>
+            </Link>
             <div className="mt-5 flex flex-grow flex-col">
               <nav className="flex-1 space-y-1 px-2 pb-4">
                 {navigation.map((item) => (
@@ -220,8 +221,8 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
                     <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm">
                       <span className="sr-only">Open user menu</span>
                       <Avatar shape="square">
-                            {profile?.username?.charAt(0).toUpperCase()}
-                          </Avatar>
+                        {profile?.username?.charAt(0).toUpperCase()}
+                      </Avatar>
                     </Menu.Button>
                   </div>
                   <Transition

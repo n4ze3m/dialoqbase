@@ -1,0 +1,55 @@
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import api from "../../services/api";
+import { SkeletonLoading } from "../../components/Common/SkeletonLoading";
+import { IntegrationGrid } from "../../components/Bot/Integration/IntegrationGrid";
+
+export default function BotIntegrationRoot() {
+  const param = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { data, status } = useQuery(
+    ["getBotEIntegration", param.id],
+    async () => {
+      const response = await api.get(`/bot/integration/${param.id}`);
+      return response.data as {
+        data: {
+          name: string;
+          channel: string;
+          logo: string;
+          link: string;
+          description: string;
+          fields: {
+            name: string;
+            type: string;
+            title: string;
+            description: string;
+            help: string;
+            requiredMessage: string;
+            value: string;
+          }[];
+          isPaused: boolean;
+          status: string;
+          color: string;
+    textColor: string;
+
+        }[];
+      };
+    },
+    {
+      enabled: !!param.id,
+      refetchInterval: 1000,
+    }
+  );
+
+  React.useEffect(() => {
+    if (status === "error") {
+      navigate("/");
+    }
+  }, [status]);
+
+  return <>
+      {status === "loading" && <SkeletonLoading />}
+      {status === "success" && <IntegrationGrid data={data.data} />}
+  </>;
+}
