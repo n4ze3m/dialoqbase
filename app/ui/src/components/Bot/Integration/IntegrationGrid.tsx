@@ -1,3 +1,7 @@
+import { Modal } from "antd";
+import React from "react";
+import { IntegrationForm } from "./IntegrationForm";
+
 type Props = {
   data: {
     name: string;
@@ -22,6 +26,28 @@ type Props = {
 };
 
 export const IntegrationGrid: React.FC<Props> = ({ data }) => {
+  const [open, setOpen] = React.useState(false);
+  const [selectedIntegration, setSelectedIntegration] = React.useState<{
+    name: string;
+    channel: string;
+    logo: string;
+    description: string;
+    link: string;
+    fields: {
+      name: string;
+      type: string;
+      title: string;
+      description: string;
+      help: string;
+      requiredMessage: string;
+      value: string;
+    }[];
+    isPaused: boolean;
+    status: string;
+    color: string;
+    textColor: string;
+  } | null>();
+
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
@@ -36,7 +62,12 @@ export const IntegrationGrid: React.FC<Props> = ({ data }) => {
       <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {data.map((integration) => (
           <div className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer">
-            <div>
+            <div
+              onClick={() => {
+                setSelectedIntegration(integration);
+                setOpen(true);
+              }}
+            >
               <div className="mb-4">
                 <div className="flex items-center justify-between">
                   <img
@@ -50,7 +81,10 @@ export const IntegrationGrid: React.FC<Props> = ({ data }) => {
                       style={{
                         backgroundColor: integration.color,
                         color: integration.textColor,
-                        borderColor: integration.color !== "#fff" ? integration.color : "#000",
+                        borderColor:
+                          integration.color !== "#fff"
+                            ? integration.color
+                            : "#000",
                       }}
                     >
                       {integration.status}
@@ -72,6 +106,19 @@ export const IntegrationGrid: React.FC<Props> = ({ data }) => {
           </div>
         ))}
       </div>
+
+      {/* MODAL */}
+      <Modal
+        title={`${selectedIntegration?.name} Integration`}
+        open={open}
+        onCancel={() => setOpen(false)}
+        footer={null}
+      >
+        <IntegrationForm
+          onClose={() => setOpen(false)}
+          data={selectedIntegration!}
+        />
+      </Modal>
     </div>
   );
 };
