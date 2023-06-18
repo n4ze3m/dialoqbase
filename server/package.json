@@ -46,6 +46,7 @@
     "fastify-cli": "^5.7.1",
     "fastify-plugin": "^4.0.0",
     "grammy": "^1.16.2",
+    "ignore": "^5.2.4",
     "ioredis": "^5.3.2",
     "langchain": "^0.0.90",
     "mammoth": "^1.6.0",

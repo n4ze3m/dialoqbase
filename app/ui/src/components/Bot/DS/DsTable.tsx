@@ -11,6 +11,7 @@ import api from "../../../services/api";
 import { useParams } from "react-router-dom";
 import { NewDsForm } from "./NewDsForm";
 import React from "react";
+import { GithubIcon } from "../../Common/GithubIcon";
 
 export const DsTable = ({
   data,
@@ -45,6 +46,8 @@ export const DsTable = ({
         return <DocumentArrowUpIcon className="h-10 w-10 text-gray-400" />;
       case "text":
         return <DocumentTextIcon className="h-10 w-10 text-gray-400" />;
+      case "github":
+        return <GithubIcon className="h-10 w-10 text-gray-400" />;
       default:
         return <DocumentTextIcon className="h-10 w-10 text-gray-400" />;
     }
