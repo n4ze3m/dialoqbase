@@ -14,6 +14,7 @@ import BotSettingsRoot from "./routes/bot/settings";
 import LoginRoot from "./routes/login/root";
 import { AuthProvider } from "./context/AuthContext";
 import SettingsRoot from "./routes/settings/root";
+import BotIntegrationRoot from "./routes/bot/integrations";
 const router = createHashRouter([
   {
     element: (
@@ -60,6 +61,14 @@ const router = createHashRouter([
     element: (
       <BotLayout>
         <BotSettingsRoot />
+      </BotLayout>
+    ),
+  },
+  {
+    path: "/bot/:id/integrations",
+    element: (
+      <BotLayout>
+        <BotIntegrationRoot />
       </BotLayout>
     ),
   },

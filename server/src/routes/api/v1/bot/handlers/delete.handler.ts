@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 
 import { GetBotRequestById, GetSourceByIds } from "./types";
+import TelegramBot from "../../../../../integration/telegram";
 
 export const deleteSourceByIdHandler = async (
   request: FastifyRequest<GetSourceByIds>,
@@ -77,6 +78,24 @@ export const deleteBotByIdHandler = async (
       message: "Bot not found",
     });
   }
+
+  const botIntegrations = await prisma.botIntegration.findMany({
+    where: {
+      bot_id: bot.id,
+    },
+  });
+
+  botIntegrations.forEach(async (botIntegration) => {
+    if (botIntegration.provider === "telegram") {
+      await TelegramBot.disconnect(botIntegration.identifier);
+    }
+  });
+
+  await prisma.botIntegration.deleteMany({
+    where: {
+      bot_id: bot.id,
+    },
+  });
 
   await prisma.botDocument.deleteMany({
     where: {
