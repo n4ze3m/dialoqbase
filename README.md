@@ -153,7 +153,7 @@ need more ? create an issue...
 ### Integrations
 
 - [X] Web embed script
-- [ ] Telegram
+- [X] Telegram (beta)
 - [ ] Discord
 - [ ] Slack
 - [ ] Whatsapp
