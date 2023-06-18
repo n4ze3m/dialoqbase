@@ -36,6 +36,7 @@ model BotSource {
   status    String        @default("pending")
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
+  options   Json?         @db.Json
   document  BotDocument[]
   bot       Bot           @relation(fields: [botId], references: [id])
 }
