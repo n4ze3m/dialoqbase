@@ -72,19 +72,23 @@ export const chatRequestHandler = async (
     },
   );
 
+  const chat_history = history
+    .map((chatMessage) => {
+      if (chatMessage.type === "human") {
+        return `Human: ${chatMessage.text}`;
+      } else if (chatMessage.type === "ai") {
+        return `Assistant: ${chatMessage.text}`;
+      } else {
+        return `${chatMessage.text}`;
+      }
+    })
+    .join("\n");
+
+  console.log(chat_history);
+
   const response = await chain.call({
     question: sanitizedQuestion,
-    chat_history: history
-      .map((chatMessage) => {
-        if (chatMessage.type === "human") {
-          return `Human: ${chatMessage.text}`;
-        } else if (chatMessage.type === "ai") {
-          return `Assistant: ${chatMessage.text}`;
-        } else {
-          return `${chatMessage.text}`;
-        }
-      })
-      .join("\n"),
+    chat_history: chat_history,
   });
 
   return {
