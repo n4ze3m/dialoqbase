@@ -92,6 +92,7 @@ _Important: After the first login, remember to change the default credentials._
 ## Stack
 
 - [React](https://reactjs.org/)
+- [Ant Design](https://ant.design/)
 - [Node.js](https://nodejs.org/)
 - [Fastify](https://www.fastify.io/)
 - [LangChain](https://langchain.com/)

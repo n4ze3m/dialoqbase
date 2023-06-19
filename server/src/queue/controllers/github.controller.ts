@@ -12,7 +12,7 @@ export const githubQueueController = async (
   const loader = new GithubRepoLoader(source.content!, {
     ...options,
     recursive: false,
-    unknown: "warn",
+    unknown: "error",
   });
   const docs = await loader.load();
 

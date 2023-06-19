@@ -1,8 +1,9 @@
-import { PDFLoader } from "langchain/document_loaders/fs/pdf";
+// import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { QSource } from "../type";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { DialoqbaseVectorStore } from "../../utils/store";
 import { embeddings } from "../../utils/embeddings";
+import { DialoqbasePDFLoader } from "../../loader/pdf";
 
 export const pdfQueueController = async (
   source: QSource,
@@ -10,7 +11,7 @@ export const pdfQueueController = async (
   console.log("loading pdf");
 
   const location = source.location!;
-  const loader = new PDFLoader(location);
+  const loader = new DialoqbasePDFLoader(location);
   const docs = await loader.load();
 
   const textSplitter = new RecursiveCharacterTextSplitter({
