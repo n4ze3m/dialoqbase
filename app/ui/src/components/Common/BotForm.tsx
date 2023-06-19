@@ -235,13 +235,13 @@ export const BotForm = ({
             rules={[
               {
                 required: true,
-                message: "Please enter the github repo URL",
+                message: "Please enter the public github repo URL",
               },
               {
                 pattern: new RegExp(
                   "^(https?://)?(www.)?github.com/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)$"
                 ),
-                message: "Please enter a valid github repo URL",
+                message: "Please enter a valid public github repo URL",
               },
             ]}
           >
@@ -266,6 +266,19 @@ export const BotForm = ({
               className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
             />
           </Form.Item>
+
+          <p className="text-sm text-gray-500">
+            If you find any issues, please report them on{" "}
+            <a
+              href="https://github.com/n4ze3m/dialoqbase/issues/new?title=Github%20issue&labels=bug"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              GitHub
+            </a>
+            .
+          </p>
         </>
       ),
     },

@@ -114,7 +114,7 @@ Dialoqbase is a side project and is not ready for production. It is still in the
 - [x] Web crawler (beta)
 - [x] Microsoft Word documents (beta)
 - [ ] Sitemap
-- [ ] Github repository
+- [X] Github repository
 - [ ] mp3
 - [ ] Notion
 
