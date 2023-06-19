@@ -10,6 +10,7 @@ import React from "react";
 import { availableEmbeddingTypes } from "../../utils/embeddings";
 import { availableChatModels } from "../../utils/chatModels";
 import { SpiderIcon } from "./SpiderIcon";
+import { GithubIcon } from "./GithubIcon";
 
 type Props = {
   createBot: (values: any) => void;
@@ -23,32 +24,6 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const availableSources = [
-  {
-    id: 1,
-    value: "website",
-    title: "Webpage",
-    icon: GlobeAltIcon,
-  },
-  {
-    id: 3,
-    value: "text",
-    title: "Text",
-    icon: DocumentTextIcon,
-  },
-  {
-    id: 2,
-    value: "file",
-    title: "File (beta)",
-    icon: DocumentArrowUpIcon,
-  },
-  {
-    id: 4,
-    value: "crawl",
-    title: "Crawler (beta)",
-    icon: SpiderIcon,
-  },
-];
 export const BotForm = ({
   createBot,
   isLoading,
@@ -56,6 +31,259 @@ export const BotForm = ({
   form,
   showEmbeddingAndModels,
 }: Props) => {
+  const [availableSources] = React.useState([
+    {
+      id: 1,
+      value: "website",
+      title: "Webpage",
+      icon: GlobeAltIcon,
+      formComponent: (
+        <Form.Item
+          name="content"
+          rules={[
+            {
+              required: true,
+              message: "Please enter the webpage URL",
+            },
+          ]}
+        >
+          <input
+            type="url"
+            placeholder="Enter the webpage URL"
+            className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+          />
+        </Form.Item>
+      ),
+    },
+    {
+      id: 3,
+      value: "text",
+      title: "Text",
+      icon: DocumentTextIcon,
+      formComponent: (
+        <Form.Item
+          name="content"
+          rules={[
+            {
+              required: true,
+              message: "Please enter the text",
+            },
+          ]}
+        >
+          <textarea
+            placeholder="Enter the text"
+            className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+          />
+        </Form.Item>
+      ),
+    },
+    {
+      id: 2,
+      value: "file",
+      title: "File (beta)",
+      icon: DocumentArrowUpIcon,
+      formComponent: (
+        <>
+          <Form.Item
+            name="file"
+            rules={[
+              {
+                required: true,
+                message: `Please upload your files (PDF, Docx, CSV)`,
+              },
+            ]}
+            getValueFromEvent={(e) => {
+              console.log("Upload event:", e);
+              if (Array.isArray(e)) {
+                return e;
+              }
+              return e?.fileList;
+            }}
+          >
+            <Upload.Dragger
+              accept={`.pdf,.docx,.csv`}
+              multiple={true}
+              maxCount={10}
+              beforeUpload={(file) => {
+                const allowedTypes = [
+                  "application/pdf",
+                  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                  "text/csv",
+                ]
+                  .map((type) => type.toLowerCase())
+                  .join(", ");
+
+                if (!allowedTypes.includes(file.type.toLowerCase())) {
+                  message.error(
+                    `File type not supported. Please upload a ${allowedTypes} file.`
+                  );
+                  return Upload.LIST_IGNORE;
+                }
+
+                return false;
+              }}
+            >
+              <div className="p-3">
+                <p className="ant-upload-drag-icon justify-center flex">
+                  <InboxIcon className="h-10 w-10 text-gray-400" />
+                </p>
+                <p className="ant-upload-text">
+                  Click or drag PDF, Docx, or CSV files to this area
+                </p>
+                <p className="ant-upload-hint">
+                  Support for a single or bulk upload up to 10 files. File
+                  upload is in beta. Please report any issues.
+                </p>
+              </div>
+            </Upload.Dragger>
+          </Form.Item>
+          <p className="text-sm text-gray-500">
+            If you find any issues, please report them on{" "}
+            <a
+              href={`https://github.com/n4ze3m/dialoqbase/issues/new?title=file%20upload%20issue&type=bug&labels=bug`}
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              GitHub
+            </a>
+            .
+          </p>
+        </>
+      ),
+    },
+    {
+      id: 4,
+      value: "crawl",
+      title: "Crawler (beta)",
+      icon: SpiderIcon,
+      formComponent: (
+        <>
+          <Form.Item
+            name="content"
+            rules={[
+              {
+                required: true,
+                message: "Please enter the website URL",
+              },
+            ]}
+          >
+            <input
+              type="url"
+              placeholder="Enter the website URL"
+              className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+            />
+          </Form.Item>
+          <Form.Item
+            name="maxDepth"
+            help="The max depth of the website to crawl"
+            rules={[
+              {
+                required: true,
+                message: "Please input max depth!",
+              },
+            ]}
+          >
+            <input
+              type="number"
+              placeholder="Enter the max depth"
+              className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="maxLinks"
+            help="The max links to crawl"
+            rules={[
+              {
+                required: true,
+                message: "Please input max links count",
+              },
+            ]}
+          >
+            <input
+              type="number"
+              placeholder="Enter the max depth"
+              className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+            />
+          </Form.Item>
+
+          <p className="text-sm text-gray-500">
+            If you find any issues, please report them on{" "}
+            <a
+              href="https://github.com/n4ze3m/dialoqbase/issues/new?title=Crawler%20issue&labels=bug"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              GitHub
+            </a>
+            .
+          </p>
+        </>
+      ),
+    },
+    {
+      id: 6,
+      value: "github",
+      title: "GitHub (beta)",
+      icon: GithubIcon,
+      formComponent: (
+        <>
+          <Form.Item
+            name="content"
+            rules={[
+              {
+                required: true,
+                message: "Please enter the public github repo URL",
+              },
+              {
+                pattern: new RegExp(
+                  "^(https?://)?(www.)?github.com/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)$"
+                ),
+                message: "Please enter a valid public github repo URL",
+              },
+            ]}
+          >
+            <input
+              type="url"
+              placeholder="Enter the github repo URL"
+              className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+            />
+          </Form.Item>
+          <Form.Item
+            name={["options", "branch"]}
+            rules={[
+              {
+                required: true,
+                message: "Please input branch",
+              },
+            ]}
+          >
+            <input
+              type="text"
+              placeholder="Enter the branch"
+              className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+            />
+          </Form.Item>
+
+          <p className="text-sm text-gray-500">
+            If you find any issues, please report them on{" "}
+            <a
+              href="https://github.com/n4ze3m/dialoqbase/issues/new?title=Github%20issue&labels=bug"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              GitHub
+            </a>
+            .
+          </p>
+        </>
+      ),
+    },
+  ]);
+
   const [selectedSource, _setSelectedSource] = React.useState<any>(
     availableSources[0]
   );
@@ -73,6 +301,9 @@ export const BotForm = ({
         model: "gpt-3.5-turbo",
         maxDepth: 2,
         maxLinks: 10,
+        options: {
+          branch: "main",
+        },
       }}
     >
       <RadioGroup
@@ -129,160 +360,7 @@ export const BotForm = ({
         </div>
       </RadioGroup>
 
-      <Form.Item
-        name="content"
-        hidden={selectedSource.id === 2}
-        rules={[
-          {
-            required: selectedSource.id !== 2,
-            message: "Please input your content!",
-          },
-        ]}
-      >
-        {selectedSource.id === 1 ? (
-          <input
-            type="url"
-            placeholder="Enter the website URL"
-            className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-          />
-        ) : null}
-
-        {selectedSource.id === 3 ? (
-          <textarea
-            placeholder="Enter the text"
-            className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-          />
-        ) : null}
-
-        {selectedSource.id === 4 ? (
-          <input
-            type="url"
-            placeholder="Enter the website URL"
-            className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-          />
-        ) : null}
-      </Form.Item>
-
-      {selectedSource.id === 2 && (
-        <>
-          <Form.Item
-            name="file"
-            rules={[
-              {
-                required: true,
-                message: `Please upload your ${selectedSource.title}`,
-              },
-            ]}
-            getValueFromEvent={(e) => {
-              console.log("Upload event:", e);
-              if (Array.isArray(e)) {
-                return e;
-              }
-              return e?.fileList;
-            }}
-          >
-            <Upload.Dragger
-              accept={`.pdf,.docx,.csv`}
-              multiple={true}
-              maxCount={10}
-              beforeUpload={(file) => {
-                const allowedTypes = [
-                  "application/pdf",
-                  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                  "text/csv",
-                ]
-                  .map((type) => type.toLowerCase())
-                  .join(", ");
-
-                if (!allowedTypes.includes(file.type.toLowerCase())) {
-                  message.error(
-                    `File type not supported. Please upload a ${allowedTypes} file.`
-                  );
-                  return Upload.LIST_IGNORE;
-                }
-
-                return false;
-              }}
-            >
-              <div className="p-3">
-                <p className="ant-upload-drag-icon justify-center flex">
-                  <InboxIcon className="h-10 w-10 text-gray-400" />
-                </p>
-                <p className="ant-upload-text">
-                  Click or drag PDF, Docx, or CSV files to this area
-                </p>
-                <p className="ant-upload-hint">
-                  Support for a single or bulk upload up to 10 files. File
-                  upload is in beta. Please report any issues.
-                </p>
-              </div>
-            </Upload.Dragger>
-          </Form.Item>
-          <p className="text-sm text-gray-500">
-            If you find any issues, please report them on{" "}
-            <a
-              href={`https://github.com/n4ze3m/dialoqbase/issues/new?title=${selectedSource.title}%20upload%20issue&type=bug&labels=bug`}
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
-            >
-              GitHub
-            </a>
-            .
-          </p>
-        </>
-      )}
-
-      {selectedSource.id === 4 && (
-        <>
-          <Form.Item
-            name="maxDepth"
-            help="The max depth of the website to crawl"
-            rules={[
-              {
-                required: true,
-                message: "Please input max depth!",
-              },
-            ]}
-          >
-            <input
-              type="number"
-              placeholder="Enter the max depth"
-              className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-            />
-          </Form.Item>
-
-          <Form.Item
-            name="maxLinks"
-            help="The max links to crawl"
-            rules={[
-              {
-                required: true,
-                message: "Please input max links count",
-              },
-            ]}
-          >
-            <input
-              type="number"
-              placeholder="Enter the max depth"
-              className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-            />
-          </Form.Item>
-
-          <p className="text-sm text-gray-500">
-            If you find any issues, please report them on{" "}
-            <a
-              href="https://github.com/n4ze3m/dialoqbase/issues/new?title=Crawler%20issue&labels=bug"
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
-            >
-              GitHub
-            </a>
-            .
-          </p>
-        </>
-      )}
+      {selectedSource.formComponent}
 
       <Form.Item hidden={!showEmbeddingAndModels} noStyle>
         <Divider />

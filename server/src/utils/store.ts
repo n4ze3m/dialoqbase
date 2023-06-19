@@ -35,19 +35,18 @@ export class DialoqbaseVectorStore extends VectorStore {
       sourceId: this.sourceId,
     }));
 
-    const chunkSize = 500;
-
-    for (let i = 0; i < rows.length; i += chunkSize) {
-      const chunk = rows.slice(i, i + chunkSize);
-      try {
-        chunk.forEach(async (row) => {
+    try {
+      rows.forEach(async (row) => {
+        if (row?.embedding) {
           const vector = `[${row.embedding.join(",")}]`;
-          await prisma.$executeRaw`INSERT INTO "BotDocument" ("content", "embedding", "metadata", "botId", "sourceId") VALUES (${row.content}, ${vector}::vector, ${row.metadata}, ${row.botId}, ${row.sourceId})`
-        });
-      } catch (e) {
-        console.log(e);
-        throw e;
-      }
+          const content = row?.content.replace(/\x00/g, "").trim();
+          await prisma
+            .$executeRaw`INSERT INTO "BotDocument" ("content", "embedding", "metadata", "botId", "sourceId") VALUES (${content}, ${vector}::vector, ${row.metadata}, ${row.botId}, ${row.sourceId})`;
+        }
+      });
+    } catch (e) {
+      console.log(e);
+      throw e;
     }
   }
   async addDocuments(documents: Document[]): Promise<void> {

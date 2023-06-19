@@ -18,6 +18,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
   void fastify.register(fastifyMultipart, {
     limits: {
       files: 10,
+      fileSize: 100 * 1024 * 1024,
     }
   });
 

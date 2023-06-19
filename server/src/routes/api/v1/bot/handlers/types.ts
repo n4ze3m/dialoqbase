@@ -7,6 +7,7 @@ export interface CreateBotRequest {
     model: string;
     maxDepth?: number;
     maxLinks?: number;
+    options?: any;
   };
 }
 
@@ -25,6 +26,7 @@ export interface AddNewSourceById {
     content: string;
     maxDepth?: number;
     maxLinks?: number;
+    options?: any;
   };
 }
 

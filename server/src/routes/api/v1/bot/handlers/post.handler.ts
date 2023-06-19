@@ -6,11 +6,7 @@ import {
   uniqueNamesGenerator,
 } from "unique-names-generator";
 
-import {
-  AddNewSourceById,
-  CreateBotRequest,
-  GetSourceByIds,
-} from "./types";
+import { AddNewSourceById, CreateBotRequest, GetSourceByIds } from "./types";
 import {
   apiKeyValidaton,
   apiKeyValidatonMessage,
@@ -78,6 +74,7 @@ export const createBotHandler = async (
       content,
       type,
       botId: bot.id,
+      options: request.body.options,
     },
   });
 
@@ -86,6 +83,7 @@ export const createBotHandler = async (
     embedding,
     maxDepth: request.body.maxDepth,
     maxLinks: request.body.maxLinks,
+    options: request.body.options,
   }]);
   return {
     id: bot.id,
@@ -121,6 +119,7 @@ export const addNewSourceByIdHandler = async (
       content,
       type,
       botId: bot.id,
+      options: request.body.options,
     },
   });
 
@@ -129,6 +128,8 @@ export const addNewSourceByIdHandler = async (
     embedding: bot.embedding,
     maxDepth: request.body.maxDepth,
     maxLinks: request.body.maxLinks,
+    options: request.body.options,
+
   }]);
   return {
     id: bot.id,
@@ -193,4 +194,3 @@ export const refreshSourceByIdHandler = async (
     id: bot.id,
   };
 };
-

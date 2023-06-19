@@ -1,17 +1,19 @@
-// import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { QSource } from "../type";
+import { GithubRepoLoader } from "langchain/document_loaders/web/github";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { DialoqbaseVectorStore } from "../../utils/store";
 import { embeddings } from "../../utils/embeddings";
-import { DialoqbasePDFLoader } from "../../loader/pdf";
 
-export const pdfQueueController = async (
+export const githubQueueController = async (
   source: QSource,
 ) => {
-  console.log("loading pdf");
+  let options = JSON.parse(JSON.stringify(source.options));
 
-  const location = source.location!;
-  const loader = new DialoqbasePDFLoader(location);
+  const loader = new GithubRepoLoader(source.content!, {
+    ...options,
+    recursive: true,
+    unknown: "error",
+  });
   const docs = await loader.load();
 
   const textSplitter = new RecursiveCharacterTextSplitter({
@@ -28,5 +30,4 @@ export const pdfQueueController = async (
       sourceId: source.id,
     },
   );
-
 };

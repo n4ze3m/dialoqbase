@@ -7,11 +7,13 @@ import { websiteQueueController } from "./controllers/website.controller";
 import { crawlQueueController } from "./controllers/crawl.controller";
 import { DocxQueueController } from "./controllers/docx.controller";
 import { csvQueueController } from "./controllers/csv.controller";
+import { githubQueueController } from "./controllers/github.controller";
 
 const prisma = new PrismaClient();
 
 export const queueHandler = async (job: Job, done: DoneCallback) => {
   const data = job.data as QSource[];
+  await prisma.$connect();
   console.log("Processing queue");
   try {
     for (const source of data) {
@@ -57,6 +59,11 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
               source,
             );
             break;
+          case "github":
+            await githubQueueController(
+              source,
+            );
+            break;
           default:
             break;
         }
@@ -87,6 +94,6 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
   } catch (e) {
     console.log(e);
   }
-
+  await prisma.$disconnect();
   done();
 };
