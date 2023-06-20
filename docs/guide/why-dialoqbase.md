@@ -67,5 +67,4 @@ Here is a list of data loaders that are currently supported by dialoqbase:
 
 ## Vector Search with PostgreSQL
 
-You don't need spend money on other vector search services. Dialoqbase uses PostgreSQL for vector search operations. It is fast and reliable. 
-
+You don't need to spend money on other vector search services. Dialoqbase uses PostgreSQL for vector search operations, which is fast and reliable
