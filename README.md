@@ -155,7 +155,7 @@ need more ? create an issue...
 
 - [X] Web embed script
 - [X] Telegram (beta)
-- [ ] Discord
+- [X] Discord
 - [ ] Slack
 - [ ] Whatsapp
 - [ ] Facebook Messenger

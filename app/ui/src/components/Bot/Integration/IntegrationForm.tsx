@@ -23,6 +23,7 @@ type Props = {
       type: string;
       title: string;
       description: string;
+      inputType: string;
       help: string;
       requiredMessage: string;
       value: string;
@@ -142,7 +143,7 @@ export const IntegrationForm: React.FC<Props> = ({ onClose, data }) => {
               rules={[{ required: true, message: field.requiredMessage }]}
             >
               <input
-                type="password"
+                type={field.inputType}
                 placeholder={field.help}
                 className="border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />

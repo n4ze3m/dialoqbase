@@ -3,6 +3,7 @@ import { createIntergationType, PauseIntergationType } from "./type";
 import { geProviderRequiredFields } from "../../../../../../utils/intergation";
 
 import TelegramBot from "../../../../../../integration/telegram";
+import DiscordBot from "../../../../../../integration/discord";
 
 export const createIntergationHandler = async (
   request: FastifyRequest<createIntergationType>,
@@ -43,8 +44,8 @@ export const createIntergationHandler = async (
 
   switch (request.body.provider) {
     case "telegram":
-      const process_name = `dialoqbase-telegram-${id}`;
-      const isProcess = await prisma.botIntegration.findFirst({
+      const process_name_tg = `dialoqbase-telegram-${id}`;
+      const isProcess_tg = await prisma.botIntegration.findFirst({
         where: {
           bot_id: id,
           provider: "telegram",
@@ -61,10 +62,10 @@ export const createIntergationHandler = async (
         });
       }
 
-      if (isProcess) {
+      if (isProcess_tg) {
         await prisma.botIntegration.update({
           where: {
-            id: isProcess.id,
+            id: isProcess_tg.id,
           },
           data: {
             telegram_bot_token: request.body.value.telegram_bot_token,
@@ -76,16 +77,74 @@ export const createIntergationHandler = async (
             bot_id: id,
             provider: "telegram",
             telegram_bot_token: request.body.value.telegram_bot_token,
-            identifier: process_name,
+            identifier: process_name_tg,
           },
         });
       }
 
       await TelegramBot.connect(
-        process_name,
+        process_name_tg,
         request.body.value.telegram_bot_token,
       );
 
+      return reply.status(200).send({
+        message: "Integration created",
+      });
+
+    case "discord":
+      const process_name_dc = `dialoqbase-discord-${id}`;
+      const isProcess_dc = await prisma.botIntegration.findFirst({
+        where: {
+          bot_id: id,
+          provider: "discord",
+        },
+      });
+
+      const isValidToken_dc = await DiscordBot.isValidate(
+        request.body.value.discord_bot_token,
+      );
+
+      if (!isValidToken_dc) {
+        return reply.status(400).send({
+          message: "Invalid token",
+        });
+      }
+
+
+      if (isProcess_dc) {
+        await prisma.botIntegration.update({
+          where: {
+            id: isProcess_dc.id,
+          },
+          data: {
+            discord_bot_token: request.body.value.discord_bot_token,
+            discord_application_id: request.body.value.discord_application_id,
+            discord_slash_command: request.body.value.discord_slash_command,
+            discord_slash_command_description:
+              request.body.value.discord_slash_command_description,
+          },
+        });
+      } else {
+        await prisma.botIntegration.create({
+          data: {
+            bot_id: id,
+            provider: "discord",
+            discord_bot_token: request.body.value.discord_bot_token,
+            discord_application_id: request.body.value.discord_application_id,
+            discord_slash_command: request.body.value.discord_slash_command,
+            discord_slash_command_description:
+              request.body.value.discord_slash_command_description,
+            identifier: process_name_dc,
+          },
+        });
+      }
+
+      await DiscordBot.connect(
+        process_name_dc,
+        request.body.value.discord_bot_token,
+        request.body.value.discord_slash_command,
+        request.body.value.discord_slash_command_description,
+      );
       return reply.status(200).send({
         message: "Integration created",
       });
@@ -157,6 +216,42 @@ export const pauseOrResumeIntergationHandler = async (
 
         await TelegramBot.disconnect(getIntegration.identifier);
       }
+      
+
+      return reply.status(200).send({
+        message: "Integration updated",
+      });
+
+    case "discord":
+      if (getIntegration.is_pause) {
+        await prismas.botIntegration.update({
+          where: {  
+            id: getIntegration.id,
+          },
+          data: {
+            is_pause: false,
+          },
+        });
+        
+        await DiscordBot.connect(
+          getIntegration.identifier,
+          getIntegration.discord_bot_token!,
+          getIntegration.discord_slash_command!,
+          getIntegration.discord_slash_command_description!,
+        );
+      } else {
+        await prismas.botIntegration.update({
+          where: {
+            id: getIntegration.id,
+          },
+          data: {
+            is_pause: true,
+          },
+        });
+
+        await DiscordBot.disconnect(getIntegration.identifier);
+      }
+
 
       return reply.status(200).send({
         message: "Integration updated",

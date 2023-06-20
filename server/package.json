@@ -42,6 +42,7 @@
     "cohere-ai": "^6.2.1",
     "concurrently": "^7.0.0",
     "d3-dsv": "2",
+    "discord.js": "^14.11.0",
     "fastify": "^4.0.0",
     "fastify-cli": "^5.7.1",
     "fastify-plugin": "^4.0.0",
