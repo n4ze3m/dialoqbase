@@ -4,6 +4,17 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
   title: "Dialoqbase",
   description: "Create chatbots with ease",
+  lastUpdated: true,
+  head: [
+    [
+      "script",
+      {
+        src: "https://static.cloudflareinsights.com/beacon.min.js",
+        "data-cf-beacone": '{"token": "7bc549b39629497a9668db8e00ec41eb"}',
+        defer: "",
+      },
+    ],
+  ],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     logo: "/logo.png",
