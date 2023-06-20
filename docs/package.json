@@ -3,9 +3,9 @@
     "version": "0.0.1",
     "description": "docs for dialoqbase",
     "scripts": {
-        "docs:dev": "vitepress dev docs --port 5323",
-        "docs:build": "vitepress build docs",
-        "docs:preview": "vitepress preview docs"
+        "docs:dev": "vitepress dev . --port 5323",
+        "docs:build": "vitepress build .",
+        "docs:preview": "vitepress preview ."
     },
     "dependencies": {
         "vitepress": "1.0.0-beta.3"
