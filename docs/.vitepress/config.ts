@@ -6,7 +6,7 @@ export default defineConfig({
   description: "Create chatbots with ease",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    logo: "/images/logo.png",
+    logo: "/logo.png",
     nav: [
       { text: "Home", link: "/" },
       { text: "Guide", link: "/guide/what-is-dialoqbase" },
