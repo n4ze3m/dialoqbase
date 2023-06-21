@@ -83,7 +83,7 @@ export async function getChannelsByProvider(
           inputType: "string",
           title: "Slash command",
           description: "Discord slash command",
-          help: "It will be used to send messages from your knowledge base",
+          help: "User will use this command to send message to discord bot",
           requiredMessage: "Slash command is required",
           value: "",
         },
@@ -131,14 +131,18 @@ export async function getChannelsByProvider(
           }
           provider.fields[0].value = integration.telegram_bot_token || "";
           break;
-        
+
         case "discord":
           for (const field of provider.fields) {
             // @ts-ignore
             field.value = integration[field.name] || "";
           }
-          provider.status = integration.discord_bot_token ? "CONNECTED" : "CONNECT";
-          provider.color = integration.discord_bot_token ? "rgb(134 239 172)" : "#fff";
+          provider.status = integration.discord_bot_token
+            ? "CONNECTED"
+            : "CONNECT";
+          provider.color = integration.discord_bot_token
+            ? "rgb(134 239 172)"
+            : "#fff";
           provider.textColor = integration.discord_bot_token ? "#fff" : "#000";
 
           if (integration.is_pause && integration.discord_bot_token) {
