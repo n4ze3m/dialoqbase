@@ -42,6 +42,7 @@ export async function getChannelsByProvider(
           help: "You can get it from @BotFather",
           requiredMessage: "Bot token is required",
           value: "",
+          defaultValue: "",
         },
       ],
       isPaused: false,
@@ -50,7 +51,7 @@ export async function getChannelsByProvider(
       textColor: "#000",
     },
     {
-      name: "Discord",
+      name: "Discord (🧪)",
       channel: "discord",
       logo: "/providers/discord.svg",
       link: "https://discord.com/developers/applications",
@@ -66,6 +67,7 @@ export async function getChannelsByProvider(
           help: "You can get it from Discord Developer Portal",
           requiredMessage: "Application ID is required",
           value: "",
+          defaultValue: "",
         },
         {
           name: "discord_bot_token",
@@ -76,6 +78,7 @@ export async function getChannelsByProvider(
           help: "You can get it from Discord Developer Portal",
           requiredMessage: "Bot token is required",
           value: "",
+          defaultValue: "",
         },
         {
           name: "discord_slash_command",
@@ -83,9 +86,10 @@ export async function getChannelsByProvider(
           inputType: "string",
           title: "Slash command",
           description: "Discord slash command",
-          help: "User will use this command to send message to discord bot",
+          help: "Bot needs to have slash command",
           requiredMessage: "Slash command is required",
-          value: "",
+          value: "help",
+          defaultValue: "help",
         },
         {
           name: "discord_slash_command_description",
@@ -93,9 +97,10 @@ export async function getChannelsByProvider(
           inputType: "string",
           title: "Slash command description",
           description: "Discord slash command description",
-          help: "It will be used to send messages from your knowledge base",
+          help: "A description for the slash command",
           requiredMessage: "Slash command description is required",
-          value: "",
+          value: "Use this command to send messages to the bot",
+          defaultValue: "Use this command to send messages to the bot",
         },
       ],
       isPaused: false,
@@ -135,7 +140,7 @@ export async function getChannelsByProvider(
         case "discord":
           for (const field of provider.fields) {
             // @ts-ignore
-            field.value = integration[field.name] || "";
+            field.value = integration[field.name] || field.defaultValue;
           }
           provider.status = integration.discord_bot_token
             ? "CONNECTED"

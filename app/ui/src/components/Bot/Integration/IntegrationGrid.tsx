@@ -115,6 +115,7 @@ export const IntegrationGrid: React.FC<Props> = ({ data }) => {
         open={open}
         onCancel={() => setOpen(false)}
         footer={null}
+        maskClosable={false}
       >
         <IntegrationForm
           onClose={() => setOpen(false)}

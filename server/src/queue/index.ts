@@ -8,6 +8,7 @@ import { crawlQueueController } from "./controllers/crawl.controller";
 import { DocxQueueController } from "./controllers/docx.controller";
 import { csvQueueController } from "./controllers/csv.controller";
 import { githubQueueController } from "./controllers/github.controller";
+import { txtQueueController } from "./controllers/txt.controller";
 
 const prisma = new PrismaClient();
 
@@ -61,6 +62,11 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
             break;
           case "github":
             await githubQueueController(
+              source,
+            );
+            break;
+          case "txt":
+            await txtQueueController(
               source,
             );
             break;
