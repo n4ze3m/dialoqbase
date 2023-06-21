@@ -60,18 +60,30 @@ model User {
 }
 
 model BotIntegration {
-  id                 Int      @id @default(autoincrement())
-  provider           String
-  telegram_bot_token String?
-  is_pause           Boolean? @default(false)
-  bot_id             String
-  identifier         String
-  Bot                Bot      @relation(fields: [bot_id], references: [id], onDelete: Cascade)
+  id                                Int      @id @default(autoincrement())
+  provider                          String
+  telegram_bot_token                String?
+  is_pause                          Boolean? @default(false)
+  bot_id                            String
+  identifier                        String
+  discord_bot_token                 String?
+  discord_slash_command             String?  @default("hey")
+  discord_slash_command_description String?  @default("Use this command to get help")
+  discord_application_id            String?
+  Bot                               Bot      @relation(fields: [bot_id], references: [id], onDelete: Cascade)
 }
 
 model BotTelegramHistory {
   id         Int     @id @default(autoincrement())
   chat_id    Int?
+  identifier String?
+  human      String?
+  bot        String?
+}
+
+model BotDiscordHistory {
+  id         Int     @id @default(autoincrement())
+  chat_id    String?
   identifier String?
   human      String?
   bot        String?

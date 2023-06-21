@@ -89,7 +89,7 @@ export const BotForm = ({
             rules={[
               {
                 required: true,
-                message: `Please upload your files (PDF, Docx, CSV)`,
+                message: `Please upload your files (PDF, Docx, CSV, TXT)`,
               },
             ]}
             getValueFromEvent={(e) => {
@@ -101,7 +101,7 @@ export const BotForm = ({
             }}
           >
             <Upload.Dragger
-              accept={`.pdf,.docx,.csv`}
+              accept={`.pdf,.docx,.csv,.txt`}
               multiple={true}
               maxCount={10}
               beforeUpload={(file) => {
@@ -109,6 +109,7 @@ export const BotForm = ({
                   "application/pdf",
                   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                   "text/csv",
+                  "text/plain",
                 ]
                   .map((type) => type.toLowerCase())
                   .join(", ");
@@ -128,7 +129,7 @@ export const BotForm = ({
                   <InboxIcon className="h-10 w-10 text-gray-400" />
                 </p>
                 <p className="ant-upload-text">
-                  Click or drag PDF, Docx, or CSV files to this area
+                  Click or drag PDF, Docx, CSV or TXT files to this area
                 </p>
                 <p className="ant-upload-hint">
                   Support for a single or bulk upload up to 10 files. File

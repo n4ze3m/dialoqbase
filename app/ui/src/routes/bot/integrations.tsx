@@ -26,13 +26,13 @@ export default function BotIntegrationRoot() {
             description: string;
             help: string;
             requiredMessage: string;
+            inputType: string;
             value: string;
           }[];
           isPaused: boolean;
           status: string;
           color: string;
-    textColor: string;
-
+          textColor: string;
         }[];
       };
     },
@@ -48,8 +48,10 @@ export default function BotIntegrationRoot() {
     }
   }, [status]);
 
-  return <>
+  return (
+    <>
       {status === "loading" && <SkeletonLoading />}
       {status === "success" && <IntegrationGrid data={data.data} />}
-  </>;
+    </>
+  );
 }

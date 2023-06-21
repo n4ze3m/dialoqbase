@@ -37,10 +37,70 @@ export async function getChannelsByProvider(
           name: "telegram_bot_token",
           type: "string",
           title: "Bot token",
+          inputType: "password",
           description: "Telegram bot token",
           help: "You can get it from @BotFather",
           requiredMessage: "Bot token is required",
           value: "",
+          defaultValue: "",
+        },
+      ],
+      isPaused: false,
+      status: "CONNECT",
+      color: "#fff",
+      textColor: "#000",
+    },
+    {
+      name: "Discord (🧪)",
+      channel: "discord",
+      logo: "/providers/discord.svg",
+      link: "https://discord.com/developers/applications",
+      description:
+        "Set up a Discord bot from your knowledge base to send and receive messages",
+      fields: [
+        {
+          name: "discord_application_id",
+          type: "string",
+          title: "Application ID",
+          inputType: "password",
+          description: "Discord application ID",
+          help: "You can get it from Discord Developer Portal",
+          requiredMessage: "Application ID is required",
+          value: "",
+          defaultValue: "",
+        },
+        {
+          name: "discord_bot_token",
+          type: "string",
+          title: "Bot token",
+          inputType: "password",
+          description: "Discord bot token",
+          help: "You can get it from Discord Developer Portal",
+          requiredMessage: "Bot token is required",
+          value: "",
+          defaultValue: "",
+        },
+        {
+          name: "discord_slash_command",
+          type: "string",
+          inputType: "string",
+          title: "Slash command",
+          description: "Discord slash command",
+          help: "Bot needs to have slash command",
+          requiredMessage: "Slash command is required",
+          value: "help",
+          defaultValue: "help",
+        },
+        {
+          name: "discord_slash_command_description",
+          type: "string",
+          inputType: "string",
+          title: "Slash command description",
+          description: "Discord slash command description",
+          help: "A description for the slash command",
+          requiredMessage: "Slash command description is required",
+          value: "Use this command to send messages to the bot",
+          defaultValue: "Use this command to send messages to the bot",
         },
       ],
       isPaused: false,
@@ -75,6 +135,26 @@ export async function getChannelsByProvider(
             provider.textColor = "#fff";
           }
           provider.fields[0].value = integration.telegram_bot_token || "";
+          break;
+
+        case "discord":
+          for (const field of provider.fields) {
+            // @ts-ignore
+            field.value = integration[field.name] || field.defaultValue;
+          }
+          provider.status = integration.discord_bot_token
+            ? "CONNECTED"
+            : "CONNECT";
+          provider.color = integration.discord_bot_token
+            ? "rgb(134 239 172)"
+            : "#fff";
+          provider.textColor = integration.discord_bot_token ? "#fff" : "#000";
+
+          if (integration.is_pause && integration.discord_bot_token) {
+            provider.status = "PAUSED";
+            provider.color = "rgb(225 29 72)";
+            provider.textColor = "#fff";
+          }
           break;
         default:
           break;

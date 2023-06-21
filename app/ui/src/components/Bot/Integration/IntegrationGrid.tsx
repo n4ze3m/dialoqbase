@@ -15,6 +15,7 @@ type Props = {
       title: string;
       description: string;
       help: string;
+      inputType: string;
       requiredMessage: string;
       value: string;
     }[];
@@ -40,6 +41,7 @@ export const IntegrationGrid: React.FC<Props> = ({ data }) => {
       description: string;
       help: string;
       requiredMessage: string;
+      inputType: string;
       value: string;
     }[];
     isPaused: boolean;
@@ -113,6 +115,7 @@ export const IntegrationGrid: React.FC<Props> = ({ data }) => {
         open={open}
         onCancel={() => setOpen(false)}
         footer={null}
+        maskClosable={false}
       >
         <IntegrationForm
           onClose={() => setOpen(false)}

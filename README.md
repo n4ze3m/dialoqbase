@@ -1,4 +1,3 @@
-
 <h1 align="center">⚡Dialoqbase ⚡</h1>
 <p align="center">
  Create chatbots with ease
@@ -9,14 +8,13 @@
   [![Join dialoqbase #welcome](https://img.shields.io/badge/discord-join%20chat-blue.svg)](https://discord.gg/SPE3npH7Wu)
   [![Build Status](https://github.com/n4ze3m/dialoqbase/actions/workflows/build.yml/badge.svg)](https://github.com/n4ze3m/dialoqbase/actions/workflows/build.yml)
   [![License: MIT](https://img.shields.io/github/license/n4ze3m/dialoqbase)](https://github.com/n4ze3m/dialoqbase/blob/master/LICENSE)
-
 </div>
+
 Dialoqbase is an open-source application designed to facilitate the creation of custom chatbots using a personalized knowledge base. The application leverages advanced language models to generate accurate and context-aware responses. Additionally, it utilizes PostgreSQL, a robust relational database management system, for efficient vector search operations and for storing the knowledge base.
 
 Here's a demo of how it works (v0.0.1):
 
 [![DialoqBase Demo](https://img.youtube.com/vi/Kktfs8JI4yI/0.jpg)](https://www.youtube.com/watch?v=Kktfs8JI4yI)
-
 
 ## Quick Deployments
 
@@ -42,6 +40,7 @@ cd dialoqbase/docker
 ```bash
 nano .env
 ```
+
 or
 
 ```bash
@@ -54,8 +53,7 @@ vim .env
 notepad .env
 ```
 
-
-Set the `OPENAI_API_KEY` variable to your OpenAI API key. You can obtain an API key [here](https://platform.openai.com/account/api-keys). 
+Set the `OPENAI_API_KEY` variable to your OpenAI API key. You can obtain an API key [here](https://platform.openai.com/account/api-keys).
 Set the `DB_SECRET_KEY` varible.
 
 3. Run the docker-compose file:
@@ -114,7 +112,7 @@ Dialoqbase is a side project and is not ready for production. It is still in the
 - [x] Web crawler (beta)
 - [x] Microsoft Word documents (beta)
 - [ ] Sitemap
-- [X] Github repository
+- [x] Github repository
 - [ ] mp3
 - [ ] Notion
 
@@ -144,25 +142,25 @@ need more ? create an issue...
 - [x] Vector search
 - [x] Bot embed script for websites
 - [ ] Supabase Integration
-- [X] Prompt Editor
+- [x] Prompt Editor
 - [ ] Chatbot API
 - [ ] Chatbot theme editor
 - [ ] Chatbot analytics
 - [ ] UI/UX improvements
 
-
 ### Integrations
 
-- [X] Web embed script
-- [X] Telegram (beta)
-- [ ] Discord
+- [x] Web embed script
+- [x] Telegram (beta)
+- [x] Discord (experimental)
 - [ ] Slack
 - [ ] Whatsapp
 - [ ] Facebook Messenger
 - [ ] Instagram
 
 need more ? create an issue...
-## Contributors ✨
+
+## Contributors
 
 <a href="https://github.com/n4ze3m/dialoqbase/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=n4ze3m/dialoqbase" />

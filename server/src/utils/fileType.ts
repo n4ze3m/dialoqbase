@@ -6,6 +6,8 @@ export const fileTypeFinder = (mimeType: string) => {
       return "docx";
     case "text/csv":
       return "csv";
+    case "text/plain":
+      return "txt";
     default:
       return "none";
   }
