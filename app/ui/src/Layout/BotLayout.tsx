@@ -7,7 +7,8 @@ import {
   CogIcon,
   ChatBubbleLeftIcon,
   CodeBracketIcon,
-  PuzzlePieceIcon
+  PuzzlePieceIcon,
+  EyeDropperIcon
 } from "@heroicons/react/24/outline";
 
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
@@ -15,12 +16,12 @@ import { useAuth } from "../context/AuthContext";
 import { Avatar } from "antd";
 
 const navigation = [
-  { name: "Embed", href: "/bot/:id", icon: CodeBracketIcon },
   {
-    name: "Preview",
-    href: "/bot/:id/preview",
+    name: "Playground",
+    href: "/bot/:id",
     icon: ChatBubbleLeftIcon,
   },
+  { name: "Embed", href: "/bot/:id/embed", icon: CodeBracketIcon },
   {
     name: "Data Sources",
     href: "/bot/:id/data-sources",
@@ -30,6 +31,11 @@ const navigation = [
     name: "Integrations (beta)",
     href: "/bot/:id/integrations",
     icon: PuzzlePieceIcon,
+  },
+  {
+    name: "Appearance",
+    href: "/bot/:id/appearance",
+    icon: EyeDropperIcon,
   },
   {
     name: "Settings",

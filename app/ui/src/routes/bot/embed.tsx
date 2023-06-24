@@ -5,6 +5,7 @@ import React from "react";
 import { SkeletonLoading } from "../../components/Common/SkeletonLoading";
 import { Cooking } from "../../components/Common/Cooking";
 import { EmbedBoard } from "../../components/Bot/Embed/EmbedBoard";
+import { PreviewIframe } from "../../components/Bot/Preview/PreviewIFrame";
 
 export default function BotEmbedRoot() {
   const param = useParams<{ id: string }>();
@@ -35,7 +36,30 @@ export default function BotEmbedRoot() {
       {status === "loading" && <SkeletonLoading />}
       {status === "success" && data.inProgress && <Cooking />}
       {status === "success" && !data.inProgress && (
-        <EmbedBoard public_id={data.public_id} />
+        <>
+          <div className="mx-auto max-w-3xl px-2 lg:max-w-7xl">
+            <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
+              <div className="grid grid-cols-1 gap-4 lg:col-span-2">
+                <section aria-labelledby="section-1-title">
+                  <div className="overflow-hidden rounded-lg bg-white shadow">
+                    <div className="p-6">
+                      <EmbedBoard public_id={data.public_id} />
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div className="grid grid-cols-1 gap-4">
+                <section aria-labelledby="section-2-title">
+                  <div className="overflow-hidden rounded-lg bg-white shadow">
+                    <div>
+                      <PreviewIframe public_id={data.public_id} />
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </>
   );
