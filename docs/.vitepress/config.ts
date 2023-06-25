@@ -45,6 +45,10 @@ export default defineConfig({
             text: "Railway Setup",
             link: "/guide/self-hosting-railway",
           },
+          {
+            text: "Upgrading (local)",
+            link: "/guide/upgrading-local",
+          }
         ],
       },
     ],
