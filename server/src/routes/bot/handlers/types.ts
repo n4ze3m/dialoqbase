@@ -10,3 +10,10 @@ export interface ChatRequestBody {
     }[];
   };
 }
+
+
+export interface ChatStyleRequest {
+  Params: {
+    id: string;
+  }
+}

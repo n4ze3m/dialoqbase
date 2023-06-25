@@ -14,9 +14,9 @@ export const PreviewIframe = ({ public_id }: Props) => {
     <>
       <div>
         <iframe
-          src={`${hostUrl}/bot/${public_id}?mode=iframe`}
+          src={`${hostUrl}/bot/${public_id}?mode=iframe&no=button`}
           className="w-full bg-white"
-          height={600}
+          height={585}
           title="Dialoqbase"
         />
       </div>

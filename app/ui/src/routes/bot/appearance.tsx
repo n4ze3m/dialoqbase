@@ -3,20 +3,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api";
 import React from "react";
 import { SkeletonLoading } from "../../components/Common/SkeletonLoading";
-import { Cooking } from "../../components/Common/Cooking";
-import { EmbedBoard } from "../../components/Bot/Embed/EmbedBoard";
+import { AppearanceType } from "../../components/Bot/Appearance/types";
+import { AppearanceBody } from "../../components/Bot/Appearance/AppearanceBody";
 
-export default function BotEmbedRoot() {
+export default function BotAppearanceRoot() {
   const param = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data, status } = useQuery(
-    ["getBotEmbedding", param.id],
+    ["getBotAppearance", param.id],
     async () => {
-      const response = await api.get(`/bot/${param.id}/embed`);
-      return response.data as {
-        inProgress: boolean;
-        public_id: string;
-      };
+      const response = await api.get(`/bot/appearance/${param.id}`);
+      return response.data as AppearanceType;
     },
     {
       enabled: !!param.id,
@@ -33,13 +30,7 @@ export default function BotEmbedRoot() {
   return (
     <>
       {status === "loading" && <SkeletonLoading />}
-      {status === "success" && data.inProgress && <Cooking />}
-      {status === "success" && !data.inProgress && (
-        <>
-        <EmbedBoard public_id={data.public_id} />
-    
-        </>
-      )}
+      {status === "success" && <AppearanceBody {...data} />}
     </>
   );
 }

@@ -7,7 +7,8 @@ import {
   CogIcon,
   ChatBubbleLeftIcon,
   CodeBracketIcon,
-  PuzzlePieceIcon
+  PuzzlePieceIcon,
+  EyeDropperIcon,
 } from "@heroicons/react/24/outline";
 
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
@@ -15,12 +16,12 @@ import { useAuth } from "../context/AuthContext";
 import { Avatar } from "antd";
 
 const navigation = [
-  { name: "Embed", href: "/bot/:id", icon: CodeBracketIcon },
   {
-    name: "Preview",
-    href: "/bot/:id/preview",
+    name: "Playground",
+    href: "/bot/:id",
     icon: ChatBubbleLeftIcon,
   },
+  { name: "Embed", href: "/bot/:id/embed", icon: CodeBracketIcon },
   {
     name: "Data Sources",
     href: "/bot/:id/data-sources",
@@ -30,6 +31,11 @@ const navigation = [
     name: "Integrations (beta)",
     href: "/bot/:id/integrations",
     icon: PuzzlePieceIcon,
+  },
+  {
+    name: "Appearance",
+    href: "/bot/:id/appearance",
+    icon: EyeDropperIcon,
   },
   {
     name: "Settings",
@@ -43,7 +49,13 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function BotLayout({ children }: { children: React.ReactNode }) {
+export default function BotLayout({
+  children,
+  noPadding,
+}: {
+  children: React.ReactNode;
+  noPadding?: boolean;
+}) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const params = useParams<{ id: string }>();
   const location = useLocation();
@@ -273,7 +285,12 @@ export default function BotLayout({ children }: { children: React.ReactNode }) {
 
           <main className="flex-1">
             <div className="py-6">
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+              <div
+                className={classNames(
+                  "mx-auto max-w-7xl",
+                  !noPadding && " px-4 sm:px-6 md:px-8"
+                )}
+              >
                 {/* Replace with your content */}
                 {children}
                 {/* <div className="py-4">

@@ -98,6 +98,7 @@ export const SettingsCard = ({
           questionGeneratorPrompt: data.questionGeneratorPrompt,
         }}
         form={form}
+        requiredMark={false}
         onFinish={updateBotSettings}
         layout="vertical"
         className="space-y-6 mb-6 bg-white "

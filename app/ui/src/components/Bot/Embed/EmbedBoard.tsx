@@ -14,7 +14,7 @@ export const EmbedBoard = ({ public_id }: Props) => {
   );
 
   return (
-    <div className="divide-ylg:col-span-9">
+    <div className="divide-y lg:col-span-9">
       <EmbedBoardTitle
         title="Public URL"
         description="This is the public URL of your bot. You can use this URL to embed"
