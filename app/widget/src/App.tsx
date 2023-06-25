@@ -128,7 +128,7 @@ function App() {
                 <p className="font-bold text-lg">
                   {botStyle.data.bot_name || "Chat Bot"}
                 </p>
-                {params?.mode === "iframe" && params.no !== "true" && (
+                {params?.mode === "iframe" && params.no !== "button" && (
                   <button
                     onClick={() => {
                       window.parent.postMessage("db-iframe-close", "*");
