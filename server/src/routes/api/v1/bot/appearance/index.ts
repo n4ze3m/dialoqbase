@@ -1,6 +1,9 @@
 import { FastifyPluginAsync } from "fastify";
-import { getBotAppearanceByIdHandler } from "./handlers";
-import { getBotAppearanceByIdSchema } from "./schema";
+import {
+  getBotAppearanceByIdHandler,
+  postBotAppearanceHandler,
+} from "./handlers";
+import { getBotAppearanceByIdSchema, saveBotAppearanceSchema } from "./schema";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   fastify.get(
@@ -10,6 +13,15 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       onRequest: [fastify.authenticate],
     },
     getBotAppearanceByIdHandler,
+  );
+
+  fastify.post(
+    "/:id",
+    {
+      schema: saveBotAppearanceSchema,
+      onRequest: [fastify.authenticate],
+    },
+    postBotAppearanceHandler,
   );
 };
 

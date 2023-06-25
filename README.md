@@ -144,7 +144,7 @@ need more ? create an issue...
 - [ ] Supabase Integration
 - [x] Prompt Editor
 - [ ] Chatbot API
-- [ ] Chatbot theme editor
+- [X] Chatbot theme editor
 - [ ] Chatbot analytics
 - [ ] UI/UX improvements
 

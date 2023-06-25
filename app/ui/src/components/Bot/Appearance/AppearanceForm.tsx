@@ -1,6 +1,10 @@
-import { Divider, Form, FormInstance } from "antd";
+import { Divider, Form, FormInstance, notification } from "antd";
 import { AppearanceType } from "./types";
 import { DbColorPicker } from "../../Common/DbColorPicker";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import api from "../../../services/api";
+import axios from "axios";
 type Props = AppearanceType;
 
 export const AppearanceForm = ({
@@ -10,8 +14,70 @@ export const AppearanceForm = ({
   initialData: Props;
   form: FormInstance;
 }) => {
-    const botBubbleStyle = Form.useWatch("chat_bot_bubble_style", form);
-    const humanBubbleStyle = Form.useWatch("chat_human_bubble_style", form);
+  const botBubbleStyle = Form.useWatch("chat_bot_bubble_style", form);
+  const humanBubbleStyle = Form.useWatch("chat_human_bubble_style", form);
+
+  const params = useParams<{ id: string }>();
+
+  const onFinish = async (values: any) => {
+    let data = {
+      ...values,
+      chat_bot_bubble_style: {
+        ...values.chat_bot_bubble_style,
+        background_color:
+          typeof values.chat_bot_bubble_style.background_color === "string"
+            ? values.chat_bot_bubble_style.background_color
+            : `#${values.chat_bot_bubble_style.background_color.toHex()}`,
+        text_color:
+          typeof values.chat_bot_bubble_style.text_color === "string"
+            ? values.chat_bot_bubble_style.text_color
+            : `#${values.chat_bot_bubble_style.text_color.toHex()}`,
+      },
+      chat_human_bubble_style: {
+        ...values.chat_human_bubble_style,
+        background_color:
+          typeof values.chat_human_bubble_style.background_color === "string"
+            ? values.chat_human_bubble_style.background_color
+            : `#${values.chat_human_bubble_style.background_color.toHex()}`,
+        text_color:
+          typeof values.chat_human_bubble_style.text_color === "string"
+            ? values.chat_human_bubble_style.text_color
+            : `#${values.chat_human_bubble_style.text_color.toHex()}`,
+      },
+    };
+
+    const response = await api.post(`/bot/appearance/${params.id}`, data);
+    return response.data;
+  };
+
+  const client = useQueryClient();
+
+  const { mutate: updateAppearance, isLoading: isUpdatingAppearance } =
+    useMutation(onFinish, {
+      onSuccess: () => {
+        client.invalidateQueries(["getBotAppearance", params.id]);
+        notification.success({
+          message: "Success",
+          description: "Bot appearance updated successfully",
+        });
+      },
+      onError: (e: any) => {
+        if (axios.isAxiosError(e)) {
+          const message = e.response?.data?.message || "Something went wrong";
+          notification.error({
+            message: "Error",
+            description: message,
+          });
+          return;
+        }
+
+        notification.error({
+          message: "Error",
+          description: "Something went wrong",
+        });
+      },
+    });
+
   return (
     <Form
       requiredMark={false}
@@ -20,6 +86,7 @@ export const AppearanceForm = ({
       }}
       layout="vertical"
       form={form}
+      onFinish={updateAppearance}
     >
       <Form.Item
         rules={[
@@ -85,6 +152,7 @@ export const AppearanceForm = ({
             ]}
           >
             <DbColorPicker
+              format="hex"
               pickedColor={
                 typeof botBubbleStyle?.background_color === "string"
                   ? botBubbleStyle?.background_color
@@ -157,8 +225,12 @@ export const AppearanceForm = ({
       </Form.Item>
 
       <div className="mt-3 text-right">
-        <button className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none">
-          Save Changes
+        <button
+          type="submit"
+          disabled={isUpdatingAppearance}
+          className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+        >
+          {isUpdatingAppearance ? "Saving..." : "Save Changes"}
         </button>
       </div>
     </Form>
