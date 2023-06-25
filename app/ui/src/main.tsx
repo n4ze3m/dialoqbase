@@ -87,8 +87,12 @@ const router = createHashRouter([
   },
   {
     path: "/settings",
-    element: <DashboardLayout><SettingsRoot /></DashboardLayout>,
-  }
+    element: (
+      <DashboardLayout>
+        <SettingsRoot />
+      </DashboardLayout>
+    ),
+  },
 ]);
 const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

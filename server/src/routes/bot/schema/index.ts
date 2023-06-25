@@ -23,3 +23,15 @@ export const chatRequestSchema: FastifySchema = {
         },
     },
 };
+
+export const chatStyleSchema: FastifySchema = {
+    params: {
+        type: "object",
+        required: ["id"],
+        properties: {
+            id: {
+                type: "string",
+            },
+        },
+    },
+};
