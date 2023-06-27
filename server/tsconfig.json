@@ -3,12 +3,12 @@
   "compilerOptions": {
     "outDir": "dist",
     "sourceMap": true,
-    "allowSyntheticDefaultImports": true
-
+    "allowSyntheticDefaultImports": true,
+    "checkJs": false,
   },
   "include": ["src/**/*.ts"],
   "exclude": [
     "node_modules",
     "uploads"
-  ]
+  ],
 }
