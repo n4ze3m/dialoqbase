@@ -2,6 +2,8 @@ export const apiKeyValidaton = (embeddingsType: string) => {
     switch (embeddingsType) {
         case "tensorflow":
             return true;
+        case "transformer":
+            return true;
         case "openai":
             return process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.length > 0 : false;
         case "cohere":

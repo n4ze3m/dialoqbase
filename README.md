@@ -15,7 +15,6 @@ Dialoqbase is an open-source application designed to facilitate the creation of 
 > **Warning**
 > This project is a side project and is still under development. Use it at your own risk
 
-
 Here's a demo of how it works (v0.0.1):
 
 [![DialoqBase Demo](https://img.youtube.com/vi/Kktfs8JI4yI/0.jpg)](https://www.youtube.com/watch?v=Kktfs8JI4yI)
@@ -135,6 +134,7 @@ open source chatmodels soon...
 - [x] TensorFlow
 - [x] Hugging Face
 - [x] Cohere
+- [x] all-MiniLM-L6-v2 using [xenova/transformers.js](https://github.com/xenova/transformers.js/)
 
 need more ? create an issue...
 
@@ -148,7 +148,7 @@ need more ? create an issue...
 - [ ] Supabase Integration
 - [x] Prompt Editor
 - [ ] Chatbot API
-- [X] Chatbot theme editor
+- [x] Chatbot theme editor
 - [ ] Chatbot analytics
 - [ ] UI/UX improvements
 
