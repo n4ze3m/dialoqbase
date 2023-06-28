@@ -7,4 +7,8 @@ export const availableEmbeddingTypes = [
     value: "transformer",
     label: "all-MiniLM-L6-v2 (xenova/transformers)",
   },
+  {
+    value: "google-gecko",
+    label: "Google text-gecko-001 (beta)",
+  },
 ];
