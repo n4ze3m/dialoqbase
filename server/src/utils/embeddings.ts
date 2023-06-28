@@ -3,7 +3,7 @@ import { TensorFlowEmbeddings } from "langchain/embeddings/tensorflow";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { CohereEmbeddings } from "langchain/embeddings/cohere";
 import { HuggingFaceInferenceEmbeddings } from "langchain/embeddings/hf";
-import { TransformersEmbeddings } from "./transformer-embedding";
+import { TransformersEmbeddings } from "../embeddings/transformer-embedding";
 
 export const embeddings = (embeddingsType: string) => {
   switch (embeddingsType) {

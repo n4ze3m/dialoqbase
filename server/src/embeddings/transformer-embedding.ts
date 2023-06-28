@@ -2,7 +2,7 @@ import { Embeddings, EmbeddingsParams } from "langchain/embeddings/base";
 import {
     piplelineTransformer,
 //@ts-ignore
-} from "./pipleline.js";
+} from "../utils/pipleline.js";
 
 export interface TransformersEmbeddingsParams extends EmbeddingsParams {
 }

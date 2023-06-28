@@ -4,6 +4,8 @@ export const apiKeyValidaton = (embeddingsType: string) => {
             return true;
         case "transformer":
             return true;
+        case "google-bison":
+            return process.env.GOOGLE_API_KEY ? process.env.GOOGLE_API_KEY.length > 0 : false;
         case "openai":
             return process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.length > 0 : false;
         case "cohere":
@@ -25,6 +27,8 @@ export const apiKeyValidatonMessage = (embeddingsType: string) => {
             return "Please add COHERE_API_KEY to your .env file"
         case "huggingface-api":
             return "Please add HUGGINGFACEHUB_API_KEY to your .env file"
+        case "google-bison":
+            return "Please add GOOGLE_API_KEY to your .env file"
         case "anthropic":
             return "Please add ANTHROPIC_API_KEY to your .env file"
     }

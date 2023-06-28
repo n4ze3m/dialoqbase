@@ -17,7 +17,7 @@ export const createBotSchema: FastifySchema = {
       },
       embedding: {
         type: "string",
-        enum: ["tensorflow", "openai", "cohere", "huggingface-api", "transformer"],
+        enum: ["tensorflow", "openai", "cohere", "huggingface-api", "transformer", "google-gecko"],
       },
       model: {
         type: "string",
@@ -28,6 +28,7 @@ export const createBotSchema: FastifySchema = {
           "gpt-4",
           "claude-1",
           "claude-instant-1",
+          "google-bison"
         ],
       },
       maxDepth: {
