@@ -6,13 +6,31 @@ export default defineConfig({
   description: "Create chatbots with ease",
   lastUpdated: true,
   head: [
+    // [
+    //   "script",
+    //   {
+    //     src: "https://static.cloudflareinsights.com/beacon.min.js",
+    //     "data-cf-beacone": '{"token": "7bc549b39629497a9668db8e00ec41eb"}',
+    //     defer: "",
+    //   },
+    // ],
     [
       "script",
       {
-        src: "https://static.cloudflareinsights.com/beacon.min.js",
-        "data-cf-beacone": '{"token": "7bc549b39629497a9668db8e00ec41eb"}',
-        defer: "",
+        src: "https://www.googletagmanager.com/gtag/js?id=G-226TFN36Z7",
+        async: "",
       },
+    ],
+    [
+      "script",
+      {},
+      `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-226TFN36Z7');
+      `,
     ],
   ],
   themeConfig: {
@@ -48,7 +66,7 @@ export default defineConfig({
           {
             text: "Upgrading (local)",
             link: "/guide/upgrading-local",
-          }
+          },
         ],
       },
     ],
