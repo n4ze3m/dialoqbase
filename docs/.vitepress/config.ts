@@ -69,6 +69,20 @@ export default defineConfig({
           },
         ],
       },
+      {
+        text: "Integrations (beta)",
+        collapsed: false,
+        items: [
+          {
+            text: "Telegram",
+            link: "/guide/integration/telegram",
+          },
+          {
+            text: "Discord (experimental)",
+            link: "/guide/integration/discord",
+          }
+        ]
+      }
     ],
 
     socialLinks: [
