@@ -133,9 +133,15 @@ export class GoogleChatBison extends BaseChatModel
     this.topP = fields?.topP ?? this.topP;
     this.topK = fields?.topK ?? this.topK;
 
-    this.connection = new DiscussServiceClient({
-      authClient: new GoogleAuth().fromAPIKey(process.env.GOOGLE_API_KEY!),
-    });
+    try {
+      this.connection = new DiscussServiceClient({
+        authClient: new GoogleAuth().fromAPIKey(process.env.GOOGLE_API_KEY!),
+      });
+    } catch (e) {
+      throw new Error(
+        `Failed to connect to Google PaLM Discuss Service: ${e}`,
+      );
+    }
   }
 
   _combineLLMOutput?(
