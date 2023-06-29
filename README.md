@@ -125,6 +125,7 @@ and more...
 
 - [x] OpenAI
 - [x] Anthropic
+- [x] Google chat-bison-001
 
 open source chatmodels soon...
 
@@ -135,6 +136,7 @@ open source chatmodels soon...
 - [x] Hugging Face
 - [x] Cohere
 - [x] all-MiniLM-L6-v2 using [xenova/transformers.js](https://github.com/xenova/transformers.js/)
+- [x] Google text-gecko-001
 
 need more ? create an issue...
 

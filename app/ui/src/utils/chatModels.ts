@@ -5,4 +5,8 @@ export const availableChatModels = [
   { value: "gpt-4-0613", label: "GPT-4 0613 (OpenAI)" },
   { value: "claude-1", label: "Claude (Anthropic)" },
   { value: "claude-instant-1", label: "Claude Instant (Anthropic)" },
+  {
+    value: "google-bison",
+    label: "Google chat-bison-001 (beta)",
+  },
 ];

@@ -3,7 +3,8 @@ import { TensorFlowEmbeddings } from "langchain/embeddings/tensorflow";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { CohereEmbeddings } from "langchain/embeddings/cohere";
 import { HuggingFaceInferenceEmbeddings } from "langchain/embeddings/hf";
-import { TransformersEmbeddings } from "./transformer-embedding";
+import { TransformersEmbeddings } from "../embeddings/transformer-embedding";
+import { GoogleGeckoEmbeddings } from "../embeddings/google-gecko-embedding";
 
 export const embeddings = (embeddingsType: string) => {
   switch (embeddingsType) {
@@ -17,6 +18,9 @@ export const embeddings = (embeddingsType: string) => {
       return new HuggingFaceInferenceEmbeddings();
     case "transformer":
       return new TransformersEmbeddings();
+    case "google-gecko":
+      console.log("using google-gecko");
+      return new GoogleGeckoEmbeddings();
     default:
       return new OpenAIEmbeddings();
   }
