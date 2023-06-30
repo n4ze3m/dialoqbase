@@ -18,9 +18,10 @@ You should obtain a URL, which will be your `DB_REDIS_URL`.
 - `DB_REDIS_URL` should be set to the Redis URL. See the previous section for more details
 - `OPENAI_API_KEY` is the OpenAI API key
 - `DB_SECRET_KEY` is a random key that you can set to whatever you want
-
 3. Run `yarn install` in the main folder and in the `server/` folder
-4. Run `yarn dev` in the main folder **and** in the `server/` folder
+4. Run `yarn build` in the main folder
+5. Run `mv app/ui/dist server/dist/public && mv app/widget/dist/index.html server/dist/public/bot.html && cp -r app/widget/dist/assets/*  server/dist/public/assets/` in the main folder
+6. Run `yarn dev` in the main folder **and** in the `server/` folder
 
 From there you can open the app by using the URL printed by this last command.
 
