@@ -9,6 +9,8 @@ import { DocxQueueController } from "./controllers/docx.controller";
 import { csvQueueController } from "./controllers/csv.controller";
 import { githubQueueController } from "./controllers/github.controller";
 import { txtQueueController } from "./controllers/txt.controller";
+import { audioQueueController } from "./controllers/audio.controller";
+import { videoQueueController } from "./controllers/video.controller";
 
 const prisma = new PrismaClient();
 
@@ -67,6 +69,16 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
             break;
           case "txt":
             await txtQueueController(
+              source,
+            );
+            break;
+          case "mp3":
+            await audioQueueController(
+              source,
+            );
+            break;
+          case "mp4":
+            await videoQueueController(
               source,
             );
             break;

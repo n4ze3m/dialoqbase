@@ -454,6 +454,20 @@
     p-limit "^3.1.0"
     readable-stream "^4.0.0"
 
+"@ffmpeg.wasm/core-mt@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@ffmpeg.wasm/core-mt/-/core-mt-0.12.0.tgz#a6e8604d6ccd3f0c9c14ead8ccfd4168b931f38c"
+  integrity sha512-M9pjL7JQX4AYl3WI8vGcPGPTz/O7JmhW8ac/fHA3oXTxoRAPwYSY/OsY1N9C0XahIM0+fxa1QSLN9Ekz8sBM/Q==
+
+"@ffmpeg.wasm/main@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@ffmpeg.wasm/main/-/main-0.12.0.tgz#ce2ebcad5bae7329eb4d5ba27fc975eaf86b4e0c"
+  integrity sha512-LILAKTrU3Rga2iXLsF9jeFxe2hNQFjWlrKuXPWSdCFeQ7Kg69fO4WwjNJ0CzjOyO6qtndRQMNKqf//N4fLYUBA==
+  dependencies:
+    is-url "^1.2.4"
+    node-fetch "^2.6.9"
+    regenerator-runtime "^0.13.11"
+
 "@fortaine/fetch-event-source@^3.0.6":
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/@fortaine/fetch-event-source/-/fetch-event-source-3.0.6.tgz#b8552a2ca2c5202f5699b93a92be0188d422b06e"
@@ -2841,6 +2855,11 @@ is-typedarray@^1.0.0:
   resolved "https://registry.yarnpkg.com/is-typedarray/-/is-typedarray-1.0.0.tgz#e479c80858df0c1b11ddda6940f96011fcda4a9a"
   integrity sha512-cyA56iCMHAh5CdzjJIa4aohJyeO1YbwLi3Jc35MmRU6poroFjIGZzUzupGiRPOjgHg9TLu43xbpwXk523fMxKA==
 
+is-url@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/is-url/-/is-url-1.2.4.tgz#04a4df46d28c4cff3d73d01ff06abeb318a1aa52"
+  integrity sha512-ITvGim8FhRiYe4IQ5uHSkj7pVaPDrCTkNd3yq3cV7iZAcJdHTUMPMEHcqSOy9xZ9qFenQCvi+2wjH9a1nXqHww==
+
 is-windows@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/is-windows/-/is-windows-1.0.2.tgz#d1850eb9791ecd18e6182ce12a30f396634bb19d"
@@ -5013,6 +5032,11 @@ walker@^1.0.6:
   integrity sha512-ts/8E8l5b7kY0vlWLewOkDXMmPdLcVV4GmOQLyxuSswIJsweeFZtAsMF7k1Nszz+TYBQrlYRmzOnr398y1JemQ==
   dependencies:
     makeerror "1.0.12"
+
+wavefile@^11.0.0:
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/wavefile/-/wavefile-11.0.0.tgz#9302165874327ff63a704d00b154c753eaa1b8e7"
+  integrity sha512-/OBiAALgWU24IG7sC84cDO/KfFuvajWc5Uec0oV2zrpOOZZDgGdOwHwgEzOrwh8jkubBk7PtZfQBIcI1OaE5Ng==
 
 webidl-conversions@^3.0.0:
   version "3.0.1"

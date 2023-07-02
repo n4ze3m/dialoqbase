@@ -116,7 +116,8 @@ Dialoqbase is a side project and is not ready for production. It is still in the
 - [x] Microsoft Word documents (beta)
 - [ ] Sitemap
 - [x] Github repository
-- [ ] mp3
+- [x] mp3
+- [x] mp4
 - [ ] Notion
 
 and more...
@@ -172,6 +173,8 @@ need more ? create an issue...
   <img src="https://contrib.rocks/image?repo=n4ze3m/dialoqbase" />
 </a>
 
+
+Interested in contributing? Check out the [contributing guide](CONTRIBUTION.md).
 ## License
 
 [MIT](LICENSE)
