@@ -134,6 +134,10 @@ export default function BotLayout({
                       alt="Dialoqbase"
                     />
                     <span className="ml-1 text-xl font-bold">Dialoqbase</span>
+                    <span className="inline-block flex-shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 ml-2">
+                      {/* @ts-ignore */}
+                      {`v${__APP_VERSION__}`}
+                    </span>
                   </Link>
                   <div className="mt-5 h-0 flex-1 overflow-y-auto">
                     <nav className="space-y-1 px-2">
@@ -183,6 +187,10 @@ export default function BotLayout({
             >
               <img className="h-8 w-auto" src="/logo.png" alt="Dialoqbase" />
               <span className="ml-1 text-xl font-bold">Dialoqbase</span>
+              <span className="inline-block flex-shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 ml-2">
+                {/* @ts-ignore */}
+                {`v${__APP_VERSION__}`}
+              </span>
             </Link>
             <div className="mt-5 flex flex-grow flex-col">
               <nav className="flex-1 space-y-1 px-2 pb-4">

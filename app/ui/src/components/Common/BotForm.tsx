@@ -89,7 +89,7 @@ export const BotForm = ({
             rules={[
               {
                 required: true,
-                message: `Please upload your files (PDF, Docx, CSV, TXT)`,
+                message: `Please upload your files (PDF, Docx, CSV, TXT, MP3, MP4)`,
               },
             ]}
             getValueFromEvent={(e) => {
@@ -101,7 +101,7 @@ export const BotForm = ({
             }}
           >
             <Upload.Dragger
-              accept={`.pdf,.docx,.csv,.txt`}
+              accept={`.pdf,.docx,.csv,.txt,.mp3,.mp4`}
               multiple={true}
               maxCount={10}
               beforeUpload={(file) => {
@@ -110,15 +110,31 @@ export const BotForm = ({
                   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                   "text/csv",
                   "text/plain",
+                  "audio/mpeg",
+                  "audio/mp4",
+                  "video/mp4",
+                  "video/mpeg",
                 ]
                   .map((type) => type.toLowerCase())
                   .join(", ");
+
+                console.log("file type:", file.type.toLowerCase());
 
                 if (!allowedTypes.includes(file.type.toLowerCase())) {
                   message.error(
                     `File type not supported. Please upload a ${allowedTypes} file.`
                   );
                   return Upload.LIST_IGNORE;
+                }
+
+                // if video or audio
+                if (
+                  file.type.toLowerCase().includes("audio") ||
+                  file.type.toLowerCase().includes("video")
+                ) {
+                  message.warning(
+                    `Currently, Only support video and audio files with English audio`
+                  );
                 }
 
                 return false;
@@ -129,11 +145,12 @@ export const BotForm = ({
                   <InboxIcon className="h-10 w-10 text-gray-400" />
                 </p>
                 <p className="ant-upload-text">
-                  Click or drag PDF, Docx, CSV or TXT files to this area
+                  Click or drag PDF, Docx, CSV , TXT, MP3, MP4 files to this
                 </p>
                 <p className="ant-upload-hint">
-                  Support for a single or bulk upload up to 10 files. File
-                  upload is in beta. Please report any issues.
+                  Support is available for a single or bulk upload of up to 10
+                  files. Please note that file upload is in beta, so if you
+                  encounter any issues, kindly report them.
                 </p>
               </div>
             </Upload.Dragger>
