@@ -173,6 +173,8 @@ need more ? create an issue...
   <img src="https://contrib.rocks/image?repo=n4ze3m/dialoqbase" />
 </a>
 
+
+Interested in contributing? Check out the [contributing guide](CONTRIBUTING.md).
 ## License
 
 [MIT](LICENSE)
