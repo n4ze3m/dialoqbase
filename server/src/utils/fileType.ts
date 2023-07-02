@@ -8,6 +8,14 @@ export const fileTypeFinder = (mimeType: string) => {
       return "csv";
     case "text/plain":
       return "txt";
+    case "video/mp4":
+      return "mp4";
+    case "audio/mpeg":
+      return "mp3";
+    case "audio/mp3":
+      return "mp3";
+    case "video/mpeg":
+      return "mp4";
     default:
       return "none";
   }
