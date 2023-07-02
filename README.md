@@ -174,7 +174,7 @@ need more ? create an issue...
 </a>
 
 
-Interested in contributing? Check out the [contributing guide](CONTRIBUTING.md).
+Interested in contributing? Check out the [contributing guide](CONTRIBUTION.md).
 ## License
 
 [MIT](LICENSE)
