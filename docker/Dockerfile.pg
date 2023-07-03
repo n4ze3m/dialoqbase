@@ -1,7 +1,0 @@
-FROM ankane/pgvector:latest
-
-ENV POSTGRES_USER postgres
-ENV POSTGRES_PASSWORD postgres
-ENV POSTGRES_DB dialoqbase
-
-COPY ./scripts /docker-entrypoint-initdb.d
