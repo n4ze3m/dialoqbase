@@ -23,6 +23,7 @@ export default function BotSettingsRoot() {
           embedding: string;
           qaPrompt: string;
           questionGeneratorPrompt: string;
+          streaming: boolean;
         };
       };
     },

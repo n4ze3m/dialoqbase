@@ -11,16 +11,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
 import { Loader } from "./components/Loader";
-type Message = {
-  isBot: boolean;
-  message: string;
-};
-
-// human and bot
-type History = {
-  type: string;
-  message: string;
-}[];
+import { useMessage } from "./hooks/useMessage";
 
 function App() {
   const divRef = React.useRef<HTMLDivElement>(null);
@@ -42,9 +33,8 @@ function App() {
     }
   });
 
-  const [messages, setMessages] = React.useState<Message[]>([]);
-
-  const [history, setHistory] = React.useState<History>([]);
+  const { messages, setMessages, setStreaming, onSubmit, setHistory } =
+    useMessage();
 
   const { data: botStyle, status } = useQuery(
     ["getBotStyle"],
@@ -54,6 +44,7 @@ function App() {
         data: {
           background_color?: string;
           bot_name: string;
+          streaming: boolean;
           chat_bot_bubble_style?: {
             background_color?: string;
             text_color?: string;
@@ -74,43 +65,26 @@ function App() {
 
   React.useEffect(() => {
     if (botStyle?.data && messages.length === 0) {
-      setMessages((messages) => [
+      setStreaming(botStyle.data.streaming);
+      setMessages([
         ...messages,
         { isBot: true, message: botStyle.data.first_message },
       ]);
     }
   }, [botStyle]);
 
-  const onMessage = async (message: string) => {
-    const response = await axios.post(getUrl(), {
-      message,
-      history,
-    });
-
-    return response.data as {
-      bot: {
-        text: string;
-      };
-      history: History;
-    };
-  };
-
   const { mutateAsync: sendMessage, isLoading: isSending } = useMutation(
-    onMessage,
+    onSubmit,
     {
-      onSuccess: (data) => {
-        setMessages((messages) => [
-          ...messages,
-          { isBot: true, message: data.bot.text },
-        ]);
-        setHistory(data.history);
+      onSuccess: () => {
+        form.setFieldValue("message", "");
       },
       onError: (error) => {
         console.error(error);
-        setMessages((messages) => [
-          ...messages,
-          { isBot: true, message: "Unable to send message" },
-        ]);
+        // setMessages([
+        //   ...messages,
+        //   { isBot: true, message: "Unable to send message" },
+        // ]);
       },
     }
   );
@@ -215,7 +189,90 @@ function App() {
                                     </code>
                                   );
                                 },
+                                a({ node, ...props }) {
+                                  return (
+                                    <a
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="text-blue-500 hover:underline"
+                                      {...props}
+                                    >
+                                      {props.children}
+                                    </a>
+                                  );
+                                },
+                                li({ node, ...props }) {
+                                  return (
+                                    <li className="list-decimal marker:text-gray-500" {...props}>
+                                      {props.children}
+                                    </li>
+                                  );
+                                },
+                                ul({ node, ...props }) {
+                                  return (
+                                    <ul className="mx-2" {...props}>
+                                      {props.children}
+                                    </ul>
+                                  );
+                                },
+                                ol({ node, ...props }) {
+                                  return (
+                                    <ul className="mx-2" {...props}>
+                                      {props.children}
+                                    </ul>
+                                  );
+                                },
+                                h1({ node, ...props }) {
+                                  return (
+                                    <h1 className="text-2xl font-bold" {...props}>
+                                      {props.children}
+                                    </h1>
+                                  );
+                                },
+                                h2({ node, ...props }) {
+                                  return (
+                                    <h2 className="text-xl font-bold" {...props}>
+                                      {props.children}
+                                    </h2>
+                                  );
+                                },
+                                h3({ node, ...props }) {
+                                  return (
+                                    <h3 className="text-lg font-bold" {...props}>
+                                      {props.children}
+                                    </h3>
+                                  );
+                                },
+                                h4({ node, ...props }) {
+                                  return (
+                                    <h4 className="text-base font-bold" {...props}>
+                                      {props.children}
+                                    </h4>
+                                  );
+                                },
+                                h5({ node, ...props }) {
+                                  return (
+                                    <h5 className="text-sm font-bold" {...props}>
+                                      {props.children}
+                                    </h5>
+                                  );
+                                },
+                                h6({ node, ...props }) {
+                                  return (
+                                    <h6 className="text-xs font-bold" {...props}>
+                                      {props.children}
+                                    </h6>
+                                  );
+                                },
+                                p({ node, ...props }) {
+                                  return (
+                                    <p className="text-sm" {...props}>
+                                      {props.children}
+                                    </p>
+                                  );
+                                }
                               }}
+                              
                             >
                               {message.message}
                             </ReactMarkdown>
@@ -225,29 +282,10 @@ function App() {
                     </div>
                   );
                 })}
-
-                {isSending && (
-                  <div className="flex w-full mt-2 space-x-3 max-w-xs">
-                    <div>
-                      <div
-                        style={{
-                          backgroundColor:
-                            botStyle.data.chat_bot_bubble_style
-                              ?.background_color,
-                          color:
-                            botStyle.data.chat_bot_bubble_style?.text_color,
-                        }}
-                        className=" p-3 rounded-r-lg rounded-bl-lg"
-                      >
-                        <p className="text-sm">Hold on, I'm looking...</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
                 <div ref={divRef} />
               </div>
             </div>
-            <div className="sticky bottom-0">
+            <div className="sticky bottom-0 bg-white">
               <div className="p-3 border-t">
                 <div className="flex-grow space-y-6">
                   <div className="flex">
@@ -284,10 +322,6 @@ function App() {
                     </span>
                     <form
                       onSubmit={form.onSubmit(async (value) => {
-                        setMessages([
-                          ...messages,
-                          { message: value.message, isBot: false },
-                        ]);
                         form.reset();
                         await sendMessage(value.message);
                       })}
@@ -300,14 +334,10 @@ function App() {
                           onKeyDown={(e) => {
                             if (e.key === "Enter" && !e.shiftKey) {
                               e.preventDefault();
-
                               form.onSubmit(async (value) => {
-                                setMessages([
-                                  ...messages,
-                                  { message: value.message, isBot: false },
-                                ]);
                                 form.reset();
                                 await sendMessage(value.message);
+                                // await sendMessage(value.message);
                               })();
                             }
                           }}

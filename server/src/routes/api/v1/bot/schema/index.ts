@@ -114,6 +114,9 @@ export const updateBotByIdSchema: FastifySchema = {
       model: {
         type: "string",
       },
+      streaming: {
+        type: "boolean",
+      },
       questionGeneratorPrompt: {
         type: "string",
       },

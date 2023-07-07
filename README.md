@@ -17,7 +17,12 @@ Dialoqbase is an open-source application designed to facilitate the creation of 
 
 Here's a demo of how it works (v0.0.1):
 
+<div align="center">
+
 [![DialoqBase Demo](https://img.youtube.com/vi/Kktfs8JI4yI/0.jpg)](https://www.youtube.com/watch?v=Kktfs8JI4yI)
+</div>
+
+Want to check more demo videos? Follow me on [Twitter](https://twitter.com/n4ze3m) or [BlueSky](https://bsky.app/profile/n4ze3m.com) for more updates.
 
 ## Quick Deployments
 
@@ -100,6 +105,7 @@ _Important: After the first login, remember to change the default credentials._
 - [PostgreSQL](https://www.postgresql.org/)
 - [Redis](https://redis.io/)
 - [Rspack](https://rspack.dev)
+- [@waylaidwanderer/fastify-sse-v2](https://github.com/waylaidwanderer/fastify-sse-v2) (Server-Sent Events)
 
 ## Disclaimer
 
@@ -154,6 +160,7 @@ need more ? create an issue...
 - [x] Chatbot theme editor
 - [ ] Chatbot analytics
 - [ ] UI/UX improvements
+- [X] Streaming responses
 
 ### Integrations
 

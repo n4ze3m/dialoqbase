@@ -1,2 +1,4 @@
 .github
 docker
+dev.bat
+dev.sh
