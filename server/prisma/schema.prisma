@@ -97,7 +97,7 @@ model BotAppearance {
   bot_id                  String
   bot_name                String
   first_message           String
-  theme                   String?
+  // theme                   String?
   background_color        String?
   chat_bot_bubble_style   Json?   @db.Json
   chat_human_bubble_style Json?   @db.Json
