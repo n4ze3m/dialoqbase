@@ -81,10 +81,10 @@ function App() {
       },
       onError: (error) => {
         console.error(error);
-        setMessages([
-          ...messages,
-          { isBot: true, message: "Unable to send message" },
-        ]);
+        // setMessages([
+        //   ...messages,
+        //   { isBot: true, message: "Unable to send message" },
+        // ]);
       },
     }
   );
