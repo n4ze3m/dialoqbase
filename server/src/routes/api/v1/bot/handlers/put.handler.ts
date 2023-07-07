@@ -5,6 +5,7 @@ import {
   apiKeyValidaton,
   apiKeyValidatonMessage,
 } from "../../../../../utils/validate";
+import { isStreamingSupported } from "../../../../../utils/models";
 
 export const updateBotByIdHandler = async (
   request: FastifyRequest<UpdateBotById>,
@@ -44,6 +45,13 @@ export const updateBotByIdHandler = async (
   }
 
   console.log("providerName", providerName);
+
+  if (!isStreamingSupported(request.body.model) && request.body.streaming) {
+    return reply.status(400).send({
+      message: "Streaming is not supported for this model",
+    });
+  }
+
 
   await prisma.bot.update({
     where: {
