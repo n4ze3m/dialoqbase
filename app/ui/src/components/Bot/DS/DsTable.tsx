@@ -4,6 +4,8 @@ import {
   TrashIcon,
   ArrowPathIcon,
   DocumentArrowUpIcon,
+  VideoCameraIcon,
+  PlayCircleIcon,
 } from "@heroicons/react/24/outline";
 import { Empty, Modal, Tag, notification } from "antd";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
@@ -48,6 +50,10 @@ export const DsTable = ({
         return <DocumentTextIcon className="h-10 w-10 text-gray-400" />;
       case "github":
         return <GithubIcon className="h-10 w-10 text-gray-400" />;
+      case "mp4":
+        return <VideoCameraIcon className="h-10 w-10 text-gray-400" />;
+      case "mp3":
+        return <PlayCircleIcon className="h-10 w-10 text-gray-400" />;
       default:
         return <DocumentTextIcon className="h-10 w-10 text-gray-400" />;
     }
