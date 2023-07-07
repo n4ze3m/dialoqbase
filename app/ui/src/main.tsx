@@ -16,6 +16,9 @@ import { AuthProvider } from "./context/AuthContext";
 import SettingsRoot from "./routes/settings/root";
 import BotIntegrationRoot from "./routes/bot/integrations";
 import BotAppearanceRoot from "./routes/bot/appearance";
+import { ConfigProvider } from "antd";
+import { StyleProvider } from "@ant-design/cssinjs";
+
 const router = createHashRouter([
   {
     element: (
@@ -97,10 +100,14 @@ const router = createHashRouter([
 const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </AuthProvider>
+    <ConfigProvider theme={{}}>
+      <StyleProvider hashPriority="high">
+        <AuthProvider>
+          <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+          </QueryClientProvider>
+        </AuthProvider>
+      </StyleProvider>
+    </ConfigProvider>
   </React.StrictMode>
 );
