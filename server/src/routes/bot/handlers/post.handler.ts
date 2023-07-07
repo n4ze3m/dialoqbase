@@ -5,8 +5,6 @@ import { ConversationalRetrievalQAChain } from "langchain/chains";
 import { embeddings } from "../../../utils/embeddings";
 import { chatModelProvider } from "../../../utils/models";
 
-// prompt copied from https://github.com/mayooear/gpt4-pdf-chatbot-langchain
-
 export const chatRequestHandler = async (
   request: FastifyRequest<ChatRequestBody>,
   reply: FastifyReply,
@@ -56,11 +54,7 @@ export const chatRequestHandler = async (
     },
   );
 
-  const model = chatModelProvider(
-    bot.provider,
-    bot.model,
-    temperature,
-  );
+  const model = chatModelProvider(bot.provider, bot.model, temperature);
 
   const chain = ConversationalRetrievalQAChain.fromLLM(
     model,
@@ -73,7 +67,7 @@ export const chatRequestHandler = async (
   );
 
   const chat_history = history
-    .map((chatMessage) => {
+    .map((chatMessage: any) => {
       if (chatMessage.type === "human") {
         return `Human: ${chatMessage.text}`;
       } else if (chatMessage.type === "ai") {
@@ -93,12 +87,16 @@ export const chatRequestHandler = async (
 
   return {
     bot: response,
-    history: [...history, {
-      type: "human",
-      text: message,
-    }, {
-      type: "ai",
-      text: response.text,
-    }],
+    history: [
+      ...history,
+      {
+        type: "human",
+        text: message,
+      },
+      {
+        type: "ai",
+        text: response.text,
+      },
+    ],
   };
 };

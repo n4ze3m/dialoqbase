@@ -1,10 +1,14 @@
-import { Form, Select, Slider, notification } from "antd";
+import { Form, notification, Select, Slider, Switch } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../services/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { availableEmbeddingTypes } from "../../../utils/embeddings";
-import { availableChatModels } from "../../../utils/chatModels";
+import {
+  availableChatModels,
+  isStreamingSupported,
+} from "../../../utils/chatModels";
 import axios from "axios";
+import React from "react";
 
 export const SettingsCard = ({
   data,
@@ -18,9 +22,11 @@ export const SettingsCard = ({
     embedding: string;
     qaPrompt: string;
     questionGeneratorPrompt: string;
+    streaming: boolean;
   };
 }) => {
   const [form] = Form.useForm();
+  const [disableStreaming, setDisableStreaming] = React.useState(false);
   const params = useParams<{ id: string }>();
 
   const client = useQueryClient();
@@ -85,9 +91,21 @@ export const SettingsCard = ({
   });
 
   const embeddingType = Form.useWatch("embedding", form);
+  const currentModel = Form.useWatch("model", form);
+
+  React.useEffect(() => {
+    if (!isStreamingSupported(currentModel) && currentModel) {
+      form.setFieldsValue({
+        streaming: false,
+      });
+      setDisableStreaming(true);
+    } else {
+      setDisableStreaming(false);
+    }
+  }, [currentModel]);
 
   return (
-    <>
+    <div className="space-y-3">
       <Form
         initialValues={{
           name: data.name,
@@ -96,6 +114,7 @@ export const SettingsCard = ({
           embedding: data.embedding,
           qaPrompt: data.qaPrompt,
           questionGeneratorPrompt: data.questionGeneratorPrompt,
+          streaming: data.streaming,
         }}
         form={form}
         requiredMark={false}
@@ -141,6 +160,19 @@ export const SettingsCard = ({
                 ]}
               >
                 <Select options={availableChatModels} />
+              </Form.Item>
+
+              <Form.Item
+                hasFeedback={!isStreamingSupported(currentModel)}
+                help={
+                  !isStreamingSupported(currentModel) &&
+                  "Streaming is not supported for this model."
+                }
+                name="streaming"
+                label="Streaming"
+                valuePropName="checked"
+              >
+                <Switch disabled={disableStreaming} />
               </Form.Item>
 
               <Form.Item
@@ -248,6 +280,6 @@ export const SettingsCard = ({
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };

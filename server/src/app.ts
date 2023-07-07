@@ -4,16 +4,20 @@ import { FastifyPluginAsync } from "fastify";
 import cors from "@fastify/cors";
 import fastifyStatic from "@fastify/static";
 import fastifyMultipart from "@fastify/multipart";
+import {FastifySSEPlugin} from "@waylaidwanderer/fastify-sse-v2";
 
 export type AppOptions = {} & Partial<AutoloadPluginOptions>;
 
-const options: AppOptions = {};
+const options: AppOptions = {
+};
 
 const app: FastifyPluginAsync<AppOptions> = async (
   fastify,
   opts,
 ): Promise<void> => {
   void fastify.register(cors);
+
+  void fastify.register(FastifySSEPlugin);
 
   void fastify.register(fastifyMultipart, {
     limits: {
