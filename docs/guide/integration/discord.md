@@ -1,7 +1,6 @@
-# Discord (experimental)
+# Discord (beta)
 
 Integrating discord with dialoqbase is very easy. You just need to create a discord bot and provide the token to dialoqbase and dialoqbase will take care of the rest.
-
 
 ## Enable Discord Channel
 
@@ -38,3 +37,8 @@ Once you have copied the token, you need to provide it to dialoqbase. You can do
 
 
 That's it! You have successfully enabled the Discord channel for your bot. You can now interact with your bot through Discord.
+
+
+## Step 4: Add your bot to your server
+
+It's easy to add your bot to your server. Just click on the Discord button on the Integration page and you will see `Add to Server` button. It will redirect you to the Discord website where you can select the server you want to add your bot to.

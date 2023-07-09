@@ -23,6 +23,10 @@ type Props = {
     status: string;
     color: string;
     textColor: string;
+    connectBtn?: {
+      text: string;
+      link: string;
+    } | null;
   }[];
 };
 
