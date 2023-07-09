@@ -33,6 +33,10 @@ export default function BotIntegrationRoot() {
           status: string;
           color: string;
           textColor: string;
+          connectBtn?: {
+            text: string;
+            link: string;
+          } | null;
         }[];
       };
     },

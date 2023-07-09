@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { GetChannelsByProviderType } from "./type";
+import { GetChannelsByProviderType, GetIntergationType } from "./type";
 
 export async function getChannelsByProvider(
   request: FastifyRequest<GetChannelsByProviderType>,
@@ -24,7 +24,7 @@ export async function getChannelsByProvider(
   }
 
   let channels: any = [];
-  let providerChannel = [
+  let providerChannel: GetIntergationType[] = [
     {
       name: "Telegram",
       channel: "telegram",
@@ -49,6 +49,7 @@ export async function getChannelsByProvider(
       status: "CONNECT",
       color: "#fff",
       textColor: "#000",
+      connectBtn: null,
     },
     {
       name: "Discord (🧪)",
@@ -107,6 +108,7 @@ export async function getChannelsByProvider(
       status: "CONNECT",
       color: "#fff",
       textColor: "#000",
+      connectBtn: null,
     },
   ];
 
@@ -154,6 +156,14 @@ export async function getChannelsByProvider(
             provider.status = "PAUSED";
             provider.color = "rgb(225 29 72)";
             provider.textColor = "#fff";
+          }
+
+          if (provider.status === "CONNECTED") {
+            provider.connectBtn = {
+              text: "Add to Discord",
+              link:
+                `https://discord.com/oauth2/authorize?client_id=${integration.discord_application_id}&scope=bot%20applications.commands&permissions=0`,
+            };
           }
           break;
         default:

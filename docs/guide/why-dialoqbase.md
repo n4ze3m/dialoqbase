@@ -70,7 +70,7 @@ Here is a list of data loaders that are currently supported by dialoqbase:
 * text
 * CSV
 * Github repository
-
+* mp3, mp4
 
 ## Vector Search with PostgreSQL
 
