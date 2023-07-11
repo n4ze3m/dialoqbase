@@ -12,6 +12,9 @@ export const modelProviderName = (model: string) => {
       return "anthropic";
     case "claude-instant-1":
       return "anthropic";
+    case "claude-2":
+      console.log("claude-2");
+      return "anthropic";
     case "google-bison":
       return "google-bison";
     default:

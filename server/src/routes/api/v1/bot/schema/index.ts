@@ -27,6 +27,7 @@ export const createBotSchema: FastifySchema = {
           "gpt-4-0613",
           "gpt-4",
           "claude-1",
+          "claude-2",
           "claude-instant-1",
           "google-bison"
         ],

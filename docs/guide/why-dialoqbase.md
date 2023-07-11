@@ -25,6 +25,7 @@ Here is a list of chat models that are currently supported by dialoqbase:
 
 * claude-1
 * claude-instant-1
+* claude-2
 
 
 ### Google PaLM 2
