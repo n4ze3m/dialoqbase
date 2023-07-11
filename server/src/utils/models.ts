@@ -48,6 +48,7 @@ export const streamingSupportedModels = [
   "gpt-4-0613",
   "claude-1",
   "claude-instant-1",
+  "claude-2",
 ];
 
 export const isStreamingSupported = (model: string) => {
