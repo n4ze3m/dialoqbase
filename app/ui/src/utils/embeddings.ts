@@ -11,4 +11,8 @@ export const availableEmbeddingTypes = [
     value: "google-gecko",
     label: "Google text-gecko-001 (beta)",
   },
+  // {
+  //   value: "bert",
+  //   label: "bert-base-uncased (xenova/transformers)",
+  // },
 ];

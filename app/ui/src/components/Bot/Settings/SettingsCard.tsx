@@ -196,7 +196,7 @@ export const SettingsCard = ({
               <Form.Item
                 label={
                   <span className="font-medium text-gray-800 text-sm">
-                    Embedding method
+                    Embedding model
                   </span>
                 }
                 name="embedding"

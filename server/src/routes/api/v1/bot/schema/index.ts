@@ -1,4 +1,5 @@
 import { FastifySchema } from "fastify";
+import { supportedEmbeddings } from "../../../../../utils/embeddings";
 
 export const createBotSchema: FastifySchema = {
   body: {
@@ -17,7 +18,7 @@ export const createBotSchema: FastifySchema = {
       },
       embedding: {
         type: "string",
-        enum: ["tensorflow", "openai", "cohere", "huggingface-api", "transformer", "google-gecko"],
+        enum: supportedEmbeddings,
       },
       model: {
         type: "string",

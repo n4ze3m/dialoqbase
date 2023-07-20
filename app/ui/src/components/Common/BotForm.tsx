@@ -401,7 +401,7 @@ export const BotForm = ({
         hidden={!showEmbeddingAndModels}
         label={
           <span className="font-medium text-gray-800 text-sm">
-            Embedding method
+            Embedding model
           </span>
         }
         name="embedding"
