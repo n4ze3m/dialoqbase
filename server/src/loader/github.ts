@@ -16,6 +16,21 @@ export class DialoqbaseGithub extends BaseDocumentLoader
   is_private: boolean;
   output_folder = "./uploads/";
   ignore_folders = ["node_modules", ".git", ".github"];
+  ignore_files = [
+    ".gitignore",
+    ".gitattributes",
+    "package-lock.json",
+    "yarn.lock",
+    "pnpm-lock.yaml",
+    "pnpm-lock.json",
+    "npm-debug.log",
+    ".npmrc",
+    ".yarnrc.yml",
+    ".yarnrc",
+    ".env",
+    ".env.local",
+    ".eslintignore",
+  ];
 
   constructor(
     {
@@ -36,15 +51,14 @@ export class DialoqbaseGithub extends BaseDocumentLoader
     );
 
     const docs = data.map((file) => {
-        const doc = new Document<Record<string, any>>({
-            pageContent: file.content,
-            metadata: {
-                path: file.path,
-            },
-        });
-        
-        return doc;
+      const doc = new Document<Record<string, any>>({
+        pageContent: file.content,
+        metadata: {
+          path: file.path,
+        },
+      });
 
+      return doc;
     });
 
     return docs;
@@ -72,7 +86,9 @@ export class DialoqbaseGithub extends BaseDocumentLoader
     const repo_url = this.is_private
       ? `https://${process.env.GITHUB_ACCESS_TOKEN}@${url}`
       : `https://${url}`;
-    const output = `${this.output_folder}${url.split("/")[1]}-${this.branch}`;
+    const output = `${this.output_folder}${url.split("/")[1]}-${
+      url.split("/")[2]
+    }-${this.branch}`;
     await this.deleteFolder(output);
     const command =
       `git clone --single-branch --branch ${this.branch} ${repo_url} ${output}`;
@@ -88,9 +104,9 @@ export class DialoqbaseGithub extends BaseDocumentLoader
     for (const file of files) {
       const filepath = `${dir}/${file}`;
       const stat = await fs.stat(filepath);
-        if (this.ignore_folders.includes(file)) {
-            continue;
-        }
+      if (this.ignore_folders.includes(file) || this.ignore_files.includes(file)) {
+        continue;
+      }
       if (stat.isDirectory()) {
         filelist = await this._readFiles(filepath, filelist);
       } else {
