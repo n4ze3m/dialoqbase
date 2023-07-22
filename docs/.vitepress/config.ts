@@ -82,6 +82,16 @@ export default defineConfig({
             link: "/guide/integration/discord",
           }
         ]
+      },
+      {
+        text: "Development",
+        collapsed: false,
+        items: [
+          {
+            text:"Running locally for development",
+            link: "/guide/running-locally-for-development",
+          }
+        ]
       }
     ],
 
