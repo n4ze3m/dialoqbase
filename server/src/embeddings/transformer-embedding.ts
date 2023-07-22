@@ -1,17 +1,20 @@
 import { Embeddings, EmbeddingsParams } from "langchain/embeddings/base";
 import {
-    piplelineTransformer,
-//@ts-ignore
+  piplelineTransformer,
+  //@ts-ignore
 } from "../utils/pipleline.js";
 
 export interface TransformersEmbeddingsParams extends EmbeddingsParams {
+  model?: string;
 }
 
 export class TransformersEmbeddings extends Embeddings {
   embeddings: any;
+  model: string = "Xenova/all-MiniLM-L6-v2";
 
   constructor(fields?: TransformersEmbeddingsParams) {
     super(fields ?? {});
+    if (fields?.model) this.model = fields.model;
   }
 
   private async init() {
@@ -21,7 +24,7 @@ export class TransformersEmbeddings extends Embeddings {
 
     this.embeddings = await pipeline(
       "feature-extraction",
-      "Xenova/all-MiniLM-L6-v2",
+      this.model,
     );
   }
 

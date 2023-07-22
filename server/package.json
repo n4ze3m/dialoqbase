@@ -15,7 +15,7 @@
     "db": "prisma generate",
     "watch:ts": "tsc -w",
     "dev": "npm run build:ts && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"npm:watch:ts\" \"npm:dev:start\"",
-    "dev:start": "fastify start --ignore-watch=.ts$ -w -l info -P dist/app.js"
+    "dev:start": "fastify start --ignore-watch=uploads,.ts$ -w -l info -P dist/app.js" 
   },
   "keywords": [],
   "author": "",
@@ -31,7 +31,8 @@
     "@ffmpeg.wasm/main": "^0.12.0",
     "@google-ai/generativelanguage": "^0.2.0",
     "@huggingface/inference": "1",
-    "@prisma/client": "4.15.0",
+    "@prisma/client": "5",
+    "@slack/bolt": "^3.13.2",
     "@supabase/supabase-js": "^2.24.0",
     "@tensorflow-models/universal-sentence-encoder": "^1.3.3",
     "@tensorflow/tfjs-backend-cpu": "^4.7.0",
@@ -64,11 +65,11 @@
     "wavefile": "^11.0.0"
   },
   "devDependencies": {
+    "prisma": "5",
     "@types/bcryptjs": "^2.4.2",
     "@types/node": "^18.0.0",
     "@types/tap": "^15.0.5",
     "fastify-tsconfig": "^1.0.1",
-    "prisma": "^4.15.0",
     "tap": "^16.1.0",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4"

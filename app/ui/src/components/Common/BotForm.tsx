@@ -1,4 +1,14 @@
-import { Divider, Form, FormInstance, Select, Upload, message } from "antd";
+import {
+  Col,
+  Divider,
+  Form,
+  FormInstance,
+  Row,
+  Select,
+  Switch,
+  Upload,
+  message,
+} from "antd";
 import { RadioGroup } from "@headlessui/react";
 import {
   DocumentArrowUpIcon,
@@ -257,7 +267,7 @@ export const BotForm = ({
               },
               {
                 pattern: new RegExp(
-                  "^(https?://)?(www.)?github.com/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)$"
+                  "^(https?://)?(www.)?github.com/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)(.git)?$"
                 ),
                 message: "Please enter a valid public github repo URL",
               },
@@ -269,21 +279,34 @@ export const BotForm = ({
               className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
             />
           </Form.Item>
-          <Form.Item
-            name={["options", "branch"]}
-            rules={[
-              {
-                required: true,
-                message: "Please input branch",
-              },
-            ]}
+          <Row
+          gutter={16}
           >
-            <input
-              type="text"
-              placeholder="Enter the branch"
-              className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-            />
-          </Form.Item>
+            <Col span={12}>
+              <Form.Item
+                name={["options", "branch"]}
+                label="Branch"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input branch",
+                  },
+                ]}
+              >
+                <input
+                  type="text"
+                  placeholder="Enter the branch"
+                  className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label="Private repo?" name={["options", "is_private"]}>
+                <Switch 
+                className="mr-2" />
+              </Form.Item>
+            </Col>
+          </Row>
 
           <p className="text-sm text-gray-500">
             If you find any issues, please report them on{" "}
@@ -321,6 +344,7 @@ export const BotForm = ({
         maxLinks: 10,
         options: {
           branch: "main",
+          is_private: false,
         },
       }}
     >
@@ -401,7 +425,7 @@ export const BotForm = ({
         hidden={!showEmbeddingAndModels}
         label={
           <span className="font-medium text-gray-800 text-sm">
-            Embedding method
+            Embedding model
           </span>
         }
         name="embedding"

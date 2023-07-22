@@ -18,6 +18,10 @@ export const embeddings = (embeddingsType: string) => {
       return new HuggingFaceInferenceEmbeddings();
     case "transformer":
       return new TransformersEmbeddings();
+    case "bert":
+      return new TransformersEmbeddings({
+        model: "Xenova/bert-base-uncased",
+      });
     case "google-gecko":
       console.log("using google-gecko");
       return new GoogleGeckoEmbeddings();
@@ -25,3 +29,13 @@ export const embeddings = (embeddingsType: string) => {
       return new OpenAIEmbeddings();
   }
 };
+
+export const supportedEmbeddings = [
+  "tensorflow",
+  "openai",
+  "cohere",
+  "huggingface-api",
+  "transformer",
+  "google-gecko",
+  "bert",
+];
