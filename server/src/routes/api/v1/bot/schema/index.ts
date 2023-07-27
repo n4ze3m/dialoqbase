@@ -125,6 +125,9 @@ export const updateBotByIdSchema: FastifySchema = {
       qaPrompt: {
         type: "string",
       },
+      showRef: {
+        type: "boolean",
+      }
     },
   },
 };

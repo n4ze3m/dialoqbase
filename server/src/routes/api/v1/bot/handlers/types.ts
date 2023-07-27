@@ -62,5 +62,6 @@ export interface UpdateBotById {
     qaPrompt: string;
     questionGeneratorPrompt: string;
     streaming: boolean;
+    showRef: boolean;
   };
 }

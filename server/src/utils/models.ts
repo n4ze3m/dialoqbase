@@ -1,6 +1,6 @@
 import { ChatAnthropic } from "langchain/chat_models/anthropic";
 import { ChatOpenAI } from "langchain/chat_models/openai";
-import { GoogleChatBison } from "../models/bison";
+import {ChatGooglePaLM  } from "langchain/chat_models/googlepalm";
 
 export const chatModelProvider = (
   provider: string,
@@ -14,8 +14,6 @@ export const chatModelProvider = (
       return new ChatOpenAI({
         modelName: modelName,
         temperature: temperature,
-        // streaming: otherFields?.streaming,
-        // callbacks: otherFields?.callbacks,
         ...otherFields,
       });
     case "anthropic":
@@ -27,8 +25,9 @@ export const chatModelProvider = (
       });
     case "google-bison":
       console.log("using google-bison");
-      return new GoogleChatBison({
+      return new ChatGooglePaLM({
         temperature: temperature,
+        apiKey: process.env.GOOGLE_API_KEY,
         ...otherFields,
       });
     default:

@@ -1,11 +1,11 @@
 import axios from "axios";
-import React from "react";
 import { getUrl } from "../utils/getUrl";
 import { History, useStoreMessage } from "../store";
 
 export type BotResponse = {
   bot: {
     text: string;
+    sourceDocuments: any[];
   };
   history: History;
 };
@@ -29,8 +29,14 @@ const parsesStreamingResponse = (text: string) => {
 };
 
 export const useMessage = () => {
-  const { history, messages, setHistory, setMessages } = useStoreMessage();
-  const [streaming, setStreaming] = React.useState<boolean>(false);
+  const {
+    history,
+    messages,
+    setHistory,
+    setMessages,
+    setStreaming,
+    streaming,
+  } = useStoreMessage();
 
   const notStreamingRequest = async (message: string) => {
     let newMessage = [
@@ -38,10 +44,12 @@ export const useMessage = () => {
       {
         isBot: false,
         message,
+        sources: [],
       },
       {
         isBot: true,
         message: "Hold on...",
+        sources: [],
       },
     ];
     setMessages(newMessage);
@@ -51,6 +59,7 @@ export const useMessage = () => {
     });
     const data = response.data as BotResponse;
     newMessage[newMessage.length - 1].message = data.bot.text;
+    newMessage[newMessage.length - 1].sources = data.bot.sourceDocuments;
     setMessages(newMessage);
     setHistory(data.history);
   };
@@ -61,10 +70,12 @@ export const useMessage = () => {
       {
         isBot: false,
         message,
+        sources: [],
       },
       {
         isBot: true,
         message: "▋",
+        sources: [],
       },
     ];
     setMessages(newMessage);
@@ -121,8 +132,8 @@ export const useMessage = () => {
           count++;
         } else if (type === "result") {
           const responseData = JSON.parse(message) as BotResponse;
-          console.log(responseData);
           newMessage[appendingIndex].message = responseData.bot.text;
+          newMessage[appendingIndex].sources = responseData.bot.sourceDocuments;
           setHistory(responseData.history);
           setMessages(newMessage);
         }
@@ -131,6 +142,7 @@ export const useMessage = () => {
   };
 
   const onSubmit = async (message: string) => {
+    console.log("is_streaming", streaming);
     if (streaming) {
       await streamingRequest(message);
     } else {
