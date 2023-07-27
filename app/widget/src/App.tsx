@@ -10,9 +10,13 @@ import BotHeader from "./components/BotHeader";
 import BotForm from "./components/BotForm";
 import BotChatBubble from "./components/BotChatBubble";
 import { BotStyle } from "./utils/types";
-
+import { Modal } from "antd";
+import { useStoreReference } from "./store";
 function App() {
   const { messages, setMessages, setStreaming } = useMessage();
+
+  const { openReferences, setOpenReferences, referenceData } =
+    useStoreReference();
 
   const divRef = React.useRef<HTMLDivElement>(null);
 
@@ -23,7 +27,6 @@ function App() {
       divRef.current.scrollIntoView({ behavior: "smooth" });
     }
   });
-
 
   const { data: botStyle, status } = useQuery(
     ["getBotStyle"],
@@ -77,6 +80,22 @@ function App() {
           </>
         )}
       </ModeSwitcher>
+
+      <Modal
+        title={
+          <h3 className="text-md font-medium leading-6 text-gray-900">
+            {referenceData?.metadata?.path || referenceData?.metadata?.source}
+          </h3>
+        }
+        open={openReferences}
+        onCancel={() => setOpenReferences(false)}
+        onOk={() => setOpenReferences(false)}
+        footer={null}
+      >
+        <p className="text-xs text-gray-500 font-normal">
+          {referenceData?.content || referenceData?.pageContent}
+        </p>
+      </Modal>
     </div>
   );
 }

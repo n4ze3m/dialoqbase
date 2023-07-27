@@ -28,3 +28,17 @@ export const useStoreMessage = create<State>((set) => ({
   streaming: false,
   setStreaming: (streaming) => set({ streaming }),
 }));
+
+type ReferenceState = {
+  openReferences: boolean;
+  setOpenReferences: (openReferences: boolean) => void;
+  referenceData: any;
+  setReferenceData: (referenceData: any) => void;
+};
+
+export const useStoreReference = create<ReferenceState>((set) => ({
+  openReferences: false,
+  setOpenReferences: (openReferences) => set({ openReferences }),
+  referenceData: {},
+  setReferenceData: (referenceData) => set({ referenceData }),
+}));
