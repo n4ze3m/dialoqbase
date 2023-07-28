@@ -179,7 +179,7 @@ export const SettingsCard = ({
 
               <Form.Item
                 name="showRef"
-                label="Cite Source"
+                label="Cite sources in the chat"
                 valuePropName="checked"
               >
                 <Switch />
