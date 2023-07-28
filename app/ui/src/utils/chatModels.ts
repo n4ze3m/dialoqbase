@@ -10,6 +10,10 @@ export const availableChatModels = [
     value: "google-bison",
     label: "Google chat-bison-001 (beta)",
   },
+  // {
+  //   value: "falcon-7b-instruct-inference",
+  //   label: "Falcon 7B Instruct (HuggingFace Inference API)",
+  // },
 ];
 
 export const streamingSupportedModels = [

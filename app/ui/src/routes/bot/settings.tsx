@@ -24,6 +24,7 @@ export default function BotSettingsRoot() {
           qaPrompt: string;
           questionGeneratorPrompt: string;
           streaming: boolean;
+          showRef: boolean;
         };
       };
     },

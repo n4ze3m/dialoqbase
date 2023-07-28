@@ -1,5 +1,6 @@
 import { FastifySchema } from "fastify";
 import { supportedEmbeddings } from "../../../../../utils/embeddings";
+import { supportedModels } from "../../../../../utils/models";
 
 export const createBotSchema: FastifySchema = {
   body: {
@@ -22,16 +23,7 @@ export const createBotSchema: FastifySchema = {
       },
       model: {
         type: "string",
-        enum: [
-          "gpt-3.5-turbo",
-          "gpt-3.5-turbo-16k",
-          "gpt-4-0613",
-          "gpt-4",
-          "claude-1",
-          "claude-2",
-          "claude-instant-1",
-          "google-bison"
-        ],
+        enum: supportedModels,
       },
       maxDepth: {
         type: "number",
@@ -124,6 +116,9 @@ export const updateBotByIdSchema: FastifySchema = {
       },
       qaPrompt: {
         type: "string",
+      },
+      showRef: {
+        type: "boolean",
       },
     },
   },

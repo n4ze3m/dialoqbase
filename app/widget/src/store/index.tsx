@@ -3,6 +3,7 @@ import { create } from "zustand";
 export type Message = {
   isBot: boolean;
   message: string;
+  sources: any[];
 };
 
 export type History = {
@@ -15,6 +16,8 @@ type State = {
   setMessages: (messages: Message[]) => void;
   history: History;
   setHistory: (history: History) => void;
+  streaming: boolean;
+  setStreaming: (streaming: boolean) => void;
 };
 
 export const useStoreMessage = create<State>((set) => ({
@@ -22,4 +25,20 @@ export const useStoreMessage = create<State>((set) => ({
   setMessages: (messages) => set({ messages }),
   history: [],
   setHistory: (history) => set({ history }),
+  streaming: false,
+  setStreaming: (streaming) => set({ streaming }),
+}));
+
+type ReferenceState = {
+  openReferences: boolean;
+  setOpenReferences: (openReferences: boolean) => void;
+  referenceData: any;
+  setReferenceData: (referenceData: any) => void;
+};
+
+export const useStoreReference = create<ReferenceState>((set) => ({
+  openReferences: false,
+  setOpenReferences: (openReferences) => set({ openReferences }),
+  referenceData: {},
+  setReferenceData: (referenceData) => set({ referenceData }),
 }));

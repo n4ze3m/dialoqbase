@@ -114,4 +114,8 @@ export class DialoqbaseVectorStore extends VectorStore {
     ]);
     return result;
   }
+
+  _vectorstoreType(): string {
+    return "dialoqbase";
+  }
 }

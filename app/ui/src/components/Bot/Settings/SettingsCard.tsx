@@ -23,6 +23,7 @@ export const SettingsCard = ({
     qaPrompt: string;
     questionGeneratorPrompt: string;
     streaming: boolean;
+    showRef: boolean;
   };
 }) => {
   const [form] = Form.useForm();
@@ -115,6 +116,7 @@ export const SettingsCard = ({
           qaPrompt: data.qaPrompt,
           questionGeneratorPrompt: data.questionGeneratorPrompt,
           streaming: data.streaming,
+          showRef: data.showRef,
         }}
         form={form}
         requiredMark={false}
@@ -173,6 +175,14 @@ export const SettingsCard = ({
                 valuePropName="checked"
               >
                 <Switch disabled={disableStreaming} />
+              </Form.Item>
+
+              <Form.Item
+                name="showRef"
+                label="Cite sources in the chat"
+                valuePropName="checked"
+              >
+                <Switch />
               </Form.Item>
 
               <Form.Item

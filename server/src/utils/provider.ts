@@ -17,6 +17,8 @@ export const modelProviderName = (model: string) => {
       return "anthropic";
     case "google-bison":
       return "google-bison";
+    case "falcon-7b-instruct-inference":
+      return "huggingface-api"
     default:
       return "Unknown";
   }

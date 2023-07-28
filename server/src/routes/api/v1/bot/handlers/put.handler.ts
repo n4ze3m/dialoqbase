@@ -44,7 +44,6 @@ export const updateBotByIdHandler = async (
     });
   }
 
-  console.log("providerName", providerName);
 
   if (!isStreamingSupported(request.body.model) && request.body.streaming) {
     return reply.status(400).send({
