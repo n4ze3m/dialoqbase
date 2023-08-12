@@ -90,6 +90,10 @@ export default defineConfig({
           {
             text:"Running locally for development",
             link: "/guide/running-locally-for-development",
+          },
+          {
+            text: "Transitioning from Single-User to Multi-User mode",
+            link: "/guide/transitioning-from-single-user-to-multi-user-mode",
           }
         ]
       }
