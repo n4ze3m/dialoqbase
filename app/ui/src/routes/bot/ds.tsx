@@ -34,9 +34,10 @@ export default function BotDSRoot() {
   }, [status]);
 
   return (
-    <>
+    <div className="mx-auto my-16 w-full max-w-7xl space-y-16">
+
       {status === "loading" && <SkeletonLoading />}
       {status === "success" && <DsTable data={botData.data} />}
-    </>
+    </div>
   );
 }

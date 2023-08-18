@@ -53,9 +53,10 @@ export default function BotIntegrationRoot() {
   }, [status]);
 
   return (
-    <>
+    <div className="mx-auto my-16 w-full max-w-7xl space-y-16">
+
       {status === "loading" && <SkeletonLoading />}
       {status === "success" && <IntegrationGrid data={data.data} />}
-    </>
+    </div>
   );
 }

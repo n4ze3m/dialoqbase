@@ -51,7 +51,6 @@ function classNames(...classes) {
 
 export default function BotLayout({
   children,
-  noPadding,
 }: {
   children: React.ReactNode;
   noPadding?: boolean;
@@ -181,40 +180,35 @@ export default function BotLayout({
 
         <div className="hidden md:fixed md:inset-y-0 md:flex md:flex-col">
           <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5">
-        
             <div className="mt-14 flex flex-grow flex-col">
               <nav className="flex-1 space-y-1 px-2 pb-4">
                 {navigation.map((item) => (
-                  <Tooltip
-                  key={item.name}
-                  title={item.name}
-                  >
-
-                  <Link
-                    to={{
-                      pathname: item.href.replace(":id", params.id!),
-                    }}
-                    className={classNames(
-                      location.pathname === item.href.replace(":id", params.id!)
-                        ? "bg-gray-100 text-gray-900"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-                      "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                    )}
-                  >
-                    <item.icon
+                  <Tooltip key={item.name} title={item.name}>
+                    <Link
+                      to={{
+                        pathname: item.href.replace(":id", params.id!),
+                      }}
                       className={classNames(
                         location.pathname ===
                           item.href.replace(":id", params.id!)
-                          ? "text-gray-500"
-                          : "text-gray-400 group-hover:text-gray-500",
-                        "mr-3 flex-shrink-0 h-6 w-6"
+                          ? "bg-gray-100 text-gray-900"
+                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                        "group  flex items-center px-2 py-2 text-sm font-medium rounded-md"
                       )}
-                      aria-hidden="true"
-                    />
-                    {/* {item.name} */}
-                  </Link>
+                    >
+                      <item.icon
+                        className={classNames(
+                          location.pathname ===
+                            item.href.replace(":id", params.id!)
+                            ? "text-gray-500"
+                            : "text-gray-400 group-hover:text-gray-500",
+                          "flex-shrink-0 h-6 w-6"
+                        )}
+                        aria-hidden="true"
+                      />
+                      {/* {item.name} */}
+                    </Link>
                   </Tooltip>
-
                 ))}
               </nav>
             </div>
@@ -223,8 +217,7 @@ export default function BotLayout({
 
         <div className="flex flex-col">
           <div className="sticky top-0 z-10 flex h-16  bg-white border-b border-gray-200 ">
-           
-          <button
+            <button
               type="button"
               className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
               onClick={() => setSidebarOpen(true)}
@@ -232,18 +225,18 @@ export default function BotLayout({
               <span className="sr-only">Open sidebar</span>
               <Bars3BottomLeftIcon className="h-6 w-6" aria-hidden="true" />
             </button>
-                <Link
+            <Link
               to="/"
               className="focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700 flex items-center px-3"
             >
               <img className="h-8 w-auto" src="/logo.png" alt="Dialoqbase" />
               <span className="ml-1 text-xl font-bold">Dialoqbase</span>
               <span className="inline-block flex-shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 ml-2">
-               {/* @ts-ignore */}
+                {/* @ts-ignore */}
                 {`v${__APP_VERSION__}`}
               </span>
             </Link>
-         
+
             <div className="flex flex-1 justify-end px-4">
               <div className="ml-4 flex items-center md:ml-6">
                 <Menu as="div" className="relative ml-3">
@@ -299,24 +292,12 @@ export default function BotLayout({
                 </Menu>
               </div>
             </div>
-            
           </div>
           <main className="flex-1">
-            <div className="py-6">
-              <div
-                className={classNames(
-                  "mx-auto max-w-7xl",
-                  !noPadding && " px-4 sm:px-6 md:px-8"
-                )}
-              >
-                {/* Replace with your content */}
-                {children}
-                {/* <div className="py-4">
+            {children}
+            {/* <div className="py-4">
                   <div className="h-96 rounded-lg border-4 border-dashed border-gray-200" />
                 </div> */}
-                {/* /End replace */}
-              </div>
-            </div>
           </main>
         </div>
       </div>

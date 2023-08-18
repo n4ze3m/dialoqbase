@@ -31,7 +31,8 @@ export default function BotEmbedRoot() {
   }, [status]);
 
   return (
-    <>
+    <div className="mx-auto my-16 w-full max-w-7xl space-y-16">
+
       {status === "loading" && <SkeletonLoading />}
       {status === "success" && data.inProgress && <Cooking />}
       {status === "success" && !data.inProgress && (
@@ -40,6 +41,6 @@ export default function BotEmbedRoot() {
     
         </>
       )}
-    </>
+    </div>
   );
 }
