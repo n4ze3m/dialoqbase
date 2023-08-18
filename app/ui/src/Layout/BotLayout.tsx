@@ -13,7 +13,7 @@ import {
 
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Avatar } from "antd";
+import { Avatar, Tooltip } from "antd";
 
 const navigation = [
   {
@@ -179,24 +179,18 @@ export default function BotLayout({
           </Dialog>
         </Transition.Root>
 
-        <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
+        <div className="hidden md:fixed md:inset-y-0 md:flex md:flex-col">
           <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5">
-            <Link
-              to="/"
-              className="focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700 flex items-center px-3"
-            >
-              <img className="h-8 w-auto" src="/logo.png" alt="Dialoqbase" />
-              <span className="ml-1 text-xl font-bold">Dialoqbase</span>
-              <span className="inline-block flex-shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 ml-2">
-                {/* @ts-ignore */}
-                {`v${__APP_VERSION__}`}
-              </span>
-            </Link>
-            <div className="mt-5 flex flex-grow flex-col">
+        
+            <div className="mt-14 flex flex-grow flex-col">
               <nav className="flex-1 space-y-1 px-2 pb-4">
                 {navigation.map((item) => (
+                  <Tooltip
+                  key={item.name}
+                  title={item.name}
+                  >
+
                   <Link
-                    key={item.name}
                     to={{
                       pathname: item.href.replace(":id", params.id!),
                     }}
@@ -217,16 +211,20 @@ export default function BotLayout({
                       )}
                       aria-hidden="true"
                     />
-                    {item.name}
+                    {/* {item.name} */}
                   </Link>
+                  </Tooltip>
+
                 ))}
               </nav>
             </div>
           </div>
         </div>
-        <div className="flex flex-1 flex-col md:pl-64">
-          <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white border-b border-gray-200 ">
-            <button
+
+        <div className="flex flex-col">
+          <div className="sticky top-0 z-10 flex h-16  bg-white border-b border-gray-200 ">
+           
+          <button
               type="button"
               className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
               onClick={() => setSidebarOpen(true)}
@@ -234,12 +232,24 @@ export default function BotLayout({
               <span className="sr-only">Open sidebar</span>
               <Bars3BottomLeftIcon className="h-6 w-6" aria-hidden="true" />
             </button>
+                <Link
+              to="/"
+              className="focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700 flex items-center px-3"
+            >
+              <img className="h-8 w-auto" src="/logo.png" alt="Dialoqbase" />
+              <span className="ml-1 text-xl font-bold">Dialoqbase</span>
+              <span className="inline-block flex-shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 ml-2">
+               {/* @ts-ignore */}
+                {`v${__APP_VERSION__}`}
+              </span>
+            </Link>
+         
             <div className="flex flex-1 justify-end px-4">
               <div className="ml-4 flex items-center md:ml-6">
                 <Menu as="div" className="relative ml-3">
                   <div>
                     <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm">
-                      <span className="sr-only">Open user menu</span>
+                      <span className="sr-only">Open usermenu</span>
                       <Avatar shape="square">
                         {profile?.username?.charAt(0).toUpperCase()}
                       </Avatar>
@@ -289,8 +299,8 @@ export default function BotLayout({
                 </Menu>
               </div>
             </div>
+            
           </div>
-
           <main className="flex-1">
             <div className="py-6">
               <div
