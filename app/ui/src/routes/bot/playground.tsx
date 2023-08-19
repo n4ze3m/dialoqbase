@@ -32,7 +32,11 @@ export default function BotPreviewRoot() {
   }, [status]);
   return (
     <>
-      {status === "loading" && <SkeletonLoading />}
+      {status === "loading" && (
+        <div className="p-4 m-3">
+          <SkeletonLoading />
+        </div>
+      )}
       {status === "success" && data.inProgress && <Cooking />}
       {status === "success" && !data.inProgress && <PlaygroundBody />}
     </>

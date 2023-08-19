@@ -183,7 +183,9 @@ export default function BotPlaygroundLayout({
             <div className="mt-14 flex flex-grow flex-col">
               <nav className="flex-1 space-y-1 px-2 pb-4">
                 {navigation.map((item) => (
-                  <Tooltip key={item.name} title={item.name}>
+                  <Tooltip 
+                  placement="right"
+                  key={item.name} title={item.name}>
                     <Link
                       to={{
                         pathname: item.href.replace(":id", params.id!),
@@ -294,9 +296,7 @@ export default function BotPlaygroundLayout({
             </div>
           </div>
           {children}
-        
-        
-                
+      
         </div>
       </div>
     </>

@@ -2,6 +2,7 @@ import { History, useStoreMessage } from "../store";
 import api, { baseURL } from "../services/api";
 import { useParams } from "react-router-dom";
 import { getToken } from "../services/cookie";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type BotResponse = {
   bot: {
@@ -44,6 +45,8 @@ export const useMessage = () => {
   } = useStoreMessage();
 
   const param = useParams<{ id: string; history_id?: string }>();
+
+  const client = useQueryClient();
 
   const getUrl = () => {
     return `bot/playground/${param.id}`;
@@ -163,6 +166,12 @@ export const useMessage = () => {
     } else {
       await notStreamingRequest(message);
     }
+
+    client.invalidateQueries([
+      "getBotPlaygroundHistory",
+      param.id,
+      param.history_id,
+    ]);
   };
 
   return {

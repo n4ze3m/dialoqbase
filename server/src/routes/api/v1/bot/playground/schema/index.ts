@@ -38,3 +38,31 @@ export const chatRequestStreamSchema: FastifySchema = {
     },
   },
 };
+
+
+export const chatPlaygroundHistorySchema: FastifySchema = {
+  params: {
+    type: "object",
+    required: ["id"],
+    properties: {
+      id: {
+        type: "string",
+      },
+    },
+  },
+};
+
+export const chatPlaygroundHistoryIdSchema: FastifySchema = {
+  params: {
+    type: "object",
+    required: ["id", "history_id"],
+    properties: {
+      id: {
+        type: "string",
+      },
+      history_id: {
+        type: "string",
+      }
+    },
+  },
+};

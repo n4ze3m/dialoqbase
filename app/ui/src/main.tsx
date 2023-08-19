@@ -54,6 +54,14 @@ const router = createHashRouter([
     ),
   },
   {
+    path: "/bot/:id/playground/:history_id",
+    element: (
+      <BotPlaygroundLayout>
+        <BotPreviewRoot />
+      </BotPlaygroundLayout>
+    ),
+  },
+  {
     path: "/bot/:id/data-sources",
     element: (
       <BotLayout>

@@ -28,3 +28,16 @@ export interface ChatStyleRequest {
     id: string;
   };
 }
+
+export interface GetPlaygroundBotById {
+  Params: {
+    id: string;
+  };
+}
+
+export interface GetPlaygroundBotByIdAndHistoryId {
+  Params: {
+    id: string;
+    history_id: string;
+  };
+}

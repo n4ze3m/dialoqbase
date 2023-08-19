@@ -1,6 +1,16 @@
 import { FastifyPluginAsync } from "fastify";
-import { chatRequestHandler, chatRequestStreamHandler } from "./handlers";
-import { chatRequestSchema, chatRequestStreamSchema } from "./schema";
+import {
+  chatRequestHandler,
+  chatRequestStreamHandler,
+  getPlaygroundHistoryByBotId,
+  getPlaygroundHistoryByBotIdAndHistoryId,
+} from "./handlers";
+import {
+  chatPlaygroundHistoryIdSchema,
+  chatPlaygroundHistorySchema,
+  chatRequestSchema,
+  chatRequestStreamSchema,
+} from "./schema";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   fastify.post("/:id", {
@@ -14,11 +24,13 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     logLevel: "silent",
   }, chatRequestStreamHandler);
 
-  // fastify.addHook("onResponse", async (request, reply) => {
-  //   console.log(request.body);
-  //   //  log response
-  //   console.log(reply.raw)
-  // });
+  fastify.get("/:id/history", {
+    schema: chatPlaygroundHistorySchema,
+  }, getPlaygroundHistoryByBotId);
+
+  fastify.get("/:id/history/:history_id", {
+    schema: chatPlaygroundHistoryIdSchema,
+  }, getPlaygroundHistoryByBotIdAndHistoryId);
 };
 
 export default root;
