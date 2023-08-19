@@ -28,9 +28,9 @@ export default function BotAppearanceRoot() {
   }, [status]);
 
   return (
-    <>
+    <div className="mx-auto my-3 w-full max-w-7xl ">
       {status === "loading" && <SkeletonLoading />}
       {status === "success" && <AppearanceBody {...data} />}
-    </>
+    </div>
   );
 }

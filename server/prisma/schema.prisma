@@ -6,7 +6,7 @@ generator client {
 datasource db {
   provider   = "postgresql"
   url        = env("DATABASE_URL")
-  extensions = [vector(schema: "public")]
+  extensions = [uuid_ossp(map: "uuid-ossp", schema: "extensions"), vector(schema: "public")]
 }
 
 model Bot {
@@ -19,13 +19,14 @@ model Bot {
   model                   String           @default("gpt-3.5-turbo")
   provider                String           @default("openai")
   embedding               String           @default("openai")
-  questionGeneratorPrompt String           @default("Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.   Chat History: {chat_history} Follow Up Input: {question} Standalone question:")
-  qaPrompt                String           @default("You are a helpful AI assistant. Use the following pieces of context to answer the question at the end. If you don't know the answer, just say you don't know. DO NOT try to make up an answer. If the question is not related to the context, politely respond that you are tuned to only answer questions that are related to the context.  {context}  Question: {question} Helpful answer in markdown:")
   streaming               Boolean          @default(false)
   showRef                 Boolean          @default(false)
+  questionGeneratorPrompt String           @default("Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.   Chat History: {chat_history} Follow Up Input: {question} Standalone question:")
+  qaPrompt                String           @default("You are a helpful AI assistant. Use the following pieces of context to answer the question at the end. If you don't know the answer, just say you don't know. DO NOT try to make up an answer. If the question is not related to the context, politely respond that you are tuned to only answer questions that are related to the context.  {context}  Question: {question} Helpful answer in markdown:")
   BotAppearance           BotAppearance[]
   document                BotDocument[]
   BotIntegration          BotIntegration[]
+  BotPlayground           BotPlayground[]
   source                  BotSource[]
 }
 
@@ -65,10 +66,10 @@ model User {
 model BotIntegration {
   id                                Int      @id @default(autoincrement())
   provider                          String
-  telegram_bot_token                String?
-  is_pause                          Boolean? @default(false)
   bot_id                            String
   identifier                        String
+  telegram_bot_token                String?
+  is_pause                          Boolean? @default(false)
   discord_bot_token                 String?
   discord_slash_command             String?  @default("hey")
   discord_slash_command_description String?  @default("Use this command to get help")
@@ -97,9 +98,28 @@ model BotAppearance {
   bot_id                  String
   bot_name                String
   first_message           String
-  // theme                   String?
   background_color        String?
   chat_bot_bubble_style   Json?   @db.Json
   chat_human_bubble_style Json?   @db.Json
   Bot                     Bot     @relation(fields: [bot_id], references: [id], onDelete: Cascade)
+}
+
+model BotPlayground {
+  id                   String                 @id @default(uuid())
+  botId                String
+  title                String                 @default("New Chat")
+  createdAt            DateTime               @default(now())
+  Bot                  Bot                    @relation(fields: [botId], references: [id])
+  BotPlaygroundMessage BotPlaygroundMessage[]
+}
+
+model BotPlaygroundMessage {
+  id              String        @id @default(uuid())
+  botPlaygroundId String
+  type            String
+  message         String
+  createdAt       DateTime      @default(now())
+  isBot           Boolean       @default(false)
+  sources         Json?
+  botPlayground   BotPlayground @relation(fields: [botPlaygroundId], references: [id], onDelete: Cascade)
 }

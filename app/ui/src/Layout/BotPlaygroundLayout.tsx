@@ -49,7 +49,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function BotLayout({
+export default function BotPlaygroundLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -183,7 +183,9 @@ export default function BotLayout({
             <div className="mt-14 flex flex-grow flex-col">
               <nav className="flex-1 space-y-1 px-2 pb-4">
                 {navigation.map((item) => (
-                  <Tooltip placement="right" key={item.name} title={item.name}>
+                  <Tooltip 
+                  placement="right"
+                  key={item.name} title={item.name}>
                     <Link
                       to={{
                         pathname: item.href.replace(":id", params.id!),
@@ -215,8 +217,8 @@ export default function BotLayout({
           </div>
         </div>
 
-        <div className="flex flex-col">
-          <div className="sticky top-0 z-10 flex h-16  bg-white border-b border-gray-200 ">
+        <div className="flex flex-col min-h-screen">
+          <div className="sticky top-0 z-[9999] flex h-16  bg-white border-b border-gray-200 ">
             <button
               type="button"
               className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
@@ -293,12 +295,8 @@ export default function BotLayout({
               </div>
             </div>
           </div>
-          <main className="flex-1">
-            {children}
-            {/* <div className="py-4">
-                  <div className="h-96 rounded-lg border-4 border-dashed border-gray-200" />
-                </div> */}
-          </main>
+          {children}
+      
         </div>
       </div>
     </>

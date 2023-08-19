@@ -4,7 +4,8 @@ import api from "../../services/api";
 import React from "react";
 import { SkeletonLoading } from "../../components/Common/SkeletonLoading";
 import { Cooking } from "../../components/Common/Cooking";
-import { PreviewIframe } from "../../components/Bot/Preview/PreviewIFrame";
+import { PlaygroundBody } from "../../components/Bot/Playground";
+// import { PreviewIframe } from "../../components/Bot/Preview/PreviewIFrame";
 
 export default function BotPreviewRoot() {
   const param = useParams<{ id: string }>();
@@ -31,11 +32,13 @@ export default function BotPreviewRoot() {
   }, [status]);
   return (
     <>
-      {status === "loading" && <SkeletonLoading />}
-      {status === "success" && data.inProgress && <Cooking />}
-      {status === "success" && !data.inProgress && (
-        <PreviewIframe public_id={data.public_id} />
+      {status === "loading" && (
+        <div className="p-4 m-3">
+          <SkeletonLoading />
+        </div>
       )}
+      {status === "success" && data.inProgress && <Cooking />}
+      {status === "success" && !data.inProgress && <PlaygroundBody />}
     </>
   );
 }

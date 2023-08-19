@@ -38,10 +38,6 @@ export default function NewRoot() {
   };
   const { mutateAsync: createBot, isLoading } = useMutation(onSubmit, {
     onSuccess: (data: any) => {
-      notification.success({
-        message: "Success",
-        description: "Bot created successfully.",
-      });
       navigate(`/bot/${data.id}`);
     },
     onError: (e) => {

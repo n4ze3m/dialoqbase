@@ -16,8 +16,18 @@ export const AppearanceBody = (props: Props) => {
   }, [props.data]);
 
   return (
-    <div >
-      <div className="mx-auto max-w-3xl lg:max-w-7xl">
+    <div className="px-4 sm:px-6 lg:px-8">
+    <div className="sm:flex sm:items-center">
+            <div className="sm:flex-auto">
+              <h1 className="text-xl font-semibold text-gray-900">
+                Appearance
+              </h1>
+              <p className="mt-2 text-sm text-gray-700">
+                Customize the appearance of your bot.
+              </p>
+            </div>
+          </div>
+      <div className="mx-auto max-w-3xl mt-6 lg:max-w-7xl">
         <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
           <div className="grid grid-cols-1 gap-4 lg:col-span-2">
             <section aria-labelledby="section-1-title">
