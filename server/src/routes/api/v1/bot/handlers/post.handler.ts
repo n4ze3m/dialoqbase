@@ -12,6 +12,7 @@ import {
   apiKeyValidatonMessage,
 } from "../../../../../utils/validate";
 import { modelProviderName } from "../../../../../utils/provider";
+import { isStreamingSupported } from "../../../../../utils/models";
 
 export const createBotHandler = async (
   request: FastifyRequest<CreateBotRequest>,
@@ -60,12 +61,15 @@ export const createBotHandler = async (
 
   const name = nameFromRequest || shortName;
 
+  const isStreamingAvilable = isStreamingSupported(request.body.model);
+
   const bot = await prisma.bot.create({
     data: {
       name,
       embedding,
       model,
       provider: providerName,
+      streaming: isStreamingAvilable,
     },
   });
 
@@ -129,7 +133,6 @@ export const addNewSourceByIdHandler = async (
     maxDepth: request.body.maxDepth,
     maxLinks: request.body.maxLinks,
     options: request.body.options,
-
   }]);
   return {
     id: bot.id,

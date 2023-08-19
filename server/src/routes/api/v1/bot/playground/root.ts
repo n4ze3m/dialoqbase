@@ -13,6 +13,12 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     onRequest: [fastify.authenticate],
     logLevel: "silent",
   }, chatRequestStreamHandler);
+
+  // fastify.addHook("onResponse", async (request, reply) => {
+  //   console.log(request.body);
+  //   //  log response
+  //   console.log(reply.raw)
+  // });
 };
 
 export default root;

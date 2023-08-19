@@ -20,16 +20,7 @@ export const chatRequestSchema: FastifySchema = {
       history: {
         type: "array",
       },
-    },
-  },
-};
-
-export const chatStyleSchema: FastifySchema = {
-  params: {
-    type: "object",
-    required: ["id"],
-    properties: {
-      id: {
+      history_id: {
         type: "string",
       },
     },

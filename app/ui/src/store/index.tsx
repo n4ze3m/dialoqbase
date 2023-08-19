@@ -18,6 +18,10 @@ type State = {
   setHistory: (history: History) => void;
   streaming: boolean;
   setStreaming: (streaming: boolean) => void;
+  isFirstMessage: boolean;
+  setIsFirstMessage: (isFirstMessage: boolean) => void;
+  historyId: string | null;
+  setHistoryId: (history_id: string | null) => void;
 };
 
 export const useStoreMessage = create<State>((set) => ({
@@ -25,8 +29,12 @@ export const useStoreMessage = create<State>((set) => ({
   setMessages: (messages) => set({ messages }),
   history: [],
   setHistory: (history) => set({ history }),
-  streaming: true,
+  streaming: false,
   setStreaming: (streaming) => set({ streaming }),
+  isFirstMessage: true,
+  setIsFirstMessage: (isFirstMessage) => set({ isFirstMessage }),
+  historyId: null,
+  setHistoryId: (historyId) => set({ historyId }),
 }));
 
 type ReferenceState = {

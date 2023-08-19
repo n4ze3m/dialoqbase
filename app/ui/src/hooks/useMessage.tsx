@@ -9,6 +9,7 @@ export type BotResponse = {
     sourceDocuments: any[];
   };
   history: History;
+  history_id: string;
 };
 
 const parsesStreamingResponse = (text: string) => {
@@ -37,15 +38,14 @@ export const useMessage = () => {
     setMessages,
     setStreaming,
     streaming,
+    setIsFirstMessage,
+    historyId,
+    setHistoryId,
   } = useStoreMessage();
 
   const param = useParams<{ id: string; history_id?: string }>();
 
   const getUrl = () => {
-    if (param.history_id) {
-      return `bot/playground/${param.id}/${param.history_id}`;
-    }
-
     return `bot/playground/${param.id}`;
   };
 
@@ -71,6 +71,7 @@ export const useMessage = () => {
     const data = response.data as BotResponse;
     newMessage[newMessage.length - 1].message = data.bot.text;
     newMessage[newMessage.length - 1].sources = data.bot.sourceDocuments;
+    setHistoryId(data.history_id);
     setMessages(newMessage);
     setHistory(data.history);
   };
@@ -95,6 +96,7 @@ export const useMessage = () => {
       body: JSON.stringify({
         message,
         history,
+        history_id: historyId,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -146,6 +148,7 @@ export const useMessage = () => {
           const responseData = JSON.parse(message) as BotResponse;
           newMessage[appendingIndex].message = responseData.bot.text;
           newMessage[appendingIndex].sources = responseData.bot.sourceDocuments;
+          setHistoryId(responseData.history_id);
           setHistory(responseData.history);
           setMessages(newMessage);
         }
@@ -169,5 +172,8 @@ export const useMessage = () => {
     setStreaming,
     streaming,
     setHistory,
+    historyId,
+    setHistoryId,
+    setIsFirstMessage,
   };
 };

@@ -8,6 +8,7 @@ export interface ChatRequestBody {
       type: string;
       text: string;
     }[];
+    history_id?: string;
   };
 }
 

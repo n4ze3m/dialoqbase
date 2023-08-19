@@ -11,7 +11,7 @@ export const chatRequestHandler = async (
 ) => {
   const bot_id = request.params.id;
 
-  const { message, history } = request.body;
+  const { message, history, history_id } = request.body;
 
   const prisma = request.server.prisma;
 
@@ -85,6 +85,38 @@ export const chatRequestHandler = async (
     chat_history: chat_history,
   });
 
+
+  let historyId = history_id;
+
+  if (!historyId) {
+    const newHistory = await prisma.botPlayground.create({
+      data: {
+        botId: bot.id,
+        title: message,
+      },
+    });
+    historyId = newHistory.id;
+  }
+
+  await prisma.botPlaygroundMessage.create({
+    data: {
+      type: "human",
+      message: message,
+      botPlaygroundId: historyId,
+    },
+  });
+  
+  await prisma.botPlaygroundMessage.create({
+    data: {
+      type: "ai",
+      message: response.text,
+      botPlaygroundId: historyId,
+      isBot: true,
+      sources: response?.sourceDocuments,
+    },
+  });
+
+
   return {
     bot: response,
     history: [
@@ -111,7 +143,7 @@ export const chatRequestStreamHandler = async (
 ) => {
   const bot_id = request.params.id;
 
-  const { message, history } = request.body;
+  const { message, history, history_id } = request.body;
   // const history = JSON.parse(chatHistory) as {
   //   type: string;
   //   text: string;
@@ -227,6 +259,37 @@ export const chatRequestStreamHandler = async (
     question: sanitizedQuestion,
     chat_history: chat_history,
   });
+
+  let historyId = history_id;
+
+  if (!historyId) {
+    const newHistory = await prisma.botPlayground.create({
+      data: {
+        botId: bot.id,
+        title: message,
+      },
+    });
+    historyId = newHistory.id;
+  }
+
+  await prisma.botPlaygroundMessage.create({
+    data: {
+      type: "human",
+      message: message,
+      botPlaygroundId: historyId,
+    },
+  });
+
+  await prisma.botPlaygroundMessage.create({
+    data: {
+      type: "ai",
+      message: response.text,
+      botPlaygroundId: historyId,
+      isBot: true,
+      sources: response?.sourceDocuments,
+    },
+  });
+
   reply.sse({
     event: "result",
     id: "",
@@ -243,6 +306,7 @@ export const chatRequestStreamHandler = async (
           text: response.text,
         },
       ],
+      history_id: historyId,
     }),
   });
   await nextTick();

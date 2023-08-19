@@ -18,6 +18,7 @@ import {
 import { modelProviderName } from "../../../../../utils/provider";
 const pump = util.promisify(pipeline);
 import { fileTypeFinder } from "../../../../../utils/fileType";
+import { isStreamingSupported } from "../../../../../utils/models";
 
 export const createBotFileHandler = async (
   request: FastifyRequest<UploadPDF>,
@@ -56,6 +57,7 @@ export const createBotFileHandler = async (
     });
 
     const prisma = request.server.prisma;
+    const isStreamingAvilable = isStreamingSupported(model);
 
     const bot = await prisma.bot.create({
       data: {
@@ -63,6 +65,7 @@ export const createBotFileHandler = async (
         embedding,
         model,
         provider: providerName,
+        streaming: isStreamingAvilable,
       },
     });
 
