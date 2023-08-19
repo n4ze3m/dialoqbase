@@ -13,12 +13,12 @@ import { BotStyle } from "./utils/types";
 import { Modal } from "antd";
 import { useStoreReference } from "./store";
 function App() {
-  const { messages, setMessages, setStreaming } = useMessage();
-
+  
   const { openReferences, setOpenReferences, referenceData } =
-    useStoreReference();
-
+  useStoreReference();
+  
   const divRef = React.useRef<HTMLDivElement>(null);
+  const { messages, setMessages, setStreaming } = useMessage();
 
   const params = useQueryParams();
 

@@ -35,6 +35,9 @@ importers:
       '@heroicons/react':
         specifier: ^2.0.18
         version: 2.0.18(react@18.2.0)
+      '@mantine/form':
+        specifier: ^6.0.13
+        version: 6.0.13(react@18.2.0)
       '@tailwindcss/forms':
         specifier: ^0.5.3
         version: 0.5.3(tailwindcss@3.3.2)
@@ -80,6 +83,9 @@ importers:
       sort-by:
         specifier: ^1.2.0
         version: 1.2.0
+      zustand:
+        specifier: ^4.3.9
+        version: 4.3.9(react@18.2.0)
     devDependencies:
       '@types/js-cookie':
         specifier: ^3.0.3

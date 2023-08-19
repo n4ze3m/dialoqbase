@@ -1,29 +1,54 @@
+import { useMutation } from "@tanstack/react-query";
+import { useMessage } from "../../../hooks/useMessage";
+import { useForm } from "@mantine/form";
+
 export const PlaygroundgForm = () => {
+  const { onSubmit } = useMessage();
+
+  const form = useForm({
+    initialValues: {
+      message: "",
+      isBot: false,
+    },
+  });
+
+  const { mutateAsync: sendMessage, isLoading: isSending } = useMutation(
+    onSubmit,
+    {
+      onSuccess: () => {
+        form.setFieldValue("message", "");
+      },
+      onError: (error) => {
+        console.error(error);
+      },
+    }
+  );
+
   return (
     <div className="p-3 ">
       <div className="flex-grow space-y-6">
         <div className="flex">
           <form
-            //   onSubmit={form.onSubmit(async (value) => {
-            //     form.reset();
-            //     await sendMessage(value.message);
-            //   })}
+            onSubmit={form.onSubmit(async (value) => {
+              form.reset();
+              await sendMessage(value.message);
+            })}
             className="shrink-0 flex-grow  flex items-center "
           >
-              <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
+            <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
               <textarea
                 // style={{ height: "48px !important" }}
-                //   disabled={isSending}
-                //   onKeyDown={(e) => {
-                //     if (e.key === "Enter" && !e.shiftKey) {
-                //       e.preventDefault();
-                //       form.onSubmit(async (value) => {
-                //         form.reset();
-                //         await sendMessage(value.message);
-                //         // await sendMessage(value.message);
-                //       })();
-                //     }
-                //   }}
+                disabled={isSending}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    form.onSubmit(async (value) => {
+                      form.reset();
+                      await sendMessage(value.message);
+                      // await sendMessage(value.message);
+                    })();
+                  }
+                }}
                 style={{
                   height: "24px",
                   maxHeight: "200px",
@@ -32,11 +57,11 @@ export const PlaygroundgForm = () => {
                 className="m-0 w-full resize-none border-0 bg-transparent p-0 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent pl-2 md:pl-0"
                 required
                 placeholder="Type your message…"
-                //   {...form.getInputProps("message")}
+                {...form.getInputProps("message")}
               />
               <div className="absolute flex items-center bottom-0.5 right-0.5">
                 <button
-                  // disabled={isSending}
+                  disabled={isSending}
                   className="absolute p-1 rounded-md bottom-1.5 md:bottom-2.5 bg-transparent disabled:bg-gray-500 right-1 md:right-2 disabled:opacity-40"
                 >
                   <svg
