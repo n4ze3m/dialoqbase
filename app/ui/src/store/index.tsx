@@ -22,6 +22,8 @@ type State = {
   setIsFirstMessage: (isFirstMessage: boolean) => void;
   historyId: string | null;
   setHistoryId: (history_id: string | null) => void;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
 };
 
 export const useStoreMessage = create<State>((set) => ({
@@ -35,6 +37,8 @@ export const useStoreMessage = create<State>((set) => ({
   setIsFirstMessage: (isFirstMessage) => set({ isFirstMessage }),
   historyId: null,
   setHistoryId: (historyId) => set({ historyId }),
+  isLoading: false,
+  setIsLoading: (isLoading) => set({ isLoading }),
 }));
 
 type ReferenceState = {

@@ -42,6 +42,8 @@ export const useMessage = () => {
     setIsFirstMessage,
     historyId,
     setHistoryId,
+    isLoading,
+    setIsLoading
   } = useStoreMessage();
 
   const param = useParams<{ id: string; history_id?: string }>();
@@ -184,5 +186,7 @@ export const useMessage = () => {
     historyId,
     setHistoryId,
     setIsFirstMessage,
+    isLoading,
+    setIsLoading
   };
 };

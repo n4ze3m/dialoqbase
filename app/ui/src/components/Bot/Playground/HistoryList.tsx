@@ -9,7 +9,13 @@ import { Empty } from "antd";
 
 export const PlaygroundHistoryList = () => {
   const params = useParams<{ id: string; history_id?: string }>();
-  const { setMessages, setHistory, setStreaming, setHistoryId } = useMessage();
+  const {
+    setMessages,
+    setHistory,
+    setStreaming,
+    setHistoryId,
+    setIsLoading,
+  } = useMessage();
 
   const { data, status } = useQuery(
     ["getBotPlaygroundHistory", params.id, params.history_id],
@@ -40,6 +46,7 @@ export const PlaygroundHistoryList = () => {
           })
         );
       }
+      setIsLoading(false);
     }
   }, [status, data]);
 

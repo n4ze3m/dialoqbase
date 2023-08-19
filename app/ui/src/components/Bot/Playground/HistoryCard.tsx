@@ -8,15 +8,21 @@ export const PlaygroundHistoryCard = ({
 }: {
   item: PlaygroundHistory;
 }) => {
-  const { historyId } = useMessage();
-
+  const { historyId, setMessages, setHistory, setIsLoading } = useMessage();
   const params = useParams<{ id: string; history_id?: string }>();
   return (
     <Link
       to={`/bot/${params.id}/playground/${item.id}`}
+      onClick={() => {
+        setIsLoading(true);
+        setMessages([]);
+        setHistory([]);
+      }}
       className={`flex py-2 px-2 items-center gap-3 relative rounded-md truncate hover:pr-4 group transition-opacity duration-300 ease-in-out ${
-        historyId === item.id || params.history_id === historyId
-          ? "bg-gray-200 dark:bg-gray-700"
+        historyId === item.id
+          ? item.id === params.history_id
+            ? "bg-gray-300 dark:bg-gray-700"
+            : "bg-gray-300 dark:bg-gray-700"
           : "bg-gray-100 dark:bg-gray-800"
       }`}
     >
