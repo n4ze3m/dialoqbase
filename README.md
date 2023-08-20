@@ -133,8 +133,8 @@ and more...
 - [x] OpenAI
 - [x] Anthropic
 - [x] Google chat-bison-001
+- [x] fireworks.ai's llama 2 models api
 
-open source chatmodels soon...
 
 ### Embedding models
 

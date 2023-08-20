@@ -30,7 +30,7 @@ export default function Markdown({ message }: { message: string }) {
             <a
               target="_blank"
               rel="noreferrer"
-              className="text-blue-500 hover:underline"
+              className="text-blue-500 text-sm hover:underline"
               {...props}
             >
               {props.children}
@@ -39,21 +39,21 @@ export default function Markdown({ message }: { message: string }) {
         },
         li({ node, ...props }) {
           return (
-            <li className="list-decimal marker:text-gray-500" {...props}>
+            <li className="list-decimal text-sm marker:text-gray-500" {...props}>
               {props.children}
             </li>
           );
         },
         ul({ node, ...props }) {
           return (
-            <ul className="mx-2" {...props}>
+            <ul className="mx-2 text-sm" {...props}>
               {props.children}
             </ul>
           );
         },
         ol({ node, ...props }) {
           return (
-            <ul className="mx-2" {...props}>
+            <ul className="mx-2 text-sm" {...props}>
               {props.children}
             </ul>
           );

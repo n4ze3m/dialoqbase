@@ -13,12 +13,17 @@ export const modelProviderName = (model: string) => {
     case "claude-instant-1":
       return "anthropic";
     case "claude-2":
-      console.log("claude-2");
       return "anthropic";
     case "google-bison":
       return "google-bison";
     case "falcon-7b-instruct-inference":
-      return "huggingface-api"
+      return "huggingface-api";
+    case "llama-v2-7b-chat":
+      return "fireworks";
+    case "llama-v2-13b-chat":
+      return "fireworks";
+    case "llama-v2-70b-chat":
+      return "fireworks";
     default:
       return "Unknown";
   }
