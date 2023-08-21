@@ -1,7 +1,22 @@
+import {
+  CheckIcon,
+  ClipboardIcon,
+} from "@heroicons/react/24/outline";
 import { Message } from "../../../store";
-import Markdown from "./Markdown";
+import Markdown from "../../Common/Markdown";
+import React from "react";
 
 export const PlaygroundMessage = (props: Message) => {
+  const [isBtnPressed, setIsBtnPressed] = React.useState(false);
+
+  React.useEffect(() => {
+    if (isBtnPressed) {
+      setTimeout(() => {
+        setIsBtnPressed(false);
+      }, 4000);
+    }
+  }, [isBtnPressed]);
+
   return (
     <div
       className={`group w-full text-gray-800 dark:text-gray-100 border-b border-black/10 dark:border-gray-900/50 ${
@@ -32,6 +47,21 @@ export const PlaygroundMessage = (props: Message) => {
               </div>
             </div>
           </div>
+          {props.isBot && (
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(props.message);
+                setIsBtnPressed(true);
+              }}
+              className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            >
+              {!isBtnPressed ? (
+                <ClipboardIcon className="w-4 h-4 text-gray-400 group-hover:text-gray-500" />
+              ) : (
+                <CheckIcon className="w-4 h-4 text-green-400 group-hover:text-green-500" />
+              )}
+            </button>
+          )}
         </div>
       </div>
     </div>

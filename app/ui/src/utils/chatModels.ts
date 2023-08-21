@@ -21,6 +21,14 @@ export const availableChatModels = [
   {
     value: "llama-v2-70b-chat",
     label: "Llama v2 70B (Fireworks)",
+  },
+  {
+    value: "llama-v2-7b-chat-w8a16",
+    label: "Llama v2 7B Chat int8 (Fireworks)",
+  },
+  {
+    value: "llama-v2-13b-chat-w8a16",
+    label: "Llama v2 13B Chat int8 (Fireworks)",
   }
   // {
   //   value: "falcon-7b-instruct-inference",
@@ -39,6 +47,8 @@ export const streamingSupportedModels = [
   "llama-v2-7b-chat",
   "llama-v2-13b-chat",
   "llama-v2-70b-chat",
+  "llama-v2-7b-chat-w8a16",
+  "llama-v2-13b-chat-w8a16",
 ];
 
 export const isStreamingSupported = (model: string) => {

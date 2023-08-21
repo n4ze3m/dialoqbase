@@ -14,7 +14,7 @@ export const modelProviderName = (model: string) => {
       return "anthropic";
     case "claude-2":
       return "anthropic";
-    case "google-bison":
+    case "google-bison": 
       return "google-bison";
     case "falcon-7b-instruct-inference":
       return "huggingface-api";
@@ -23,6 +23,10 @@ export const modelProviderName = (model: string) => {
     case "llama-v2-13b-chat":
       return "fireworks";
     case "llama-v2-70b-chat":
+      return "fireworks";
+    case "llama-v2-7b-chat-w8a16":
+      return "fireworks";
+    case "llama-v2-13b-chat-w8a16":
       return "fireworks";
     default:
       return "Unknown";

@@ -67,6 +67,8 @@ export const fireworksModels: {
   "llama-v2-7b-chat": "accounts/fireworks/models/llama-v2-7b-chat",
   "llama-v2-13b-chat": "accounts/fireworks/models/llama-v2-13b-chat",
   "llama-v2-70b-chat": "accounts/fireworks/models/llama-v2-70b-chat",
+  "llama-v2-7b-chat-w8a16": "accounts/fireworks/models/llama-v2-7b-chat-w8a16",
+  "llama-v2-13b-chat-w8a16": "accounts/fireworks/models/llama-v2-13b-chat-w8a16",
 };
 
 export const streamingSupportedModels = [
@@ -79,7 +81,9 @@ export const streamingSupportedModels = [
   "claude-2",
   "llama-v2-7b-chat",
   "llama-v2-13b-chat",
-  "llama-v2-70b-chat"
+  "llama-v2-70b-chat",
+  "llama-v2-7b-chat-w8a16",
+  "llama-v2-13b-chat-w8a16",
 ];
 
 export const isStreamingSupported = (model: string) => {
@@ -98,5 +102,7 @@ export const supportedModels = [
   "falcon-7b-instruct-inference",
   "llama-v2-7b-chat",
   "llama-v2-13b-chat",
-  "llama-v2-70b-chat"
+  "llama-v2-70b-chat",
+  "llama-v2-7b-chat-w8a16",
+  "llama-v2-13b-chat-w8a16",
 ];
