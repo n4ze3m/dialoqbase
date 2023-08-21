@@ -20,7 +20,7 @@ export default function Markdown({ message }: { message: string }) {
               PreTag="div"
             />
           ) : (
-            <code className={className} {...props}>
+            <code className={`${className} bg-gray-200 rounded-md p-1 text-sm`} {...props}>
               {children}
             </code>
           );
@@ -30,7 +30,7 @@ export default function Markdown({ message }: { message: string }) {
             <a
               target="_blank"
               rel="noreferrer"
-              className="text-blue-500 hover:underline"
+              className="text-blue-500 text-sm hover:underline"
               {...props}
             >
               {props.children}
@@ -39,21 +39,24 @@ export default function Markdown({ message }: { message: string }) {
         },
         li({ node, ...props }) {
           return (
-            <li className="list-decimal marker:text-gray-500" {...props}>
+            <li
+              className="list-decimal text-sm marker:text-gray-500"
+              {...props}
+            >
               {props.children}
             </li>
           );
         },
         ul({ node, ...props }) {
           return (
-            <ul className="mx-2" {...props}>
+            <ul className="mx-2 text-sm" {...props}>
               {props.children}
             </ul>
           );
         },
         ol({ node, ...props }) {
           return (
-            <ul className="mx-2" {...props}>
+            <ul className="mx-2 text-sm" {...props}>
               {props.children}
             </ul>
           );
@@ -105,6 +108,61 @@ export default function Markdown({ message }: { message: string }) {
             <p className="text-sm" {...props}>
               {props.children}
             </p>
+          );
+        },
+        table({ node, ...props }) {
+          return (
+            <table
+              className="border-collapse border text-sm border-gray-300"
+              {...props}
+            >
+              {props.children}
+            </table>
+          );
+        },
+        thead({ node, ...props }) {
+          return (
+            <thead className="bg-gray-100" {...props}>
+              {props.children}
+            </thead>
+          );
+        },
+        tbody({ node, ...props }) {
+          return (
+            <tbody className="divide-y divide-gray-300" {...props}>
+              {props.children}
+            </tbody>
+          );
+        },
+        tr({ node, ...props }) {
+          return (
+            <tr className="divide-x divide-gray-300" {...props}>
+              {props.children}
+            </tr>
+          );
+        },
+
+        th({ node, ...props }) {
+          return (
+            <th className="p-2" {...props}>
+              {props.children}
+            </th>
+          );
+        },
+
+        td({ node, ...props }) {
+          return (
+            <td className="p-2" {...props}>
+              {props.children}
+            </td>
+          );
+        },
+
+        blockquote({ node, ...props }) {
+          return (
+            <blockquote className="border-l-4 border-gray-300 pl-2" {...props}>
+              {props.children}
+            </blockquote>
           );
         },
       }}

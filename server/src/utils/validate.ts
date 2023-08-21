@@ -18,6 +18,8 @@ export const apiKeyValidaton = (embeddingsType: string) => {
             return process.env.HUGGINGFACEHUB_API_KEY ? process.env.HUGGINGFACEHUB_API_KEY.length > 0 : false;
         case "anthropic":
             return process.env.ANTHROPIC_API_KEY ? process.env.ANTHROPIC_API_KEY.length > 0 : false;
+        case "fireworks":
+            return process.env.FIREWORKS_API_KEY ? process.env.FIREWORKS_API_KEY.length > 0 : false;
         default:
             true
     }
@@ -37,5 +39,7 @@ export const apiKeyValidatonMessage = (embeddingsType: string) => {
             return "Please add GOOGLE_API_KEY to your .env file"
         case "anthropic":
             return "Please add ANTHROPIC_API_KEY to your .env file"
+        case "fireworks":
+            return "Please add FIREWORKS_API_KEY to your .env file"
     }
 }
