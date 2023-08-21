@@ -106,7 +106,7 @@ export default defineConfig({
     ],
     footer: {
       message: "MIT Licensed Open Source Project",
-      copyright: "Copyright © 2023 Muhammed Nazeem",
+      copyright: "Copyright © 2023 Muhammed Nazeem  & Dialoqbase Contributors",
     },
   },
 });
