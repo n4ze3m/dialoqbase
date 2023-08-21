@@ -15,11 +15,11 @@ Dialoqbase is an open-source application designed to facilitate the creation of 
 > **Warning**
 > This project is a side project and is still under development. Use it at your own risk
 
-Here's a demo of how it works (v0.0.1):
+Here's a demo of how it works (v0.0.23):
 
 <div align="center">
 
-[![DialoqBase Demo](https://img.youtube.com/vi/Kktfs8JI4yI/0.jpg)](https://www.youtube.com/watch?v=Kktfs8JI4yI)
+[![DialoqBase Demo](https://img.youtube.com/vi/D3X3ZIYsT_w/0.jpg)](https://www.youtube.com/watch?v=D3X3ZIYsT_w)
 </div>
 
 Want to check more demo videos? Follow me on [Twitter](https://twitter.com/n4ze3m) or [BlueSky](https://bsky.app/profile/n4ze3m.com) for more updates.
