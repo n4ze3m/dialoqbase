@@ -32,6 +32,17 @@ Here is a list of chat models that are currently supported by dialoqbase:
 
 * chat-bison-001
 
+
+### Llama via Fireworks.ai
+
+* llama v2 7b
+
+* llama v2 13b
+
+* llama v2 70b
+
+Note: In order to use Llama models you need to provide [fireworks.ai](https://fireworks.ai/) API key. You can get a free API key from [here](https://fireworks.ai/).
+
 ### Embedding Models
 
 Here is a list of embedding models that are currently supported by dialoqbase:
