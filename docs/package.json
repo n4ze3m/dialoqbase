@@ -2,12 +2,13 @@
     "name": "dialoqbase-docs",
     "version": "0.0.1",
     "description": "docs for dialoqbase",
+    "type": "module",
     "scripts": {
         "docs:dev": "vitepress dev . --port 5323",
         "docs:build": "vitepress build .",
         "docs:preview": "vitepress preview ."
     },
     "dependencies": {
-        "vitepress": "1.0.0-beta.3"
+        "vitepress": "^1.0.0-rc.4"
     }
 }

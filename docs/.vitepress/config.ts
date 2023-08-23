@@ -5,6 +5,7 @@ export default defineConfig({
   title: "Dialoqbase",
   description: "Create chatbots with ease",
   lastUpdated: true,
+  
   head: [
     // [
     //   "script",
@@ -36,6 +37,9 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     logo: "/logo.png",
+    search: {
+      provider: 'local'
+    },
     nav: [
       { text: "Home", link: "/" },
       { text: "Guide", link: "/guide/what-is-dialoqbase" },
@@ -109,4 +113,7 @@ export default defineConfig({
       copyright: "Copyright © 2023 Muhammed Nazeem  & Dialoqbase Contributors",
     },
   },
+  sitemap: {
+    hostname: "https://dialoqbase.n4ze3m.com",
+  }
 });
