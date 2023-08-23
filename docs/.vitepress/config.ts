@@ -5,7 +5,7 @@ export default defineConfig({
   title: "Dialoqbase",
   description: "Create chatbots with ease",
   lastUpdated: true,
-  
+
   head: [
     // [
     //   "script",
@@ -38,7 +38,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     logo: "/logo.png",
     search: {
-      provider: 'local'
+      provider: "local",
     },
     nav: [
       { text: "Home", link: "/" },
@@ -84,23 +84,23 @@ export default defineConfig({
           {
             text: "Discord (experimental)",
             link: "/guide/integration/discord",
-          }
-        ]
+          },
+        ],
       },
       {
         text: "Development",
         collapsed: false,
         items: [
           {
-            text:"Running locally for development",
+            text: "Running locally for development",
             link: "/guide/running-locally-for-development",
           },
           {
             text: "Transitioning from Single-User to Multi-User mode",
             link: "/guide/transitioning-from-single-user-to-multi-user-mode",
-          }
-        ]
-      }
+          },
+        ],
+      },
     ],
 
     socialLinks: [
@@ -115,5 +115,5 @@ export default defineConfig({
   },
   sitemap: {
     hostname: "https://dialoqbase.n4ze3m.com",
-  }
+  },
 });
