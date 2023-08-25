@@ -43,6 +43,7 @@ export const chatModelProvider = (
       return new DialoqbaseFireworksModel({
         model: fireworksModels[modelName],
         temperature: temperature,
+        is_chat: !notChatModels.includes(modelName),
         ...otherFields,
       });
     default:
@@ -69,6 +70,8 @@ export const fireworksModels: {
   "llama-v2-70b-chat": "accounts/fireworks/models/llama-v2-70b-chat",
   "llama-v2-7b-chat-w8a16": "accounts/fireworks/models/llama-v2-7b-chat-w8a16",
   "llama-v2-13b-chat-w8a16": "accounts/fireworks/models/llama-v2-13b-chat-w8a16",
+  "llama-v2-13b-code-instruct": "accounts/fireworks/models/llama-v2-13b-code-instruct",
+  "llama-v2-34b-code-instruct-w8a16": "accounts/fireworks/models/llama-v2-34b-code-instruct-w8a16",
 };
 
 export const streamingSupportedModels = [
@@ -84,11 +87,19 @@ export const streamingSupportedModels = [
   "llama-v2-70b-chat",
   "llama-v2-7b-chat-w8a16",
   "llama-v2-13b-chat-w8a16",
+  "llama-v2-13b-code-instruct",
+  "llama-v2-34b-code-instruct-w8a16",
 ];
 
 export const isStreamingSupported = (model: string) => {
   return streamingSupportedModels.includes(model);
 };
+
+
+export const notChatModels = [
+  "llama-v2-13b-code-instruct",
+  "llama-v2-34b-code-instruct-w8a16",
+]
 
 export const supportedModels = [
   "gpt-3.5-turbo",
@@ -105,4 +116,6 @@ export const supportedModels = [
   "llama-v2-70b-chat",
   "llama-v2-7b-chat-w8a16",
   "llama-v2-13b-chat-w8a16",
+  "llama-v2-13b-code-instruct",
+  "llama-v2-34b-code-instruct-w8a16",
 ];

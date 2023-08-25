@@ -109,6 +109,28 @@ export const deleteBotByIdHandler = async (
     },
   });
 
+  const botPlayground = await prisma.botPlayground.findMany({
+    where: {
+      botId: bot.id,
+    },
+  });
+
+  if (botPlayground.length > 0) {
+    await prisma.botPlaygroundMessage.deleteMany({
+      where: {
+        botPlaygroundId: {
+          in: botPlayground.map((bp) => bp.id),
+        },
+      },
+    });
+  }
+
+  await prisma.botPlayground.deleteMany({
+    where: {
+      botId: bot.id,
+    }
+  });
+
   await prisma.bot.delete({
     where: {
       id: bot.id,
