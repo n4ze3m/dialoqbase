@@ -19,10 +19,11 @@ declare interface DialoqbaseFireworksModelInput {
 }
 
 interface ChatCompletionRequest {
-  messages: {
+  messages?: {
     role: string;
     content: string;
   }[];
+  prompt?: string;
   stream?: boolean;
   temperature?: number;
   top_p?: number;
@@ -110,7 +111,11 @@ export class DialoqbaseFireworksModel extends BaseChatModel
       content: message.content,
     }));
 
-    console.log(this.model)
+    const prompt = messagesMapped.reduce((acc, message) => {
+      return `[INST]${message.content}\n[/INST]`;
+    }, "");
+
+    console.log(this.model);
 
     let data = this.streaming
       ? await new Promise<any>((resolve, reject) => {
@@ -121,10 +126,12 @@ export class DialoqbaseFireworksModel extends BaseChatModel
         this.completionWithRetry(
           {
             ...params,
-            messages: messagesMapped,
+            messages: this.is_chat ? messagesMapped : undefined,
+            prompt: !this.is_chat ? prompt : undefined,
           },
           options?.signal,
           (event) => {
+            // console.log(event.data);
             if (event.data === "[DONE]") {
               if (resolved || rejected) {
                 return;
@@ -150,37 +157,39 @@ export class DialoqbaseFireworksModel extends BaseChatModel
                 model: string;
                 choices: {
                   index: number;
-                  delta: {
+                  delta?: {
                     content?: string;
                     role?: string;
                   };
+                  text?: string;
                   finish_reason: string;
                 }[];
               };
 
               if (!response) {
                 if (
-                  message.choices.length > 0 &&
-                  message.choices[0].delta?.content
+                  message.choices.length > 0
                 ) {
                   response = {
                     id: message.id,
                     object: message.object,
                     created: message.created,
-                    result: message.choices[0].delta.content,
+                    result: message.choices[0]?.delta?.content ||
+                      message?.choices[0]?.text || "",
                   };
                 }
               } else {
                 if (
-                  message.choices.length > 0 &&
-                  message.choices[0].delta?.content
+                  message.choices.length > 0
                 ) {
                   response.created = message.created;
-                  response.result += message.choices[0].delta.content;
+                  response.result += message.choices[0]?.delta?.content ||
+                    message?.choices[0]?.text || "";
                 }
               }
               void runManager?.handleLLMNewToken(
-                message?.choices[0]?.delta?.content ?? "",
+                message.choices[0]?.delta?.content ||
+                  message?.choices[0]?.text || "",
               );
             } catch (e) {
               console.error(e);
@@ -205,13 +214,14 @@ export class DialoqbaseFireworksModel extends BaseChatModel
       : await this.completionWithRetry(
         {
           ...params,
-          messages: messagesMapped,
+          messages: this.is_chat ? messagesMapped : undefined,
+          prompt: !this.is_chat ? prompt : undefined,
         },
         options?.signal,
       );
-
-    const text = data?.result ?? data?.choices[0]?.message?.content ?? "";
-
+    // console.log(data);
+    const text = data?.result ?? data?.choices[0]?.message?.content ??
+      data?.choices[0]?.text ?? "";
 
     const generations: ChatGeneration[] = [];
 
