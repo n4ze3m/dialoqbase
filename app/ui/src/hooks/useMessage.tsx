@@ -162,7 +162,6 @@ export const useMessage = () => {
   };
 
   const onSubmit = async (message: string) => {
-    console.log("is_streaming", streaming);
     if (streaming) {
       await streamingRequest(message);
     } else {

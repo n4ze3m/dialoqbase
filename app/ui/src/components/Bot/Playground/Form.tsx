@@ -1,9 +1,24 @@
 import { useMutation } from "@tanstack/react-query";
 import { useMessage } from "../../../hooks/useMessage";
 import { useForm } from "@mantine/form";
+import React from "react";
 
 export const PlaygroundgForm = () => {
   const { onSubmit } = useMessage();
+
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+  React.useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      const increaseHeight = () => {
+        textarea.style.height = "auto";
+        textarea.style.height = `${Math.min(textarea.scrollHeight, 300)}px`;
+      };
+      increaseHeight();
+      textarea.addEventListener("input", increaseHeight);
+      return () => textarea.removeEventListener("input", increaseHeight);
+    }
+  }, []);
 
   const form = useForm({
     initialValues: {
@@ -24,6 +39,13 @@ export const PlaygroundgForm = () => {
     }
   );
 
+  const resetHeight = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "auto";
+    }
+  };
+
   return (
     <div className="p-3 ">
       <div className="flex-grow space-y-6">
@@ -31,6 +53,7 @@ export const PlaygroundgForm = () => {
           <form
             onSubmit={form.onSubmit(async (value) => {
               form.reset();
+              resetHeight();
               await sendMessage(value.message);
             })}
             className="shrink-0 flex-grow  flex items-center "
@@ -44,16 +67,14 @@ export const PlaygroundgForm = () => {
                     e.preventDefault();
                     form.onSubmit(async (value) => {
                       form.reset();
+                      resetHeight();
                       await sendMessage(value.message);
-                      // await sendMessage(value.message);
+                      // reset the height of the textarea
                     })();
                   }
                 }}
-                style={{
-                  height: "24px",
-                  maxHeight: "200px",
-                  overflowY: "hidden",
-                }}
+                ref={textareaRef}
+                rows={1}
                 className="m-0 w-full resize-none border-0 bg-transparent p-0 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent pl-2 md:pl-0"
                 required
                 placeholder="Type your message…"
