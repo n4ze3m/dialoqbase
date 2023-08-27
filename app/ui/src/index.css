@@ -33,3 +33,19 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+@media (max-width: 720px) {
+  pre {
+    width: calc(100vw - 110px);
+  }
+}
+
+pre:has(div.code) {
+  padding: 0;
+  margin: 0;
+}
+
+markdown-processing { 
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}

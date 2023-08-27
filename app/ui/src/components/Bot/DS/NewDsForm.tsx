@@ -1,9 +1,4 @@
 import { useState } from "react";
-import {
-  GlobeAltIcon,
-  // DocumentArrowUpIcon,
-  DocumentTextIcon,
-} from "@heroicons/react/20/solid";
 import { Form, notification } from "antd";
 import { useParams } from "react-router-dom";
 import api from "../../../services/api";
@@ -11,11 +6,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BotForm } from "../../Common/BotForm";
 import axios from "axios";
 
-const availableSources = [
-  { id: 1, title: "Website", icon: GlobeAltIcon },
-  // { id: 2, title: "PDF", icon: DocumentArrowUpIcon },
-  { id: 3, title: "Text", icon: DocumentTextIcon },
-];
 // @ts-ignore
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -62,10 +52,12 @@ export const NewDsForm = ({ onClose }: { onClose: () => void }) => {
         description: "New Source added successfully.",
       });
       form.resetFields();
-      setSelectedSource(availableSources[0]);
+      setSelectedSource({
+        id: 1,
+        value: "Website",
+      });
     },
     onError: (e) => {
-      console.log(e);
       if (axios.isAxiosError(e)) {
         const message =
           e.response?.data?.message ||
