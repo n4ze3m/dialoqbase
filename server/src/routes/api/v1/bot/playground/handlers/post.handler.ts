@@ -85,7 +85,6 @@ export const chatRequestHandler = async (
     chat_history: chat_history,
   });
 
-
   let historyId = history_id;
 
   if (!historyId) {
@@ -105,7 +104,7 @@ export const chatRequestHandler = async (
       botPlaygroundId: historyId,
     },
   });
-  
+
   await prisma.botPlaygroundMessage.create({
     data: {
       type: "ai",
@@ -115,7 +114,6 @@ export const chatRequestHandler = async (
       sources: response?.sourceDocuments,
     },
   });
-
 
   return {
     bot: response,
@@ -211,7 +209,9 @@ export const chatRequestStreamHandler = async (
             return reply.sse({
               id: "",
               event: "chunk",
-              data: token || "",
+              data: JSON.stringify({
+                message: token || "",
+              }),
             });
             // } else {
             // console.log("done");
