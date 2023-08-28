@@ -15,6 +15,9 @@ hero:
     - theme: alt
       text: View on GitHub
       link: https://github.com/n4ze3m/dialoqbase
+    - theme: alt
+      text: Buy me a coffee ☕
+      link: https://www.ko-fi.com/n4ze3m
 
 features:
   - title: Open Source

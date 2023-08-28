@@ -43,6 +43,10 @@ export default defineConfig({
     nav: [
       { text: "Home", link: "/" },
       { text: "Guide", link: "/guide/what-is-dialoqbase" },
+      {
+        text: "AI Providers",
+        link: "/guide/ai-providers/openai",
+      },
       { text: "Self Hosting", link: "/guide/self-hosting" },
     ],
 
@@ -101,6 +105,36 @@ export default defineConfig({
           },
         ],
       },
+      {
+        text: "AI Providers",
+        collapsed: false,
+        items: [
+          {
+            text: "OpenAI",
+            link: "/guide/ai-providers/openai",
+          },
+          {
+            text: "Fireworks",
+            link: "/guide/ai-providers/fireworks",
+          },
+          {
+            text: "Google",
+            link: "/guide/ai-providers/google",
+          },
+          {
+            text: "HuggingFace",
+            link: "/guide/ai-providers/huggingface",
+          },
+          {
+            text: "Cohere",
+            link: "/guide/ai-providers/cohere",
+          },
+          {
+            text: "TensorFlow",
+            link: "/guide/ai-providers/tensorflow",
+          }
+        ]
+      }
     ],
 
     socialLinks: [
