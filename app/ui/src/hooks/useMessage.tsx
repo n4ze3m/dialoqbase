@@ -45,6 +45,8 @@ export const useMessage = () => {
     setHistoryId,
     isLoading,
     setIsLoading,
+    isProcessing,
+    setIsProcessing
   } = useStoreMessage();
 
   const param = useParams<{ id: string; history_id?: string }>();
@@ -151,6 +153,7 @@ export const useMessage = () => {
             setMessages(newMessage);
           }
           count++;
+          setIsProcessing(true);
         } else if (type === "result") {
           const responseData = JSON.parse(message) as BotResponse;
           newMessage[appendingIndex].message = responseData.bot.text;
@@ -158,6 +161,7 @@ export const useMessage = () => {
           setHistoryId(responseData.history_id);
           setHistory(responseData.history);
           setMessages(newMessage);
+          setIsProcessing(false);
           reader.releaseLock();
           break;
         }
@@ -192,5 +196,6 @@ export const useMessage = () => {
     setIsFirstMessage,
     isLoading,
     setIsLoading,
+    isProcessing,
   };
 };

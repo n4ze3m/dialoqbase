@@ -9,7 +9,7 @@ import { ClipboardIcon, CheckIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { Tooltip } from "antd";
 import Mermaid from "./Mermaid";
-// import { useMessage } from "../../hooks/useMessage";
+import { useMessage } from "../../hooks/useMessage";
 
 export default function Markdown({ message }: { message: string }) {
   const [isBtnPressed, setIsBtnPressed] = React.useState(false);
@@ -23,6 +23,7 @@ export default function Markdown({ message }: { message: string }) {
       }, 4000);
     }
   }, [isBtnPressed]);
+  const { isProcessing } = useMessage();
 
   return (
     <ReactMarkdown
@@ -32,8 +33,8 @@ export default function Markdown({ message }: { message: string }) {
       components={{
         code({ node, inline, className, children, ...props }) {
           // // if language is mermaid
-          if (className === "language-mermaid") {
-            return <Mermaid code={children[0] as string} />;  
+          if (className === "language-mermaid" && !isProcessing) {
+            return <Mermaid code={children[0] as string} />;
           }
           const match = /language-(\w+)/.exec(className || "");
           return !inline ? (
