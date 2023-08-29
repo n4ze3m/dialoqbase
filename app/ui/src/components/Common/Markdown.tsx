@@ -3,10 +3,13 @@ import remarkGfm from "remark-gfm";
 import { nightOwl } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import rehypeMathjax from "rehype-mathjax";
 import remarkMath from "remark-math";
+// import remhypeMrmaid from "rehype-mermaidjs"
 import ReactMarkdown from "react-markdown";
 import { ClipboardIcon, CheckIcon } from "@heroicons/react/24/outline";
 import React from "react";
-// import { useMessage } from "../../hooks/useMessage";
+import { Tooltip } from "antd";
+import Mermaid from "./Mermaid";
+import { useMessage } from "../../hooks/useMessage";
 
 export default function Markdown({ message }: { message: string }) {
   const [isBtnPressed, setIsBtnPressed] = React.useState(false);
@@ -20,15 +23,19 @@ export default function Markdown({ message }: { message: string }) {
       }, 4000);
     }
   }, [isBtnPressed]);
+  const { isProcessing } = useMessage();
 
   return (
     <ReactMarkdown
       className={`prose-invert flex-1 `}
-      // white space
       remarkPlugins={[remarkGfm, remarkMath]}
       rehypePlugins={[rehypeMathjax]}
       components={{
         code({ node, inline, className, children, ...props }) {
+          // // if language is mermaid
+          if (className === "language-mermaid" && !isProcessing) {
+            return <Mermaid code={children[0] as string} />;
+          }
           const match = /language-(\w+)/.exec(className || "");
           return !inline ? (
             <div className="code relative text-base bg-gray-800 rounded-md overflow-hidden">
@@ -38,19 +45,21 @@ export default function Markdown({ message }: { message: string }) {
                 </span>
 
                 <div className="flex items-center">
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(children[0] as string);
-                      setIsBtnPressed(true);
-                    }}
-                    className="flex gap-1.5 items-center rounded bg-none p-1 text-xs text-gray-200 hover:bg-gray-700 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-                  >
-                    {!isBtnPressed ? (
-                      <ClipboardIcon className="h-4 w-4" />
-                    ) : (
-                      <CheckIcon className="h-4 w-4 text-green-400" />
-                    )}
-                  </button>
+                  <Tooltip title="Copy to clipboard">
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(children[0] as string);
+                        setIsBtnPressed(true);
+                      }}
+                      className="flex gap-1.5 items-center rounded bg-none p-1 text-xs text-gray-200 hover:bg-gray-700 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                    >
+                      {!isBtnPressed ? (
+                        <ClipboardIcon className="h-4 w-4" />
+                      ) : (
+                        <CheckIcon className="h-4 w-4 text-green-400" />
+                      )}
+                    </button>
+                  </Tooltip>
                 </div>
               </div>
               <SyntaxHighlighter
