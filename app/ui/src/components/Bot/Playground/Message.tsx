@@ -1,7 +1,4 @@
-import {
-  CheckIcon,
-  ClipboardIcon,
-} from "@heroicons/react/24/outline";
+import { CheckIcon, ClipboardIcon } from "@heroicons/react/24/outline";
 import { Message } from "../../../store";
 import Markdown from "../../Common/Markdown";
 import React from "react";

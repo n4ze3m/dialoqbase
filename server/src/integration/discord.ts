@@ -19,87 +19,94 @@ export default class DiscordBot {
     identifier: string,
     token: string,
     slashCommands: string = "/hey",
-    slashCommandsDescription: string = "Say hey to the bot"
+    slashCommandsDescription: string = "Say hey to the bot",
   ) {
-    if (this._clients.has(identifier)) {
-      await this.disconnect(identifier);
-    }
-
-    const bot = new Client({ intents: [GatewayIntentBits.Guilds] });
-
-    this._clients.set(identifier, bot);
-
-    bot.on("ready", async () => {
-      console.log(`Logged in as ${bot.user?.tag}!`);
-      const clientId = bot.user?.id;
-      if (clientId) {
-        await this.setCommand(
-          token,
-          clientId,
-          slashCommands,
-          slashCommandsDescription
-        );
+    try {
+      if (this._clients.has(identifier)) {
+        await this.disconnect(identifier);
       }
-    });
 
-    bot.on("interactionCreate", async (interaction) => {
-      console.log(interaction);
-      if (!interaction.isCommand()) return;
+      const bot = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-      if (interaction.commandName === slashCommands) {
-        if (!interaction.guildId) {
-          await interaction.reply("Bot only works in channels");
-          return;
+      this._clients.set(identifier, bot);
+
+      bot.on("ready", async () => {
+        console.log(`Logged in as ${bot.user?.tag}!`);
+        const clientId = bot.user?.id;
+        if (clientId) {
+          await this.setCommand(
+            token,
+            clientId,
+            slashCommands,
+            slashCommandsDescription,
+          );
         }
-        const userMessage = interaction.options.get("message");
-        const message = userMessage?.value;
-        if (!message) {
-          await interaction.reply("Message is required");
-          return;
-        }
-        const channel_id = interaction.channelId;
-        const user_id = interaction.user.id;
-        const guild_id = interaction.guildId;
-        const chat_id = `${guild_id}-${channel_id}-${user_id}`;
+      });
 
-        const reply = await interaction.reply({
-          content: "_Hold on, I'm thinking 🤔..._",
-          fetchReply: true,
-        });
+      bot.on("interactionCreate", async (interaction) => {
+        console.log(interaction);
+        if (!interaction.isCommand()) return;
 
-        const bot_response = await discordBotHandler(
-          identifier,
-          message.toString(),
-          chat_id
-        );
+        if (interaction.commandName === slashCommands) {
+          if (!interaction.guildId) {
+            await interaction.reply("Bot only works in channels");
+            return;
+          }
+          const userMessage = interaction.options.get("message");
+          const message = userMessage?.value;
+          if (!message) {
+            await interaction.reply("Message is required");
+            return;
+          }
+          const channel_id = interaction.channelId;
+          const user_id = interaction.user.id;
+          const guild_id = interaction.guildId;
+          const chat_id = `${guild_id}-${channel_id}-${user_id}`;
 
-        await reply.edit(`_${message}_\n
+          const reply = await interaction.reply({
+            content: "_Hold on, I'm thinking 🤔..._",
+            fetchReply: true,
+          });
+
+          const bot_response = await discordBotHandler(
+            identifier,
+            message.toString(),
+            chat_id,
+          );
+
+          await reply.edit(`_${message}_\n
 ${bot_response}
         `);
-      }
-
-      if (interaction.commandName === "clear") {
-        if (!interaction.guildId) {
-          await interaction.reply("Bot only works in channels");
-          return;
         }
-        const channel_id = interaction.channelId;
-        const user_id = interaction.user.id;
-        const guild_id = interaction.guildId;
 
-        const chat_id = `${guild_id}-${channel_id}-${user_id}`;
+        if (interaction.commandName === "clear") {
+          if (!interaction.guildId) {
+            await interaction.reply("Bot only works in channels");
+            return;
+          }
+          const channel_id = interaction.channelId;
+          const user_id = interaction.user.id;
+          const guild_id = interaction.guildId;
 
-        const reply = await interaction.reply({
-          content: "_Deleting chat history..._",
-        });
+          const chat_id = `${guild_id}-${channel_id}-${user_id}`;
 
-        const bot_response = await clearDiscordChatHistory(identifier, chat_id);
+          const reply = await interaction.reply({
+            content: "_Deleting chat history..._",
+          });
 
-        await reply.edit(bot_response);
-      }
-    });
+          const bot_response = await clearDiscordChatHistory(
+            identifier,
+            chat_id,
+          );
 
-    bot.login(token);
+          await reply.edit(bot_response);
+        }
+      });
+
+      bot.login(token);
+    } catch (error) {
+      console.log("[DiscordBot] Error", error);
+    }
   }
 
   static async isConnect(identifier: string) {
@@ -125,7 +132,7 @@ ${bot_response}
     token: string,
     clientId: string,
     slashCommands: string = "/hey",
-    slashCommandsDescription: string = "Say hey to the bot"
+    slashCommandsDescription: string = "Say hey to the bot",
   ) {
     try {
       const rest = new REST({ version: "10" }).setToken(token);

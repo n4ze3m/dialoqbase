@@ -31,7 +31,7 @@ export default function DashboardLayout({
           {() => (
             <>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="flex h-16 justify-between">
+                <div className="flex h-14 justify-between">
                   <Link
                     to="/"
                     className="focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700 flex items-center mr-4"

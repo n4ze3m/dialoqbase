@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import api from "../../services/api";
 import { ChevronRightIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { Empty } from "antd";
+import { sources } from "../../utils/sources";
 
 export const DashboardGrid = () => {
   const { data, status } = useQuery(["getAllBots"], async () => {
@@ -19,9 +20,7 @@ export const DashboardGrid = () => {
             <div
               className="flex animate-pulse h-28 px-3 py-4 bg-gray-400 rounded-md shadow-sm hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
               key={item}
-            >
-              
-            </div>
+            ></div>
           ))}
         </div>
       )}
@@ -36,27 +35,40 @@ export const DashboardGrid = () => {
               className="flex rounded-md shadow-sm hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
               key={bot.id}
             >
-              <div className="pb-9 flex flex-1  items-center justify-between truncate rounded-md border border-gray-200 bg-white">
-                <div className="flex-1 truncate px-4 py-4">
-                  <h3 className="text-xl font-semibold text-gray-900 hover:text-gray-600 flex-shrink truncate">
-                    {bot.name}
-                  </h3>
-                  <div className="w-full">
-                    <div className="flex items-end justify-between">
-                      <span className="text-xs lowercase text-scale-1000 text-gray-600">
-                        {bot.model}
-                      </span>
+              <div className="w-full truncate rounded-md border border-gray-200 bg-white">
+                <div className="flex flex-1 items-center justify-between ">
+                  <div className="flex-1 truncate px-4 py-4">
+                    <h3 className="text-xl font-semibold text-gray-900 hover:text-gray-600 flex-shrink truncate">
+                      {bot.name}
+                    </h3>
+                    <div className="w-full">
+                      <div className="flex items-end justify-between">
+                        <span className="text-xs lowercase text-scale-1000 text-gray-600">
+                          {bot.model}
+                        </span>
+                      </div>
                     </div>
                   </div>
+                  <div className="flex-shrink-0 pr-2">
+                    <button
+                      type="button"
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    >
+                      <span className="sr-only">Open options</span>
+                      <ChevronRightIcon
+                        className="h-6 w-6"
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex-shrink-0 pr-2">
-                  <button
-                    type="button"
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  >
-                    <span className="sr-only">Open options</span>
-                    <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-                  </button>
+
+                <div className="px-4 my-3 flex flex-wrap gap-2 text-gray-500 text-xs">
+                  {bot.source.map((source: any) => (
+                    <span
+                    title={`${source.type} source`}
+                    >{sources[source.type as keyof typeof sources]}</span>
+                  ))}
                 </div>
               </div>
             </Link>
