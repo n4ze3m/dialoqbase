@@ -3,7 +3,7 @@ import React, { Fragment } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu } from "@headlessui/react";
-import { Avatar } from "antd";
+import Avatar from "../components/Common/Avatar";
 
 //@ts-ignore
 function classNames(...classes) {
@@ -52,9 +52,8 @@ export default function DashboardLayout({
                       <div>
                         <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm">
                           <span className="sr-only">Open user menu</span>
-                          <Avatar shape="square">
-                            {profile?.username?.charAt(0).toUpperCase()}
-                          </Avatar>
+                          <Avatar username={profile?.username || "admin"} />
+
                         </Menu.Button>
                       </div>
                       <Transition
@@ -107,9 +106,7 @@ export default function DashboardLayout({
                 <div className="border-t border-gray-200 pt-4 pb-3">
                   <div className="flex items-center px-4">
                     <div className="flex-shrink-0">
-                      <Avatar shape="square">
-                        {profile?.username?.charAt(0).toUpperCase()}
-                      </Avatar>
+                      <Avatar username={profile?.username || "admin"} />
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium text-gray-800">

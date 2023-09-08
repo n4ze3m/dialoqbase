@@ -12,7 +12,7 @@ export const sources = {
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="2"
-      className="w-5 h-5"
+      className="w-4 h-4"
       viewBox="0 0 24 24"
     >
       <path d="M21.54 15H17a2 2 0 00-2 2v4.54M7 3.34V5a3 3 0 003 3v0a2 2 0 012 2v0c0 1.1.9 2 2 2v0a2 2 0 002-2v0c0-1.1.9-2 2-2h3.17M11 21.95V18a2 2 0 00-2-2v0a2 2 0 01-2-2v-1a2 2 0 00-2-2H2.05"></path>
@@ -29,7 +29,7 @@ export const sources = {
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="2"
-      className="w-5 h-5"
+      className="w-4 h-4"
       viewBox="0 0 24 24"
     >
       <path d="M17 6.1H3M21 12.1H3M15.1 18H3"></path>
@@ -45,7 +45,7 @@ export const sources = {
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="2"
-        className="w-5 h-5"
+        className="w-4 h-4"
       viewBox="0 0 24 24"
     >
       <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"></path>
@@ -62,7 +62,7 @@ export const sources = {
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="2"
-        className="w-5 h-5"
+        className="w-4 h-4"
       viewBox="0 0 24 24"
     >
       <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"></path>
@@ -82,7 +82,7 @@ export const sources = {
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="2"
-      className="w-5 h-5"
+      className="w-4 h-4"
       viewBox="0 0 24 24"
     >
       <path d="M12 3v18"></path>
@@ -100,14 +100,14 @@ export const sources = {
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="2"
-      className="w-5 h-5"
+      className="w-4 h-4"
       viewBox="0 0 24 24"
     >
       <path d="M17 6.1H3M21 12.1H3M15.1 18H3"></path>
     </svg>
   ),
-  crawl: <SpiderIcon className="h-5 w-5" />,
-  github: <GithubIcon className="h-5 w-5" />,
+  crawl: <SpiderIcon className="h-4 w-4" />,
+  github: <GithubIcon className="h-4 w-4" />,
   mp3: (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -118,7 +118,7 @@ export const sources = {
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="2"
-      className="w-5 h-5"
+      className="w-4 h-4"
       viewBox="0 0 24 24"
     >
       <path d="M17.5 22h.5c.5 0 1-.2 1.4-.6.4-.4.6-.9.6-1.4V7.5L14.5 2H6c-.5 0-1 .2-1.4.6C4.2 3 4 3.5 4 4v3"></path>
@@ -137,7 +137,7 @@ export const sources = {
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="2"
-      className="w-5 h-5"
+      className="w-4 h-4"
       viewBox="0 0 24 24"
     >
       <path d="M4 8V4a2 2 0 012-2h8.5L20 7.5V20a2 2 0 01-2 2H4"></path>

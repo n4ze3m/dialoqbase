@@ -12,7 +12,8 @@ import {
 
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Avatar, Tooltip } from "antd";
+import {  Tooltip } from "antd";
+import Avatar from "../components/Common/Avatar";
 
 const navigation = [
   {
@@ -26,7 +27,7 @@ const navigation = [
     icon: CircleStackIcon,
   },
   {
-    name: "Integrations (beta)",
+    name: "Integrations",
     href: "/bot/:id/integrations",
     icon: PuzzlePieceIcon,
   },
@@ -241,9 +242,7 @@ export default function BotLayout({
                   <div>
                     <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm">
                       <span className="sr-only">Open usermenu</span>
-                      <Avatar shape="square">
-                        {profile?.username?.charAt(0).toUpperCase()}
-                      </Avatar>
+                      <Avatar username={profile?.username || "admin"} />
                     </Menu.Button>
                   </div>
                   <Transition
