@@ -1,12 +1,14 @@
-import {
-  CheckIcon,
-  ClipboardIcon,
-} from "@heroicons/react/24/outline";
+import { CheckIcon, ClipboardIcon } from "@heroicons/react/24/outline";
 import { Message } from "../../../store";
 import Markdown from "../../Common/Markdown";
 import React from "react";
+import { removeUUID } from "../../../utils/filename";
 
-export const PlaygroundMessage = (props: Message) => {
+type Props = Message & {
+  onSourceClick(source: any): void;
+};
+
+export const PlaygroundMessage = (props: Props) => {
   const [isBtnPressed, setIsBtnPressed] = React.useState(false);
 
   React.useEffect(() => {
@@ -46,6 +48,24 @@ export const PlaygroundMessage = (props: Message) => {
                 </div>
               </div>
             </div>
+
+            {props.isBot && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {props?.sources?.map((source, index) => (
+                  <button
+                    key={index}
+                    onClick={props.onSourceClick.bind(null, source)}
+                    className="inline-flex cursor-pointer transition-shadow duration-300 ease-in-out hover:shadow-lg  items-center rounded-md bg-gray-100 p-1 text-xs text-gray-800 border border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 opacity-80 hover:opacity-100"
+                  >
+                    <span className="text-xs">
+                      {removeUUID(`${
+                        source?.metadata?.path || source?.metadata?.source
+                      }`.replace("./uploads/", ""))}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
           {props.isBot && (
             <button

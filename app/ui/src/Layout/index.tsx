@@ -3,7 +3,7 @@ import React, { Fragment } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu } from "@headlessui/react";
-import { Avatar } from "antd";
+import Avatar from "../components/Common/Avatar";
 
 //@ts-ignore
 function classNames(...classes) {
@@ -31,7 +31,7 @@ export default function DashboardLayout({
           {() => (
             <>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="flex h-16 justify-between">
+                <div className="flex h-14 justify-between">
                   <Link
                     to="/"
                     className="focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700 flex items-center mr-4"
@@ -52,9 +52,8 @@ export default function DashboardLayout({
                       <div>
                         <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm">
                           <span className="sr-only">Open user menu</span>
-                          <Avatar shape="square">
-                            {profile?.username?.charAt(0).toUpperCase()}
-                          </Avatar>
+                          <Avatar username={profile?.username || "admin"} />
+
                         </Menu.Button>
                       </div>
                       <Transition
@@ -107,9 +106,7 @@ export default function DashboardLayout({
                 <div className="border-t border-gray-200 pt-4 pb-3">
                   <div className="flex items-center px-4">
                     <div className="flex-shrink-0">
-                      <Avatar shape="square">
-                        {profile?.username?.charAt(0).toUpperCase()}
-                      </Avatar>
+                      <Avatar username={profile?.username || "admin"} />
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium text-gray-800">

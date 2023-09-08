@@ -14,40 +14,43 @@ export default class TelegramBot {
   }
 
   static async connect(identifier: string, token: string) {
-    if (this._clients.has(identifier)) {
-      await this.disconnect(identifier);
-    }
-
-    const bot = new Bot(token);
-    await bot.api.setMyCommands([
-      { command: "start", description: "Start the bot" },
-      { command: "ping", description: "Ping the bot" },
-    ]);
-
-    bot.command("start", (ctx) => ctx.reply("Hey, How can I assist you?"));
-    bot.command("ping", (ctx) => ctx.reply("pong"));
-    bot.on("message:text", async (ctx) => {
-      // check it's a group chat
-      if (ctx.chat.type !== "private") {
-        return ctx.reply("I can only work in private chats.");
+    try {
+      if (this._clients.has(identifier)) {
+        await this.disconnect(identifier);
       }
-      await ctx.replyWithChatAction(
-        "typing",
-      );
-      //  set messaging type
-      const user_id = ctx.from.id;
-      const message = await telegramBotHandler(
-        identifier,
-        ctx.message.text,
-        user_id,
-      );
-    
 
-      return await ctx.reply(message,);
-    });
-    bot.start();
-    bot.catch((err) => console.log(`${identifier} error: ${err}`));
-    this._clients.set(identifier, bot);
+      const bot = new Bot(token);
+      await bot.api.setMyCommands([
+        { command: "start", description: "Start the bot" },
+        { command: "ping", description: "Ping the bot" },
+      ]);
+
+      bot.command("start", (ctx) => ctx.reply("Hey, How can I assist you?"));
+      bot.command("ping", (ctx) => ctx.reply("pong"));
+      bot.on("message:text", async (ctx) => {
+        // check it's a group chat
+        if (ctx.chat.type !== "private") {
+          return ctx.reply("I can only work in private chats.");
+        }
+        await ctx.replyWithChatAction(
+          "typing",
+        );
+        //  set messaging type
+        const user_id = ctx.from.id;
+        const message = await telegramBotHandler(
+          identifier,
+          ctx.message.text,
+          user_id,
+        );
+
+        return await ctx.reply(message);
+      });
+      bot.start();
+      bot.catch((err) => console.log(`${identifier} error: ${err}`));
+      this._clients.set(identifier, bot);
+    } catch (error) {
+      console.log("[TelegramBot] error: ", error);
+    }
   }
 
   static async isConnect(identifier: string) {

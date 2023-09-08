@@ -100,6 +100,14 @@ export const getAllBotsHandler = async (
     orderBy: {
       createdAt: "desc",
     },
+    include: {
+      source: {
+        distinct: ["type"],
+        select: {
+          type: true,
+        }
+      }
+    }
   });
 
   return bots;

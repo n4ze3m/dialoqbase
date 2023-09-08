@@ -6,14 +6,14 @@ import {
   CircleStackIcon,
   CogIcon,
   ChatBubbleLeftIcon,
-  CodeBracketIcon,
   PuzzlePieceIcon,
   EyeDropperIcon,
 } from "@heroicons/react/24/outline";
 
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Avatar, Tooltip } from "antd";
+import {  Tooltip } from "antd";
+import Avatar from "../components/Common/Avatar";
 
 const navigation = [
   {
@@ -21,14 +21,13 @@ const navigation = [
     href: "/bot/:id",
     icon: ChatBubbleLeftIcon,
   },
-  { name: "Embed", href: "/bot/:id/embed", icon: CodeBracketIcon },
   {
     name: "Data Sources",
     href: "/bot/:id/data-sources",
     icon: CircleStackIcon,
   },
   {
-    name: "Integrations (beta)",
+    name: "Integrations",
     href: "/bot/:id/integrations",
     icon: PuzzlePieceIcon,
   },
@@ -216,7 +215,7 @@ export default function BotLayout({
         </div>
 
         <div className="flex flex-col">
-          <div className="sticky top-0 z-10 flex h-16  bg-white border-b border-gray-200 ">
+          <div className="sticky top-0 z-10 flex h-14  bg-white border-b border-gray-200 ">
             <button
               type="button"
               className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
@@ -243,9 +242,7 @@ export default function BotLayout({
                   <div>
                     <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm">
                       <span className="sr-only">Open usermenu</span>
-                      <Avatar shape="square">
-                        {profile?.username?.charAt(0).toUpperCase()}
-                      </Avatar>
+                      <Avatar username={profile?.username || "admin"} />
                     </Menu.Button>
                   </div>
                   <Transition

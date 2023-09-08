@@ -25,10 +25,7 @@ export default function LoginRoot() {
 
   const { login } = useAuth();
 
-  const {
-    mutateAsync: loginMutation,
-    isLoading,
-  } = useMutation(onLogin, {
+  const { mutateAsync: loginMutation, isLoading } = useMutation(onLogin, {
     onSuccess: (data) => {
       notification.success({
         message: "Success",
@@ -47,7 +44,7 @@ export default function LoginRoot() {
           description: message,
           placement: "bottomRight",
         });
-        return
+        return;
       }
 
       notification.error({
@@ -59,77 +56,90 @@ export default function LoginRoot() {
 
   return (
     <>
-      <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <img
-            className="mx-auto h-12 w-auto"
-            src="https://em-content.zobj.net/thumbs/120/openmoji/338/high-voltage_26a1.png"
-            alt="dialoqbase"
-          />
-          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-            Sign in to your account
-          </h2>
-        </div>
-
-        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <Form
-              layout="vertical"
-              className="space-y-6"
-              onFinish={loginMutation}
-            >
-              <Form.Item
-                name="username"
-                label="Username"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your username!",
-                  },
-                ]}
-              >
-                <div className="mt-1">
-                  <input
-                    autoComplete="username"
-                    className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                  />
-                </div>
-              </Form.Item>
-
-              <Form.Item
-                name="password"
-                label="Password"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your password!",
-                  },
-                ]}
-              >
-                <div className="mt-1">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                  />
-                </div>
-              </Form.Item>
-
-              <div>
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                  {
-                    isLoading ? "Loading..." : "Sign in"
-                  }
-                </button>
+      {" "}
+      <div className="flex min-h-full bg-white flex-1">
+        <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+          <div className="mx-auto w-full max-w-sm lg:w-96">
+            <div>
+              <div className="focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700 flex items-center">
+                <img className="h-8 w-auto" src="/logo.png" alt="Dialoqbase" />
+                <span className="text-md font-bold">Dialoqbase</span>
+                <span className="inline-block flex-shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 ml-2">
+                  {/* @ts-ignore */}
+                  {`v${__APP_VERSION__}`}
+                </span>
               </div>
-            </Form>
+              <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                Sign in to your account
+              </h2>
+            </div>
+
+            <div className="mt-10">
+              <div>
+                <Form
+                  layout="vertical"
+                  className="space-y-6"
+                  onFinish={loginMutation}
+                  requiredMark={false}
+                >
+                  {" "}
+                  <Form.Item
+                    name="username"
+                    label={
+                      <label className="block text-sm font-medium leading-6 text-gray-900">
+                        Username
+                      </label>
+                    }
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your username!",
+                      },
+                    ]}
+                  >
+                    <input
+                      autoComplete="username"
+                      placeholder="Username"
+                      className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset  sm:text-sm sm:leading-6 px-3"
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name="password"
+                    label={
+                      <label className="block text-sm font-medium leading-6 text-gray-900">
+                        Password
+                      </label>
+                    }
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your password!",
+                      },
+                    ]}
+                  >
+                    <input
+                      autoComplete="current-password"
+                      placeholder="Password"
+                      type="password"
+                      className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3"
+                    />
+                  </Form.Item>
+                  <div>
+                    <button
+                      type="submit"
+                      disabled={isLoading}
+                      className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                      {isLoading ? "Loading..." : "Sign in"}
+                    </button>
+                  </div>
+                </Form>
+              </div>
+            </div>
           </div>
+        </div>
+        <div className="relative hidden w-0 flex-1 lg:block">
+          <div className="absolute h-full w-full object-cover rounded-sm bg-gradient-to-r from-sky-400 to-blue-500"></div>
         </div>
       </div>
     </>
