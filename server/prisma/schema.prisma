@@ -74,6 +74,9 @@ model BotIntegration {
   discord_slash_command             String?  @default("hey")
   discord_slash_command_description String?  @default("Use this command to get help")
   discord_application_id            String?
+  whatsapp_access_token             String?
+  whatsapp_verify_token             String?
+  whatsapp_phone_number             String?
   Bot                               Bot      @relation(fields: [bot_id], references: [id], onDelete: Cascade)
 }
 
@@ -118,8 +121,17 @@ model BotPlaygroundMessage {
   botPlaygroundId String
   type            String
   message         String
-  createdAt       DateTime      @default(now())
   isBot           Boolean       @default(false)
   sources         Json?
+  createdAt       DateTime      @default(now())
   botPlayground   BotPlayground @relation(fields: [botPlaygroundId], references: [id], onDelete: Cascade)
+}
+
+model BotWhatsappHistory {
+  id         Int     @id @default(autoincrement())
+  chat_id    String?
+  identifier String?
+  human      String?
+  bot        String?
+  from       String?
 }

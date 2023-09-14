@@ -52,6 +52,7 @@
     "fastify": "^4.0.0",
     "fastify-cli": "^5.7.1",
     "fastify-plugin": "^4.0.0",
+    "fastify-raw-body": "4.0.0",
     "fastify-sse-v2": "^3.1.1",
     "google-auth-library": "^8.8.0",
     "grammy": "^1.16.2",
@@ -61,12 +62,14 @@
     "mammoth": "^1.6.0",
     "pdf-parse": "^1.1.1",
     "pdfjs-dist": "^3.7.107",
+    "pubsub-js": "^1.9.4",
     "unique-names-generator": "^4.7.1",
     "wavefile": "^11.0.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/node": "^18.0.0",
+    "@types/pubsub-js": "^1.8.3",
     "@types/tap": "^15.0.5",
     "fastify-tsconfig": "^1.0.1",
     "prisma": "5",

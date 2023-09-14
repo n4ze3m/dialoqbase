@@ -3,6 +3,7 @@ import { FastifyPluginAsync } from "fastify";
 import { PrismaClient } from "@prisma/client";
 import TelegramBot from "../integration/telegram";
 import DiscordBot from "../integration/discord";
+import WhatsappBot from "../integration/whatsapp";
 
 const integrationPlugin: FastifyPluginAsync = fp(async (server, options) => {
   console.log("Connecting pm2...");
@@ -11,6 +12,9 @@ const integrationPlugin: FastifyPluginAsync = fp(async (server, options) => {
     where: {
       is_pause: false,
     },
+  include: {
+    Bot: true
+  }
   });
 
   pendingProcess.forEach(async (process) => {
@@ -27,6 +31,12 @@ const integrationPlugin: FastifyPluginAsync = fp(async (server, options) => {
         process.discord_slash_command!,
         process.discord_slash_command_description!,
       );
+    } else if (process.provider === "whatsapp") {
+      await WhatsappBot.connect(
+        process.bot_id,
+        process.whatsapp_phone_number!,
+        process.whatsapp_access_token!,
+      )
     }
   });
 });

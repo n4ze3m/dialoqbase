@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../../services/api";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import { ClipboardIcon } from "@heroicons/react/24/outline";
 
 //@ts-ignore
 function classNames(...classes) {
@@ -86,6 +87,11 @@ export const IntegrationForm: React.FC<Props> = ({ onClose, data }) => {
     }
   );
 
+  const [hostUrl] = React.useState<string>(
+    () =>
+      import.meta.env.VITE_HOST_URL ||
+      window.location.protocol + "//" + window.location.host
+  );
   const { mutate: toggleIntegration, isLoading: isToggling } = useMutation(
     async () => {
       const response = await api.post(`/bot/integration/${params.id}/toggle`, {
@@ -139,6 +145,41 @@ export const IntegrationForm: React.FC<Props> = ({ onClose, data }) => {
         onFinish={updateIntegration}
       >
         {data.fields.map((field, index) => {
+          if (field.type === "webhook") {
+            return (
+              <Form.Item key={index} label={field.title} name={field.name}>
+                <div className="flex">
+                  <div className="relative flex-grow focus-within:z-10">
+                    <input
+                      readOnly
+                      value={`${hostUrl}/api/v1/bot/integration/${params.id}/whatsapp`}
+                      type={field.inputType}
+                      placeholder={field.help}
+                      className="border border-gray-300 rounded-md text-gray-400 px-4 py-2 w-full focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div className="flex-shrink-0 ml-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(
+                          `${hostUrl}/api/v1/bot/integration/${params.id}/whatsapp`
+                        );
+                        notification.success({
+                          message: "Copied!",
+                          placement: "bottomRight",
+                        });
+                      }}
+                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+                    >
+                      <ClipboardIcon className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              </Form.Item>
+            );
+          }
+
           return (
             <Form.Item
               key={index}

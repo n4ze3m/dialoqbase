@@ -110,6 +110,65 @@ export async function getChannelsByProvider(
       textColor: "#000",
       connectBtn: null,
     },
+    {
+      name: "WhatsApp (🧪)",
+      channel: "whatsapp",
+      logo: "/providers/whatsapp.svg",
+      link: "https://developers.facebook.com/docs/whatsapp/guides",
+      description:
+        "Set up a WhatsApp bot from your knowledge base to send and receive messages",
+      fields: [
+        {
+          name: "whatsapp_phone_number",
+          type: "string",
+          title: "WhatsApp phone number ID",
+          inputType: "password",
+          description: "WhatsApp phone number ID",
+          help: "You can get it from WhatsApp Business API",
+          requiredMessage: "WhatsApp phone number ID is required",
+          value: "",
+          defaultValue: "",
+        },
+        {
+          name: "whatsapp_access_token",
+          type: "string",
+          title: "Access token",
+          inputType: "password",
+          description: "Access token",
+          help: "You can get it from WhatsApp Business API",
+          requiredMessage: "Access token is required",
+          value: "",
+          defaultValue: "",
+        },
+        {
+          name: "whatsapp_verify_token",
+          type: "string",
+          title: "Verify token",
+          inputType: "password",
+          description: "Verify token",
+          help: "A token to verify the webhook request",
+          requiredMessage: "Verify token is required",
+          value: "",
+          defaultValue: "",
+        },
+        {
+          name: "whatsapp_webhook_url",
+          type: "webhook",
+          title: "Webhook URL",
+          inputType: "string",
+          description: "Webhook URL",
+          help: "A URL to receive webhook requests",
+          requiredMessage: "Webhook URL is required",
+          value: "",
+          defaultValue: "",
+        },
+      ],
+      isPaused: false,
+      status: "CONNECT",
+      color: "#fff",
+      textColor: "#000",
+      connectBtn: null,
+    },
   ];
 
   for (const provider of providerChannel) {
@@ -166,6 +225,43 @@ export async function getChannelsByProvider(
             };
           }
           break;
+
+        case "whatsapp":
+          for (const field of provider.fields) {
+            if (field.type === "webhook") {
+              field.value = bot.publicId;
+            } else {
+              // @ts-ignore
+              field.value = integration[field.name] || field.defaultValue;
+            }
+          }
+
+          provider.status = integration.whatsapp_phone_number
+            ? "CONNECTED"
+            : "CONNECT";
+          provider.color = integration.whatsapp_phone_number
+            ? "rgb(134 239 172)"
+            : "#fff";
+
+          provider.textColor = integration.whatsapp_phone_number
+            ? "#fff"
+            : "#000";
+
+          if (integration.is_pause && integration.whatsapp_phone_number) {
+            provider.status = "PAUSED";
+            provider.color = "rgb(225 29 72)";
+            provider.textColor = "#fff";
+          }
+
+          // if (provider.status === "CONNECTED") {
+          //   // provider.connectBtn = {
+          //   //   text: "Connect to WhatsApp",
+          //   //   link:
+          //   //     `https://wa.me/${integration.whatsapp_phone_number}`,
+          //   // };
+          // }
+          break;
+
         default:
           break;
       }

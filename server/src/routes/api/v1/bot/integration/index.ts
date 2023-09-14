@@ -1,6 +1,14 @@
 import { FastifyPluginAsync } from "fastify";
-import { createIntergationHandler, pauseOrResumeIntergationHandler } from "./handlers/post.handler";
-import { createIntergationSchema, pauseOrResumeIntergationSchema } from "./schema";
+import {
+  createIntergationHandler,
+  pauseOrResumeIntergationHandler,
+  whatsappIntergationHandler,
+  whatsappIntergationHandlerPost,
+} from "./handlers/post.handler";
+import {
+  createIntergationSchema,
+  pauseOrResumeIntergationSchema,
+} from "./schema";
 import { getChannelsByProvider } from "./handlers/get.handler";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
@@ -15,12 +23,14 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     onRequest: [fastify.authenticate],
   }, pauseOrResumeIntergationHandler);
 
-
   // return all bot channels
   fastify.get("/:id", {
     onRequest: [fastify.authenticate],
   }, getChannelsByProvider);
 
+  // whatsapp integration
+  fastify.get("/:id/whatsapp", {}, whatsappIntergationHandler);
+  fastify.post("/:id/whatsapp", {}, whatsappIntergationHandlerPost);
 };
 
 export default root;
