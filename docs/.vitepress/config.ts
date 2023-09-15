@@ -86,8 +86,12 @@ export default defineConfig({
             link: "/guide/integration/telegram",
           },
           {
-            text: "Discord (experimental)",
+            text: "Discord (beta)",
             link: "/guide/integration/discord",
+          },
+          {
+            text: "Whatsapp (experimental)",
+            link: "/guide/integration/whatsapp",
           },
         ],
       },
@@ -132,9 +136,9 @@ export default defineConfig({
           {
             text: "TensorFlow",
             link: "/guide/ai-providers/tensorflow",
-          }
-        ]
-      }
+          },
+        ],
+      },
     ],
 
     socialLinks: [

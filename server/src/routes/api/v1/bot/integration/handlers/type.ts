@@ -58,3 +58,22 @@ export type GetIntergationType = {
     link: string;
   } | null;
 };
+
+
+export type WhatsAppIntergationType = {
+  Querystring: {
+    "hub.verify_token": string;
+    "hub.mode": string;
+    "hub.challenge": string;
+  }
+}
+
+export type WhatsAppIntergationBodyType = {
+  Params: {
+    id: string;
+  },
+  Headers: {
+    "x-hub-signature": string;
+  }
+  Body: Record<string, any>; 
+}

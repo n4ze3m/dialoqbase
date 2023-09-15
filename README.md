@@ -163,9 +163,9 @@ need more ? create an issue...
 
 - [x] Web embed script
 - [x] Telegram (beta)
-- [x] Discord (experimental)
+- [x] Discord (beta)
 - [ ] Slack
-- [ ] Whatsapp
+- [X] Whatsapp (experimental)
 - [ ] Facebook Messenger
 - [ ] Instagram
 
