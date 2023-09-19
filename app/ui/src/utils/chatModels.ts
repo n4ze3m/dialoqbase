@@ -3,6 +3,10 @@ export const availableChatModels = [
   { value: "gpt-3.5-turbo-16k", label: "GPT-3.5 Turbo 16K (OpenAI)" },
   { value: "gpt-4", label: "GPT-4 (OpenAI)" },
   { value: "gpt-4-0613", label: "GPT-4 0613 (OpenAI)" },
+  {
+    value: "gpt-3.5-turbo-instruct",
+    label: "GPT-3.5 Turbo Instruct (OpenAI)",
+  },
   { value: "claude-1", label: "Claude 1 (Anthropic)" },
   { value: "claude-2", label: "Claude 2 (Anthropic)" },
   { value: "claude-instant-1", label: "Claude Instant (Anthropic)" },
@@ -59,6 +63,7 @@ export const streamingSupportedModels = [
   "llama-v2-13b-chat-w8a16",
   "llama-v2-13b-code-instruct",
   "llama-v2-34b-code-instruct-w8a16",
+  "gpt-3.5-turbo-instruct"
 ];
 
 export const isStreamingSupported = (model: string) => {

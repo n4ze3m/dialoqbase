@@ -32,6 +32,8 @@ export const modelProviderName = (model: string) => {
       return "fireworks";
     case "llama-v2-34b-code-instruct-w8a16":
       return "fireworks";
+    case "gpt-3.5-turbo-instruct":
+      return "openai-instruct";
     default:
       return "Unknown";
   }

@@ -12,6 +12,8 @@ export const apiKeyValidaton = (embeddingsType: string) => {
             return process.env.GOOGLE_API_KEY ? process.env.GOOGLE_API_KEY.length > 0 : false;
         case "openai":
             return process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.length > 0 : false;
+        case "openai-instruct":
+            return process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.length > 0 : false;
         case "cohere":
             return process.env.COHERE_API_KEY ? process.env.COHERE_API_KEY.length > 0 : false;
         case "huggingface-api":
@@ -41,5 +43,7 @@ export const apiKeyValidatonMessage = (embeddingsType: string) => {
             return "Please add ANTHROPIC_API_KEY to your .env file"
         case "fireworks":
             return "Please add FIREWORKS_API_KEY to your .env file"
+        case "openai-instruct":
+            return "Please add OPENAI_API_KEY to your .env file"
     }
 }

@@ -20,6 +20,7 @@ Here is a list of chat models that are currently supported by dialoqbase:
 * gpt-3.5-turbo-16K
 * gpt-4
 * gpt-4-0613
+* gpt-3.5-turbo-instruct
 
 #### Anthropic
 
