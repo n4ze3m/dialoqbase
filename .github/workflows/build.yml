@@ -3,7 +3,7 @@ name: Docker Image CI
 on:
   push:
     tags:
-      - '*'
+      - 'v*'
 
 jobs:
   docker:
