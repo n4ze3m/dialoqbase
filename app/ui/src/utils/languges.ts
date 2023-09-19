@@ -39,4 +39,10 @@ export const COMMON_PROGRAMMING_LANGUAGES_EXTENSIONS: {
     "handlebars": "handlebars",
     "hbs": "handlebars",
     "ejs": "ejs",
+    "pug": "pug",
+    "jade": "pug",
+    "coffee": "coffeescript",
+    "csx": "coffeescript",
+    "less": "less",
+    "scss": "scss",
 }

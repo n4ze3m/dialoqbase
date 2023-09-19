@@ -3,6 +3,7 @@ import { ChatOpenAI } from "langchain/chat_models/openai";
 import { ChatGooglePaLM } from "langchain/chat_models/googlepalm";
 import { HuggingFaceInference } from "langchain/llms/hf";
 import { DialoqbaseFireworksModel } from "../models/fireworks";
+import { OpenAI } from "langchain/llms/openai";
 
 export const chatModelProvider = (
   provider: string,
@@ -10,6 +11,8 @@ export const chatModelProvider = (
   temperature: number,
   otherFields?: any,
 ) => {
+  console.log("provider", provider);
+  console.log("modelName", modelName);
   switch (provider) {
     case "openai":
       console.log("using openai");
@@ -46,6 +49,13 @@ export const chatModelProvider = (
         is_chat: !notChatModels.includes(modelName),
         ...otherFields,
       });
+    case "openai-instruct":
+      console.log("using openai-instruct");
+      return new OpenAI({
+        modelName: modelName,
+        temperature: temperature,
+        ...otherFields,
+      });
     default:
       console.log("using default");
       return new ChatOpenAI({
@@ -69,9 +79,12 @@ export const fireworksModels: {
   "llama-v2-13b-chat": "accounts/fireworks/models/llama-v2-13b-chat",
   "llama-v2-70b-chat": "accounts/fireworks/models/llama-v2-70b-chat",
   "llama-v2-7b-chat-w8a16": "accounts/fireworks/models/llama-v2-7b-chat-w8a16",
-  "llama-v2-13b-chat-w8a16": "accounts/fireworks/models/llama-v2-13b-chat-w8a16",
-  "llama-v2-13b-code-instruct": "accounts/fireworks/models/llama-v2-13b-code-instruct",
-  "llama-v2-34b-code-instruct-w8a16": "accounts/fireworks/models/llama-v2-34b-code-instruct-w8a16",
+  "llama-v2-13b-chat-w8a16":
+    "accounts/fireworks/models/llama-v2-13b-chat-w8a16",
+  "llama-v2-13b-code-instruct":
+    "accounts/fireworks/models/llama-v2-13b-code-instruct",
+  "llama-v2-34b-code-instruct-w8a16":
+    "accounts/fireworks/models/llama-v2-34b-code-instruct-w8a16",
 };
 
 export const streamingSupportedModels = [
@@ -89,17 +102,17 @@ export const streamingSupportedModels = [
   "llama-v2-13b-chat-w8a16",
   "llama-v2-13b-code-instruct",
   "llama-v2-34b-code-instruct-w8a16",
+  "gpt-3.5-turbo-instruct",
 ];
 
 export const isStreamingSupported = (model: string) => {
   return streamingSupportedModels.includes(model);
 };
 
-
 export const notChatModels = [
   "llama-v2-13b-code-instruct",
   "llama-v2-34b-code-instruct-w8a16",
-]
+];
 
 export const supportedModels = [
   "gpt-3.5-turbo",
@@ -118,4 +131,5 @@ export const supportedModels = [
   "llama-v2-13b-chat-w8a16",
   "llama-v2-13b-code-instruct",
   "llama-v2-34b-code-instruct-w8a16",
+  "gpt-3.5-turbo-instruct",
 ];

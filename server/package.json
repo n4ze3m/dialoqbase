@@ -58,7 +58,7 @@
     "grammy": "^1.16.2",
     "ignore": "^5.2.4",
     "ioredis": "^5.3.2",
-    "langchain": "0.0.118",
+    "langchain": "^0.0.151",
     "mammoth": "^1.6.0",
     "pdf-parse": "^1.1.1",
     "pdfjs-dist": "^3.7.107",
