@@ -69,7 +69,7 @@ Set the `DATABASE_URL` environment variable to the URL of your PostgreSQL databa
     - `OPENAI_API_KEY` is the OpenAI API key
     - `DB_SECRET_KEY` is a random key that you can set to whatever you want
     
-3. Run `yarn install` in the main folder and in the `server/` folder to install dependencies.  
+3. Run `yarn install` in the main folder, `app/ui/`, `app/widget/`, `app/script/` and in the `server/` folder to install dependencies.  
 
 4. Run `yarn build` in the main folder to build the frontend assets.
 
