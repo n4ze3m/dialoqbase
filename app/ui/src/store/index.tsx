@@ -26,6 +26,8 @@ type State = {
   setIsLoading: (isLoading: boolean) => void;
   isProcessing: boolean;
   setIsProcessing: (isProcessing: boolean) => void;
+  defaultSpeechToTextLanguage: string;
+  setDefaultSpeechToTextLanguage: (defaultSpeechToTextLanguage: string) => void;
 };
 
 export const useStoreMessage = create<State>((set) => ({
@@ -43,6 +45,9 @@ export const useStoreMessage = create<State>((set) => ({
   setIsLoading: (isLoading) => set({ isLoading }),
   isProcessing: false,
   setIsProcessing: (isProcessing) => set({ isProcessing }),
+  defaultSpeechToTextLanguage: "en-US",
+  setDefaultSpeechToTextLanguage: (defaultSpeechToTextLanguage) =>
+    set({ defaultSpeechToTextLanguage }),
 }));
 
 type ReferenceState = {

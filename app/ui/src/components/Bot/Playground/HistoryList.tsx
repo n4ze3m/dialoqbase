@@ -47,7 +47,7 @@ export const PlaygroundHistoryList = () => {
 
   return (
     <div
-      className={`flex-col flex-1 overflow-y-auto  border-b border-white/20 `}
+      className={`flex-col flex-1 overflow-y-auto   border-b border-white/20 `}
     >
       <div>
         {status === "success" && (
