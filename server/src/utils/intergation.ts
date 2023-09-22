@@ -2,6 +2,7 @@ export const CHANNELS = [
   "telegram",
   "discord",
   "whatsapp",
+  "slack",
 ];
 
 export const geProviderRequiredFields = (channel: string) => {
@@ -20,6 +21,12 @@ export const geProviderRequiredFields = (channel: string) => {
         "whatsapp_phone_number",
         "whatsapp_verify_token",
         "whatsapp_access_token",
+      ];
+    case "slack":
+      return [
+        "slack_auth_token",
+        "slack_signing_secret",
+        "slack_app_token"
       ];
     default:
       return null;

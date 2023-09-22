@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import TelegramBot from "../integration/telegram";
 import DiscordBot from "../integration/discord";
 import WhatsappBot from "../integration/whatsapp";
+// import SlackBot from "../integration/slack";
 
 const integrationPlugin: FastifyPluginAsync = fp(async (server, options) => {
   console.log("Connecting pm2...");
@@ -38,6 +39,15 @@ const integrationPlugin: FastifyPluginAsync = fp(async (server, options) => {
         process.whatsapp_access_token!,
       )
     }
+    
+    // else if (process.provider === "slack") {
+    //   await SlackBot.connect(
+    //     process.identifier,
+    //     process.slack_auth_token!,
+    //     process.slack_signing_secret!,
+    //     process.slack_app_token!,
+    //   )
+    // }
   });
 });
 
