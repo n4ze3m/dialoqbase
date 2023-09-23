@@ -6,11 +6,21 @@ import { BotPlaygroundHistory } from "./types";
 import React from "react";
 import { useMessage } from "../../../hooks/useMessage";
 import { Empty } from "antd";
+import { useStoreMessage } from "../../../store";
 
 export const PlaygroundHistoryList = () => {
   const params = useParams<{ id: string; history_id?: string }>();
   const { setMessages, setHistory, setStreaming, setHistoryId, setIsLoading } =
     useMessage();
+
+  const {
+    setTextToSpeechEnabled,
+    setDefaultWebTextToSpeechLanguageType,
+    setDefualtTextSpeechSettings,
+    setElevenLabsApiKeyPresent,
+    setElevenLabsApiKeyValid,
+    setVoices
+  } = useStoreMessage();
 
   const { data, status } = useQuery(
     ["getBotPlaygroundHistory", params.id, params.history_id],
@@ -28,6 +38,12 @@ export const PlaygroundHistoryList = () => {
 
   React.useEffect(() => {
     if (status === "success" && data) {
+      setTextToSpeechEnabled(data.text_to_speech_enabled);
+      setElevenLabsApiKeyPresent(data.eleven_labs_api_key_present);
+      setElevenLabsApiKeyValid(data.eleven_labs_api_key_valid);
+      setVoices(data.voices);
+      setDefaultWebTextToSpeechLanguageType(data.text_to_speech_type);
+      setDefualtTextSpeechSettings(data.text_to_speech_settings);
       setStreaming(data.streaming);
       if (params.history_id) {
         setHistoryId(params.history_id);
@@ -51,7 +67,7 @@ export const PlaygroundHistoryList = () => {
     >
       <div>
         {status === "success" && (
-          <div >
+          <div>
             {data.history.length === 0 && (
               <div className="flex justify-center items-center mt-20 overflow-hidden">
                 <Empty description="No history yet" />

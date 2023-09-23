@@ -41,3 +41,13 @@ export interface GetPlaygroundBotByIdAndHistoryId {
     history_id: string;
   };
 }
+
+export interface UpdateBotAudioSettings {
+  Params: {
+    id: string;
+  };
+  Body: {
+    type: string;
+    enabled: boolean;
+  };
+}

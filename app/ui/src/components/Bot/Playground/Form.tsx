@@ -16,8 +16,12 @@ export const PlaygroundgForm = () => {
     },
   });
 
-  const { defaultSpeechToTextLanguage, setDefaultSpeechToTextLanguage } =
-    useStoreMessage();
+  const {
+    defaultSpeechToTextLanguage,
+    setDefaultSpeechToTextLanguage,
+    setDefaultWebTextToSpeechLanguageWebAPI,
+    setElevenLabsDefaultVoice,
+  } = useStoreMessage();
 
   const [hideListening, setHideListening] = React.useState(false);
   const { transcript, listening, browserSupportsSpeechRecognition } =
@@ -27,10 +31,26 @@ export const PlaygroundgForm = () => {
     const defaultLanguageFromLocalStorage = localStorage.getItem(
       "defaultSpeechToTextLanguage"
     );
+    const defaultWebTextToSpeechLanguageWebAPIFromLocalStorage =
+      localStorage.getItem("defaultWebTextToSpeechLanguageWebAPI");
     if (defaultLanguageFromLocalStorage) {
       setDefaultSpeechToTextLanguage(defaultLanguageFromLocalStorage);
     } else {
       setDefaultSpeechToTextLanguage(window.navigator.language);
+    }
+
+    if (defaultWebTextToSpeechLanguageWebAPIFromLocalStorage) {
+      setDefaultWebTextToSpeechLanguageWebAPI(
+        defaultWebTextToSpeechLanguageWebAPIFromLocalStorage
+      );
+    }
+
+    const defaultElevenLabsDefaultVoiceFromLocalStorage = localStorage.getItem(
+      "elevenLabsDefaultVoice"
+    );
+
+    if (defaultElevenLabsDefaultVoiceFromLocalStorage) {
+      setElevenLabsDefaultVoice(defaultElevenLabsDefaultVoiceFromLocalStorage);
     }
   }, []);
 
