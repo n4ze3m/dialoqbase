@@ -17,6 +17,7 @@ export const PlaygroundMenu = () => {
           <nav className="flex h-full flex-1 flex-col space-y-3 px-2 pt-2 overflow-x-hidden">
             <div className="flex gap-2">
               <PlaygroundNewChat />
+              <PlaygroundFooter />
             </div>
             {/* here */}
             <div className="flex-grow overflow-y-auto  border-b border-white/20 ">
@@ -24,7 +25,6 @@ export const PlaygroundMenu = () => {
             </div>
 
             {/* footer */}
-            <PlaygroundFooter />
           </nav>
         </div>
       </div>

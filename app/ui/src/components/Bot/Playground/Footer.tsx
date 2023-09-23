@@ -10,7 +10,7 @@ export default function PlaygroundFooter() {
       <div className="flex items-center justify-center space-x-2">
         <button
           onClick={() => setOpenModal(true)}
-          className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none"
+          className="flex items-center justify-center w-8 h-8 rounded-full transition-colors duration-200 focus:outline-none"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -18,7 +18,7 @@ export default function PlaygroundFooter() {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="w-6 h-6"
+            className="w-5 h-5 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
           >
             <path
               strokeLinecap="round"
