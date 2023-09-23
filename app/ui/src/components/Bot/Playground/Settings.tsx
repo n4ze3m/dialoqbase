@@ -38,6 +38,8 @@ export default function PlaygroundSettings({ close }: { close: () => void }) {
   React.useEffect(() => {
     if (!browserSupportsSpeechRecognition) {
       setShowWarningWebspeech(true);
+    } else {
+      setShowWarningWebspeech(false);
     }
   }, [browserSupportsSpeechRecognition]);
 
