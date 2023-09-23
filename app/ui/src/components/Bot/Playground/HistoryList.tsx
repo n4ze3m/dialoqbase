@@ -5,12 +5,22 @@ import api from "../../../services/api";
 import { BotPlaygroundHistory } from "./types";
 import React from "react";
 import { useMessage } from "../../../hooks/useMessage";
-import { Empty } from "antd";
+import { Empty, Skeleton } from "antd";
+import { useStoreMessage } from "../../../store";
 
 export const PlaygroundHistoryList = () => {
   const params = useParams<{ id: string; history_id?: string }>();
   const { setMessages, setHistory, setStreaming, setHistoryId, setIsLoading } =
     useMessage();
+
+  const {
+    setTextToSpeechEnabled,
+    setDefaultWebTextToSpeechLanguageType,
+    setDefualtTextSpeechSettings,
+    setElevenLabsApiKeyPresent,
+    setElevenLabsApiKeyValid,
+    setVoices
+  } = useStoreMessage();
 
   const { data, status } = useQuery(
     ["getBotPlaygroundHistory", params.id, params.history_id],
@@ -28,6 +38,12 @@ export const PlaygroundHistoryList = () => {
 
   React.useEffect(() => {
     if (status === "success" && data) {
+      setTextToSpeechEnabled(data.text_to_speech_enabled);
+      setElevenLabsApiKeyPresent(data.eleven_labs_api_key_present);
+      setElevenLabsApiKeyValid(data.eleven_labs_api_key_valid);
+      setVoices(data.voices);
+      setDefaultWebTextToSpeechLanguageType(data.text_to_speech_type);
+      setDefualtTextSpeechSettings(data.text_to_speech_settings);
       setStreaming(data.streaming);
       if (params.history_id) {
         setHistoryId(params.history_id);
@@ -47,11 +63,11 @@ export const PlaygroundHistoryList = () => {
 
   return (
     <div
-      className={`flex-col flex-1 overflow-y-auto  border-b border-white/20 `}
+      className={`flex-col flex-1 overflow-y-auto   border-b border-white/20 `}
     >
       <div>
         {status === "success" && (
-          <div >
+          <div>
             {data.history.length === 0 && (
               <div className="flex justify-center items-center mt-20 overflow-hidden">
                 <Empty description="No history yet" />
@@ -65,28 +81,8 @@ export const PlaygroundHistoryList = () => {
           </div>
         )}
         {status === "loading" && (
-          <div className="flex justify-center items-center mt-20">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="animate-spin rounded-full h-6 w-6 text-gray-500"
-              viewBox="0 0 24 24"
-            >
-              <path d="M12 2L12 6"></path>
-              <path d="M12 18L12 22"></path>
-              <path d="M4.93 4.93L7.76 7.76"></path>
-              <path d="M16.24 16.24L19.07 19.07"></path>
-              <path d="M2 12L6 12"></path>
-              <path d="M18 12L22 12"></path>
-              <path d="M4.93 19.07L7.76 16.24"></path>
-              <path d="M16.24 7.76L19.07 4.93"></path>
-            </svg>
+          <div className="flex justify-center items-center mt-5">
+            <Skeleton active paragraph={{ rows: 8 }} />
           </div>
         )}
         {status === "error" && (

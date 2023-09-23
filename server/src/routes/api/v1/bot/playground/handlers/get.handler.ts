@@ -3,6 +3,9 @@ import {
   GetPlaygroundBotById,
   GetPlaygroundBotByIdAndHistoryId,
 } from "./types";
+import {
+  getElevenLab,
+} from "../../../../../../utils/elevenlabs";
 
 export async function getPlaygroundHistoryByBotId(
   request: FastifyRequest<GetPlaygroundBotById>,
@@ -30,10 +33,22 @@ export async function getPlaygroundHistoryByBotId(
     });
   }
 
+  const {
+    eleven_labs_api_key_present,
+    eleven_labs_api_key_valid,
+    voices
+  } = await getElevenLab()
+
   return {
     history: bot.BotPlayground,
     streaming: bot.streaming,
     other_info: null,
+    text_to_speech_type: bot.text_to_voice_type,
+    text_to_speech_settings: bot.text_to_voice_type_metadata,
+    text_to_speech_enabled: bot.text_to_voice_enabled,
+    eleven_labs_api_key_present,
+    eleven_labs_api_key_valid,
+    voices,
     messages: [],
   };
 }
@@ -83,11 +98,24 @@ export async function getPlaygroundHistoryByBotIdAndHistoryId(
       message: "History not found",
     });
   }
+  const {
+    eleven_labs_api_key_present,
+    eleven_labs_api_key_valid,
+    voices
+  } = await getElevenLab()
+
 
   return {
     history: bot.BotPlayground,
     streaming: bot.streaming,
     other_info: details,
     messages: details.BotPlaygroundMessage,
+    text_to_speech_type: bot.text_to_voice_type,
+    text_to_speech_settings: bot.text_to_voice_type_metadata,
+    text_to_speech_enabled: bot.text_to_voice_enabled,
+    eleven_labs_api_key_present,
+    eleven_labs_api_key_valid,
+    voices,
+    
   };
 }

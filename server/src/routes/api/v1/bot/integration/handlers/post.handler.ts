@@ -12,6 +12,7 @@ import DiscordBot from "../../../../../../integration/discord";
 import WhatsappBot from "../../../../../../integration/whatsapp";
 
 import * as PubSub from "pubsub-js";
+import SlackBot from "../../../../../../integration/slack";
 // import { writeFile } from "fs";
 
 export const createIntergationHandler = async (
@@ -211,6 +212,50 @@ export const createIntergationHandler = async (
         isBot.id,
         request.body.value.whatsapp_phone_number,
         request.body.value.whatsapp_access_token,
+      );
+
+      return reply.status(200).send({
+        message: "Integration created",
+      });
+
+    case "slack":
+      const process_name_sl = `dialoqbase-slack-${id}`;
+      const isProcess_sl = await prisma.botIntegration.findFirst({
+        where: {
+          bot_id: id,
+          provider: "slack",
+        },
+      });
+
+      if (isProcess_sl) {
+        await prisma.botIntegration.update({
+          where: {
+            id: isProcess_sl.id,
+          },
+          data: {
+            slack_auth_token: request.body.value.slack_auth_token,
+            slack_signing_secret: request.body.value.slack_signing_secret,
+            slack_app_token: request.body.value.slack_app_token,
+          },
+        });
+      } else {
+        await prisma.botIntegration.create({
+          data: {
+            bot_id: id,
+            provider: "slack",
+            slack_auth_token: request.body.value.slack_auth_token,
+            slack_signing_secret: request.body.value.slack_signing_secret,
+            slack_app_token: request.body.value.slack_app_token,
+            identifier: process_name_sl,
+          },
+        });
+      }
+
+      await SlackBot.connect(
+        process_name_sl,
+        request.body.value.slack_auth_token,
+        request.body.value.slack_signing_secret,
+        request.body.value.slack_app_token,
       );
 
       return reply.status(200).send({

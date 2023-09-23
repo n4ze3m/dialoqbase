@@ -169,6 +169,54 @@ export async function getChannelsByProvider(
       textColor: "#000",
       connectBtn: null,
     },
+    // {
+    //   name: "Slack (🧪)",
+    //   channel: "slack",
+    //   logo: "/providers/slack.svg",
+    //   link: "https://api.slack.com/apps",
+    //   description:
+    //     "Set up a Slack bot from your knowledge base to send and receive messages",
+    //   fields: [
+    //     {
+    //       name: "slack_auth_token",
+    //       type: "string",
+    //       title: "Auth token",
+    //       inputType: "password",
+    //       description: "Slack auth token",
+    //       help: "You can get it from Slack API",
+    //       requiredMessage: "Auth token is required",
+    //       value: "",
+    //       defaultValue: "",
+    //     },
+    //     {
+    //       name: "slack_signing_secret",
+    //       type: "string",
+    //       title: "Signing secret",
+    //       inputType: "password",
+    //       description: "Slack signing secret",
+    //       help: "You can get it from Slack API",
+    //       requiredMessage: "Signing secret is required",
+    //       value: "",
+    //       defaultValue: "",
+    //     },
+    //     {
+    //       name: "slack_app_token",
+    //       type: "string",
+    //       title: "App token",
+    //       inputType: "password",
+    //       description: "Slack app token",
+    //       help: "You can get it from Slack API",
+    //       requiredMessage: "App token is required",
+    //       value: "",
+    //       defaultValue: "",
+    //     },
+    //   ],
+    //   isPaused: false,
+    //   status: "CONNECT",
+    //   color: "#fff",
+    //   textColor: "#000",
+    //   connectBtn: null,
+    // },
   ];
 
   for (const provider of providerChannel) {
@@ -262,6 +310,34 @@ export async function getChannelsByProvider(
           // }
           break;
 
+        case "slack":
+          for (const field of provider.fields) {
+            // @ts-ignore
+            field.value = integration[field.name] || field.defaultValue;
+          }
+          provider.status = integration.slack_auth_token
+            ? "CONNECTED"
+            : "CONNECT";
+          provider.color = integration.slack_auth_token
+            ? "rgb(134 239 172)"
+            : "#fff";
+          provider.textColor = integration.slack_auth_token ? "#fff" : "#000";
+
+          if (integration.is_pause && integration.slack_auth_token) {
+            provider.status = "PAUSED";
+            provider.color = "rgb(225 29 72)";
+            provider.textColor = "#fff";
+          }
+
+          if (provider.status === "CONNECTED") {
+            provider.connectBtn = {
+              text: "Add to Slack",
+              link:
+                `https://slack.com/oauth/v2/authorize?client_id=${integration.slack_auth_token}&scope=commands`,
+            };
+          }
+
+          break;
         default:
           break;
       }

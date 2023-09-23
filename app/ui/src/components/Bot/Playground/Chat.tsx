@@ -6,9 +6,12 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nightOwl } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { COMMON_PROGRAMMING_LANGUAGES_EXTENSIONS } from "../../../utils/languges";
 import { removeUUID } from "../../../utils/filename";
+import { useStoreMessage } from "../../../store";
 
 export const PlaygroundChat = () => {
   const { messages } = useMessage();
+  const { textToSpeechEnabled, defaultWebTextToSpeechLanguageType } =
+    useStoreMessage();
   const divRef = React.useRef<HTMLDivElement>(null);
 
   const [sourceData, setSourceData] = React.useState<any>(null);
@@ -61,6 +64,8 @@ export const PlaygroundChat = () => {
                       setSourceData(source);
                       setOpenSource(true);
                     }}
+                    textToSpeech={textToSpeechEnabled}
+                    textToSpeechType={defaultWebTextToSpeechLanguageType}
                   />
                 ))}
                 <div className="w-full h-32 md:h-48 flex-shrink-0"></div>

@@ -1,6 +1,7 @@
 import React from "react";
 import { PlaygroundNewChat } from "./NewChat";
 import { PlaygroundHistoryList } from "./HistoryList";
+import PlaygroundFooter from "./Footer";
 
 export const PlaygroundMenu = () => {
   const [hideMenu] = React.useState(false);
@@ -13,12 +14,17 @@ export const PlaygroundMenu = () => {
     >
       <div className="flex mt-16 h-full min-h-0 flex-col">
         <div className="flex h-full w-full flex-1 items-start border-white/20">
-          <nav className="flex h-full flex-1 flex-col space-y-3 px-2 pt-2">
+          <nav className="flex h-full flex-1 flex-col space-y-3 px-2 pt-2 overflow-x-hidden">
             <div className="flex gap-2">
               <PlaygroundNewChat />
+              <PlaygroundFooter />
             </div>
             {/* here */}
-            <PlaygroundHistoryList />
+            <div className="flex-grow overflow-y-auto  border-b border-white/20 ">
+              <PlaygroundHistoryList />
+            </div>
+
+            {/* footer */}
           </nav>
         </div>
       </div>

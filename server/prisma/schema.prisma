@@ -10,24 +10,28 @@ datasource db {
 }
 
 model Bot {
-  id                      String           @id @default(cuid())
-  publicId                String           @unique @default(uuid())
-  name                    String
-  description             String?
-  createdAt               DateTime         @default(now())
-  temperature             Float            @default(0.7)
-  model                   String           @default("gpt-3.5-turbo")
-  provider                String           @default("openai")
-  embedding               String           @default("openai")
-  streaming               Boolean          @default(false)
-  showRef                 Boolean          @default(false)
-  questionGeneratorPrompt String           @default("Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.   Chat History: {chat_history} Follow Up Input: {question} Standalone question:")
-  qaPrompt                String           @default("You are a helpful AI assistant. Use the following pieces of context to answer the question at the end. If you don't know the answer, just say you don't know. DO NOT try to make up an answer. If the question is not related to the context, politely respond that you are tuned to only answer questions that are related to the context.  {context}  Question: {question} Helpful answer in markdown:")
-  BotAppearance           BotAppearance[]
-  document                BotDocument[]
-  BotIntegration          BotIntegration[]
-  BotPlayground           BotPlayground[]
-  source                  BotSource[]
+  id                          String           @id @default(cuid())
+  publicId                    String           @unique @default(uuid())
+  name                        String
+  description                 String?
+  createdAt                   DateTime         @default(now())
+  temperature                 Float            @default(0.7)
+  model                       String           @default("gpt-3.5-turbo")
+  provider                    String           @default("openai")
+  embedding                   String           @default("openai")
+  streaming                   Boolean          @default(false)
+  showRef                     Boolean          @default(false)
+  questionGeneratorPrompt     String           @default("Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.   Chat History: {chat_history} Follow Up Input: {question} Standalone question:")
+  qaPrompt                    String           @default("You are a helpful AI assistant. Use the following pieces of context to answer the question at the end. If you don't know the answer, just say you don't know. DO NOT try to make up an answer. If the question is not related to the context, politely respond that you are tuned to only answer questions that are related to the context.  {context}  Question: {question} Helpful answer in markdown:")
+  voice_to_text_type          String           @default("web_api")
+  text_to_voice_enabled       Boolean          @default(false)
+  text_to_voice_type          String           @default("web_api")
+  text_to_voice_type_metadata Json             @default("{}") @db.Json
+  BotAppearance               BotAppearance[]
+  document                    BotDocument[]
+  BotIntegration              BotIntegration[]
+  BotPlayground               BotPlayground[]
+  source                      BotSource[]
 }
 
 model BotSource {
@@ -77,6 +81,9 @@ model BotIntegration {
   whatsapp_access_token             String?
   whatsapp_verify_token             String?
   whatsapp_phone_number             String?
+  slack_auth_token                  String?
+  slack_signing_secret              String?
+  slack_app_token                   String?
   Bot                               Bot      @relation(fields: [bot_id], references: [id], onDelete: Cascade)
 }
 
@@ -130,8 +137,8 @@ model BotPlaygroundMessage {
 model BotWhatsappHistory {
   id         Int     @id @default(autoincrement())
   chat_id    String?
+  from       String?
   identifier String?
   human      String?
   bot        String?
-  from       String?
 }

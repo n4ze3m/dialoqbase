@@ -66,3 +66,28 @@ export const chatPlaygroundHistoryIdSchema: FastifySchema = {
     },
   },
 };
+
+
+export const audioSettingsSchema: FastifySchema = {
+  params: {
+    type: "object",
+    required: ["id"],
+    properties: {
+      id: {
+        type: "string",
+      },
+    },
+  },
+  body: {
+    type: "object",
+    required: ["type", "enabled"],
+    properties: {
+      type: {
+        type: "string",
+      },
+      enabled: {
+        type: "boolean",
+      },
+    },
+  },
+};
