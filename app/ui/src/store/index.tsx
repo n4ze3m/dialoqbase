@@ -112,3 +112,15 @@ export const useStoreReference = create<ReferenceState>((set) => ({
   referenceData: {},
   setReferenceData: (referenceData) => set({ referenceData }),
 }));
+
+
+type SpeechToTextStore = {
+  supported: boolean;
+  setSupported: (supported: boolean) => void;
+}
+
+
+export const useStoreSpeechToText = create<SpeechToTextStore>((set) => ({
+  supported: false,
+  setSupported: (supported) => set({ supported }),
+}));

@@ -2,10 +2,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useMessage } from "../../../hooks/useMessage";
 import { useForm } from "@mantine/form";
 import React from "react";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
 import { useStoreMessage } from "../../../store";
+import { useSpeechRecognition } from "../../../hooks/useSpeechRecognition";
 
 export const PlaygroundgForm = () => {
   const { onSubmit } = useMessage();
@@ -24,8 +22,14 @@ export const PlaygroundgForm = () => {
   } = useStoreMessage();
 
   const [hideListening, setHideListening] = React.useState(false);
-  const { transcript, listening, browserSupportsSpeechRecognition } =
-    useSpeechRecognition();
+  const {
+    transcript,
+    listening,
+    supported: browserSupportsSpeechRecognition,
+    listen,
+    stop,
+  } = useSpeechRecognition();
+
 
   React.useEffect(() => {
     const defaultLanguageFromLocalStorage = localStorage.getItem(
@@ -61,6 +65,8 @@ export const PlaygroundgForm = () => {
   React.useEffect(() => {
     if (!browserSupportsSpeechRecognition) {
       setHideListening(true);
+    } else {
+      setHideListening(false);
     }
   }, [browserSupportsSpeechRecognition]);
 
@@ -141,14 +147,11 @@ export const PlaygroundgForm = () => {
                     disabled={isSending}
                     onClick={() => {
                       if (!listening) {
-                        SpeechRecognition.startListening({
-                          // continuous: true,
-                          interimResults: true,
-                          language: defaultSpeechToTextLanguage,
+                        listen({
+                          lang: defaultSpeechToTextLanguage,
                         });
                       } else {
-                        SpeechRecognition.stopListening();
-                        SpeechRecognition.abortListening();
+                        stop();
                       }
                     }}
                     type="button"

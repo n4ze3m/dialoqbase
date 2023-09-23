@@ -1,14 +1,15 @@
 import { Form, Switch, Tabs } from "antd";
 import React from "react";
-import { useSpeechRecognition } from "react-speech-recognition";
 import { SUPPORTED_LANGUAGES } from "../../../utils/languages";
 import { useMutation } from "@tanstack/react-query";
 import { useStoreMessage } from "../../../store";
 import { useParams } from "react-router-dom";
 import api from "../../../services/api";
+import { useSpeechRecognition } from "../../../hooks/useSpeechRecognition";
 
 export default function PlaygroundSettings({ close }: { close: () => void }) {
-  const { browserSupportsSpeechRecognition } = useSpeechRecognition();
+  const { supported: browserSupportsSpeechRecognition } =
+    useSpeechRecognition();
 
   const [webVoices, setWebVoices] = React.useState<SpeechSynthesisVoice[]>([]);
 
