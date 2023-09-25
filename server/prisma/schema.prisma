@@ -6,7 +6,7 @@ generator client {
 datasource db {
   provider   = "postgresql"
   url        = env("DATABASE_URL")
-  extensions = [uuid_ossp(map: "uuid-ossp", schema: "extensions"), vector(schema: "public")]
+  extensions = [vector(schema: "public")]
 }
 
 model Bot {
@@ -141,4 +141,15 @@ model BotWhatsappHistory {
   identifier String?
   human      String?
   bot        String?
+}
+
+model botWebHistory {
+  id        String   @id @default(uuid())
+  bot_id    String
+  chat_id   String
+  metadata  Json?
+  sources   Json?
+  human     String?
+  bot       String?
+  createdAt DateTime @default(now())
 }

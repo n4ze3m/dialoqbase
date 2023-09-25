@@ -4,6 +4,7 @@ export interface ChatRequestBody {
   };
   Body: {
     message: string;
+    history_id: string;
     history: {
       type: string;
       text: string;

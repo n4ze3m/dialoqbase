@@ -11,7 +11,7 @@ export const chatRequestHandler = async (
 ) => {
   const public_id = request.params.id;
 
-  const { message, history } = request.body;
+  const { message, history, history_id } = request.body;
 
   const prisma = request.server.prisma;
 
@@ -85,6 +85,20 @@ export const chatRequestHandler = async (
     chat_history: chat_history,
   });
 
+  await prisma.botWebHistory.create({
+    data: {
+      chat_id: history_id,
+      bot_id: bot.id,
+      bot: response.text,
+      human: message,
+      metadata: {
+        ip: request?.ip,
+        user_agent: request?.headers["user-agent"],
+      },
+      sources: response?.sources,
+    },
+  });
+
   return {
     bot: response,
     history: [
@@ -99,4 +113,179 @@ export const chatRequestHandler = async (
       },
     ],
   };
+};
+
+function nextTick() {
+  return new Promise((resolve) => setTimeout(resolve, 0));
+}
+
+export const chatRequestStreamHandler = async (
+  request: FastifyRequest<ChatRequestBody>,
+  reply: FastifyReply,
+) => {
+  try {
+    const public_id = request.params.id;
+    // get user meta info from request
+    // const meta = request.headers["user-agent"];
+    // ip address
+
+    const { message, history, history_id } = request.body;
+    // const history = JSON.parse(chatHistory) as {
+    //   type: string;
+    //   text: string;
+    // }[];
+
+    console.log("history", history);
+    const prisma = request.server.prisma;
+
+    const bot = await prisma.bot.findFirst({
+      where: {
+        publicId: public_id,
+      },
+    });
+
+    if (!bot) {
+      return {
+        bot: {
+          text: "You are in the wrong place, buddy.",
+          sourceDocuments: [],
+        },
+        history: [
+          ...history,
+          {
+            type: "human",
+            text: message,
+          },
+          {
+            type: "ai",
+            text: "You are in the wrong place, buddy.",
+          },
+        ],
+      };
+    }
+
+    const temperature = bot.temperature;
+
+    const sanitizedQuestion = message.trim().replaceAll("\n", " ");
+    const embeddingModel = embeddings(bot.embedding);
+
+    const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
+      embeddingModel,
+      {
+        botId: bot.id,
+        sourceId: null,
+      },
+    );
+
+    let response: any = null;
+
+    reply.raw.on("close", () => {
+      console.log("closed");
+    });
+
+    const streamedModel = chatModelProvider(
+      bot.provider,
+      bot.model,
+      temperature,
+      {
+        streaming: true,
+        callbacks: [
+          {
+            handleLLMNewToken(token: string) {
+              // if (token !== '[DONE]') {
+              // console.log(token);
+              return reply.sse({
+                id: "",
+                event: "chunk",
+                data: JSON.stringify({
+                  message: token || "",
+                }),
+              });
+              // } else {
+              // console.log("done");
+              // }
+            },
+          },
+        ],
+      },
+    );
+
+    const nonStreamingModel = chatModelProvider(
+      bot.provider,
+      bot.model,
+      temperature,
+    );
+
+    const chain = ConversationalRetrievalQAChain.fromLLM(
+      streamedModel,
+      vectorstore.asRetriever(),
+      {
+        qaTemplate: bot.qaPrompt,
+        questionGeneratorTemplate: bot.questionGeneratorPrompt,
+        returnSourceDocuments: true,
+        questionGeneratorChainOptions: {
+          llm: nonStreamingModel,
+        },
+      },
+    );
+
+    const chat_history = history
+      .map((chatMessage: any) => {
+        if (chatMessage.type === "human") {
+          return `Human: ${chatMessage.text}`;
+        } else if (chatMessage.type === "ai") {
+          return `Assistant: ${chatMessage.text}`;
+        } else {
+          return `${chatMessage.text}`;
+        }
+      })
+      .join("\n");
+
+    console.log("Waiting for response...");
+
+   
+    response = await chain.call({
+      question: sanitizedQuestion,
+      chat_history: chat_history,
+    });
+
+
+    await prisma.botWebHistory.create({
+      data: {
+        chat_id: history_id,
+        bot_id: bot.id,
+        bot: response.text,
+        human: message,
+        metadata: {
+          ip: request?.ip,
+          user_agent: request?.headers["user-agent"],
+        },
+        sources: response?.sources || response?.sourceDocuments || [],
+      },
+    });
+
+    reply.sse({
+      event: "result",
+      id: "",
+      data: JSON.stringify({
+        bot: response,
+        history: [
+          ...history,
+          {
+            type: "human",
+            text: message,
+          },
+          {
+            type: "ai",
+            text: response.text,
+          },
+        ],
+      }),
+    });
+    await nextTick();
+    return reply.raw.end();
+  } catch (e) {
+    console.log(e);
+    return reply.status(500).send(e);
+  }
 };

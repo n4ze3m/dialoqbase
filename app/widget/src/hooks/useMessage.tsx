@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getUrl } from "../utils/getUrl";
 import { History, useStoreMessage } from "../store";
+import useChatId from "./useChatId";
 
 export type BotResponse = {
   bot: {
@@ -29,6 +30,7 @@ const parsesStreamingResponse = (text: string) => {
 };
 
 export const useMessage = () => {
+  const { chatId, resetChatId } = useChatId();
   const {
     history,
     messages,
@@ -56,10 +58,13 @@ export const useMessage = () => {
     const response = await axios.post(getUrl(), {
       message,
       history,
+      history_id: chatId,
     });
     const data = response.data as BotResponse;
     newMessage[newMessage.length - 1].message = data.bot.text;
     newMessage[newMessage.length - 1].sources = data.bot.sourceDocuments;
+    localStorage.setItem("DS_MESSAGE", JSON.stringify(newMessage));
+    localStorage.setItem("DS_HISTORY", JSON.stringify(data.history));
     setMessages(newMessage);
     setHistory(data.history);
   };
@@ -84,6 +89,7 @@ export const useMessage = () => {
       body: JSON.stringify({
         message,
         history,
+        history_id: chatId,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -122,18 +128,26 @@ export const useMessage = () => {
 
       for (const { type, message } of p) {
         if (type === "chunk") {
+          const jsonMessage = JSON.parse(message);
           if (count === 0) {
-            newMessage[appendingIndex].message = message;
+            newMessage[appendingIndex].message = jsonMessage.message;
             setMessages(newMessage);
+            localStorage.setItem("DS_MESSAGE", JSON.stringify(newMessage));
           } else {
-            newMessage[appendingIndex].message += message;
+            newMessage[appendingIndex].message += jsonMessage.message;
             setMessages(newMessage);
+            localStorage.setItem("DS_MESSAGE", JSON.stringify(newMessage));
           }
           count++;
         } else if (type === "result") {
           const responseData = JSON.parse(message) as BotResponse;
           newMessage[appendingIndex].message = responseData.bot.text;
           newMessage[appendingIndex].sources = responseData.bot.sourceDocuments;
+          localStorage.setItem("DS_MESSAGE", JSON.stringify(newMessage));
+          localStorage.setItem(
+            "DS_HISTORY",
+            JSON.stringify(responseData.history)
+          );
           setHistory(responseData.history);
           setMessages(newMessage);
         }
@@ -142,7 +156,6 @@ export const useMessage = () => {
   };
 
   const onSubmit = async (message: string) => {
-    console.log("is_streaming", streaming);
     if (streaming) {
       await streamingRequest(message);
     } else {
@@ -157,5 +170,6 @@ export const useMessage = () => {
     setStreaming,
     streaming,
     setHistory,
+    resetChatId,
   };
 };

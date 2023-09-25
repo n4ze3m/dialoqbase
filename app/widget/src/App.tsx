@@ -13,12 +13,11 @@ import { BotStyle } from "./utils/types";
 import { Modal } from "antd";
 import { useStoreReference } from "./store";
 function App() {
-  
   const { openReferences, setOpenReferences, referenceData } =
-  useStoreReference();
-  
+    useStoreReference();
+
   const divRef = React.useRef<HTMLDivElement>(null);
-  const { messages, setMessages, setStreaming } = useMessage();
+  const { messages, setMessages, setStreaming, setHistory } = useMessage();
 
   const params = useQueryParams();
 
@@ -42,11 +41,18 @@ function App() {
 
   React.useEffect(() => {
     if (botStyle?.data && messages.length === 0) {
+      const history = localStorage.getItem("DS_HISTORY");
+      const localMessages = localStorage.getItem("DS_MESSAGE");
       setStreaming(botStyle.data.streaming);
-      setMessages([
-        ...messages,
-        { isBot: true, message: botStyle.data.first_message, sources: [] },
-      ]);
+      setHistory(history ? JSON.parse(history) : []);
+      if (localMessages && localMessages.length > 0) {
+        setMessages(JSON.parse(localMessages));
+      } else {
+        setMessages([
+          ...messages,
+          { isBot: true, message: botStyle.data.first_message, sources: [] },
+        ]);
+      }
     }
   }, [botStyle]);
 
