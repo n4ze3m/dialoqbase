@@ -62,6 +62,14 @@ const router = createHashRouter([
     ),
   },
   {
+    path: "/bot/:id/conversations",
+    element: <BotPlaygroundLayout>test</BotPlaygroundLayout>,
+  },
+  {
+    path: "/bot/:id/conversations/:type/:conversation_id",
+    element: <BotPlaygroundLayout>test</BotPlaygroundLayout>,
+  },
+  {
     path: "/bot/:id/data-sources",
     element: (
       <BotLayout>
