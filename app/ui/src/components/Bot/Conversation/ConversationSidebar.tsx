@@ -3,7 +3,7 @@ import { ConversationsByType } from "../../../@types/conversation";
 import { Empty, Select } from "antd";
 import { getOSAndBrowser } from "../../../utils/useragent";
 import * as relativeTime from "dayjs/plugin/relativeTime";
-import dayjs from "dayjs";
+import * as dayjs from "dayjs";
 import { UserIcon } from "@heroicons/react/24/outline";
 dayjs.extend(relativeTime);
 export const ConversationSidebar = ({
