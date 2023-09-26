@@ -2,10 +2,11 @@ import React from "react";
 import { ConversationsByType } from "../../../@types/conversation";
 import { Empty, Select } from "antd";
 import { getOSAndBrowser } from "../../../utils/useragent";
-import * as relativeTime from "dayjs/plugin/relativeTime";
-import * as dayjs from "dayjs";
 import { UserIcon } from "@heroicons/react/24/outline";
+import relativeTime from "dayjs/plugin/relativeTime";
+import dayjs from "dayjs";
 dayjs.extend(relativeTime);
+
 export const ConversationSidebar = ({
   data,
   defaultIndex,
