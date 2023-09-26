@@ -8,7 +8,7 @@ export default function BotForm({
 }: {
     botStyle: BotStyle
 }) {
-  const { onSubmit, setHistory, setMessages } = useMessage();
+  const { onSubmit, setHistory, setMessages, resetChatId } = useMessage();
 
   const form = useForm({
     initialValues: {
@@ -40,6 +40,7 @@ export default function BotForm({
             <button
               disabled={isSending}
               onClick={() => {
+                resetChatId()
                 setHistory([]);
                 setMessages([
                   {

@@ -5,9 +5,10 @@ import {
   XMarkIcon,
   CircleStackIcon,
   CogIcon,
-  ChatBubbleLeftIcon,
+  SparklesIcon,
   PuzzlePieceIcon,
   EyeDropperIcon,
+  ChatBubbleLeftRightIcon
 } from "@heroicons/react/24/outline";
 
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
@@ -19,7 +20,7 @@ const navigation = [
   {
     name: "Playground",
     href: "/bot/:id",
-    icon: ChatBubbleLeftIcon,
+    icon: SparklesIcon,
   },
   {
     name: "Data Sources",
@@ -30,6 +31,11 @@ const navigation = [
     name: "Integrations",
     href: "/bot/:id/integrations",
     icon: PuzzlePieceIcon,
+  },
+  {
+    name: "Conversations",
+    href: "/bot/:id/conversations",
+    icon: ChatBubbleLeftRightIcon,
   },
   {
     name: "Appearance",

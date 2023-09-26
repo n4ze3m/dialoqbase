@@ -3,6 +3,7 @@ export const CHANNELS = [
   "discord",
   "whatsapp",
   "slack",
+  "website"
 ];
 
 export const geProviderRequiredFields = (channel: string) => {

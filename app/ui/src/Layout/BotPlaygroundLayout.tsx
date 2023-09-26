@@ -5,21 +5,22 @@ import {
   XMarkIcon,
   CircleStackIcon,
   CogIcon,
-  ChatBubbleLeftIcon,
   PuzzlePieceIcon,
   EyeDropperIcon,
+  SparklesIcon,
+  ChatBubbleLeftRightIcon,
 } from "@heroicons/react/24/outline";
 
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import {  Tooltip } from "antd";
+import { Tooltip } from "antd";
 import Avatar from "../components/Common/Avatar";
 
 const navigation = [
   {
     name: "Playground",
     href: "/bot/:id",
-    icon: ChatBubbleLeftIcon,
+    icon: SparklesIcon,
   },
   {
     name: "Data Sources",
@@ -30,6 +31,11 @@ const navigation = [
     name: "Integrations",
     href: "/bot/:id/integrations",
     icon: PuzzlePieceIcon,
+  },
+  {
+    name: "Conversations",
+    href: "/bot/:id/conversations",
+    icon: ChatBubbleLeftRightIcon,
   },
   {
     name: "Appearance",
@@ -182,9 +188,7 @@ export default function BotPlaygroundLayout({
             <div className="mt-14 flex flex-grow flex-col">
               <nav className="flex-1 space-y-1 px-2 pb-4">
                 {navigation.map((item) => (
-                  <Tooltip 
-                  placement="right"
-                  key={item.name} title={item.name}>
+                  <Tooltip placement="right" key={item.name} title={item.name}>
                     <Link
                       to={{
                         pathname: item.href.replace(":id", params.id!),
@@ -293,7 +297,6 @@ export default function BotPlaygroundLayout({
             </div>
           </div>
           {children}
-      
         </div>
       </div>
     </>

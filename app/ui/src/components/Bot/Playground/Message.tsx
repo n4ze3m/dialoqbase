@@ -15,6 +15,9 @@ type Props = Message & {
   onSourceClick(source: any): void;
   textToSpeech: boolean;
   textToSpeechType: string;
+  hideCopy?: boolean;
+  botAvatar?: JSX.Element;
+  userAvatar?: JSX.Element;
 };
 
 export const PlaygroundMessage = (props: Props) => {
@@ -47,9 +50,15 @@ export const PlaygroundMessage = (props: Props) => {
           <div className="w-8 flex flex-col relative items-end">
             <div className="relative h-7 w-7 p-1 rounded-sm text-white flex items-center justify-center  text-opacity-100r">
               {props.isBot ? (
-                <div className="absolute h-7 w-7 rounded-sm bg-gradient-to-r from-green-300 to-purple-400"></div>
-              ) : (
+                !props.botAvatar ? (
+                  <div className="absolute h-7 w-7 rounded-sm bg-gradient-to-r from-green-300 to-purple-400"></div>
+                ) : (
+                  props.botAvatar
+                )
+              ) : !props.userAvatar ? (
                 <div className="absolute h-7 w-7 rounded-sm bg-black/50"></div>
+              ) : (
+                props.userAvatar
               )}
             </div>
           </div>
@@ -89,19 +98,21 @@ export const PlaygroundMessage = (props: Props) => {
 
           {props.isBot && (
             <div className="flex space-x-2">
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(props.message);
-                  setIsBtnPressed(true);
-                }}
-                className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              >
-                {!isBtnPressed ? (
-                  <ClipboardIcon className="w-4 h-4 text-gray-400 group-hover:text-gray-500" />
-                ) : (
-                  <CheckIcon className="w-4 h-4 text-green-400 group-hover:text-green-500" />
-                )}
-              </button>
+              {!props.hideCopy && (
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(props.message);
+                    setIsBtnPressed(true);
+                  }}
+                  className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                >
+                  {!isBtnPressed ? (
+                    <ClipboardIcon className="w-4 h-4 text-gray-400 group-hover:text-gray-500" />
+                  ) : (
+                    <CheckIcon className="w-4 h-4 text-green-400 group-hover:text-green-500" />
+                  )}
+                </button>
+              )}
 
               {props.textToSpeech && props.textToSpeechType === "web_api" && (
                 <button

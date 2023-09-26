@@ -19,6 +19,7 @@ import BotAppearanceRoot from "./routes/bot/appearance";
 import { ConfigProvider } from "antd";
 import { StyleProvider } from "@ant-design/cssinjs";
 import BotPlaygroundLayout from "./Layout/BotPlaygroundLayout";
+import BotConversationsRoot from "./routes/bot/conversations";
 
 const router = createHashRouter([
   {
@@ -58,6 +59,22 @@ const router = createHashRouter([
     element: (
       <BotPlaygroundLayout>
         <BotPreviewRoot />
+      </BotPlaygroundLayout>
+    ),
+  },
+  {
+    path: "/bot/:id/conversations",
+    element: (
+      <BotPlaygroundLayout>
+        <BotConversationsRoot />
+      </BotPlaygroundLayout>
+    ),
+  },
+  {
+    path: "/bot/:id/conversations/:type/:conversation_id",
+    element: (
+      <BotPlaygroundLayout>
+        <BotConversationsRoot />
       </BotPlaygroundLayout>
     ),
   },
