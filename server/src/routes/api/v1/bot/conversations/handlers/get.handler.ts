@@ -5,6 +5,36 @@ import {
 } from "./type";
 import { botWebHistory } from "@prisma/client";
 
+const getAllMessagesHelper =  (webHistory: botWebHistory[]) => {
+  const messages: {
+    isBot: boolean;
+    message?: string | null;
+    sources?: any;
+    createdAt: Date;
+  }[] = [];
+  for (const message of webHistory) {
+    messages.push({
+      isBot: false,
+      message: message.human,
+      sources: null,
+      createdAt: message.createdAt,
+    });
+
+    messages.push({
+      isBot: true,
+      message: message.bot,
+      sources: message.sources,
+      createdAt: message.createdAt,
+    });
+  }
+
+  messages.sort((a, b) => {
+    return a.createdAt.getTime() - b.createdAt.getTime();
+  });
+
+  return messages;
+};
+
 export const getChatIntergationHistoryByTypeHandler = async (
   request: FastifyRequest<ChatIntergationHistoryByTypeRequest>,
   reply: FastifyReply,
@@ -52,8 +82,14 @@ export const getChatIntergationHistoryByTypeHandler = async (
           human: webHistoyGroupByChatId[key][0].human,
           bot: webHistoyGroupByChatId[key][0].bot,
           created_at: webHistoyGroupByChatId[key][0].createdAt,
+          all_messages: getAllMessagesHelper(webHistoyGroupByChatId[key]),
         };
       });
+      result.sort((a, b) => {
+        return (
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+      }); 
       return reply.status(200).send({
         message: "Success",
         data: result,

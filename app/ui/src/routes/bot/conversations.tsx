@@ -3,20 +3,26 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api";
 import React from "react";
 import { SkeletonLoading } from "../../components/Common/SkeletonLoading";
-import { Cooking } from "../../components/Common/Cooking";
-import { PlaygroundBody } from "../../components/Bot/Playground";
+import { ConversationsByType } from "../../@types/conversation";
+import { ConversationBody } from "../../components/Bot/Conversation";
 // import { PreviewIframe } from "../../components/Bot/Preview/PreviewIFrame";
 
-export default function BotPreviewRoot() {
-  const param = useParams<{ id: string }>();
+export default function BotConversationsRoot() {
+  const param = useParams<{
+    id: string;
+    type?: string;
+    conversation_id?: string;
+  }>();
   const navigate = useNavigate();
+  const [defaultType] = React.useState<string>(param.type || "website");
   const { data, status } = useQuery(
-    ["getBotPreview", param.id],
+    ["getBotConversations", param.id, param.type],
     async () => {
-      const response = await api.get(`/bot/${param.id}/embed`);
+      const response = await api.get(
+        `/bot/conversations/${param.id}/${defaultType}`
+      );
       return response.data as {
-        inProgress: boolean;
-        public_id: string;
+        data: ConversationsByType[];
       };
     },
     {
@@ -37,8 +43,7 @@ export default function BotPreviewRoot() {
           <SkeletonLoading />
         </div>
       )}
-      {status === "success" && data.inProgress && <Cooking />}
-      {status === "success" && !data.inProgress && <PlaygroundBody />}
+      {status === "success" && <ConversationBody data={data.data} />}
     </>
   );
 }
