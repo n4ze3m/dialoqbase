@@ -21,6 +21,7 @@ import { availableEmbeddingTypes } from "../../utils/embeddings";
 import { availableChatModels } from "../../utils/chatModels";
 import { SpiderIcon } from "./SpiderIcon";
 import { GithubIcon } from "./GithubIcon";
+import { YoutubeIcon } from "./Youtube";
 
 type Props = {
   createBot: (values: any) => void;
@@ -90,7 +91,7 @@ export const BotForm = ({
     {
       id: 2,
       value: "file",
-      title: "File (beta)",
+      title: "File",
       icon: DocumentArrowUpIcon,
       formComponent: (
         <>
@@ -183,7 +184,7 @@ export const BotForm = ({
     {
       id: 4,
       value: "crawl",
-      title: "Crawler (beta)",
+      title: "Crawler",
       icon: SpiderIcon,
       formComponent: (
         <>
@@ -254,7 +255,7 @@ export const BotForm = ({
     {
       id: 6,
       value: "github",
-      title: "GitHub (beta)",
+      title: "GitHub",
       icon: GithubIcon,
       formComponent: (
         <>
@@ -323,6 +324,50 @@ export const BotForm = ({
         </>
       ),
     },
+    {
+      id: 7,
+      value: "youtube",
+      title: "Youtube",
+      icon: YoutubeIcon,
+      formComponent: (
+        <>
+          <Form.Item
+            name="content"
+            rules={[
+              {
+                required: true,
+                message: "Please enter a valid youtube URL",
+              },
+              {
+                pattern: new RegExp(
+                  /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/
+                ),
+                message: "Please enter a valid youtube URL",
+              },
+            ]}
+          >
+            <input
+              type="url"
+              placeholder="Enter the youtube URL"
+              className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+            />
+          </Form.Item>
+        
+          <p className="text-sm text-gray-500">
+            If you find any issues, please report them on{" "}
+            <a
+              href="https://github.com/n4ze3m/dialoqbase/issues/new?title=Github%20issue&labels=bug"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              GitHub
+            </a>
+            .
+          </p>
+        </>
+      ),
+    }
   ]);
 
   const [selectedSource, _setSelectedSource] = React.useState<any>(
@@ -359,7 +404,7 @@ export const BotForm = ({
           Select a data source
         </RadioGroup.Label>
 
-        <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+        <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
           {availableSources.map((source) => (
             <RadioGroup.Option
               key={source.id}

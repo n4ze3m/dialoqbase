@@ -69,7 +69,7 @@ export default function NewRoot() {
             Create a new bot
           </h2>
         </div>
-        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
             <BotForm
               showEmbeddingAndModels={true}

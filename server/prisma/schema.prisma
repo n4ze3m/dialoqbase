@@ -27,6 +27,7 @@ model Bot {
   text_to_voice_enabled       Boolean          @default(false)
   text_to_voice_type          String           @default("web_api")
   text_to_voice_type_metadata Json             @default("{}") @db.Json
+  use_hybrid_search           Boolean          @default(false)
   BotAppearance               BotAppearance[]
   document                    BotDocument[]
   BotIntegration              BotIntegration[]

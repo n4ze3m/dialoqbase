@@ -33,6 +33,7 @@ export default function PlaygroundSettings({ close }: { close: () => void }) {
 
     setDefaultWebTextToSpeechLanguageWebAPI,
     setElevenLabsDefaultVoice,
+    setDefaultWebTextToSpeechLanguageType,
   } = useStoreMessage();
 
   React.useEffect(() => {
@@ -65,7 +66,7 @@ export default function PlaygroundSettings({ close }: { close: () => void }) {
       type: values.textToSpeechType,
       enabled: values.textToSpeechEnabled,
     });
-    setTextToSpeechEnabled(textToSpeechEnabled);
+    setDefaultWebTextToSpeechLanguageType(textToSpeechType);
     if (textToSpeechType === "web_api") {
       setDefaultWebTextToSpeechLanguageWebAPI(values.webApiDefaultVoice);
       localStorage.setItem(
@@ -79,6 +80,7 @@ export default function PlaygroundSettings({ close }: { close: () => void }) {
         values.elevenLabsDefaultVoice
       );
     }
+    setTextToSpeechEnabled(textToSpeechEnabled);
   };
 
   const { mutate: saveTextToSpeech, isLoading: isSavingTextToSpeech } =

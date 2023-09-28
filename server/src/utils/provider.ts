@@ -34,6 +34,8 @@ export const modelProviderName = (model: string) => {
       return "fireworks";
     case "gpt-3.5-turbo-instruct":
       return "openai-instruct";
+    case "mistral-7b-instruct-4k":
+      return "fireworks";
     default:
       return "Unknown";
   }

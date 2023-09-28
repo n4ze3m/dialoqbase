@@ -89,6 +89,7 @@ export const telegramBotHandler = async (
 
     return bot_response;
   } catch (error) {
+    console.log(error);
     return "Opps! Something went wrong";
   }
 };

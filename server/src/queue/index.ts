@@ -11,6 +11,7 @@ import { githubQueueController } from "./controllers/github.controller";
 import { txtQueueController } from "./controllers/txt.controller";
 import { audioQueueController } from "./controllers/audio.controller";
 import { videoQueueController } from "./controllers/video.controller";
+import { youtubeQueueController } from "./controllers/youtube.controller";
 
 const prisma = new PrismaClient();
 
@@ -82,6 +83,11 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
               source,
             );
             break;
+          case "youtube":
+            await youtubeQueueController(
+              source,
+            );
+            break;
           default:
             break;
         }
@@ -95,6 +101,9 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
             isPending: false,
           },
         });
+
+        done();
+        await prisma.$disconnect();
       } catch (e) {
         console.log(e);
 
@@ -107,11 +116,10 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
             isPending: false,
           },
         });
+        await prisma.$disconnect();
       }
     }
   } catch (e) {
     console.log(e);
   }
-  await prisma.$disconnect();
-  done();
 };
