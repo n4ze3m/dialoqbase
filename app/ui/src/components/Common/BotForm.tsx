@@ -91,7 +91,7 @@ export const BotForm = ({
     {
       id: 2,
       value: "file",
-      title: "File (beta)",
+      title: "File",
       icon: DocumentArrowUpIcon,
       formComponent: (
         <>
@@ -184,7 +184,7 @@ export const BotForm = ({
     {
       id: 4,
       value: "crawl",
-      title: "Crawler (beta)",
+      title: "Crawler",
       icon: SpiderIcon,
       formComponent: (
         <>
@@ -327,7 +327,7 @@ export const BotForm = ({
     {
       id: 7,
       value: "youtube",
-      title: "Youtube (beta)",
+      title: "Youtube",
       icon: YoutubeIcon,
       formComponent: (
         <>
@@ -404,7 +404,7 @@ export const BotForm = ({
           Select a data source
         </RadioGroup.Label>
 
-        <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+        <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
           {availableSources.map((source) => (
             <RadioGroup.Option
               key={source.id}

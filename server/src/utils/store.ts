@@ -100,7 +100,7 @@ export class DialoqbaseVectorStore extends VectorStore {
     const bot_id = this.botId;
 
     const data = await prisma.$queryRaw`
-     SELECT * FROM "similarity_search"(query_embedding := ${vector}::vector, botId := ${bot_id}::text,match_count := ${k}::int)
+     SELECT * FROM "similarity_search_v2"(query_embedding := ${vector}::vector, botId := ${bot_id}::text,match_count := ${k}::int)
     `;
 
     const result: [Document, number][] = (

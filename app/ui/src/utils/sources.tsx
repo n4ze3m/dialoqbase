@@ -1,5 +1,6 @@
 import { GithubIcon } from "../components/Common/GithubIcon";
 import { SpiderIcon } from "../components/Common/SpiderIcon";
+import { YoutubeIcon } from "../components/Common/Youtube";
 
 export const sources = {
   website: (
@@ -108,6 +109,7 @@ export const sources = {
   ),
   crawl: <SpiderIcon className="h-4 w-4" />,
   github: <GithubIcon className="h-4 w-4" />,
+  youtube: <YoutubeIcon className="h-4 w-4" />,
   mp3: (
     <svg
       xmlns="http://www.w3.org/2000/svg"

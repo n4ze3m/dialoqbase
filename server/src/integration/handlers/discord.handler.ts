@@ -89,6 +89,7 @@ export const discordBotHandler = async (
 
     return bot_response;
   } catch (error) {
+    console.log(error);
     return "Opps! Something went wrong";
   }
 };
@@ -123,6 +124,7 @@ export const clearDiscordChatHistory = async (
 
     return "Chat history cleared";
   } catch (error) {
+    console.log(error);
     return "Opps! Something went wrong";
   }
 };

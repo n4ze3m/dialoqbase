@@ -25,6 +25,7 @@ export default function BotSettingsRoot() {
           questionGeneratorPrompt: string;
           streaming: boolean;
           showRef: boolean;
+          use_hybrid_search: boolean;
         };
       };
     },

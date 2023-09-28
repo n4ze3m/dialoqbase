@@ -121,6 +121,9 @@ export const updateBotByIdSchema: FastifySchema = {
       showRef: {
         type: "boolean",
       },
+      use_hybrid_search: {
+        type: "boolean",
+      }
     },
   },
 };

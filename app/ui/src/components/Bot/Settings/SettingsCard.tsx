@@ -24,6 +24,7 @@ export const SettingsCard = ({
     questionGeneratorPrompt: string;
     streaming: boolean;
     showRef: boolean;
+    use_hybrid_search: boolean;
   };
 }) => {
   const [form] = Form.useForm();
@@ -127,6 +128,7 @@ export const SettingsCard = ({
             questionGeneratorPrompt: data.questionGeneratorPrompt,
             streaming: data.streaming,
             showRef: data.showRef,
+            use_hybrid_search: data.use_hybrid_search,
           }}
           form={form}
           requiredMark={false}
@@ -256,6 +258,36 @@ export const SettingsCard = ({
                     rows={5}
                     placeholder=""
                   />
+                </Form.Item>
+
+                <Form.Item
+                  label={
+                    <span className="font-medium text-gray-800 text-sm">
+                      Question Generator Prompt 
+                    </span>
+                  }
+                  name="questionGeneratorPrompt"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input a prompt!",
+                    },
+                  ]}
+                >
+                  <textarea
+                    className="mt-1 block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                    rows={5}
+                    placeholder=""
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  name="use_hybrid_search"
+                  label="Use Hybrid Search Retrieval (Beta)"
+                  valuePropName="checked"
+                  tooltip="This will use the hybrid search retrieval method instead of the default semantic search retrieval method. Only work on playground ui."
+                >
+                  <Switch />
                 </Form.Item>
               </div>
             </div>

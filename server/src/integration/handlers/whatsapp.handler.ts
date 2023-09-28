@@ -99,6 +99,7 @@ export const whatsappBotHandler = async (
 
     return bot_response;
   } catch (error) {
+    console.log(error);
     return "Opps! Something went wrong";
   }
 };
@@ -132,6 +133,7 @@ export const clearHistoryWhatsapp = async (
 
     return "Chat history cleared";
   } catch (error) {
+    console.log(error);
     return "Opps! Something went wrong";
   }
 };
