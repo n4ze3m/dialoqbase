@@ -101,6 +101,9 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
             isPending: false,
           },
         });
+
+        done();
+        await prisma.$disconnect();
       } catch (e) {
         console.log(e);
 
@@ -113,11 +116,10 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
             isPending: false,
           },
         });
+        await prisma.$disconnect();
       }
     }
   } catch (e) {
     console.log(e);
   }
-  await prisma.$disconnect();
-  done();
 };
