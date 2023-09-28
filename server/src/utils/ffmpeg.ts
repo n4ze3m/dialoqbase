@@ -52,3 +52,23 @@ export const convertMp3ToWave = async (file_path: string) => {
   ffmpeg.exit();
   return new_file_path;
 };
+
+
+export const convertMp3ToWaveFromBuffer = async (audio: Buffer) => {
+  await _init();
+  ffmpeg.FS("writeFile", "./audio.mp3", audio);
+  await ffmpeg.run(
+    "-i",
+    "./audio.mp3",
+    "-acodec",
+    "pcm_s16le",
+    "-ac",
+    "1",
+    "-ar",
+    "16000",
+    "./audio.wav",
+  );
+  const data = ffmpeg.FS("readFile", "./audio.wav");
+  ffmpeg.exit();
+  return data;
+};

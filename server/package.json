@@ -64,7 +64,8 @@
     "pdfjs-dist": "^3.7.107",
     "pubsub-js": "^1.9.4",
     "unique-names-generator": "^4.7.1",
-    "wavefile": "^11.0.0"
+    "wavefile": "^11.0.0",
+    "ytdl-core": "^4.11.5"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",

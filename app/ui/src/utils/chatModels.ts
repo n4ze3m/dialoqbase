@@ -42,6 +42,10 @@ export const availableChatModels = [
     value: "llama-v2-34b-code-instruct-w8a16",
     label: "Llama v2 34B Code Instruct int8 (Fireworks)",
   },
+  {
+    value: "mistral-7b-instruct-4k",
+    label: "Mistral 7B Instruct 4K (Fireworks)",
+  }
   // {
   //   value: "falcon-7b-instruct-inference",
   //   label: "Falcon 7B Instruct (HuggingFace Inference API)",
@@ -63,7 +67,8 @@ export const streamingSupportedModels = [
   "llama-v2-13b-chat-w8a16",
   "llama-v2-13b-code-instruct",
   "llama-v2-34b-code-instruct-w8a16",
-  "gpt-3.5-turbo-instruct"
+  "gpt-3.5-turbo-instruct",
+  "mistral-7b-instruct-4k",
 ];
 
 export const isStreamingSupported = (model: string) => {

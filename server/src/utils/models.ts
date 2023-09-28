@@ -85,6 +85,7 @@ export const fireworksModels: {
     "accounts/fireworks/models/llama-v2-13b-code-instruct",
   "llama-v2-34b-code-instruct-w8a16":
     "accounts/fireworks/models/llama-v2-34b-code-instruct-w8a16",
+  "mistral-7b-instruct-4k": "accounts/fireworks/models/mistral-7b-instruct-4k",
 };
 
 export const streamingSupportedModels = [
@@ -103,6 +104,7 @@ export const streamingSupportedModels = [
   "llama-v2-13b-code-instruct",
   "llama-v2-34b-code-instruct-w8a16",
   "gpt-3.5-turbo-instruct",
+  "mistral-7b-instruct-4k",
 ];
 
 export const isStreamingSupported = (model: string) => {
@@ -112,6 +114,7 @@ export const isStreamingSupported = (model: string) => {
 export const notChatModels = [
   "llama-v2-13b-code-instruct",
   "llama-v2-34b-code-instruct-w8a16",
+  "mistral-7b-instruct-4k",
 ];
 
 export const supportedModels = [
@@ -132,4 +135,5 @@ export const supportedModels = [
   "llama-v2-13b-code-instruct",
   "llama-v2-34b-code-instruct-w8a16",
   "gpt-3.5-turbo-instruct",
+  "mistral-7b-instruct-4k"
 ];

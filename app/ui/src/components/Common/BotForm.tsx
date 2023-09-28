@@ -21,6 +21,7 @@ import { availableEmbeddingTypes } from "../../utils/embeddings";
 import { availableChatModels } from "../../utils/chatModels";
 import { SpiderIcon } from "./SpiderIcon";
 import { GithubIcon } from "./GithubIcon";
+import { YoutubeIcon } from "./Youtube";
 
 type Props = {
   createBot: (values: any) => void;
@@ -254,7 +255,7 @@ export const BotForm = ({
     {
       id: 6,
       value: "github",
-      title: "GitHub (beta)",
+      title: "GitHub",
       icon: GithubIcon,
       formComponent: (
         <>
@@ -323,6 +324,50 @@ export const BotForm = ({
         </>
       ),
     },
+    {
+      id: 7,
+      value: "youtube",
+      title: "Youtube (beta)",
+      icon: YoutubeIcon,
+      formComponent: (
+        <>
+          <Form.Item
+            name="content"
+            rules={[
+              {
+                required: true,
+                message: "Please enter a valid youtube URL",
+              },
+              {
+                pattern: new RegExp(
+                  /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/
+                ),
+                message: "Please enter a valid youtube URL",
+              },
+            ]}
+          >
+            <input
+              type="url"
+              placeholder="Enter the youtube URL"
+              className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+            />
+          </Form.Item>
+        
+          <p className="text-sm text-gray-500">
+            If you find any issues, please report them on{" "}
+            <a
+              href="https://github.com/n4ze3m/dialoqbase/issues/new?title=Github%20issue&labels=bug"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              GitHub
+            </a>
+            .
+          </p>
+        </>
+      ),
+    }
   ]);
 
   const [selectedSource, _setSelectedSource] = React.useState<any>(
