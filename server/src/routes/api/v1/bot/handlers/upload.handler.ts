@@ -44,6 +44,7 @@ export const createBotFileHandler = async (
       });
     }
 
+    console.log(providerName)
     const isAPIKeyAddedForProvider = apiKeyValidaton(providerName);
 
     if (!isAPIKeyAddedForProvider) {
