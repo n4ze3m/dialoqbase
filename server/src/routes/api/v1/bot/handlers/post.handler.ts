@@ -70,6 +70,7 @@ export const createBotHandler = async (
       model,
       provider: providerName,
       streaming: isStreamingAvilable,
+      user_id: request.user.user_id,
     },
   });
 
@@ -101,9 +102,10 @@ export const addNewSourceByIdHandler = async (
   const prisma = request.server.prisma;
   const id = request.params.id;
 
-  const bot = await prisma.bot.findUnique({
+  const bot = await prisma.bot.findFirst({
     where: {
       id,
+      user_id: request.user.user_id,
     },
   });
 
@@ -147,9 +149,10 @@ export const refreshSourceByIdHandler = async (
   const bot_id = request.params.id;
   const source_id = request.params.sourceId;
 
-  const bot = await prisma.bot.findUnique({
+  const bot = await prisma.bot.findFirst({
     where: {
       id: bot_id,
+      user_id: request.user.user_id,
     },
   });
 

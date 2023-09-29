@@ -20,6 +20,7 @@ import { ConfigProvider } from "antd";
 import { StyleProvider } from "@ant-design/cssinjs";
 import BotPlaygroundLayout from "./Layout/BotPlaygroundLayout";
 import BotConversationsRoot from "./routes/bot/conversations";
+import RegisterRoot from "./routes/register";
 
 const router = createHashRouter([
   {
@@ -122,8 +123,14 @@ const router = createHashRouter([
       </DashboardLayout>
     ),
   },
+  {
+    path: "/register",
+    element: <RegisterRoot />
+  }
 ]);
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  
+});
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ConfigProvider theme={{}}>

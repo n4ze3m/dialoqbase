@@ -8,9 +8,10 @@ export const postBotAppearanceHandler = async (
   const prisma = request.server.prisma;
   const { id } = request.params;
 
-  const isBotExist = await prisma.bot.findUnique({
+  const isBotExist = await prisma.bot.findFirst({
     where: {
       id,
+      user_id: request.user.user_id,
     },
   });
 

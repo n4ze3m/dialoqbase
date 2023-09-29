@@ -20,6 +20,7 @@ export const chatRequestHandler = async (
   const bot = await prisma.bot.findFirst({
     where: {
       id: bot_id,
+      user_id: request.user.user_id,
     },
   });
 
@@ -166,6 +167,7 @@ export const chatRequestStreamHandler = async (
   const bot = await prisma.bot.findFirst({
     where: {
       id: bot_id,
+      user_id: request.user.user_id,
     },
   });
 
@@ -346,9 +348,10 @@ export const updateBotAudioSettingsHandler = async (
 
   const prisma = request.server.prisma;
 
-  const bot = await prisma.bot.findUnique({
+  const bot = await prisma.bot.findFirst({
     where: {
       id,
+      user_id: request.user.user_id,
     },
   });
 

@@ -2,7 +2,7 @@ import fp from "fastify-plugin";
 import { FastifyPluginAsync } from "fastify";
 
 import * as Queue from "bull";
-import { queueHandler } from "../queue";
+import { join } from "path";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -18,8 +18,8 @@ const bullPlugin: FastifyPluginAsync = fp(async (server, options) => {
   const queue = new Queue("vector", redis_url, {});
 
   await queue.isReady();
-
-  queue.process(queueHandler);
+  const path = join(__dirname, "../queue/index.js");
+  queue.process(path);
 
   server.decorate("queue", queue);
 

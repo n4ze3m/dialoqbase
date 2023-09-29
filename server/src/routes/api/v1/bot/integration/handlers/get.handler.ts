@@ -6,12 +6,12 @@ export async function getChannelsByProvider(
   reply: FastifyReply,
 ) {
   const { id } = request.params;
-  console.log("bot id", id);
   const prisma = request.server.prisma;
 
-  const bot = await prisma.bot.findUnique({
+  const bot = await prisma.bot.findFirst({
     where: {
       id,
+      user_id: request.user.user_id,
     },
   });
 

@@ -1,11 +1,13 @@
 import { QueryBoundaries } from "../../components/Common/QueryBoundaries";
-import { AuthLogin } from "../../components/Auth/Login";
+import { AuthRegister } from "../../components/Auth/Register";
 
-export default function LoginRoot() {
+
+export default function RegisterRoot() {
+  
+
   return (
     <QueryBoundaries>
-      {" "}
-      <AuthLogin />
+      <AuthRegister />
     </QueryBoundaries>
   );
 }

@@ -13,6 +13,8 @@ model Bot {
   id                          String           @id @default(cuid())
   publicId                    String           @unique @default(uuid())
   name                        String
+  user_id                     Int?
+  User                        User?            @relation(fields: [user_id], references: [user_id])
   description                 String?
   createdAt                   DateTime         @default(now())
   temperature                 Float            @default(0.7)
@@ -62,10 +64,20 @@ model BotDocument {
 }
 
 model User {
-  user_id      Int     @id @default(autoincrement())
-  username     String
-  password     String
-  isFirstLogin Boolean @default(true)
+  user_id         Int     @id @default(autoincrement())
+  username        String  @unique
+  password        String
+  email           String? @unique
+  isFirstLogin    Boolean @default(true)
+  isAdministrator Boolean @default(false)
+  bots            Bot[]
+}
+
+model DialoqbaseSettings {
+  id Int @id @default(autoincrement())
+  noOfBotsPerUser Int @default(10)
+  allowUserToCreateBots Boolean @default(true)
+  allowUserToRegister Boolean @default(false)
 }
 
 model BotIntegration {

@@ -1,13 +1,17 @@
 import { FastifyPluginAsync } from "fastify";
 import {
-  userLoginHandler,
+  isRegisterationAllowedHandler,
+  registerUserHandler,
   updatePasswordHandler,
   updateUsernameHandler,
+  userLoginHandler,
 } from "./handlers";
 import {
-  userLoginSchema,
+  isRegisterationAllowedSchema,
   updatePasswordSchema,
   updateUsernameSchema,
+  userLoginSchema,
+  userRegisterSchema,
 } from "./schema";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
@@ -16,25 +20,41 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     {
       schema: userLoginSchema,
     },
-    userLoginHandler
+    userLoginHandler,
   );
 
   fastify.post(
     "/update-username",
     {
       schema: updateUsernameSchema,
-      onRequest: [fastify.authenticate]
+      onRequest: [fastify.authenticate],
     },
-    updateUsernameHandler
+    updateUsernameHandler,
   );
 
   fastify.post(
     "/update-password",
     {
       schema: updatePasswordSchema,
-      onRequest: [fastify.authenticate]
+      onRequest: [fastify.authenticate],
     },
-    updatePasswordHandler
+    updatePasswordHandler,
+  );
+
+  fastify.get(
+    "/info",
+    {
+      schema: isRegisterationAllowedSchema,
+    },
+    isRegisterationAllowedHandler,
+  );
+
+  fastify.post(
+    "/register",
+    {
+      schema: userRegisterSchema,
+    },
+    registerUserHandler,
   );
 };
 
