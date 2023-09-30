@@ -7,7 +7,7 @@ import WhatsappBot from "../integration/whatsapp";
 // import SlackBot from "../integration/slack";
 
 const integrationPlugin: FastifyPluginAsync = fp(async (server, options) => {
-  console.log("Connecting pm2...");
+  console.log("Connecting integration...");
   const prisma = new PrismaClient();
   const pendingProcess = await prisma.botIntegration.findMany({
     where: {

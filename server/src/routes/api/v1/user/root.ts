@@ -1,6 +1,7 @@
 import { FastifyPluginAsync } from "fastify";
 import {
   isRegisterationAllowedHandler,
+  meHandler,
   registerUserHandler,
   updatePasswordHandler,
   updateUsernameHandler,
@@ -55,6 +56,24 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       schema: userRegisterSchema,
     },
     registerUserHandler,
+  );
+
+  fastify.get(
+    "/is-admin",
+    {
+      onRequest: [fastify.authenticate],
+    },
+    async (request, reply) => {
+      reply.send({ is_admin: request.user.is_admin });
+    },
+  );
+
+  fastify.get(
+    "/me",
+    {
+      onRequest: [fastify.authenticate],
+    },
+    meHandler,
   );
 };
 
