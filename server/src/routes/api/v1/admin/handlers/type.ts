@@ -5,3 +5,18 @@ export type UpdateDialoqbaseSettingsRequest = {
     allowUserToRegister: boolean;
   };
 };
+
+export type ResetUserPasswordByAdminRequest = {
+  Body: {
+    user_id: number;
+    new_password: string;
+  };
+}
+
+export type RegisterUserbyAdminRequestBody = {
+  Body: {
+    username: string;
+    email: string;
+    password: string;
+  }
+}

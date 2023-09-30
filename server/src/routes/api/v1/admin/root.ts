@@ -2,10 +2,16 @@ import { FastifyPluginAsync } from "fastify";
 import {
   dialoqbaseSettingsHandler,
   updateDialoqbaseSettingsHandler,
+  getAllUsersHandler,
+  registerUserByAdminHandler,
+  resetUserPasswordByAdminHandler
 } from "./handlers";
 import {
   dialoqbaseSettingsSchema,
   updateDialoqbaseSettingsSchema,
+  getAllUsersSchema,
+  registerUserByAdminSchema,
+  resetUserPasswordByAdminSchema
 } from "./schema";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
@@ -25,6 +31,33 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       onRequest: [fastify.authenticate],
     },
     updateDialoqbaseSettingsHandler,
+  );
+
+  fastify.get(
+    "/users",
+    {
+      schema: getAllUsersSchema,
+      onRequest: [fastify.authenticate],
+    },
+    getAllUsersHandler,
+  );
+
+  fastify.post(
+    "/register-user",
+    {
+      schema: registerUserByAdminSchema,
+      onRequest: [fastify.authenticate],
+    },
+    registerUserByAdminHandler,
+  );
+
+  fastify.post(
+    "/reset-user-password",
+    {
+      schema: resetUserPasswordByAdminSchema,
+      onRequest: [fastify.authenticate],
+    },
+    resetUserPasswordByAdminHandler,
   );
 };
 

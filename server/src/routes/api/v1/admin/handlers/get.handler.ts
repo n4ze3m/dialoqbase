@@ -24,3 +24,30 @@ export const dialoqbaseSettingsHandler = async (
 
   return settings;
 };
+
+export const getAllUsersHandler = async (
+  request: FastifyRequest,
+  reply: FastifyReply,
+) => {
+  const prisma = request.server.prisma;
+  const user = request.user;
+
+  if (!user.is_admin) {
+    return reply.status(403).send({
+      message: "Forbidden",
+    });
+  }
+
+  const users = await prisma.user.findMany({
+    include: {
+      bots: true,
+    },
+  });
+
+  return users.map((user) => ({
+    ...user,
+    is_admin: user.isAdministrator,
+    password: undefined,
+    bots: user.bots.length,
+  }));
+};
