@@ -4,7 +4,7 @@ export const modelProviderName = (model: string) => {
     case "gpt-3.5-turbo-16k":
     case "gpt-4":
     case "gpt-4-0613":
-      return process.env.AZURE_OPENAI_API_KEY ? "azure openai" : "openai";
+      return "openai";
     case "claude-1":
       return "anthropic";
     case "claude-instant-1":

@@ -56,16 +56,6 @@ export const chatModelProvider = (
         temperature: temperature,
         ...otherFields,
       });
-    case "azure openai":
-      return new OpenAI({
-        modelName: modelName,
-        temperature: temperature,
-        azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY ,
-        azureOpenAIApiInstanceName: process.env.AZURE_OPENAI_API_INSTANCE_NAME ,
-        azureOpenAIApiDeploymentName: process.env.AZURE_OPENAI_API_DEPLOYMENT_NAME ,
-        azureOpenAIApiVersion: process.env.AZURE_OPENAI_API_VERSION ,
-        ...otherFields,
-      });
     default:
       console.log("using default");
       return new ChatOpenAI({
