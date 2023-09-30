@@ -15,7 +15,7 @@ export const userLoginSchema: FastifySchema = {
   },
 };
 
-export const updateUsernameSchema: FastifySchema = {
+export const updateProfileSchema: FastifySchema = {
   body: {
     type: "object",
     required: ["username", "email"],

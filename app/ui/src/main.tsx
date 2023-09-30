@@ -22,6 +22,7 @@ import BotPlaygroundLayout from "./Layout/BotPlaygroundLayout";
 import BotConversationsRoot from "./routes/bot/conversations";
 import RegisterRoot from "./routes/register";
 import { QueryBoundaries } from "./components/Common/QueryBoundaries";
+import SettingsApplicationRoot from "./routes/settings/application";
 
 const router = createHashRouter([
   {
@@ -122,6 +123,16 @@ const router = createHashRouter([
       <DashboardLayout>
         <QueryBoundaries>
           <SettingsRoot />
+        </QueryBoundaries>
+      </DashboardLayout>
+    ),
+  },
+  {
+    path: "/settings/application",
+    element: (
+      <DashboardLayout>
+        <QueryBoundaries>
+          <SettingsApplicationRoot />
         </QueryBoundaries>
       </DashboardLayout>
     ),

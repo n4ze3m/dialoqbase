@@ -52,7 +52,7 @@ export const userLoginHandler = async (
   });
 };
 
-export const updateUsernameHandler = async (
+export const updateProfileHandler = async (
   request: FastifyRequest<UpdateUsernameRequestBody>,
   reply: FastifyReply,
 ) => {

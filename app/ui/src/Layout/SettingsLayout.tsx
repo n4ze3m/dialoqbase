@@ -63,8 +63,8 @@ export const SettingsLayout = ({ children }: { children: React.ReactNode }) => {
                   current={location.pathname}
                 />
                 <LinkComponent
-                  href="/settings/applications"
-                  name="Applications"
+                  href="/settings/application"
+                  name="Application"
                   icon={CubeIcon}
                   current={location.pathname}
                 />

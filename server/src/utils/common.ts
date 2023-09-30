@@ -8,7 +8,16 @@ export const getSettings = (prisma: PrismaClient) => {
   });
 
   if (!settings) {
-    throw new Error("Settings not found");
+    const defaultSettings = prisma.dialoqbaseSettings.create({
+      data: {
+        id: 1,
+        allowUserToCreateBots: true,
+        allowUserToRegister: false,
+        noOfBotsPerUser: 10,
+      },
+    });
+
+    return defaultSettings;
   }
 
   return settings;

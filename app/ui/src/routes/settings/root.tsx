@@ -1,5 +1,4 @@
 import { Form, notification } from "antd";
-import { useAuth } from "../../context/AuthContext";
 import React from "react";
 import api from "../../services/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -27,13 +26,13 @@ export default function SettingsRoot() {
     }
   }, [status]);
 
-  const onUpdateUsername = async (values: any) => {
-    const response = await api.post("/user/update-username", values);
+  const onUpdateProfile = async (values: any) => {
+    const response = await api.post("/user/me", values);
     return response.data;
   };
 
-  const { mutateAsync: updateUsername, isLoading } = useMutation(
-    onUpdateUsername,
+  const { mutateAsync: updateProfile, isLoading } = useMutation(
+    onUpdateProfile,
     {
       onSuccess: (data) => {
         notification.success({
@@ -109,7 +108,7 @@ export default function SettingsRoot() {
                     ...data,
                   }}
                   layout="vertical"
-                  onFinish={updateUsername}
+                  onFinish={updateProfile}
                 >
                   <div className="sm:overflow-hidden ">
                     <div className="space-y-6 border-t border rounded-t-md  bg-white px-4 py-5 sm:p-6">

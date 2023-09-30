@@ -13,6 +13,7 @@ import {
 } from "../../../../../utils/validate";
 import { modelProviderName } from "../../../../../utils/provider";
 import { isStreamingSupported } from "../../../../../utils/models";
+import { getSettings } from "../../../../../utils/common";
 
 export const createBotHandler = async (
   request: FastifyRequest<CreateBotRequest>,
@@ -27,6 +28,30 @@ export const createBotHandler = async (
   } = request.body;
 
   const prisma = request.server.prisma;
+
+  // only non-admin users are affected by this settings
+  const settings = await getSettings(prisma);
+  const user = request.user;
+  const isBotCreatingAllowed = settings?.allowUserToCreateBots;
+  if (!user.is_admin && !isBotCreatingAllowed) {
+    return reply.status(400).send({
+      message: "Bot creation is disabled by admin",
+    });
+  }
+
+  const totalBotsUserCreated = await prisma.bot.count({
+    where: {
+      user_id: request.user.user_id,
+    },
+  });
+
+  const maxBotsAllowed = settings?.noOfBotsPerUser || 10;
+
+  if (!user.is_admin && totalBotsUserCreated >= maxBotsAllowed) {
+    return reply.status(400).send({
+      message: `Reach maximum limit of ${maxBotsAllowed} bots per user`,
+    });
+  }
 
   const isEmbeddingsValid = apiKeyValidaton(embedding);
 

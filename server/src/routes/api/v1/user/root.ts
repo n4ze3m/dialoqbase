@@ -4,13 +4,13 @@ import {
   meHandler,
   registerUserHandler,
   updatePasswordHandler,
-  updateUsernameHandler,
+  updateProfileHandler,
   userLoginHandler,
 } from "./handlers";
 import {
   isRegisterationAllowedSchema,
   updatePasswordSchema,
-  updateUsernameSchema,
+  updateProfileSchema,
   userLoginSchema,
   userRegisterSchema,
 } from "./schema";
@@ -25,12 +25,12 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   );
 
   fastify.post(
-    "/update-username",
+    "/me",
     {
-      schema: updateUsernameSchema,
+      schema: updateProfileSchema,
       onRequest: [fastify.authenticate],
     },
-    updateUsernameHandler,
+    updateProfileHandler,
   );
 
   fastify.post(
