@@ -12,13 +12,12 @@ export const apiKeyValidaton = (embeddingsType: string) => {
         case "google-gecko":
             return process.env.GOOGLE_API_KEY ? process.env.GOOGLE_API_KEY.length > 0 : false;
         case "openai":
+        case "openai-instruct":
             let flag = process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.length > 0 : false;
             if (!flag) {
                 flag = process.env.AZURE_OPENAI_API_KEY ? process.env.AZURE_OPENAI_API_KEY.length > 0 : false;
             }
              return flag;
-        case "openai-instruct":
-            return process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.length > 0 : false;
         case "cohere":
             return process.env.COHERE_API_KEY ? process.env.COHERE_API_KEY.length > 0 : false;
         case "huggingface-api":
