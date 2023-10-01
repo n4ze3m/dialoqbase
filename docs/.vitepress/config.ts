@@ -121,6 +121,10 @@ export default defineConfig({
           {
             link: "/guide/application/adjusting-bots-creation-limit-in-dialoqbase",
             text: "Adjusting Bots Creation Limit For Users",
+          },
+          {
+            link:"/guide/application/setting-up-dialoqbase-queue-concurrency",
+            text:"Setting up Dialoqbase Queue Concurrency"
           }
         ],
       },
