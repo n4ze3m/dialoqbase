@@ -110,6 +110,25 @@ export default defineConfig({
         ],
       },
       {
+        text: "Application",
+        collapsed: false,
+        items: [
+          {
+            link:
+              "/guide/application/enabling-disabling-user-registration-in-dialoqbase",
+            text: "Enabling/Disabling User Registration",
+          },
+          {
+            link: "/guide/application/adjusting-bots-creation-limit-in-dialoqbase",
+            text: "Adjusting Bots Creation Limit For Users",
+          },
+          {
+            link:"/guide/application/setting-up-dialoqbase-queue-concurrency",
+            text:"Setting up Dialoqbase Queue Concurrency"
+          }
+        ],
+      },
+      {
         text: "AI Providers",
         collapsed: false,
         items: [

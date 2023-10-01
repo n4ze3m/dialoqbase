@@ -53,7 +53,6 @@ export default function DashboardLayout({
                         <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm">
                           <span className="sr-only">Open user menu</span>
                           <Avatar username={profile?.username || "admin"} />
-
                         </Menu.Button>
                       </div>
                       <Transition
@@ -137,11 +136,9 @@ export default function DashboardLayout({
             </>
           )}
         </Disclosure>
-        <div className="py-10">
+        <div>
           <main>
-            <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
               {children}
-            </div>
           </main>
         </div>
       </div>

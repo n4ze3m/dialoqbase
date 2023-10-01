@@ -14,6 +14,7 @@
     "build": "tsc && copyfiles -u 1 \"src/**/*.js \" dist",
     "db": "prisma generate",
     "watch:ts": "tsc -w",
+    "queue": "node dist/queue.js",
     "dev": "npm run build:ts && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"npm:watch:ts\" \"npm:dev:start\"",
     "dev:start": "fastify start --ignore-watch=uploads,.ts$ -w  -P dist/app.js"
   },

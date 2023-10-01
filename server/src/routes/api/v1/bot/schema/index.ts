@@ -6,7 +6,6 @@ import { SUPPORTED_SOURCE_TYPES } from "../../../../../utils/datasource";
 export const createBotSchema: FastifySchema = {
   body: {
     type: "object",
-    required: ["content", "type"],
     properties: {
       content: {
         type: "string",

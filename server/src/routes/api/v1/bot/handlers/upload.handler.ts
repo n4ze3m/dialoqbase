@@ -19,6 +19,8 @@ import { modelProviderName } from "../../../../../utils/provider";
 const pump = util.promisify(pipeline);
 import { fileTypeFinder } from "../../../../../utils/fileType";
 import { isStreamingSupported } from "../../../../../utils/models";
+import { getSettings } from "../../../../../utils/common";
+import { HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT } from "../../../../../utils/prompts";
 
 export const createBotFileHandler = async (
   request: FastifyRequest<UploadPDF>,
@@ -27,6 +29,31 @@ export const createBotFileHandler = async (
   try {
     const embedding = request.query.embedding;
     const model = request.query.model;
+    const prisma = request.server.prisma;
+    // only non-admin users are affected by this settings
+    const settings = await getSettings(prisma);
+    const user = request.user;
+    const isBotCreatingAllowed = settings?.allowUserToCreateBots;
+    if (!user.is_admin && !isBotCreatingAllowed) {
+      return reply.status(400).send({
+        message: "Bot creation is disabled by admin",
+      });
+    }
+
+    const totalBotsUserCreated = await prisma.bot.count({
+      where: {
+        user_id: request.user.user_id,
+      },
+    });
+
+    const maxBotsAllowed = settings?.noOfBotsPerUser || 10;
+
+    if (!user.is_admin && totalBotsUserCreated >= maxBotsAllowed) {
+      return reply.status(400).send({
+        message: `Reach maximum limit of ${maxBotsAllowed} bots per user`,
+      });
+    }
+
     const isEmbeddingsValid = apiKeyValidaton(embedding);
 
     if (!isEmbeddingsValid) {
@@ -44,7 +71,7 @@ export const createBotFileHandler = async (
       });
     }
 
-    console.log(providerName)
+    console.log(providerName);
     const isAPIKeyAddedForProvider = apiKeyValidaton(providerName);
 
     if (!isAPIKeyAddedForProvider) {
@@ -57,7 +84,6 @@ export const createBotFileHandler = async (
       length: 2,
     });
 
-    const prisma = request.server.prisma;
     const isStreamingAvilable = isStreamingSupported(model);
 
     const bot = await prisma.bot.create({
@@ -67,6 +93,7 @@ export const createBotFileHandler = async (
         model,
         provider: providerName,
         streaming: isStreamingAvilable,
+        user_id: request.user.user_id,
       },
     });
 
@@ -112,9 +139,13 @@ export const addNewSourceFileByIdHandler = async (
   const prisma = request.server.prisma;
   const id = request.params.id;
 
-  const bot = await prisma.bot.findUnique({
+  const bot = await prisma.bot.findFirst({
     where: {
       id,
+      user_id: request.user.user_id,
+    },
+    include: {
+      source: true,
     },
   });
 
@@ -141,6 +172,18 @@ export const addNewSourceFileByIdHandler = async (
         botId: id,
       },
     });
+
+    if (bot.source.length === 0 && !bot.haveDataSourcesBeenAdded) {
+      await prisma.bot.update({
+        where: {
+          id,
+        },
+        data: {
+          haveDataSourcesBeenAdded: true,
+          qaPrompt: HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT,
+        },
+      });
+    }
 
     await request.server.queue.add([{
       ...botSource,

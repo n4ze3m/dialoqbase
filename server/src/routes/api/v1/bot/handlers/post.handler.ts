@@ -13,6 +13,11 @@ import {
 } from "../../../../../utils/validate";
 import { modelProviderName } from "../../../../../utils/provider";
 import { isStreamingSupported } from "../../../../../utils/models";
+import { getSettings } from "../../../../../utils/common";
+import {
+  HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT,
+  HELPFUL_ASSISTANT_WITHOUT_CONTEXT_PROMPT,
+} from "../../../../../utils/prompts";
 
 export const createBotHandler = async (
   request: FastifyRequest<CreateBotRequest>,
@@ -27,6 +32,30 @@ export const createBotHandler = async (
   } = request.body;
 
   const prisma = request.server.prisma;
+
+  // only non-admin users are affected by this settings
+  const settings = await getSettings(prisma);
+  const user = request.user;
+  const isBotCreatingAllowed = settings?.allowUserToCreateBots;
+  if (!user.is_admin && !isBotCreatingAllowed) {
+    return reply.status(400).send({
+      message: "Bot creation is disabled by admin",
+    });
+  }
+
+  const totalBotsUserCreated = await prisma.bot.count({
+    where: {
+      user_id: request.user.user_id,
+    },
+  });
+
+  const maxBotsAllowed = settings?.noOfBotsPerUser || 10;
+
+  if (!user.is_admin && totalBotsUserCreated >= maxBotsAllowed) {
+    return reply.status(400).send({
+      message: `Reach maximum limit of ${maxBotsAllowed} bots per user`,
+    });
+  }
 
   const isEmbeddingsValid = apiKeyValidaton(embedding);
 
@@ -63,35 +92,55 @@ export const createBotHandler = async (
 
   const isStreamingAvilable = isStreamingSupported(request.body.model);
 
-  const bot = await prisma.bot.create({
-    data: {
-      name,
+  if (content && type) {
+    const bot = await prisma.bot.create({
+      data: {
+        name,
+        embedding,
+        model,
+        provider: providerName,
+        streaming: isStreamingAvilable,
+        user_id: request.user.user_id,
+        haveDataSourcesBeenAdded: true,
+      },
+    });
+    const botSource = await prisma.botSource.create({
+      data: {
+        content,
+        type,
+        botId: bot.id,
+        options: request.body.options,
+      },
+    });
+
+    await request.server.queue.add([{
+      ...botSource,
       embedding,
-      model,
-      provider: providerName,
-      streaming: isStreamingAvilable,
-    },
-  });
-
-  const botSource = await prisma.botSource.create({
-    data: {
-      content,
-      type,
-      botId: bot.id,
+      maxDepth: request.body.maxDepth,
+      maxLinks: request.body.maxLinks,
       options: request.body.options,
-    },
-  });
+    }]);
+    return {
+      id: bot.id,
+    };
+  } else {
+    const bot = await prisma.bot.create({
+      data: {
+        name,
+        embedding,
+        model,
+        provider: providerName,
+        streaming: isStreamingAvilable,
+        user_id: request.user.user_id,
+        haveDataSourcesBeenAdded: false,
+        qaPrompt: HELPFUL_ASSISTANT_WITHOUT_CONTEXT_PROMPT,
+      },
+    });
 
-  await request.server.queue.add([{
-    ...botSource,
-    embedding,
-    maxDepth: request.body.maxDepth,
-    maxLinks: request.body.maxLinks,
-    options: request.body.options,
-  }]);
-  return {
-    id: bot.id,
-  };
+    return {
+      id: bot.id,
+    };
+  }
 };
 
 export const addNewSourceByIdHandler = async (
@@ -101,9 +150,13 @@ export const addNewSourceByIdHandler = async (
   const prisma = request.server.prisma;
   const id = request.params.id;
 
-  const bot = await prisma.bot.findUnique({
+  const bot = await prisma.bot.findFirst({
     where: {
       id,
+      user_id: request.user.user_id,
+    },
+    include: {
+      source: true,
     },
   });
 
@@ -127,6 +180,18 @@ export const addNewSourceByIdHandler = async (
     },
   });
 
+  if (bot.source.length === 0 && !bot.haveDataSourcesBeenAdded) {
+    await prisma.bot.update({
+      where: {
+        id,
+      },
+      data: {
+        haveDataSourcesBeenAdded: true,
+        qaPrompt: HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT,
+      },
+    });
+  }
+
   await request.server.queue.add([{
     ...botSource,
     embedding: bot.embedding,
@@ -147,9 +212,10 @@ export const refreshSourceByIdHandler = async (
   const bot_id = request.params.id;
   const source_id = request.params.sourceId;
 
-  const bot = await prisma.bot.findUnique({
+  const bot = await prisma.bot.findFirst({
     where: {
       id: bot_id,
+      user_id: request.user.user_id,
     },
   });
 

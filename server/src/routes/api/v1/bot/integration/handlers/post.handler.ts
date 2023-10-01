@@ -22,9 +22,10 @@ export const createIntergationHandler = async (
   const prisma = request.server.prisma;
   const id = request.params.id;
 
-  const isBot = await prisma.bot.findUnique({
+  const isBot = await prisma.bot.findFirst({
     where: {
       id,
+      user_id: request.user.user_id,
     },
   });
 
@@ -276,9 +277,10 @@ export const pauseOrResumeIntergationHandler = async (
   const prismas = request.server.prisma;
   const bot_id = request.params.id;
 
-  const isBot = await prismas.bot.findUnique({
+  const isBot = await prismas.bot.findFirst({
     where: {
       id: bot_id,
+      user_id: request.user.user_id,
     },
   });
 

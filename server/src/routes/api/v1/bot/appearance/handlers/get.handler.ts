@@ -8,9 +8,10 @@ export const getBotAppearanceByIdHandler = async (
   const prisma = request.server.prisma;
   const bot_id = request.params.id;
 
-  const isBotExist = await prisma.bot.findUnique({
+  const isBotExist = await prisma.bot.findFirst({
     where: {
       id: bot_id,
+      user_id: request.user.user_id,
     },
   });
 

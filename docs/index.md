@@ -28,9 +28,9 @@ features:
     details: Supports most popular chat and embedding models. You can choose the one that suits your needs.
   - title: Data Loaders
     icon: 📊
-    details: Dialoqbase designed to work with almost all popular data sources (Website, PDF, docx, txt, etc.).
+    details: Easily load your data from Website, Youtube, PDF, CSV, and more.
   - title: Integrations
     icon: 📦
-    details: Dialoqbase currently supports integration with Telegram and Webpage. More integrations are coming soon.
+    details: Integrates with most popular applications like WhatsApp, Telegram, Discord, and more.
 ---
 

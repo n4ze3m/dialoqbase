@@ -15,7 +15,7 @@ import { youtubeQueueController } from "./controllers/youtube.controller";
 
 const prisma = new PrismaClient();
 
-export const queueHandler = async (job: Job, done: DoneCallback) => {
+export default async function queueHandler(job: Job, done: DoneCallback) {
   const data = job.data as QSource[];
   await prisma.$connect();
   console.log("Processing queue");
@@ -122,4 +122,4 @@ export const queueHandler = async (job: Job, done: DoneCallback) => {
   } catch (e) {
     console.log(e);
   }
-};
+}

@@ -7,6 +7,7 @@ declare module "@fastify/jwt" {
     user: {
       user_id: number;
       username: string;
+      is_admin: boolean;
     };
   }
 }
@@ -35,6 +36,11 @@ export default fp<FastifyJWTOptions>(async (fastify, opts) => {
         if (!user) {
           throw new Error("User not found");
         }
+        request.user = {
+          user_id: user.user_id,
+          username: user.username,
+          is_admin: user.isAdministrator,
+        };
       } catch (err) {
         reply.send(err);
       }

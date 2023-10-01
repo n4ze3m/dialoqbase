@@ -15,6 +15,7 @@ Official Website: [https://fireworks.ai/](https://fireworks.ai/?ref=dialoqbase)
 | Llama 2 7B code instruct | Instruct |
 | Llama 2 13B code instruct | Instruct |
 | Llama 2 70B code instruct | Instruct |
+| Mistral 7B Instruct 4K | Instruct |
 
 ## API Key
 

@@ -14,9 +14,10 @@ export async function getPlaygroundHistoryByBotId(
   const { id } = request.params;
   const prisma = request.server.prisma;
 
-  const bot = await prisma.bot.findUnique({
+  const bot = await prisma.bot.findFirst({
     where: {
       id,
+      user_id: request.user.user_id,
     },
     include: {
       BotPlayground: {
@@ -60,9 +61,10 @@ export async function getPlaygroundHistoryByBotIdAndHistoryId(
   const { id, history_id } = request.params;
   const prisma = request.server.prisma;
 
-  const bot = await prisma.bot.findUnique({
+  const bot = await prisma.bot.findFirst({
     where: {
       id,
+      user_id: request.user.user_id,
     },
     include: {
       BotPlayground: {

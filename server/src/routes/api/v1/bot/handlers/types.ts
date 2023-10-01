@@ -1,8 +1,8 @@
 export interface CreateBotRequest {
   Body: {
     name?: string;
-    type: string;
-    content: string;
+    type?: string;
+    content?: string;
     embedding: string;
     model: string;
     maxDepth?: number;

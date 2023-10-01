@@ -72,7 +72,7 @@ docker compose logs -f
 :::
 
 
-Congratulations! You have successfully updated your Dialogflow Docker container to the latest version.
+Congratulations! You have successfully updated your Dialoqbase Docker container to the latest version.
 
 ## Additional Notes
 

@@ -42,9 +42,10 @@ export const getChatIntergationHistoryByTypeHandler = async (
   const { id, type } = request.params;
   const prisma = request.server.prisma;
 
-  const isBotExist = await prisma.bot.findUnique({
+  const isBotExist = await prisma.bot.findFirst({
     where: {
       id,
+      user_id: request.user.user_id,
     },
   });
 
@@ -109,9 +110,10 @@ export const getChatHistoryByChatIdHandler = async (
   const { id, type, chat_id } = request.params;
   const prisma = request.server.prisma;
 
-  const isBotExist = await prisma.bot.findUnique({
+  const isBotExist = await prisma.bot.findFirst({
     where: {
       id,
+      user_id: request.user.user_id,
     },
   });
 

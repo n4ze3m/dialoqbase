@@ -1,13 +1,18 @@
 import { FastifyPluginAsync } from "fastify";
 import {
-  userLoginHandler,
+  isRegisterationAllowedHandler,
+  meHandler,
+  registerUserHandler,
   updatePasswordHandler,
-  updateUsernameHandler,
+  updateProfileHandler,
+  userLoginHandler,
 } from "./handlers";
 import {
-  userLoginSchema,
+  isRegisterationAllowedSchema,
   updatePasswordSchema,
-  updateUsernameSchema,
+  updateProfileSchema,
+  userLoginSchema,
+  userRegisterSchema,
 } from "./schema";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
@@ -16,25 +21,59 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     {
       schema: userLoginSchema,
     },
-    userLoginHandler
+    userLoginHandler,
   );
 
   fastify.post(
-    "/update-username",
+    "/me",
     {
-      schema: updateUsernameSchema,
-      onRequest: [fastify.authenticate]
+      schema: updateProfileSchema,
+      onRequest: [fastify.authenticate],
     },
-    updateUsernameHandler
+    updateProfileHandler,
   );
 
   fastify.post(
     "/update-password",
     {
       schema: updatePasswordSchema,
-      onRequest: [fastify.authenticate]
+      onRequest: [fastify.authenticate],
     },
-    updatePasswordHandler
+    updatePasswordHandler,
+  );
+
+  fastify.get(
+    "/info",
+    {
+      schema: isRegisterationAllowedSchema,
+    },
+    isRegisterationAllowedHandler,
+  );
+
+  fastify.post(
+    "/register",
+    {
+      schema: userRegisterSchema,
+    },
+    registerUserHandler,
+  );
+
+  fastify.get(
+    "/is-admin",
+    {
+      onRequest: [fastify.authenticate],
+    },
+    async (request, reply) => {
+      reply.send({ is_admin: request.user.is_admin });
+    },
+  );
+
+  fastify.get(
+    "/me",
+    {
+      onRequest: [fastify.authenticate],
+    },
+    meHandler,
   );
 };
 
