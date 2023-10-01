@@ -280,9 +280,7 @@ export const BotForm = ({
               className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
             />
           </Form.Item>
-          <Row
-          gutter={16}
-          >
+          <Row gutter={16}>
             <Col span={12}>
               <Form.Item
                 name={["options", "branch"]}
@@ -303,8 +301,7 @@ export const BotForm = ({
             </Col>
             <Col span={12}>
               <Form.Item label="Private repo?" name={["options", "is_private"]}>
-                <Switch 
-                className="mr-2" />
+                <Switch className="mr-2" />
               </Form.Item>
             </Col>
           </Row>
@@ -352,7 +349,7 @@ export const BotForm = ({
               className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
             />
           </Form.Item>
-        
+
           <p className="text-sm text-gray-500">
             If you find any issues, please report them on{" "}
             <a
@@ -367,11 +364,11 @@ export const BotForm = ({
           </p>
         </>
       ),
-    }
+    },
   ]);
 
   const [selectedSource, _setSelectedSource] = React.useState<any>(
-    availableSources[0]
+    showEmbeddingAndModels ? null : availableSources[0]
   );
 
   const embeddingType = Form.useWatch("embedding", form);
@@ -447,7 +444,7 @@ export const BotForm = ({
         </div>
       </RadioGroup>
 
-      {selectedSource.formComponent}
+      {selectedSource && selectedSource.formComponent}
 
       <Form.Item hidden={!showEmbeddingAndModels} noStyle>
         <Divider />

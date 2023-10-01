@@ -20,6 +20,7 @@ const pump = util.promisify(pipeline);
 import { fileTypeFinder } from "../../../../../utils/fileType";
 import { isStreamingSupported } from "../../../../../utils/models";
 import { getSettings } from "../../../../../utils/common";
+import { HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT } from "../../../../../utils/prompts";
 
 export const createBotFileHandler = async (
   request: FastifyRequest<UploadPDF>,
@@ -70,7 +71,7 @@ export const createBotFileHandler = async (
       });
     }
 
-    console.log(providerName)
+    console.log(providerName);
     const isAPIKeyAddedForProvider = apiKeyValidaton(providerName);
 
     if (!isAPIKeyAddedForProvider) {
@@ -143,6 +144,9 @@ export const addNewSourceFileByIdHandler = async (
       id,
       user_id: request.user.user_id,
     },
+    include: {
+      source: true,
+    },
   });
 
   if (!bot) {
@@ -168,6 +172,18 @@ export const addNewSourceFileByIdHandler = async (
         botId: id,
       },
     });
+
+    if (bot.source.length === 0 && !bot.haveDataSourcesBeenAdded) {
+      await prisma.bot.update({
+        where: {
+          id,
+        },
+        data: {
+          haveDataSourcesBeenAdded: true,
+          qaPrompt: HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT,
+        },
+      });
+    }
 
     await request.server.queue.add([{
       ...botSource,

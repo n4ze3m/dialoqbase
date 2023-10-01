@@ -6,10 +6,13 @@
 
 */
 -- AlterTable
-ALTER TABLE "Bot" ADD COLUMN     "user_id" INTEGER;
+ALTER TABLE "Bot" ADD COLUMN "user_id" INTEGER;
+
+ALTER TABLE "Bot" ADD COLUMN "haveDataSourcesBeenAdded" BOOLEAN NOT NULL DEFAULT false;
 
 -- AlterTable
-ALTER TABLE "User" ADD COLUMN     "email" TEXT, 
+    
+ALTER TABLE "User" ADD COLUMN  "email" TEXT,  ADD COLUMN "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 ADD COLUMN     "isAdministrator" BOOLEAN NOT NULL DEFAULT false;
 
 -- CreateTable

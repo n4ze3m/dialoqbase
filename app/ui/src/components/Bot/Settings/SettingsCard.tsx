@@ -9,6 +9,10 @@ import {
 } from "../../../utils/chatModels";
 import axios from "axios";
 import React from "react";
+import {
+  HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT,
+  HELPFUL_ASSISTANT_WITHOUT_CONTEXT_PROMPT,
+} from "../../../utils/prompts";
 
 export const SettingsCard = ({
   data,
@@ -136,7 +140,7 @@ export const SettingsCard = ({
           layout="vertical"
           className="space-y-6 mb-6 "
         >
-          <div className="px-4 py-5 bg-white  shadow sm:rounded-lg sm:p-6">
+          <div className="px-4 py-5 bg-white  border sm:rounded-lg sm:p-6">
             <div className="md:grid md:grid-cols-3 md:gap-6">
               <div className="md:col-span-1">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">
@@ -159,7 +163,7 @@ export const SettingsCard = ({
                 >
                   <input
                     type="text"
-                    className="mt-1 block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                    className="mt-1 block w-full sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
                   />
                 </Form.Item>
 
@@ -259,11 +263,35 @@ export const SettingsCard = ({
                     placeholder=""
                   />
                 </Form.Item>
+                <div className="flex flex-row justify-start gap-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      form.setFieldsValue({
+                        qaPrompt: HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT,
+                      });
+                    }}
+                    className="flex items-center rounded-md py-[0.4375rem] pl-2 pr-2 lg:pr-3 bg-white border text-xs"
+                  >
+                    PROMPT WITH CONTEXT
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      form.setFieldsValue({
+                        qaPrompt: HELPFUL_ASSISTANT_WITHOUT_CONTEXT_PROMPT,
+                      });
+                    }}
+                    className="flex items-center rounded-md py-[0.4375rem] pl-2 pr-2 lg:pr-3 bg-white border text-xs"
+                  >
+                    PROMPT WITHOUT CONTEXT
+                  </button>
+                </div>
 
                 <Form.Item
                   label={
                     <span className="font-medium text-gray-800 text-sm">
-                      Question Generator Prompt 
+                      Question Generator Prompt
                     </span>
                   }
                   name="questionGeneratorPrompt"
@@ -275,7 +303,7 @@ export const SettingsCard = ({
                   ]}
                 >
                   <textarea
-                    className="mt-1 block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                    className="mt-1 block w-full sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
                     rows={5}
                     placeholder=""
                   />
@@ -295,7 +323,7 @@ export const SettingsCard = ({
             <div className="mt-3 text-right">
               <button
                 type="submit"
-                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white  hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
                 {isLoading ? "Saving..." : "Save"}
               </button>
@@ -303,7 +331,7 @@ export const SettingsCard = ({
           </div>
         </Form>
 
-        <div className="bg-white shadow sm:rounded-lg">
+        <div className="bg-white border sm:rounded-lg">
           <div className="px-4 py-5 sm:p-6">
             <h3 className="text-lg font-medium leading-6 text-gray-900">
               Delete your bot

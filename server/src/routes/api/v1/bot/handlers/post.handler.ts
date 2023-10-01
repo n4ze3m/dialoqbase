@@ -14,6 +14,10 @@ import {
 import { modelProviderName } from "../../../../../utils/provider";
 import { isStreamingSupported } from "../../../../../utils/models";
 import { getSettings } from "../../../../../utils/common";
+import {
+  HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT,
+  HELPFUL_ASSISTANT_WITHOUT_CONTEXT_PROMPT,
+} from "../../../../../utils/prompts";
 
 export const createBotHandler = async (
   request: FastifyRequest<CreateBotRequest>,
@@ -88,36 +92,55 @@ export const createBotHandler = async (
 
   const isStreamingAvilable = isStreamingSupported(request.body.model);
 
-  const bot = await prisma.bot.create({
-    data: {
-      name,
+  if (content && type) {
+    const bot = await prisma.bot.create({
+      data: {
+        name,
+        embedding,
+        model,
+        provider: providerName,
+        streaming: isStreamingAvilable,
+        user_id: request.user.user_id,
+        haveDataSourcesBeenAdded: true,
+      },
+    });
+    const botSource = await prisma.botSource.create({
+      data: {
+        content,
+        type,
+        botId: bot.id,
+        options: request.body.options,
+      },
+    });
+
+    await request.server.queue.add([{
+      ...botSource,
       embedding,
-      model,
-      provider: providerName,
-      streaming: isStreamingAvilable,
-      user_id: request.user.user_id,
-    },
-  });
-
-  const botSource = await prisma.botSource.create({
-    data: {
-      content,
-      type,
-      botId: bot.id,
+      maxDepth: request.body.maxDepth,
+      maxLinks: request.body.maxLinks,
       options: request.body.options,
-    },
-  });
+    }]);
+    return {
+      id: bot.id,
+    };
+  } else {
+    const bot = await prisma.bot.create({
+      data: {
+        name,
+        embedding,
+        model,
+        provider: providerName,
+        streaming: isStreamingAvilable,
+        user_id: request.user.user_id,
+        haveDataSourcesBeenAdded: false,
+        qaPrompt: HELPFUL_ASSISTANT_WITHOUT_CONTEXT_PROMPT,
+      },
+    });
 
-  await request.server.queue.add([{
-    ...botSource,
-    embedding,
-    maxDepth: request.body.maxDepth,
-    maxLinks: request.body.maxLinks,
-    options: request.body.options,
-  }]);
-  return {
-    id: bot.id,
-  };
+    return {
+      id: bot.id,
+    };
+  }
 };
 
 export const addNewSourceByIdHandler = async (
@@ -131,6 +154,9 @@ export const addNewSourceByIdHandler = async (
     where: {
       id,
       user_id: request.user.user_id,
+    },
+    include: {
+      source: true,
     },
   });
 
@@ -153,6 +179,18 @@ export const addNewSourceByIdHandler = async (
       options: request.body.options,
     },
   });
+
+  if (bot.source.length === 0 && !bot.haveDataSourcesBeenAdded) {
+    await prisma.bot.update({
+      where: {
+        id,
+      },
+      data: {
+        haveDataSourcesBeenAdded: true,
+        qaPrompt: HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT,
+      },
+    });
+  }
 
   await request.server.queue.add([{
     ...botSource,

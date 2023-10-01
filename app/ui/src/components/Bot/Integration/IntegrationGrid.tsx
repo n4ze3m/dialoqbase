@@ -69,7 +69,7 @@ export const IntegrationGrid: React.FC<Props> = ({ data }) => {
       {/* GRID */}
       <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {data.map((integration) => (
-          <div className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer">
+          <div className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer">
             <div
               onClick={() => {
                 setSelectedIntegration(integration);
@@ -116,7 +116,7 @@ export const IntegrationGrid: React.FC<Props> = ({ data }) => {
 
         <Link
         to={`/bot/${param.id}/embed`}
-        className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer">
+        className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer">
           <div>
             <div className="mb-4">
               <div className="flex items-center justify-between">

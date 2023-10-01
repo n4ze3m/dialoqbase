@@ -30,6 +30,7 @@ model Bot {
   text_to_voice_type          String           @default("web_api")
   text_to_voice_type_metadata Json             @default("{}") @db.Json
   use_hybrid_search           Boolean          @default(false)
+  haveDataSourcesBeenAdded    Boolean          @default(false)
   BotAppearance               BotAppearance[]
   document                    BotDocument[]
   BotIntegration              BotIntegration[]
@@ -64,20 +65,21 @@ model BotDocument {
 }
 
 model User {
-  user_id         Int     @id @default(autoincrement())
-  username        String  @unique
+  user_id         Int      @id @default(autoincrement())
+  username        String   @unique
   password        String
-  email           String? @unique
-  isFirstLogin    Boolean @default(true)
-  isAdministrator Boolean @default(false)
+  email           String?  @unique
+  isFirstLogin    Boolean  @default(true)
+  isAdministrator Boolean  @default(false)
+  createdAt       DateTime @default(now())
   bots            Bot[]
 }
 
 model DialoqbaseSettings {
-  id Int @id @default(autoincrement())
-  noOfBotsPerUser Int @default(10)
+  id                    Int     @id @default(autoincrement())
+  noOfBotsPerUser       Int     @default(10)
   allowUserToCreateBots Boolean @default(true)
-  allowUserToRegister Boolean @default(false)
+  allowUserToRegister   Boolean @default(false)
 }
 
 model BotIntegration {
