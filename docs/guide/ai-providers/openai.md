@@ -14,6 +14,7 @@ Official Website: [https://openai.com/](https://openai.com/)
 | gpt-3.5-turbo-16k | Chat |
 | gpt-4 | Chat |
 | gpt-4-0613 | Chat |
+| gpt-3.5-instruct | Instruct |
 | text-embedding-ada-002 | Embedding |
 
 ## API Key

@@ -1,5 +1,9 @@
 # Transitioning from Single-User to Multi-User Mode with Dialoqbase
 
+::: warning
+If you're using `v1.0.0` or above, you can skip this guide. Multi-user mode is enabled by default in `v1.0.0`. This guide is only for `v0.0.32` and below.
+:::
+
 If you've been utilizing Dialoqbase from a single-user standpoint and are now eager to expand its capabilities to cater to multiple users, you've come to the right place. Dialoqbase, renowned for its user-friendliness and proficiency in constructing conversational interfaces, seamlessly accommodates multi-user environments. This guide will comprehensively walk you through the essential steps for transitioning from single-user to multi-user mode.
 
 ### What's the Main Change?

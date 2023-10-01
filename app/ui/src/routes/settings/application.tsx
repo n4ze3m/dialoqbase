@@ -84,7 +84,7 @@ export default function SettingsApplicationRoot() {
                           },
                         ]}
                       >
-                        <input
+                         <input
                           type="number"
                           className="mt-1 block w-full border-gray-300 rounded-md  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />

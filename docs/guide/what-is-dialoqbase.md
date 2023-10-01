@@ -2,12 +2,6 @@
 
 Dialoqbase is an open-source application designed to facilitate the creation of custom chatbots using a personalized knowledge base. The application leverages advanced language models to generate accurate and context-aware responses. Additionally, it utilizes PostgreSQL, a robust relational database management system, for efficient vector search operations and for storing the knowledge base.
 
-
-::: warning
-This project is a side project and is still under development. Use it at your own risk
-:::
-
-
 ## Use Cases
 
 Dialoqbase can be used in a variety of scenarios, including:
@@ -31,4 +25,4 @@ Dialoqbase has the following features:
 
 - **Data Loaders**: Dialoqbase designed to work with almost all popular data sources (Website, PDF, docx, txt, etc.).
 
-- **Integrations**: Dialoqbase currently supports integration with Telegram and Webpage. More integrations are coming soon.
+- **Integrations**: Supports most popular applications like WhatsApp, Telegram, Discord, and more.
