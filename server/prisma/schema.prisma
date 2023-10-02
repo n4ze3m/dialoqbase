@@ -105,6 +105,7 @@ model BotIntegration {
 model BotTelegramHistory {
   id         Int     @id @default(autoincrement())
   chat_id    Int?
+  new_chat_id String?
   identifier String?
   human      String?
   bot        String?

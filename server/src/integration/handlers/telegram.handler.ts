@@ -27,7 +27,7 @@ export const telegramBotHandler = async (
 
     const chat_history = await prisma.botTelegramHistory.findMany({
       where: {
-        chat_id: user_id,
+        new_chat_id: `${user_id}`,
         identifier: identifer,
       },
     });
@@ -79,7 +79,7 @@ export const telegramBotHandler = async (
     await prisma.botTelegramHistory.create({
       data: {
         identifier: identifer,
-        chat_id: user_id,
+        new_chat_id: `${user_id}`,
         human: message,
         bot: bot_response,
       },
