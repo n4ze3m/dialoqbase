@@ -18,6 +18,7 @@ CREATE TABLE "BotTelegramHistory" (
   PRIMARY KEY ("id"),
   "chat_id" integer NULL,
   "identifier" text NULL,
+  "new_chat_id" text NULL,
   "human" text NULL,
   "bot" text NULL
 );
