@@ -17,7 +17,7 @@ export const PlaygroundChat = () => {
   const [sourceData, setSourceData] = React.useState<any>(null);
   const [openSource, setOpenSource] = React.useState(false);
   const [fileType, setFileType] = React.useState<
-    "pdf" | "mp3" | "mp4" | "other"
+    "pdf" | "mp3" | "mp4" | "other" | "lang"
   >("other");
 
   React.useEffect(() => {
@@ -59,7 +59,21 @@ export const PlaygroundChat = () => {
                       } else if (fileExtension === "mp4") {
                         setFileType("mp4");
                       } else {
-                        setFileType("other");
+                        const isExist =
+                          COMMON_PROGRAMMING_LANGUAGES_EXTENSIONS[
+                            `${
+                              source?.metadata?.path || source?.metadata?.source
+                            }`
+                              .split(".")
+                              .pop() ||
+                              ("" as keyof typeof COMMON_PROGRAMMING_LANGUAGES_EXTENSIONS)
+                          ];
+
+                        if (isExist) {
+                          setFileType("lang");
+                        } else {
+                          setFileType("other");
+                        }
                       }
                       setSourceData(source);
                       setOpenSource(true);
@@ -107,7 +121,13 @@ export const PlaygroundChat = () => {
               </div>
             </>
           )}
+
           {fileType === "other" && (
+            <>
+              <p className="text-gray-500 text-sm">{sourceData?.pageContent}</p>
+            </>
+          )}
+          {fileType === "lang" && (
             <>
               <SyntaxHighlighter
                 startingLineNumber={sourceData?.metadata?.loc?.lines?.from}
