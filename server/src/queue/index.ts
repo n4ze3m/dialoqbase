@@ -12,6 +12,7 @@ import { txtQueueController } from "./controllers/txt.controller";
 import { audioQueueController } from "./controllers/audio.controller";
 import { videoQueueController } from "./controllers/video.controller";
 import { youtubeQueueController } from "./controllers/youtube.controller";
+import { restQueueController } from "./controllers/rest.controller";
 
 const prisma = new PrismaClient();
 
@@ -87,6 +88,9 @@ export default async function queueHandler(job: Job, done: DoneCallback) {
             await youtubeQueueController(
               source,
             );
+            break;
+          case "rest":
+            await restQueueController(source);
             break;
           default:
             break;

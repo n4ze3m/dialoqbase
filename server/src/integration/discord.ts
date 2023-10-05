@@ -18,17 +18,18 @@ export default class DiscordBot {
   static async connect(
     identifier: string,
     token: string,
-    slashCommands: string = "/hey",
+    command: string = "hey",
     slashCommandsDescription: string = "Say hey to the bot",
   ) {
     try {
       if (this._clients.has(identifier)) {
         await this.disconnect(identifier);
       }
-
       const bot = new Client({ intents: [GatewayIntentBits.Guilds] });
 
       this._clients.set(identifier, bot);
+
+      let slashCommands = command.replace(/[^a-zA-Z0-9]/g, "");
 
       bot.on("ready", async () => {
         console.log(`Logged in as ${bot.user?.tag}!`);
@@ -37,7 +38,7 @@ export default class DiscordBot {
           await this.setCommand(
             token,
             clientId,
-            slashCommands,
+            slashCommands.replace(/[^a-zA-Z0-9]/g, ""),
             slashCommandsDescription,
           );
         }
@@ -131,7 +132,7 @@ ${bot_response}
   static async setCommand(
     token: string,
     clientId: string,
-    slashCommands: string = "/hey",
+    slashCommands: string = "hey",
     slashCommandsDescription: string = "Say hey to the bot",
   ) {
     try {

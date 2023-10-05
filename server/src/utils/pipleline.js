@@ -1,4 +1,6 @@
 exports.piplelineTransformer = async () => {
-    let { pipeline } = await import("@xenova/transformers");
+    let { pipeline,env } = await import("@xenova/transformers");
+    env.useBrowserCache = false;
+    env.allowLocalModels = false;
     return pipeline;
 }

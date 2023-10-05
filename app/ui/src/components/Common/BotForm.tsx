@@ -19,9 +19,10 @@ import {
 import React from "react";
 import { availableEmbeddingTypes } from "../../utils/embeddings";
 import { availableChatModels } from "../../utils/chatModels";
-import { SpiderIcon } from "./SpiderIcon";
-import { GithubIcon } from "./GithubIcon";
-import { YoutubeIcon } from "./Youtube";
+import { SpiderIcon } from "../Icons/SpiderIcon";
+import { GithubIcon } from "../Icons/GithubIcon";
+import { YoutubeIcon } from "../Icons/YoutubeIcon";
+import { ApiIcon } from "../Icons/ApiIcon";
 
 type Props = {
   createBot: (values: any) => void;
@@ -42,6 +43,8 @@ export const BotForm = ({
   form,
   showEmbeddingAndModels,
 }: Props) => {
+  const embeddingType = Form.useWatch("embedding", form);
+
   const [availableSources] = React.useState([
     {
       id: 1,
@@ -365,13 +368,69 @@ export const BotForm = ({
         </>
       ),
     },
+    {
+      id: 8,
+      value: "rest",
+      title: "REST API",
+      icon: ApiIcon,
+      formComponent: (
+        <>
+          <Row gutter={24}>
+            <Col span={6}>
+              <Form.Item
+                name={["options", "method"]}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select a method",
+                  },
+                ]}
+              >
+                <Select
+                  size="large"
+                  options={[
+                    {
+                      label: "GET",
+                      value: "get",
+                    },
+                    {
+                      label: "POST",
+                      value: "post",
+                    },
+                  ]}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={18}>
+              <Form.Item
+                name="content"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter a valid REST API URL",
+                  },
+                  {
+                    pattern: new RegExp(/^(https?:\/\/)?(www\.)?(.+)\.(.+)$/),
+                    message: "Please enter a valid REST API URL",
+                  },
+                ]}
+              >
+                <input
+                  type="url"
+                  placeholder="Enter the REST API URL"
+                  className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+        </>
+      ),
+    },
   ]);
 
   const [selectedSource, _setSelectedSource] = React.useState<any>(
     showEmbeddingAndModels ? null : availableSources[0]
   );
-
-  const embeddingType = Form.useWatch("embedding", form);
 
   return (
     <Form
@@ -387,6 +446,9 @@ export const BotForm = ({
         options: {
           branch: "main",
           is_private: false,
+          method: "get",
+          headers: "{}",
+          body: "{}",
         },
       }}
     >
@@ -446,6 +508,39 @@ export const BotForm = ({
 
       {selectedSource && selectedSource.formComponent}
 
+      {selectedSource && selectedSource.value === "rest" && (
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item
+              name={["options", "headers"]}
+              label="Headers"
+            >
+              <textarea
+                placeholder="Enter the headers"
+                className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+              />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name={["options", "body"]}
+              label="Body (JSON)"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter a valid JSON",
+                },
+              ]}
+            >
+              <textarea
+                placeholder="Enter the body"
+                className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+      )}
+
       <Form.Item hidden={!showEmbeddingAndModels} noStyle>
         <Divider />
       </Form.Item>
@@ -462,7 +557,6 @@ export const BotForm = ({
           options={availableChatModels}
         />
       </Form.Item>
-
       <Form.Item
         hidden={!showEmbeddingAndModels}
         label={

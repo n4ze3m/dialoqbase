@@ -13,8 +13,9 @@ import api from "../../../services/api";
 import { useParams } from "react-router-dom";
 import { NewDsForm } from "./NewDsForm";
 import React from "react";
-import { GithubIcon } from "../../Common/GithubIcon";
-import { YoutubeIcon } from "../../Common/Youtube";
+import { GithubIcon } from "../../Icons/GithubIcon";
+import { YoutubeIcon } from "../../Icons/YoutubeIcon";
+import { ApiIcon } from "../../Icons/ApiIcon";
 
 export const DsTable = ({
   data,
@@ -57,6 +58,8 @@ export const DsTable = ({
         return <PlayCircleIcon className="h-10 w-10 text-gray-400" />;
       case "youtube":
         return <YoutubeIcon className="h-10 w-10 text-gray-400" />;
+      case "rest":
+        return <ApiIcon className="h-10 w-10 text-gray-400" />;
       default:
         return <DocumentTextIcon className="h-10 w-10 text-gray-400" />;
     }
