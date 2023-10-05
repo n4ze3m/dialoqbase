@@ -61,7 +61,6 @@ function messageToFireworkRole(
       throw new Error(`Unknown message type: ${type}`);
   }
 }
-
 export class DialoqbaseFireworksModel extends BaseChatModel
   implements DialoqbaseFireworksModelInput {
   temperature: number | undefined;
