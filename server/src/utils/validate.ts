@@ -5,7 +5,7 @@ export const apiKeyValidaton = (embeddingsType: string) => {
             return true;
         case "transformer":
             return true;
-        case "bert":
+        case "supabase":
             return true;
         case "google-bison":
             return process.env.GOOGLE_API_KEY ? process.env.GOOGLE_API_KEY.length > 0 : false;

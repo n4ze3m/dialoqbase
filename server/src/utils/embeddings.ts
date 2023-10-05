@@ -17,10 +17,14 @@ export const embeddings = (embeddingsType: string) => {
     case "huggingface-api":
       return new HuggingFaceInferenceEmbeddings();
     case "transformer":
-      return new TransformersEmbeddings();
-    case "bert":
+      return new TransformersEmbeddings(
+        {
+          model: "Xenova/all-MiniLM-L6-v2",
+        },
+      );
+    case "supabase":
       return new TransformersEmbeddings({
-        model: "Xenova/bert-base-uncased",
+        model: "Supabase/gte-small",
       });
     case "google-gecko":
       console.log("using google-gecko");
@@ -37,5 +41,5 @@ export const supportedEmbeddings = [
   "huggingface-api",
   "transformer",
   "google-gecko",
-  "bert",
+  "supabase",
 ];

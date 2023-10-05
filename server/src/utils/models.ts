@@ -2,8 +2,7 @@ import { ChatAnthropic } from "langchain/chat_models/anthropic";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { ChatGooglePaLM } from "langchain/chat_models/googlepalm";
 import { HuggingFaceInference } from "langchain/llms/hf";
-import { ChatFireworks } from "langchain/chat_models/fireworks";
-import { Fireworks } from "langchain/llms/fireworks";
+import { DialoqbaseFireworksModel } from "../models/fireworks";
 import { OpenAI } from "langchain/llms/openai";
 
 export const chatModelProvider = (
@@ -44,19 +43,12 @@ export const chatModelProvider = (
         ...otherFields,
       });
     case "fireworks":
-      if (notChatModels.includes(modelName)) {
-        return new Fireworks({
-          model: fireworksModels[modelName],
-          temperature: temperature,
-          ...otherFields,
-        });
-      } else {
-        return new ChatFireworks({
-          model: fireworksModels[modelName],
-          temperature: temperature,
-          ...otherFields,
-        });
-      }
+      return new DialoqbaseFireworksModel({
+        model: fireworksModels[modelName],
+        temperature: temperature,
+        is_chat: !notChatModels.includes(modelName),
+        ...otherFields,
+      });
     case "openai-instruct":
       console.log("using openai-instruct");
       return new OpenAI({
@@ -143,5 +135,5 @@ export const supportedModels = [
   "llama-v2-13b-code-instruct",
   "llama-v2-34b-code-instruct-w8a16",
   "gpt-3.5-turbo-instruct",
-  "mistral-7b-instruct-4k",
+  "mistral-7b-instruct-4k"
 ];
