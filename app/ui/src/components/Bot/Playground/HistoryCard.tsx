@@ -29,7 +29,7 @@ export const PlaygroundHistoryCard = ({
       <ChatBubbleLeftIcon className="w-5 h-5 text-gray-400 dark:text-gray-600 group-hover:text-gray-500 dark:group-hover:text-gray-400 transition-colors" />
       <div className="flex-1 overflow-hidden break-all">
         <span
-          className="text-gray-500 dark:text-gray-400 text-sm font-semibold"
+          className="text-gray-500 dark:text-gray-400 text-sm font-semibold truncate"
           title={item.title}
         >
           {item.title.length > 20
