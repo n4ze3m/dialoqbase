@@ -59,7 +59,7 @@ export const getBotByIdAllSourcesHandler = async (
     where: {
       botId: id,
       type: {
-        not: "crawl",
+        notIn: ["crawl", "sitemap"],
       },
     },
   });

@@ -13,6 +13,7 @@ import { audioQueueController } from "./controllers/audio.controller";
 import { videoQueueController } from "./controllers/video.controller";
 import { youtubeQueueController } from "./controllers/youtube.controller";
 import { restQueueController } from "./controllers/rest.controller";
+import { sitemapQueueController } from "./controllers/sitemap.controller";
 
 const prisma = new PrismaClient();
 
@@ -92,6 +93,9 @@ export default async function queueHandler(job: Job, done: DoneCallback) {
           case "rest":
             await restQueueController(source);
             break;
+          case "sitemap":
+            await sitemapQueueController(source);
+            break;
           default:
             break;
         }
@@ -110,7 +114,6 @@ export default async function queueHandler(job: Job, done: DoneCallback) {
         await prisma.$disconnect();
       } catch (e) {
         console.log(e);
-
         await prisma.botSource.update({
           where: {
             id: source.id,
@@ -121,6 +124,7 @@ export default async function queueHandler(job: Job, done: DoneCallback) {
           },
         });
         await prisma.$disconnect();
+        done();
       }
     }
   } catch (e) {

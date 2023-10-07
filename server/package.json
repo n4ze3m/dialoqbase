@@ -27,6 +27,7 @@
     "@fastify/jwt": "^7.0.0",
     "@fastify/multipart": "^7.6.0",
     "@fastify/sensible": "^5.0.0",
+    "@fastify/session": "^10.5.0",
     "@fastify/static": "^6.10.2",
     "@ffmpeg.wasm/core-mt": "^0.12.0",
     "@ffmpeg.wasm/main": "^0.12.0",
@@ -64,6 +65,7 @@
     "pdf-parse": "^1.1.1",
     "pdfjs-dist": "^3.7.107",
     "pubsub-js": "^1.9.4",
+    "sitemapper": "^3.2.6",
     "unique-names-generator": "^4.7.1",
     "wavefile": "^11.0.0",
     "ytdl-core": "^4.11.5"
