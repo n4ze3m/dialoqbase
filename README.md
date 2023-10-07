@@ -122,6 +122,8 @@ Dialoqbase is a side project and is not ready for production. It is still in the
 - [x] Github repository
 - [x] mp3
 - [x] mp4
+- [X] Sitemap
+- [x] Youtube
 - [ ] Notion
 
 and more...

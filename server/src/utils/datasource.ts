@@ -5,4 +5,5 @@ export const SUPPORTED_SOURCE_TYPES = [
   "github",
   "youtube",
   "rest",
+  "sitemap",
 ];

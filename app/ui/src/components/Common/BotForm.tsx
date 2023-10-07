@@ -23,6 +23,7 @@ import { SpiderIcon } from "../Icons/SpiderIcon";
 import { GithubIcon } from "../Icons/GithubIcon";
 import { YoutubeIcon } from "../Icons/YoutubeIcon";
 import { ApiIcon } from "../Icons/ApiIcon";
+import { SitemapIcon } from "../Icons/SitemapIcon";
 
 type Props = {
   createBot: (values: any) => void;
@@ -59,6 +60,7 @@ export const BotForm = ({
               required: true,
               message: "Please enter the webpage URL",
             },
+           
           ]}
         >
           <input
@@ -426,6 +428,29 @@ export const BotForm = ({
         </>
       ),
     },
+    {
+      id: 9,
+      value: "sitemap",
+      title: "Sitemap",
+      icon: SitemapIcon,
+      formComponent: (
+        <Form.Item
+          name="content"
+          rules={[
+            {
+              required: true,
+              message: "Please enter the sitemap URL",
+            }
+          ]}
+        >
+          <input
+            type="url"
+            placeholder="Enter the sitemap URL"
+            className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+          />
+        </Form.Item>
+      ),
+    },
   ]);
 
   const [selectedSource, _setSelectedSource] = React.useState<any>(
@@ -511,10 +536,7 @@ export const BotForm = ({
       {selectedSource && selectedSource.value === "rest" && (
         <Row gutter={24}>
           <Col span={12}>
-            <Form.Item
-              name={["options", "headers"]}
-              label="Headers"
-            >
+            <Form.Item name={["options", "headers"]} label="Headers">
               <textarea
                 placeholder="Enter the headers"
                 className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
