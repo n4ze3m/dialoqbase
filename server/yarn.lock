@@ -373,6 +373,14 @@
   dependencies:
     text-decoding "^1.0.0"
 
+"@fastify/cookie@^9.1.0":
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/@fastify/cookie/-/cookie-9.1.0.tgz#b9ca95fcb934a21915ab6f228a63dd73013738df"
+  integrity sha512-w/LlQjj7cmYlQNhEKNm4jQoLkFXCL73kFu1Jy3aL7IFbYEojEKur0f7ieCKUxBBaU65tpaWC83UM8xW7AzY6uw==
+  dependencies:
+    cookie "^0.5.0"
+    fastify-plugin "^4.0.0"
+
 "@fastify/cors@^8.3.0":
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/@fastify/cors/-/cors-8.3.0.tgz#f03d745731b770793a1a15344da7220ca0d19619"

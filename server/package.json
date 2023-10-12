@@ -23,6 +23,7 @@
   "license": "MIT",
   "dependencies": {
     "@fastify/autoload": "^5.0.0",
+    "@fastify/cookie": "^9.1.0",
     "@fastify/cors": "^8.3.0",
     "@fastify/jwt": "^7.0.0",
     "@fastify/multipart": "^7.6.0",
