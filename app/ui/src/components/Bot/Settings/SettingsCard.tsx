@@ -119,6 +119,7 @@ export const SettingsCard = ({ data }: { data: BotSettings }) => {
             showRef: data.showRef,
             use_hybrid_search: data.use_hybrid_search,
             bot_protect: data.bot_protect,
+            use_rag: data.use_rag
           }}
           form={form}
           requiredMark={false}
@@ -309,6 +310,14 @@ export const SettingsCard = ({ data }: { data: BotSettings }) => {
                   label="Activate Public Bot Protection (Beta)"
                   valuePropName="checked"
                   tooltip="This will activate the public bot protection using session to avoid misuse of the bot"
+                >
+                  <Switch />
+                </Form.Item>
+
+                <Form.Item
+                  name="use_rag"
+                  label="Use Retrieval Augmented Generation (RAG)"
+                  valuePropName="checked"
                 >
                   <Switch />
                 </Form.Item>
