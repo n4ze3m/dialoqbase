@@ -13,24 +13,9 @@ import {
   HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT,
   HELPFUL_ASSISTANT_WITHOUT_CONTEXT_PROMPT,
 } from "../../../utils/prompts";
+import { BotSettings } from "../../../@types/bot";
 
-export const SettingsCard = ({
-  data,
-}: {
-  data: {
-    id: string;
-    name: string;
-    model: string;
-    public_id: string;
-    temperature: number;
-    embedding: string;
-    qaPrompt: string;
-    questionGeneratorPrompt: string;
-    streaming: boolean;
-    showRef: boolean;
-    use_hybrid_search: boolean;
-  };
-}) => {
+export const SettingsCard = ({ data }: { data: BotSettings }) => {
   const [form] = Form.useForm();
   const [disableStreaming, setDisableStreaming] = React.useState(false);
   const params = useParams<{ id: string }>();
@@ -133,6 +118,8 @@ export const SettingsCard = ({
             streaming: data.streaming,
             showRef: data.showRef,
             use_hybrid_search: data.use_hybrid_search,
+            bot_protect: data.bot_protect,
+            use_rag: data.use_rag
           }}
           form={form}
           requiredMark={false}
@@ -314,6 +301,23 @@ export const SettingsCard = ({
                   label="Use Hybrid Search Retrieval (Beta)"
                   valuePropName="checked"
                   tooltip="This will use the hybrid search retrieval method instead of the default semantic search retrieval method. Only work on playground ui."
+                >
+                  <Switch />
+                </Form.Item>
+
+                <Form.Item
+                  name="bot_protect"
+                  label="Activate Public Bot Protection (Beta)"
+                  valuePropName="checked"
+                  tooltip="This will activate the public bot protection using session to avoid misuse of the bot"
+                >
+                  <Switch />
+                </Form.Item>
+
+                <Form.Item
+                  name="use_rag"
+                  label="Use Retrieval Augmented Generation (RAG)"
+                  valuePropName="checked"
                 >
                   <Switch />
                 </Form.Item>

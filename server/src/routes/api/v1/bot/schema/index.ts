@@ -122,7 +122,13 @@ export const updateBotByIdSchema: FastifySchema = {
       },
       use_hybrid_search: {
         type: "boolean",
-      }
+      },
+      bot_protect: {
+        type: "boolean",
+      },
+      use_rag: {
+        type: "boolean",
+      },
     },
   },
 };

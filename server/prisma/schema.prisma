@@ -31,6 +31,10 @@ model Bot {
   text_to_voice_type_metadata Json             @default("{}") @db.Json
   use_hybrid_search           Boolean          @default(false)
   haveDataSourcesBeenAdded    Boolean          @default(false)
+  use_rag                     Boolean          @default(false)
+  bot_protect                 Boolean          @default(false)
+  bot_api_key                 String?
+  options                     Json?            @default("{}") @db.Json
   BotAppearance               BotAppearance[]
   document                    BotDocument[]
   BotIntegration              BotIntegration[]
@@ -103,12 +107,12 @@ model BotIntegration {
 }
 
 model BotTelegramHistory {
-  id         Int     @id @default(autoincrement())
-  chat_id    Int?
+  id          Int     @id @default(autoincrement())
+  chat_id     Int?
   new_chat_id String?
-  identifier String?
-  human      String?
-  bot        String?
+  identifier  String?
+  human       String?
+  bot         String?
 }
 
 model BotDiscordHistory {
