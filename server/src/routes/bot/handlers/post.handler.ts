@@ -206,7 +206,10 @@ export const chatRequestStreamHandler = async (
     if (bot.bot_protect) {
       if (!request.session.get("is_bot_allowed")) {
         console.log("not allowed");
-        return reply.sse({
+
+        reply.raw.setHeader("Content-Type", "text/event-stream");
+
+        reply.sse({
           event: "result",
           id: "",
           data: JSON.stringify({
@@ -227,6 +230,11 @@ export const chatRequestStreamHandler = async (
             ],
           }),
         });
+
+
+        await nextTick();
+
+        return reply.raw.end();
       }
     }
 
@@ -350,7 +358,9 @@ export const chatRequestStreamHandler = async (
     return reply.raw.end();
   } catch (e) {
     console.log(e);
-    return reply.sse({
+    reply.raw.setHeader("Content-Type", "text/event-stream");
+
+    reply.sse({
       event: "result",
       id: "",
       data: JSON.stringify({
@@ -371,5 +381,8 @@ export const chatRequestStreamHandler = async (
         ],
       }),
     });
+    await nextTick();
+
+    return reply.raw.end();
   }
 };
