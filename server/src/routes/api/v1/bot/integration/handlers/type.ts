@@ -77,3 +77,10 @@ export type WhatsAppIntergationBodyType = {
   }
   Body: Record<string, any>; 
 }
+
+
+export type GetAPIIntergationRequest  = {
+  Params: {
+    id: string;
+  };
+}

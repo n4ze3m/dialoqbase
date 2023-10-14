@@ -24,6 +24,7 @@ import RegisterRoot from "./routes/register";
 import { QueryBoundaries } from "./components/Common/QueryBoundaries";
 import SettingsApplicationRoot from "./routes/settings/application";
 import SettingsTeamsRoot from "./routes/settings/teams";
+import BotIntegrationAPIRoot from "./routes/bot/api";
 
 const router = createHashRouter([
   {
@@ -103,6 +104,14 @@ const router = createHashRouter([
     element: (
       <BotLayout>
         <BotIntegrationRoot />
+      </BotLayout>
+    ),
+  },
+  {
+    path: "/bot/:id/integrations/api",
+    element: (
+      <BotLayout>
+        <BotIntegrationAPIRoot />
       </BotLayout>
     ),
   },

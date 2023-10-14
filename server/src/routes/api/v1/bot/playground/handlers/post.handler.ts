@@ -547,7 +547,7 @@ export const chatRequestStreamHandler = async (
 
       let historyId = history_id;
       const documents = await documentPromise;
-      console.log(response);
+      console.log(response, historyId);
 
       if (!historyId) {
         const newHistory = await prisma.botPlayground.create({
@@ -558,7 +558,7 @@ export const chatRequestStreamHandler = async (
         });
         historyId = newHistory.id;
       }
-
+      
       await prisma.botPlaygroundMessage.create({
         data: {
           type: "human",

@@ -13,3 +13,12 @@ export type BotSettings = {
   bot_protect: boolean;
   use_rag: boolean;
 };
+
+
+export type BotIntegrationAPI = {
+  is_api_enabled: boolean;
+  data: {
+    public_url: string | null;
+    api_key: string | null;
+  };
+}
