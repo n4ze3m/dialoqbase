@@ -173,3 +173,18 @@ model botWebHistory {
   bot       String?
   createdAt DateTime @default(now())
 }
+
+
+model DialoqbaseModels {
+  id Int @id @default(autoincrement())
+  name String?
+  model_id String @unique
+  model_type String @default("chat")
+  stream_available Boolean @default(false)
+  model_provider String?
+  local_model Boolean @default(false)
+  config Json @default("{}") @db.Json
+  hide Boolean @default(false)
+  deleted Boolean @default(false)
+  createdAt DateTime @default(now())
+}

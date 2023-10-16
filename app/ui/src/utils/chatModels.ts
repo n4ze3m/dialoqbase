@@ -46,10 +46,6 @@ export const availableChatModels = [
     value: "mistral-7b-instruct-4k",
     label: "Mistral 7B Instruct 4K (Fireworks)",
   }
-  // {
-  //   value: "falcon-7b-instruct-inference",
-  //   label: "Falcon 7B Instruct (HuggingFace Inference API)",
-  // },
 ];
 
 export const streamingSupportedModels = [
