@@ -25,6 +25,7 @@ import { QueryBoundaries } from "./components/Common/QueryBoundaries";
 import SettingsApplicationRoot from "./routes/settings/application";
 import SettingsTeamsRoot from "./routes/settings/teams";
 import BotIntegrationAPIRoot from "./routes/bot/api";
+import SettingsModelRoot from "./routes/settings/model";
 
 const router = createHashRouter([
   {
@@ -153,6 +154,16 @@ const router = createHashRouter([
       <DashboardLayout>
         <QueryBoundaries>
           <SettingsTeamsRoot />
+        </QueryBoundaries>
+      </DashboardLayout>
+    ),
+  },
+  {
+    path: "/settings/model",
+    element: (
+      <DashboardLayout>
+        <QueryBoundaries>
+          <SettingsModelRoot />
         </QueryBoundaries>
       </DashboardLayout>
     ),

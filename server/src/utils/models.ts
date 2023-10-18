@@ -56,8 +56,8 @@ export const chatModelProvider = (
         temperature: temperature,
         ...otherFields,
       });
-    case "other":
-      console.log("using other");
+    case "local":
+      console.log("using local");
       return new ChatOpenAI({
         modelName: modelName,
         temperature: temperature,
