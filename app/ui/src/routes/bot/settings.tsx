@@ -13,10 +13,9 @@ export default function BotSettingsRoot() {
   const { data, status } = useQuery(
     ["getBotSettings", param.id],
     async () => {
-      const response = await api.get(`/bot/${param.id}`);
-      return response.data as {
-        data: BotSettings
-      };
+      const response = await api.get(`/bot/${param.id}/settings`);
+      return response.data as BotSettings
+      
     },
     {
       refetchInterval: 1000,
@@ -31,7 +30,7 @@ export default function BotSettingsRoot() {
   return (
     <div className="mx-auto my-3 w-full max-w-7xl">
       {status === "loading" && <SkeletonLoading />}
-      {status === "success" && <SettingsCard data={data.data} />}
+      {status === "success" && <SettingsCard {...data} />}
     </div>
   );
 }

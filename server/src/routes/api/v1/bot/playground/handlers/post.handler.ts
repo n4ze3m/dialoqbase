@@ -45,7 +45,7 @@ const combineDocumentsFn = (docs: Document[], separator = "\n\n") => {
 
 export const chatRequestHandler = async (
   request: FastifyRequest<ChatRequestBody>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const bot_id = request.params.id;
 
@@ -107,7 +107,7 @@ export const chatRequestHandler = async (
         {
           botId: bot.id,
           sourceId: null,
-        },
+        }
       );
 
       retriever = vectorstore.asRetriever({
@@ -121,18 +121,44 @@ export const chatRequestHandler = async (
       });
     }
 
-    const model = chatModelProvider(bot.provider, bot.model, temperature);
+    const modelinfo = await prisma.dialoqbaseModels.findFirst({
+      where: {
+        model_id: bot.model,
+      },
+    });
+
+    if (!modelinfo) {
+      return {
+        bot: {
+          text: "Unable to find model",
+          sourceDocuments: [],
+        },
+        history: [
+          ...history,
+          {
+            type: "human",
+            text: message,
+          },
+          {
+            type: "ai",
+            text: "Unable to find model",
+          },
+        ],
+      };
+    }
+
+    const botConfig = (modelinfo.config as {}) || {};
+
+    const model = chatModelProvider(bot.provider, bot.model, temperature, {
+      ...botConfig,
+    });
 
     if (!bot.use_rag) {
-      const chain = ConversationalRetrievalQAChain.fromLLM(
-        model,
-        retriever,
-        {
-          qaTemplate: bot.qaPrompt,
-          questionGeneratorTemplate: bot.questionGeneratorPrompt,
-          returnSourceDocuments: true,
-        },
-      );
+      const chain = ConversationalRetrievalQAChain.fromLLM(model, retriever, {
+        qaTemplate: bot.qaPrompt,
+        questionGeneratorTemplate: bot.questionGeneratorPrompt,
+        returnSourceDocuments: true,
+      });
 
       const chat_history = history
         .map((chatMessage: any) => {
@@ -220,9 +246,7 @@ export const chatRequestHandler = async (
         model,
       ]);
 
-      const chain = standaloneQuestionChain.pipe(
-        answerChain,
-      );
+      const chain = standaloneQuestionChain.pipe(answerChain);
       const botResponse = await chain.invoke({
         question: sanitizedQuestion,
         chat_history: history as ChatMessage[],
@@ -313,7 +337,7 @@ function nextTick() {
 
 export const chatRequestStreamHandler = async (
   request: FastifyRequest<ChatRequestBody>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const bot_id = request.params.id;
 
@@ -380,7 +404,7 @@ export const chatRequestStreamHandler = async (
         {
           botId: bot.id,
           sourceId: null,
-        },
+        }
       );
 
       retriever = vectorstore.asRetriever({
@@ -393,6 +417,41 @@ export const chatRequestStreamHandler = async (
         ],
       });
     }
+
+    const modelinfo = await prisma.dialoqbaseModels.findFirst({
+      where: {
+        model_id: bot.model,
+      },
+    });
+    if (!modelinfo) {
+      reply.raw.setHeader("Content-Type", "text/event-stream");
+
+      reply.sse({
+        event: "result",
+        id: "",
+        data: JSON.stringify({
+          bot: {
+            text: "There was an error processing your request.",
+            sourceDocuments: [],
+          },
+          history: [
+            ...history,
+            {
+              type: "human",
+              text: message,
+            },
+            {
+              type: "ai",
+              text: "There was an error processing your request.",
+            },
+          ],
+        }),
+      });
+      await nextTick();
+
+      return reply.raw.end();
+    }
+    const botConfig = (modelinfo.config as {}) || {};
 
     let response: any = null;
     const streamedModel = chatModelProvider(
@@ -419,13 +478,17 @@ export const chatRequestStreamHandler = async (
             },
           },
         ],
-      },
+        ...botConfig,
+      }
     );
 
     const nonStreamingModel = chatModelProvider(
       bot.provider,
       bot.model,
       temperature,
+      {
+        ...botConfig,
+      }
     );
 
     reply.raw.on("close", () => {
@@ -443,7 +506,7 @@ export const chatRequestStreamHandler = async (
           questionGeneratorChainOptions: {
             llm: nonStreamingModel,
           },
-        },
+        }
       );
 
       const chat_history = history
@@ -537,9 +600,7 @@ export const chatRequestStreamHandler = async (
         streamedModel,
       ]);
 
-      const chain = standaloneQuestionChain.pipe(
-        answerChain,
-      );
+      const chain = standaloneQuestionChain.pipe(answerChain);
       response = await chain.invoke({
         question: sanitizedQuestion,
         chat_history: history as ChatMessage[],
@@ -558,7 +619,7 @@ export const chatRequestStreamHandler = async (
         });
         historyId = newHistory.id;
       }
-      
+
       await prisma.botPlaygroundMessage.create({
         data: {
           type: "human",
@@ -639,7 +700,7 @@ export const chatRequestStreamHandler = async (
 
 export const updateBotAudioSettingsHandler = async (
   request: FastifyRequest<UpdateBotAudioSettings>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const { id } = request.params;
   const { type, enabled } = request.body;

@@ -7,7 +7,7 @@ import { chatModelProvider } from "../../../utils/models";
 
 export const chatRequestHandler = async (
   request: FastifyRequest<ChatRequestBody>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const { message, history, history_id } = request.body;
   try {
@@ -73,10 +73,40 @@ export const chatRequestHandler = async (
       {
         botId: bot.id,
         sourceId: null,
-      },
+      }
     );
 
-    const model = chatModelProvider(bot.provider, bot.model, temperature);
+    const modelinfo = await prisma.dialoqbaseModels.findFirst({
+      where: {
+        model_id: bot.model,
+      },
+    });
+
+    if (!modelinfo) {
+      return {
+        bot: {
+          text: "There was an error processing your request.",
+          sourceDocuments: [],
+        },
+        history: [
+          ...history,
+          {
+            type: "human",
+            text: message,
+          },
+          {
+            type: "ai",
+            text: "There was an error processing your request.",
+          },
+        ],
+      };
+    }
+
+    const botConfig = (modelinfo.config as {}) || {};
+
+    const model = chatModelProvider(bot.provider, bot.model, temperature, {
+      ...botConfig,
+    });
 
     const chain = ConversationalRetrievalQAChain.fromLLM(
       model,
@@ -85,7 +115,7 @@ export const chatRequestHandler = async (
         qaTemplate: bot.qaPrompt,
         questionGeneratorTemplate: bot.questionGeneratorPrompt,
         returnSourceDocuments: true,
-      },
+      }
     );
 
     const chat_history = history
@@ -160,7 +190,7 @@ function nextTick() {
 
 export const chatRequestStreamHandler = async (
   request: FastifyRequest<ChatRequestBody>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const { message, history, history_id } = request.body;
 
@@ -231,7 +261,6 @@ export const chatRequestStreamHandler = async (
           }),
         });
 
-
         await nextTick();
 
         return reply.raw.end();
@@ -248,7 +277,7 @@ export const chatRequestStreamHandler = async (
       {
         botId: bot.id,
         sourceId: null,
-      },
+      }
     );
 
     let response: any = null;
@@ -256,6 +285,43 @@ export const chatRequestStreamHandler = async (
     reply.raw.on("close", () => {
       console.log("closed");
     });
+
+    const modelinfo = await prisma.dialoqbaseModels.findFirst({
+      where: {
+        model_id: bot.model,
+      },
+    });
+
+    if (!modelinfo) {
+      reply.raw.setHeader("Content-Type", "text/event-stream");
+
+      reply.sse({
+        event: "result",
+        id: "",
+        data: JSON.stringify({
+          bot: {
+            text: "There was an error processing your request.",
+            sourceDocuments: [],
+          },
+          history: [
+            ...history,
+            {
+              type: "human",
+              text: message,
+            },
+            {
+              type: "ai",
+              text: "There was an error processing your request.",
+            },
+          ],
+        }),
+      });
+      await nextTick();
+
+      return reply.raw.end();
+    }
+
+    const botConfig = (modelinfo.config as {}) || {};
 
     const streamedModel = chatModelProvider(
       bot.provider,
@@ -281,13 +347,18 @@ export const chatRequestStreamHandler = async (
             },
           },
         ],
-      },
+        ...botConfig,
+      }
     );
 
     const nonStreamingModel = chatModelProvider(
       bot.provider,
       bot.model,
       temperature,
+      {
+        streaming: false,
+        ...botConfig,
+      }
     );
 
     const chain = ConversationalRetrievalQAChain.fromLLM(
@@ -300,7 +371,7 @@ export const chatRequestStreamHandler = async (
         questionGeneratorChainOptions: {
           llm: nonStreamingModel,
         },
-      },
+      }
     );
 
     const chat_history = history

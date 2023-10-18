@@ -2,11 +2,6 @@ import { Form, notification, Select, Slider, Switch } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../services/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { availableEmbeddingTypes } from "../../../utils/embeddings";
-import {
-  availableChatModels,
-  isStreamingSupported,
-} from "../../../utils/chatModels";
 import axios from "axios";
 import React from "react";
 import {
@@ -15,7 +10,11 @@ import {
 } from "../../../utils/prompts";
 import { BotSettings } from "../../../@types/bot";
 
-export const SettingsCard = ({ data }: { data: BotSettings }) => {
+export const SettingsCard: React.FC<BotSettings> = ({
+  data,
+  chatModel,
+  embeddingModel,
+}) => {
   const [form] = Form.useForm();
   const [disableStreaming, setDisableStreaming] = React.useState(false);
   const params = useParams<{ id: string }>();
@@ -84,6 +83,10 @@ export const SettingsCard = ({ data }: { data: BotSettings }) => {
   const embeddingType = Form.useWatch("embedding", form);
   const currentModel = Form.useWatch("model", form);
 
+  const isStreamingSupported = (model: string) => {
+    return chatModel.find((m) => m.value === model)?.stream === true;
+  };
+
   React.useEffect(() => {
     if (!isStreamingSupported(currentModel) && currentModel) {
       form.setFieldsValue({
@@ -92,6 +95,9 @@ export const SettingsCard = ({ data }: { data: BotSettings }) => {
       setDisableStreaming(true);
     } else {
       setDisableStreaming(false);
+      form.setFieldsValue({
+        streaming: true,
+      });
     }
   }, [currentModel]);
 
@@ -119,7 +125,7 @@ export const SettingsCard = ({ data }: { data: BotSettings }) => {
             showRef: data.showRef,
             use_hybrid_search: data.use_hybrid_search,
             bot_protect: data.bot_protect,
-            use_rag: data.use_rag
+            use_rag: data.use_rag,
           }}
           form={form}
           requiredMark={false}
@@ -164,7 +170,7 @@ export const SettingsCard = ({ data }: { data: BotSettings }) => {
                     },
                   ]}
                 >
-                  <Select options={availableChatModels} />
+                  <Select options={chatModel} />
                 </Form.Item>
 
                 <Form.Item
@@ -226,7 +232,7 @@ export const SettingsCard = ({ data }: { data: BotSettings }) => {
                   <Select
                     disabled
                     placeholder="Select an embedding method"
-                    options={availableEmbeddingTypes}
+                    options={embeddingModel}
                   />
                 </Form.Item>
 

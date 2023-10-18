@@ -1,5 +1,6 @@
 export type BotSettings = {
-  id: string;
+  data: {
+    id: string;
   name: string;
   model: string;
   public_id: string;
@@ -12,6 +13,16 @@ export type BotSettings = {
   use_hybrid_search: boolean;
   bot_protect: boolean;
   use_rag: boolean;
+  },
+  chatModel: {
+    label: string;
+    value: string;
+    stream: boolean;
+  }[],
+  embeddingModel: {
+    label: string;
+    value: string;
+  }[],
 };
 
 

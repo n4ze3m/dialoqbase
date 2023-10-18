@@ -27,7 +27,7 @@ INSERT INTO "DialoqbaseModels" ("name", "model_id", "model_type", "model_provide
 ('GPT-3.5 Turbo 16K (OpenAI)', 'gpt-3.5-turbo-16k', 'chat', 'OpenAI', true, false, '{}'),
 ('GPT-4 (OpenAI)', 'gpt-4', 'chat', 'OpenAI', true, false, '{}'),
 ('GPT-4 0613 (OpenAI)', 'gpt-4-0613', 'chat', 'OpenAI', true, false, '{}'),
-('GPT-3.5 Turbo Instruct (OpenAI)', 'gpt-3.5-turbo-instruct', 'instruct', 'OpenAI', true, false, '{}'),
+('GPT-3.5 Turbo Instruct (OpenAI)', 'gpt-3.5-turbo-instruct', 'instruct', 'openai-instruct', true, false, '{}'),
 ('Claude 1 (Anthropic)', 'claude-1', 'chat', 'Anthropic', true, false, '{}'),
 ('Claude 2 (Anthropic)', 'claude-2', 'chat', 'Anthropic', true, false, '{}'),
 ('Claude Instant (Anthropic)', 'claude-instant-1', 'chat', 'Anthropic', true, false, '{}'),

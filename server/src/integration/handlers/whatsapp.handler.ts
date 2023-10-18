@@ -62,10 +62,25 @@ export const whatsappBotHandler = async (
       },
     );
 
+    const modelinfo = await prisma.dialoqbaseModels.findFirst({
+      where: {
+        model_id: bot.model,
+      },
+    });
+
+    if (!modelinfo) {
+      return "Unable to find model";
+    }
+
+    const botConfig = (modelinfo.config as {}) || {};
+
     const model = chatModelProvider(
       bot.provider,
       bot.model,
       temperature,
+      {
+        ...botConfig,
+      },
     );
 
     const chain = ConversationalRetrievalQAChain.fromLLM(
