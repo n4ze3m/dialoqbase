@@ -63,6 +63,8 @@ export const createBotFileHandler = async (
     const modelInfo = await prisma.dialoqbaseModels.findFirst({
       where: {
         model_id: model,
+        hide: false,
+        deleted: false,
       },
     });
 

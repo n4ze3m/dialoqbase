@@ -127,6 +127,7 @@ export const getCreateBotConfigHandler = async (
   const models = await prisma.dialoqbaseModels.findMany({
     where: {
       hide: false,
+      deleted: false
     },
   });
 
@@ -182,6 +183,7 @@ export const getBotByIdSettingsHandler = async (
   const models = await prisma.dialoqbaseModels.findMany({
     where: {
       hide: false,
+      deleted: false
     },
   });
 

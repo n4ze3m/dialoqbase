@@ -104,6 +104,8 @@ export const saveModelFromInputedUrlHandler = async (
     const modelExist = await prisma.dialoqbaseModels.findFirst({
       where: {
         model_id: model_id,
+        hide: false,
+        deleted: false,
       },
     });
 

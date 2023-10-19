@@ -65,6 +65,8 @@ export const whatsappBotHandler = async (
     const modelinfo = await prisma.dialoqbaseModels.findFirst({
       where: {
         model_id: bot.model,
+        hide: false,
+        deleted: false,
       },
     });
 

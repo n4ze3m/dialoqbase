@@ -28,6 +28,8 @@ export const updateBotByIdHandler = async (
   const modelInfo = await prisma.dialoqbaseModels.findFirst({
     where: {
       model_id: request.body.model,
+      hide: false,
+      deleted: false,
     },
   });
 
@@ -38,7 +40,7 @@ export const updateBotByIdHandler = async (
   }
 
   const isAPIKeyAddedForProvider = apiKeyValidaton(
-   `${modelInfo.model_provider}`.toLocaleLowerCase()
+    `${modelInfo.model_provider}`.toLocaleLowerCase()
   );
 
   if (!isAPIKeyAddedForProvider) {

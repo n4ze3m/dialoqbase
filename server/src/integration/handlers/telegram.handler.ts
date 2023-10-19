@@ -58,6 +58,8 @@ export const telegramBotHandler = async (
     const modelinfo = await prisma.dialoqbaseModels.findFirst({
       where: {
         model_id: bot.model,
+        hide: false,
+        deleted: false,
       },
     });
 
