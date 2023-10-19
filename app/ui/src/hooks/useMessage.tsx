@@ -46,7 +46,7 @@ export const useMessage = () => {
     isLoading,
     setIsLoading,
     isProcessing,
-    setIsProcessing
+    setIsProcessing,
   } = useStoreMessage();
 
   const param = useParams<{ id: string; history_id?: string }>();
@@ -146,14 +146,17 @@ export const useMessage = () => {
         if (type === "chunk") {
           const jsonMessage = JSON.parse(message);
           if (count === 0) {
-            newMessage[appendingIndex].message = jsonMessage.message;
+            setIsProcessing(true);
+            newMessage[appendingIndex].message = jsonMessage.message + "▋";
             setMessages(newMessage);
           } else {
-            newMessage[appendingIndex].message += jsonMessage.message;
+            newMessage[appendingIndex].message =
+              newMessage[appendingIndex].message.slice(0, -1) +
+              jsonMessage.message +
+              "▋";
             setMessages(newMessage);
           }
           count++;
-          setIsProcessing(true);
         } else if (type === "result") {
           const responseData = JSON.parse(message) as BotResponse;
           newMessage[appendingIndex].message = responseData.bot.text;

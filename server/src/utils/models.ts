@@ -11,8 +11,12 @@ export const chatModelProvider = (
   temperature: number,
   otherFields?: any
 ) => {
+  modelName = modelName.replace("-dbase", "");
+
   console.log("provider", provider);
   console.log("modelName", modelName);
+
+
   switch (provider.toLowerCase()) {
     case "openai":
       console.log("using openai");
