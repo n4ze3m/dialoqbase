@@ -24,3 +24,13 @@ export const saveModelFromInputedUrlSchema: FastifySchema = {
     required: ["url", "model_id", "name", "stream_available"],
   },
 };
+
+export const toogleModelSchema: FastifySchema = {
+  body: {
+    type: "object",
+    properties: {
+      id: { type: "number" },
+    },
+    required: ["id"],
+  },
+};

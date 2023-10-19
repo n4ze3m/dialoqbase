@@ -8,6 +8,8 @@ import {
   fetchModelFromInputedUrlHandler,
   getAllModelsHandler,
   saveModelFromInputedUrlHandler,
+  deleteModelHandler,
+  hideModelHandler
 } from "./handlers";
 import {
   dialoqbaseSettingsSchema,
@@ -21,6 +23,7 @@ import {
   fetchModelFromInputedUrlSchema,
   getAllModelsSchema,
   saveModelFromInputedUrlSchema,
+  toogleModelSchema
 } from "./schema/model";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
@@ -94,6 +97,26 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       onRequest: [fastify.authenticate],
     },
     fetchModelFromInputedUrlHandler
+  );
+
+
+  fastify.post(
+    "/models/delete",
+    {
+      schema: toogleModelSchema,
+      onRequest: [fastify.authenticate],
+    },
+    deleteModelHandler
+  );
+
+
+  fastify.post(
+    "/models/hide",
+    {
+      schema: toogleModelSchema,
+      onRequest: [fastify.authenticate],
+    },
+    hideModelHandler
   );
 };
 

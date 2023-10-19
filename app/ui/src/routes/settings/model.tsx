@@ -1,18 +1,29 @@
-import { Form, Switch, Table, Tag, Modal, notification, Select } from "antd";
+import {
+  Form,
+  Switch,
+  Table,
+  Tag,
+  Modal,
+  notification,
+  Select,
+  Tooltip,
+} from "antd";
 import React from "react";
 import api from "../../services/api";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { SettingsLayout } from "../../Layout/SettingsLayout";
 import { SkeletonLoading } from "../../components/Common/SkeletonLoading";
 import { useNavigate } from "react-router-dom";
 import { GetAllModelResponse } from "../../@types/settings";
+import { EyeIcon, EyeSlashIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 export default function SettingsModelRoot() {
   const navigate = useNavigate();
   const [openAddModel, setOpenAddModel] = React.useState(false);
   const [fetchUrlForm] = Form.useForm();
   const [form] = Form.useForm();
+  const client = useQueryClient();
 
   const [type, setType] = React.useState<"url" | "save">("url");
   const [localModels, setLocalModels] = React.useState<
@@ -75,6 +86,7 @@ export default function SettingsModelRoot() {
         notification.success({
           message: "Model saved successfully",
         });
+        client.invalidateQueries(["fetchAllModels"]);
         setOpenAddModel(false);
         form.resetFields();
         fetchUrlForm.resetFields();
@@ -88,6 +100,50 @@ export default function SettingsModelRoot() {
       },
     }
   );
+
+  const hideModel = async (id: number) => {
+    const response = await api.post(`/admin/models/hide`, {
+      id,
+    });
+    return response.data;
+  };
+
+  const deleteModel = async (id: number) => {
+    const response = await api.post(`/admin/models/delete`, {
+      id,
+    });
+    return response.data;
+  };
+
+  const { mutate: hide, isLoading: isHide } = useMutation(hideModel, {
+    onSuccess: () => {
+      notification.success({
+        message: "Model hidden successfully",
+      });
+      client.invalidateQueries(["fetchAllModels"]);
+    },
+    onError: (e: any) => {
+      const message = e?.response?.data?.message || "Something went wrong";
+      notification.error({
+        message,
+      });
+    },
+  });
+
+  const { mutate: del, isLoading: isDelete } = useMutation(deleteModel, {
+    onSuccess: () => {
+      notification.success({
+        message: "Model deleted successfully",
+      });
+      client.invalidateQueries(["fetchAllModels"]);
+    },
+    onError: (e: any) => {
+      const message = e?.response?.data?.message || "Something went wrong";
+      notification.error({
+        message,
+      });
+    },
+  });
 
   return (
     <SettingsLayout>
@@ -144,6 +200,65 @@ export default function SettingsModelRoot() {
                             {value ? "Available" : "Unavailable"}
                           </Tag>
                         ),
+                      },
+                      {
+                        title: "Action",
+                        render: (record) =>
+                          record.local_model ? (
+                            <div className="flex flex-row gap-2">
+                              <Tooltip title="Hide Model from Users">
+                                <button
+                                  type="button"
+                                  disabled={isHide}
+                                  onClick={() => {
+                                    hide(record.id);
+                                  }}
+                                  className="text-gray-400 hover:text-gray-500"
+                                >
+                                  {record.hide ? (
+                                    <EyeSlashIcon className="h-5 w-5" />
+                                  ) : (
+                                    <EyeIcon className="h-5 w-5" />
+                                  )}
+                                </button>
+                              </Tooltip>
+                              <Tooltip title="Delete Model">
+                                <button
+                                  type="button"
+                                  disabled={isDelete}
+                                  onClick={() => {
+                                    const confirm = window.confirm(
+                                      "Are you sure you want to delete this model?"
+                                    );
+
+                                    if (confirm) {
+                                      del(record.id);
+                                    }
+                                  }}
+                                  className="text-red-400 hover:text-red-500"
+                                >
+                                  <TrashIcon className="h-5 w-5" />
+                                </button>
+                              </Tooltip>
+                            </div>
+                          ) : (
+                            <Tooltip title="Hide Model from Users">
+                              <button
+                                type="button"
+                                disabled={isHide}
+                                onClick={() => {
+                                  hide(record.id);
+                                }}
+                                className="text-gray-400 hover:text-gray-500"
+                              >
+                                {record.hide ? (
+                                  <EyeSlashIcon className="h-5 w-5" />
+                                ) : (
+                                  <EyeIcon className="h-5 w-5" />
+                                )}
+                              </button>
+                            </Tooltip>
+                          ),
                       },
                     ]}
                   />

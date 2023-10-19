@@ -4,6 +4,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import {
   FetchModelFromInputedUrlRequest,
   SaveModelFromInputedUrlRequest,
+  ToogleModelRequest,
 } from "./type";
 import axios from "axios";
 
@@ -125,6 +126,109 @@ export const saveModelFromInputedUrlHandler = async (
         config: {
           baseURL: url,
         },
+      },
+    });
+
+    return {
+      message: "success",
+    };
+  } catch (error) {
+    console.log(error);
+    return reply.status(500).send({
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export const hideModelHandler = async (
+  request: FastifyRequest<ToogleModelRequest>,
+  reply: FastifyReply
+) => {
+  try {
+    const { id } = request.body;
+
+    const user = request.user;
+
+    const prisma = request.server.prisma;
+
+    if (!user.is_admin) {
+      return reply.status(403).send({
+        message: "Forbidden",
+      });
+    }
+
+    const model = await prisma.dialoqbaseModels.findFirst({
+      where: {
+        id: id,
+        deleted: false,
+      },
+    });
+
+    if (!model) {
+      return reply.status(404).send({
+        message: "Model not found",
+      });
+    }
+
+    await prisma.dialoqbaseModels.update({
+      where: {
+        id: id,
+      },
+      data: {
+        hide: !model.hide,
+      },
+    });
+
+    return {
+      message: "success",
+    };
+  } catch (error) {
+    console.log(error);
+    return reply.status(500).send({
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export const deleteModelHandler = async (
+  request: FastifyRequest<ToogleModelRequest>,
+  reply: FastifyReply
+) => {
+  try {
+    const { id } = request.body;
+
+    const user = request.user;
+
+    const prisma = request.server.prisma;
+
+    if (!user.is_admin) {
+      return reply.status(403).send({
+        message: "Forbidden",
+      });
+    }
+
+    const model = await prisma.dialoqbaseModels.findFirst({
+      where: {
+        id: id,
+        deleted: false,
+      },
+    });
+
+    if (!model) {
+      return reply.status(404).send({
+        message: "Model not found",
+      });
+    }
+
+    if (!model.local_model) {
+      return reply.status(400).send({
+        message: "Only local model can be deleted",
+      });
+    }
+
+    await prisma.dialoqbaseModels.delete({
+      where: {
+        id: id,
       },
     });
 
