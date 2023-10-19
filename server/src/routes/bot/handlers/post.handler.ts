@@ -186,7 +186,7 @@ export const chatRequestHandler = async (
   }
 };
 
-function nextTick() {
+export function nextTick() {
   return new Promise((resolve) => setTimeout(resolve, 0));
 }
 
