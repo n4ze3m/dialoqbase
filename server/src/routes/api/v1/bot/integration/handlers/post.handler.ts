@@ -168,8 +168,12 @@ export const createIntergationHandler = async (
             discord_slash_command: request.body.value.discord_slash_command,
             discord_slash_command_description:
               request.body.value.discord_slash_command_description,
-            discord_show_sources: request.body.value.discord_show_sources,
-            discord_smart_label: request.body.value.discord_smart_label,
+            discord_show_sources:
+              !!request.body.value.discord_show_sources &&
+              request.body.value.discord_show_sources != "false",
+            discord_smart_label:
+              !!request.body.value.discord_smart_label &&
+              request.body.value.discord_smart_label != "false",
             identifier: process_name_dc,
           },
         });
