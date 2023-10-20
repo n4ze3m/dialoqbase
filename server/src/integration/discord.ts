@@ -117,9 +117,14 @@ export default class DiscordBot {
             chat_id,
           );
 
+          if (typeof bot_response == "string") {
+            console.error(bot_response);
+            return;
+          }
+
           const unique_button_sources: Array<string> = Array.from(
             // Convert to Set so we only get unique sources
-            // i.e. sources made from the same source will be "merged"
+            // i.e. text from the same url will be "merged"
             new Set(
               bot_response?.sourceDocuments?.map(
                 (d: { metadata: { source: string } }): string =>
