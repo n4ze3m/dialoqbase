@@ -75,5 +75,12 @@ export type WhatsAppIntergationBodyType = {
   Headers: {
     "x-hub-signature": string;
   }
-  Body: Record<string, any>;
+  Body: Record<string, any>; 
+}
+
+
+export type GetAPIIntergationRequest  = {
+  Params: {
+    id: string;
+  };
 }

@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "Bot" ADD COLUMN     "options" JSON DEFAULT '{}',
+ADD COLUMN     "use_rag" BOOLEAN NOT NULL DEFAULT false;
+
+ALTER TABLE "Bot" ADD COLUMN  "bot_protect" BOOLEAN NOT NULL DEFAULT false;
+
+
+ALTER TABLE "Bot" ADD COLUMN  "bot_api_key"  TEXT NULL DEFAULT NULL;

@@ -15,16 +15,14 @@ import {
   apiKeyValidaton,
   apiKeyValidatonMessage,
 } from "../../../../../utils/validate";
-import { modelProviderName } from "../../../../../utils/provider";
 const pump = util.promisify(pipeline);
 import { fileTypeFinder } from "../../../../../utils/fileType";
-import { isStreamingSupported } from "../../../../../utils/models";
 import { getSettings } from "../../../../../utils/common";
 import { HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT } from "../../../../../utils/prompts";
 
 export const createBotFileHandler = async (
   request: FastifyRequest<UploadPDF>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   try {
     const embedding = request.query.embedding;
@@ -62,36 +60,45 @@ export const createBotFileHandler = async (
       });
     }
 
-    const providerName = modelProviderName(model);
-    const isModelValid = providerName !== "Unknown";
+    const modelInfo = await prisma.dialoqbaseModels.findFirst({
+      where: {
+        model_id: model,
+        hide: false,
+        deleted: false,
+      },
+    });
 
-    if (!isModelValid) {
+    if (!modelInfo) {
       return reply.status(400).send({
         message: "Model not found",
       });
     }
 
-    console.log(providerName);
-    const isAPIKeyAddedForProvider = apiKeyValidaton(providerName);
+    const isAPIKeyAddedForProvider = apiKeyValidaton(
+      `${modelInfo.model_provider}`.toLocaleLowerCase()
+    );
 
     if (!isAPIKeyAddedForProvider) {
       return reply.status(400).send({
-        message: apiKeyValidatonMessage(providerName),
+        message: apiKeyValidatonMessage(
+          `${modelInfo.model_provider}`.toLocaleLowerCase()
+        ),
       });
     }
+
     const name = uniqueNamesGenerator({
       dictionaries: [adjectives, animals, colors],
       length: 2,
     });
 
-    const isStreamingAvilable = isStreamingSupported(model);
+    const isStreamingAvilable = modelInfo.stream_available;
 
     const bot = await prisma.bot.create({
       data: {
         name,
         embedding,
         model,
-        provider: providerName,
+        provider: modelInfo.model_provider || "",
         streaming: isStreamingAvilable,
         user_id: request.user.user_id,
       },
@@ -115,10 +122,12 @@ export const createBotFileHandler = async (
         },
       });
 
-      await request.server.queue.add([{
-        ...botSource,
-        embedding: bot.embedding,
-      }]);
+      await request.server.queue.add([
+        {
+          ...botSource,
+          embedding: bot.embedding,
+        },
+      ]);
     }
 
     return reply.status(200).send({
@@ -134,7 +143,7 @@ export const createBotFileHandler = async (
 
 export const addNewSourceFileByIdHandler = async (
   request: FastifyRequest<AddNewPDFById>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const prisma = request.server.prisma;
   const id = request.params.id;
@@ -185,10 +194,12 @@ export const addNewSourceFileByIdHandler = async (
       });
     }
 
-    await request.server.queue.add([{
-      ...botSource,
-      embedding: bot.embedding,
-    }]);
+    await request.server.queue.add([
+      {
+        ...botSource,
+        embedding: bot.embedding,
+      },
+    ]);
   }
 
   return {

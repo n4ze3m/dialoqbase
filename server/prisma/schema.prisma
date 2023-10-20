@@ -31,6 +31,10 @@ model Bot {
   text_to_voice_type_metadata Json             @default("{}") @db.Json
   use_hybrid_search           Boolean          @default(false)
   haveDataSourcesBeenAdded    Boolean          @default(false)
+  use_rag                     Boolean          @default(false)
+  bot_protect                 Boolean          @default(false)
+  bot_api_key                 String?
+  options                     Json?            @default("{}") @db.Json
   BotAppearance               BotAppearance[]
   document                    BotDocument[]
   BotIntegration              BotIntegration[]
@@ -105,12 +109,12 @@ model BotIntegration {
 }
 
 model BotTelegramHistory {
-  id         Int     @id @default(autoincrement())
-  chat_id    Int?
+  id          Int     @id @default(autoincrement())
+  chat_id     Int?
   new_chat_id String?
-  identifier String?
-  human      String?
-  bot        String?
+  identifier  String?
+  human       String?
+  bot         String?
 }
 
 model BotDiscordHistory {
@@ -169,5 +173,20 @@ model botWebHistory {
   sources   Json?
   human     String?
   bot       String?
+  createdAt DateTime @default(now())
+}
+
+
+model DialoqbaseModels {
+  id Int @id @default(autoincrement())
+  name String?
+  model_id String @unique
+  model_type String @default("chat")
+  stream_available Boolean @default(false)
+  model_provider String?
+  local_model Boolean @default(false)
+  config Json @default("{}") @db.Json
+  hide Boolean @default(false)
+  deleted Boolean @default(false)
   createdAt DateTime @default(now())
 }

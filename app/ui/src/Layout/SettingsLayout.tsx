@@ -5,6 +5,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useIsAdmin } from "../hooks/useIsAdmin";
 import { Link, useLocation } from "react-router-dom";
+import { AiIcon } from "../components/Icons/AiIcon";
 
 //@ts-ignore
 function classNames(...classes) {
@@ -50,7 +51,7 @@ export const SettingsLayout = ({ children }: { children: React.ReactNode }) => {
     <>
       <div className="mx-auto max-w-7xl lg:flex lg:gap-x-16 lg:px-8">
         {adminInfo?.is_admin && (
-          <aside className="flex lg:rounded-md bg-white lg:h-44 lg:p-4 lg:mt-20 overflow-x-auto lg:border border-b  py-4 lg:block lg:w-64 lg:flex-none  ">
+          <aside className="flex lg:rounded-md bg-white lg:h-52 lg:p-4 lg:mt-20 overflow-x-auto lg:border border-b  py-4 lg:block lg:w-64 lg:flex-none  ">
             <nav className="flex-none  px-4 sm:px-6 lg:px-0">
               <ul
                 role="list"
@@ -74,6 +75,13 @@ export const SettingsLayout = ({ children }: { children: React.ReactNode }) => {
                   name="Teams"
                   icon={UsersIcon}
                   current={location.pathname}
+                />
+
+                <LinkComponent
+                  href="/settings/model"
+                  name="Model"
+                  current={location.pathname}
+                  icon={AiIcon}
                 />
               </ul>
             </nav>

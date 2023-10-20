@@ -4,4 +4,6 @@ export const SUPPORTED_SOURCE_TYPES = [
   "crawl",
   "github",
   "youtube",
+  "rest",
+  "sitemap",
 ];

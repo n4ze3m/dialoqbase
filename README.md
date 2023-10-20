@@ -119,10 +119,11 @@ Dialoqbase is a side project and is not ready for production. It is still in the
 - [x] PDF (beta)
 - [x] Web crawler (beta)
 - [x] Microsoft Word documents (beta)
-- [ ] Sitemap
 - [x] Github repository
 - [x] mp3
 - [x] mp4
+- [X] Sitemap
+- [x] Youtube
 - [ ] Notion
 
 and more...
@@ -132,7 +133,9 @@ and more...
 - [x] OpenAI
 - [x] Anthropic
 - [x] Google chat-bison-001
-- [x] fireworks.ai's llama 2 models api
+- [x] fireworks.ai's llama 2 models
+- [x] fireworks.ai's mistral
+- [X] Local AI models
 
 ### Embedding models
 
@@ -152,11 +155,9 @@ need more ? create an issue...
 - [x] Generate responses
 - [x] Vector search
 - [x] Bot embed script for websites
-- [ ] Supabase Integration
 - [x] Prompt Editor
-- [ ] Chatbot API
+- [X] Chatbot API
 - [x] Chatbot theme editor
-- [ ] Chatbot analytics
 - [x] Streaming responses
 
 ### Integrations 
@@ -166,8 +167,6 @@ need more ? create an issue...
 - [x] Discord (beta)
 - [ ] Slack
 - [X] Whatsapp (experimental)
-- [ ] Facebook Messenger
-- [ ] Instagram
 
 need more ? create an issue...
 

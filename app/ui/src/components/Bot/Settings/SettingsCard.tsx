@@ -2,34 +2,18 @@ import { Form, notification, Select, Slider, Switch } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../services/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { availableEmbeddingTypes } from "../../../utils/embeddings";
-import {
-  availableChatModels,
-  isStreamingSupported,
-} from "../../../utils/chatModels";
 import axios from "axios";
 import React from "react";
 import {
   HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT,
   HELPFUL_ASSISTANT_WITHOUT_CONTEXT_PROMPT,
 } from "../../../utils/prompts";
+import { BotSettings } from "../../../@types/bot";
 
-export const SettingsCard = ({
+export const SettingsCard: React.FC<BotSettings> = ({
   data,
-}: {
-  data: {
-    id: string;
-    name: string;
-    model: string;
-    public_id: string;
-    temperature: number;
-    embedding: string;
-    qaPrompt: string;
-    questionGeneratorPrompt: string;
-    streaming: boolean;
-    showRef: boolean;
-    use_hybrid_search: boolean;
-  };
+  chatModel,
+  embeddingModel,
 }) => {
   const [form] = Form.useForm();
   const [disableStreaming, setDisableStreaming] = React.useState(false);
@@ -99,6 +83,10 @@ export const SettingsCard = ({
   const embeddingType = Form.useWatch("embedding", form);
   const currentModel = Form.useWatch("model", form);
 
+  const isStreamingSupported = (model: string) => {
+    return chatModel.find((m) => m.value === model)?.stream === true;
+  };
+
   React.useEffect(() => {
     if (!isStreamingSupported(currentModel) && currentModel) {
       form.setFieldsValue({
@@ -107,6 +95,9 @@ export const SettingsCard = ({
       setDisableStreaming(true);
     } else {
       setDisableStreaming(false);
+      form.setFieldsValue({
+        streaming: true,
+      });
     }
   }, [currentModel]);
 
@@ -133,6 +124,8 @@ export const SettingsCard = ({
             streaming: data.streaming,
             showRef: data.showRef,
             use_hybrid_search: data.use_hybrid_search,
+            bot_protect: data.bot_protect,
+            use_rag: data.use_rag,
           }}
           form={form}
           requiredMark={false}
@@ -177,7 +170,7 @@ export const SettingsCard = ({
                     },
                   ]}
                 >
-                  <Select options={availableChatModels} />
+                  <Select options={chatModel} />
                 </Form.Item>
 
                 <Form.Item
@@ -239,7 +232,7 @@ export const SettingsCard = ({
                   <Select
                     disabled
                     placeholder="Select an embedding method"
-                    options={availableEmbeddingTypes}
+                    options={embeddingModel}
                   />
                 </Form.Item>
 
@@ -314,6 +307,23 @@ export const SettingsCard = ({
                   label="Use Hybrid Search Retrieval (Beta)"
                   valuePropName="checked"
                   tooltip="This will use the hybrid search retrieval method instead of the default semantic search retrieval method. Only work on playground ui."
+                >
+                  <Switch />
+                </Form.Item>
+
+                <Form.Item
+                  name="bot_protect"
+                  label="Activate Public Bot Protection (Beta)"
+                  valuePropName="checked"
+                  tooltip="This will activate the public bot protection using session to avoid misuse of the bot"
+                >
+                  <Switch />
+                </Form.Item>
+
+                <Form.Item
+                  name="use_rag"
+                  label="Use Retrieval Augmented Generation (RAG)"
+                  valuePropName="checked"
                 >
                   <Switch />
                 </Form.Item>

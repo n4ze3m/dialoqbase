@@ -1,6 +1,4 @@
 import { FastifySchema } from "fastify";
-import { supportedEmbeddings } from "../../../../../utils/embeddings";
-import { supportedModels } from "../../../../../utils/models";
 import { SUPPORTED_SOURCE_TYPES } from "../../../../../utils/datasource";
 
 export const createBotSchema: FastifySchema = {
@@ -19,11 +17,9 @@ export const createBotSchema: FastifySchema = {
       },
       embedding: {
         type: "string",
-        enum: supportedEmbeddings,
       },
       model: {
         type: "string",
-        enum: supportedModels,
       },
       maxDepth: {
         type: "number",
@@ -122,7 +118,13 @@ export const updateBotByIdSchema: FastifySchema = {
       },
       use_hybrid_search: {
         type: "boolean",
-      }
+      },
+      bot_protect: {
+        type: "boolean",
+      },
+      use_rag: {
+        type: "boolean",
+      },
     },
   },
 };

@@ -1,4 +1,4 @@
-import { Form, Modal, Tag, Tooltip, notification } from "antd";
+import { Form, Modal, Table, Tag, Tooltip, notification } from "antd";
 import React from "react";
 import api from "../../services/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -133,81 +133,50 @@ export default function SettingsTeamsRoot() {
 
             <dl className="mt-6 space-y-6 divide-y divide-gray-100   text-sm leading-6 ">
               <div className="mt-5 md:col-span-2 md:mt-0">
-                <table className="min-w-full border rounded-lg divide-y divide-gray-300">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                      >
-                        Username
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                      >
-                        Email
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                      >
-                        Total Bots
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                      >
-                        Role
-                      </th>
-                      <th
-                        scope="col"
-                        className="relative py-3.5 pl-3 pr-4 sm:pr-6"
-                      >
-                        <span className="sr-only">Re-fetch</span>
-
-                        <span className="sr-only">Remove</span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 bg-white">
-                    {data.map((user, idx) => (
-                      <tr key={idx}>
-                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                          {user.username}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {user.email}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {user.bots}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <Tag color={user.is_admin ? "green" : "blue"}>
-                            {user.is_admin ? "ADMIN" : "USER"}
-                          </Tag>
-                        </td>
-
-                        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                          <div className="flex justify-end space-x-2">
-                            <Tooltip title="Reset Password">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setResetPasswordUserId(user.user_id);
-                                  setResetPasswordModal(true);
-                                }}
-                                className="text-red-400 hover:text-red-500"
-                              >
-                                <KeyIcon className="h-5 w-5" />
-                              </button>
-                            </Tooltip>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <Table
+                  columns={[
+                    {
+                      title: "Username",
+                      dataIndex: "username",
+                      key: "username",
+                    },
+                    {
+                      title: "Email",
+                      dataIndex: "email",
+                    },
+                    {
+                      title: "Total Bots",
+                      dataIndex: "bots",
+                    },
+                    {
+                      title: "Role",
+                      dataIndex: "is_admin",
+                      render: (value) => (
+                        <Tag color={value ? "green" : "blue"}>
+                          {value ? "Admin" : "User"}
+                        </Tag>
+                      ),
+                    },
+                    {
+                      title: "Actions",
+                      render: (_, user) => (
+                        <Tooltip title="Reset Password">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setResetPasswordUserId(user.user_id);
+                              setResetPasswordModal(true);
+                            }}
+                            className="text-red-400 hover:text-red-500"
+                          >
+                            <KeyIcon className="h-5 w-5" />
+                          </button>
+                        </Tooltip>
+                      ),
+                    },
+                  ]}
+                  dataSource={data}
+                />
               </div>
             </dl>
           </div>

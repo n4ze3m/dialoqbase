@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-
+import { generateUUID } from "../utils/uuid";
 const useChatId = () => {
   const [chatId, setChatId] = useState<string>("");
 
   const resetChatId = () => {
-    const newChatId = crypto.randomUUID();
+    const newChatId = generateUUID();
     localStorage.removeItem("DS_MESSAGE");
     localStorage.removeItem("DS_HISTORY");
     localStorage.setItem("DS_CHAT_ID", newChatId);
@@ -17,7 +17,7 @@ const useChatId = () => {
     if (storedChatId) {
       setChatId(storedChatId);
     } else {
-      const newChatId = crypto.randomUUID();
+      const newChatId = generateUUID();
       localStorage.setItem("DS_CHAT_ID", newChatId);
       setChatId(newChatId);
     }

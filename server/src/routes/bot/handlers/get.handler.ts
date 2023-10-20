@@ -1,6 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import {  ChatStyleRequest } from "./types";
-
+import { ChatStyleRequest } from "./types";
 
 export const getChatStyleByIdHandler = async (
   request: FastifyRequest<ChatStyleRequest>,
@@ -51,7 +50,7 @@ export const getChatStyleByIdHandler = async (
       },
     };
   }
-
+  request.session.is_bot_allowed = true;
   return {
     data: {
       background_color: "#ffffff",
