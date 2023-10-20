@@ -117,7 +117,7 @@ export async function getChannelsByProvider(
         {
           name: "discord_smart_label",
           type: "string",
-          inputType: "string",
+          inputType: "boolean",
           title: `Smart Source Label\n("https://en.wikipedia.org/wiki/Linux_kernel" => "Linux Kernel")`,
           description:
             "Let the system try to find a smart title for every source",

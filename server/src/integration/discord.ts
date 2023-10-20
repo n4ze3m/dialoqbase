@@ -16,7 +16,7 @@ import {
 function url_to_label(
   url: string,
   alternative: string,
-  smart_label: boolean,
+  smart_label: boolean
 ): string {
   // Reduce URLs to a representative label,
   // as Discord at most allows 80 characters in their labels
@@ -59,7 +59,7 @@ export default class DiscordBot {
     command: string = "hey",
     slashCommandsDescription: string = "Say hey to the bot",
     showSources: boolean | string = false,
-    smartLabel: boolean | string = false,
+    smartLabel: boolean | string = false
   ) {
     try {
       if (this._clients.has(identifier)) {
@@ -81,7 +81,7 @@ export default class DiscordBot {
             token,
             clientId,
             slashCommands.replace(/[^a-zA-Z0-9]/g, ""),
-            slashCommandsDescription,
+            slashCommandsDescription
           );
         }
       });
@@ -114,7 +114,7 @@ export default class DiscordBot {
           const bot_response = await discordBotHandler(
             identifier,
             message.toString(),
-            chat_id,
+            chat_id
           );
 
           const unique_button_sources: Array<string> = Array.from(
@@ -123,9 +123,9 @@ export default class DiscordBot {
             new Set(
               bot_response?.sourceDocuments?.map(
                 (d: { metadata: { source: string } }): string =>
-                  d.metadata.source,
-              ),
-            ),
+                  d.metadata.source
+              )
+            )
           );
 
           await interaction
@@ -137,24 +137,27 @@ export default class DiscordBot {
                   description: bot_response?.text,
                 }),
               ],
-              components: showSources
-                ? [
-                    new ActionRowBuilder<ButtonBuilder>({
-                      components: unique_button_sources.map(
-                        (url: string, i: number): ButtonBuilder =>
-                          new ButtonBuilder({
-                            style: ButtonStyle.Link,
-                            label: url_to_label(
-                              url,
-                              `Source ${(i + 1).toString()}`,
-                              smartLabelBool,
-                            ),
-                            url: url,
-                          }),
-                      ),
-                    }),
-                  ]
-                : [],
+              components:
+                unique_button_sources.length > 0
+                  ? showSources
+                    ? [
+                        new ActionRowBuilder<ButtonBuilder>({
+                          components: unique_button_sources.map(
+                            (url: string, i: number): ButtonBuilder =>
+                              new ButtonBuilder({
+                                style: ButtonStyle.Link,
+                                label: url_to_label(
+                                  url,
+                                  `Source ${(i + 1).toString()}`,
+                                  smartLabelBool
+                                ),
+                                url: url,
+                              })
+                          ),
+                        }),
+                      ]
+                    : []
+                  : [],
             })
             .catch((err: any) => console.log(err));
         }
@@ -176,7 +179,7 @@ export default class DiscordBot {
 
           const bot_response = await clearDiscordChatHistory(
             identifier,
-            chat_id,
+            chat_id
           );
 
           await reply.edit(bot_response);
@@ -212,7 +215,7 @@ export default class DiscordBot {
     token: string,
     clientId: string,
     slashCommands: string = "hey",
-    slashCommandsDescription: string = "Say hey to the bot",
+    slashCommandsDescription: string = "Say hey to the bot"
   ) {
     try {
       const rest = new REST({ version: "10" }).setToken(token);

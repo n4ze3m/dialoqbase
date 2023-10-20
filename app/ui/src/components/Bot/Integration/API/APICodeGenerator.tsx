@@ -4,30 +4,33 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nightOwl } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { CopyBtn } from "../../../Common/CopyBtn";
 
-
-
-export const CodePreview: React.FC<{ code: string , lang: string}> = ({ code, lang }) => {
-    return   <div className="code relative text-base bg-gray-800 rounded-md overflow-hidden">
-    <div className="flex items-center justify-end py-1.5 px-4">
+export const CodePreview: React.FC<{ code: string; lang: string }> = ({
+  code,
+  lang,
+}) => {
+  return (
+    <div className="code relative text-base bg-gray-800 rounded-md overflow-hidden">
+      <div className="flex items-center justify-end py-1.5 px-4">
         <CopyBtn showText={false} iconSize="h-4 w-4" value={code} />
+      </div>
+      <SyntaxHighlighter
+        children={String(code).replace(/\n$/, "")}
+        style={nightOwl}
+        key={Math.random()}
+        showLineNumbers
+        customStyle={{
+          margin: 0,
+          fontSize: "1rem",
+          lineHeight: "1.5rem",
+        }}
+        language={lang}
+        codeTagProps={{
+          className: "text-sm",
+        }}
+      />
     </div>
-    <SyntaxHighlighter
-      children={String(code).replace(/\n$/, "")}
-      style={nightOwl}
-      key={Math.random()}
-      showLineNumbers
-      customStyle={{
-        margin: 0,
-        fontSize: "1rem",
-        lineHeight: "1.5rem",
-      }}
-      language={lang}
-      codeTagProps={{
-        className: "text-sm",
-      }}
-    />
-  </div>
-}
+  );
+};
 
 interface APICodeGeneratorProps {
   api: string;
@@ -111,40 +114,31 @@ func main() {
             label: (
               <div>
                 <span className="text-sm font-semibold">curl</span>
-                <img
-                  src="/code/curl.png"
-                  className=" h-4 ml-2 inline-block"
-                />
+                <img src="/code/curl.png" className=" h-4 ml-2 inline-block" />
               </div>
             ),
             key: "curl",
-            children: <CodePreview  code={codes.curlCode} lang="bash" />
+            children: <CodePreview code={codes.curlCode} lang="bash" />,
           },
           {
             label: (
               <div>
                 <span className="text-sm font-semibold">node</span>
-                <img
-                  src="/code/node.png"
-                  className=" h-4 ml-2 inline-block"
-                />
+                <img src="/code/node.png" className=" h-4 ml-2 inline-block" />
               </div>
             ),
             key: "node",
-            children: <CodePreview  code={codes.nodeCode} lang="javascript" />
+            children: <CodePreview code={codes.nodeCode} lang="javascript" />,
           },
           {
             label: (
               <div>
                 <span className="text-sm font-semibold">python</span>
-                <img
-                  src="/code/python.png"
-                  className="h-4 ml-2 inline-block"
-                />
+                <img src="/code/python.png" className="h-4 ml-2 inline-block" />
               </div>
             ),
             key: "python",
-            children: <CodePreview  code={codes.pythonCode} lang="python" />
+            children: <CodePreview code={codes.pythonCode} lang="python" />,
           },
           {
             label: (
@@ -154,8 +148,8 @@ func main() {
               </div>
             ),
             key: "go",
-            children: <CodePreview  code={codes.goCode} lang="go" />
-          }
+            children: <CodePreview code={codes.goCode} lang="go" />,
+          },
         ]}
       />
     </div>

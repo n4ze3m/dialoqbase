@@ -468,7 +468,7 @@ export const BotForm = ({
           className="space-y-6"
           initialValues={{
             embedding: "openai",
-            model: "gpt-3.5-turbo",
+            model: "gpt-3.5-turbo-dbase",
             maxDepth: 2,
             maxLinks: 10,
             options: {

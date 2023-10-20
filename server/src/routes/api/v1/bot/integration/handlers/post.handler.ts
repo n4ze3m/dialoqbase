@@ -17,7 +17,7 @@ import SlackBot from "../../../../../../integration/slack";
 
 export const createIntergationHandler = async (
   request: FastifyRequest<createIntergationType>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const prisma = request.server.prisma;
   const id = request.params.id;
@@ -44,7 +44,12 @@ export const createIntergationHandler = async (
   }
 
   const isRequiredField = requiredFiled.every((field) => {
-    return request.body.value[field];
+    // return request.body.value[field];
+    // if value is in boolean
+    return (
+      typeof request.body.value[field] === "boolean" ||
+      !!request.body.value[field]
+    );
   });
 
   if (!isRequiredField) {
@@ -64,7 +69,7 @@ export const createIntergationHandler = async (
       });
 
       const isValidToken = await TelegramBot.isValidate(
-        request.body.value.telegram_bot_token,
+        request.body.value.telegram_bot_token
       );
 
       if (!isValidToken) {
@@ -86,7 +91,7 @@ export const createIntergationHandler = async (
         if (!isProcess_tg.is_pause) {
           await TelegramBot.connect(
             process_name_tg,
-            request.body.value.telegram_bot_token,
+            request.body.value.telegram_bot_token
           );
         }
       } else {
@@ -101,7 +106,7 @@ export const createIntergationHandler = async (
 
         await TelegramBot.connect(
           process_name_tg,
-          request.body.value.telegram_bot_token,
+          request.body.value.telegram_bot_token
         );
       }
 
@@ -119,7 +124,7 @@ export const createIntergationHandler = async (
       });
 
       const isValidToken_dc = await DiscordBot.isValidate(
-        request.body.value.discord_bot_token,
+        request.body.value.discord_bot_token
       );
 
       if (!isValidToken_dc) {
@@ -155,7 +160,7 @@ export const createIntergationHandler = async (
             request.body.value.discord_slash_command,
             request.body.value.discord_slash_command_description,
             request.body.value.discord_show_sources,
-            request.body.value.discord_smart_label,
+            request.body.value.discord_smart_label
           );
         }
       } else {
@@ -180,7 +185,7 @@ export const createIntergationHandler = async (
           request.body.value.discord_slash_command,
           request.body.value.discord_slash_command_description,
           request.body.value.discord_show_sources,
-          request.body.value.discord_smart_label,
+          request.body.value.discord_smart_label
         );
       }
 
@@ -224,7 +229,7 @@ export const createIntergationHandler = async (
       await WhatsappBot.connect(
         isBot.id,
         request.body.value.whatsapp_phone_number,
-        request.body.value.whatsapp_access_token,
+        request.body.value.whatsapp_access_token
       );
 
       return reply.status(200).send({
@@ -268,7 +273,7 @@ export const createIntergationHandler = async (
         process_name_sl,
         request.body.value.slack_auth_token,
         request.body.value.slack_signing_secret,
-        request.body.value.slack_app_token,
+        request.body.value.slack_app_token
       );
 
       return reply.status(200).send({
@@ -284,7 +289,7 @@ export const createIntergationHandler = async (
 
 export const pauseOrResumeIntergationHandler = async (
   request: FastifyRequest<PauseIntergationType>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const prismas = request.server.prisma;
   const bot_id = request.params.id;
@@ -329,7 +334,7 @@ export const pauseOrResumeIntergationHandler = async (
 
         await TelegramBot.connect(
           getIntegration.identifier,
-          getIntegration.telegram_bot_token!,
+          getIntegration.telegram_bot_token!
         );
       } else {
         await prismas.botIntegration.update({
@@ -365,7 +370,7 @@ export const pauseOrResumeIntergationHandler = async (
           getIntegration.discord_slash_command!,
           getIntegration.discord_slash_command_description!,
           getIntegration.discord_show_sources!,
-          getIntegration.discord_smart_label!,
+          getIntegration.discord_smart_label!
         );
       } else {
         await prismas.botIntegration.update({
@@ -398,7 +403,7 @@ export const pauseOrResumeIntergationHandler = async (
         await WhatsappBot.connect(
           bot_id,
           getIntegration.whatsapp_phone_number!,
-          getIntegration.whatsapp_access_token!,
+          getIntegration.whatsapp_access_token!
         );
 
         return reply.status(200).send({
@@ -414,9 +419,7 @@ export const pauseOrResumeIntergationHandler = async (
           },
         });
 
-        await WhatsappBot.disconnect(
-          bot_id,
-        );
+        await WhatsappBot.disconnect(bot_id);
 
         return reply.status(200).send({
           message: "Integration updated",
@@ -432,7 +435,7 @@ export const pauseOrResumeIntergationHandler = async (
 
 export const whatsappIntergationHandler = async (
   request: FastifyRequest<WhatsAppIntergationType>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   //  req.query['hub.mode'] == 'subscribe' &&
   // req.query['hub.verify_token'] == 1234
@@ -451,7 +454,7 @@ export const whatsappIntergationHandler = async (
 
 export const whatsappIntergationHandlerPost = async (
   req: FastifyRequest<WhatsAppIntergationBodyType>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   try {
     const signature = req.headers["x-hub-signature"];
@@ -487,13 +490,8 @@ export const whatsappIntergationHandlerPost = async (
       return reply.status(202).send();
     }
 
-    const {
-      from,
-      id,
-      timestamp,
-      type,
-      ...rest
-    } = req.body.entry[0].changes[0].value.messages[0];
+    const { from, id, timestamp, type, ...rest } =
+      req.body.entry[0].changes[0].value.messages[0];
     const identifer =
       req.body.entry[0].changes[0].value.metadata.phone_number_id;
 

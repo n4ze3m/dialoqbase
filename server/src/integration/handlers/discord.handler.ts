@@ -64,7 +64,9 @@ let history = chat_history
     });
 
     if (!modelinfo) {
-      return "Unable to find model";
+      return {
+        text: "Opps! Model not found",
+      }
     }
 
     const botConfig = (modelinfo.config as {}) || {};
