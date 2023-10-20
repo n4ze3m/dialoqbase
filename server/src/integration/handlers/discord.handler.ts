@@ -22,7 +22,7 @@ export const discordBotHandler = async (
     });
 
     if (!bot) {
-      return "Opps! Bot not found";
+      return { text: "Opps! Bot not found" };
     }
 
     const chat_history = await prisma.botDiscordHistory.findMany({
@@ -36,7 +36,7 @@ export const discordBotHandler = async (
       chat_history.splice(0, chat_history.length - 10);
     }
 
-    let history = chat_history
+let history = chat_history
       .map((chat) => {
         return `Human: ${chat.human}\nAssistant: ${chat.bot}`;
       })
@@ -88,23 +88,21 @@ export const discordBotHandler = async (
       chat_history: history,
     });
 
-    const bot_response = response["text"];
-
     await prisma.botDiscordHistory.create({
       data: {
         identifier: identifer,
         chat_id: user_id,
         human: message,
-        bot: bot_response,
+        bot: response.text,
       },
     });
 
     await prisma.$disconnect();
 
-    return bot_response;
+    return response;
   } catch (error) {
     console.log(error);
-    return "Opps! Something went wrong";
+    return { text: "Opps! Something went wrong" };
   }
 };
 

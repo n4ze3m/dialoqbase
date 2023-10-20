@@ -16,6 +16,8 @@ export const geProviderRequiredFields = (channel: string) => {
         "discord_application_id",
         "discord_slash_command",
         "discord_slash_command_description",
+        "discord_show_sources",
+        "discord_smart_label",
       ];
     case "whatsapp":
       return [

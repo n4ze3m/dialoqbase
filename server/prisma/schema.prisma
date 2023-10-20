@@ -97,6 +97,8 @@ model BotIntegration {
   discord_slash_command             String?  @default("hey")
   discord_slash_command_description String?  @default("Use this command to get help")
   discord_application_id            String?
+  discord_show_sources              Boolean? @default(false)
+  discord_smart_label               Boolean? @default(false)
   whatsapp_access_token             String?
   whatsapp_verify_token             String?
   whatsapp_phone_number             String?

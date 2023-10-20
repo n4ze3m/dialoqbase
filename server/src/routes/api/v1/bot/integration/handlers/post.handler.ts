@@ -139,6 +139,12 @@ export const createIntergationHandler = async (
             discord_slash_command: request.body.value.discord_slash_command,
             discord_slash_command_description:
               request.body.value.discord_slash_command_description,
+            discord_show_sources:
+              !!request.body.value.discord_show_sources &&
+              request.body.value.discord_show_sources != "false",
+            discord_smart_label:
+              !!request.body.value.discord_smart_label &&
+              request.body.value.discord_smart_label != "false",
           },
         });
 
@@ -148,6 +154,8 @@ export const createIntergationHandler = async (
             request.body.value.discord_bot_token,
             request.body.value.discord_slash_command,
             request.body.value.discord_slash_command_description,
+            request.body.value.discord_show_sources,
+            request.body.value.discord_smart_label,
           );
         }
       } else {
@@ -160,6 +168,8 @@ export const createIntergationHandler = async (
             discord_slash_command: request.body.value.discord_slash_command,
             discord_slash_command_description:
               request.body.value.discord_slash_command_description,
+            discord_show_sources: request.body.value.discord_show_sources,
+            discord_smart_label: request.body.value.discord_smart_label,
             identifier: process_name_dc,
           },
         });
@@ -169,6 +179,8 @@ export const createIntergationHandler = async (
           request.body.value.discord_bot_token,
           request.body.value.discord_slash_command,
           request.body.value.discord_slash_command_description,
+          request.body.value.discord_show_sources,
+          request.body.value.discord_smart_label,
         );
       }
 
@@ -352,6 +364,8 @@ export const pauseOrResumeIntergationHandler = async (
           getIntegration.discord_bot_token!,
           getIntegration.discord_slash_command!,
           getIntegration.discord_slash_command_description!,
+          getIntegration.discord_show_sources!,
+          getIntegration.discord_smart_label!,
         );
       } else {
         await prismas.botIntegration.update({

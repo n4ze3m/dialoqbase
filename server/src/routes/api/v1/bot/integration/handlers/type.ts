@@ -46,8 +46,8 @@ export type GetIntergationType = {
     description: string;
     help: string;
     requiredMessage: string;
-    value: string;
-    defaultValue: string;
+    value: string | boolean;
+    defaultValue: string | boolean;
   }[];
   isPaused?: boolean;
   status?: string;
