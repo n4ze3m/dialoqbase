@@ -1,12 +1,14 @@
 import React from "react";
 import { BotIntegrationAPI } from "../../../../@types/bot";
 import { CopyBtn } from "../../../Common/CopyBtn";
-import { Form, Select, Switch } from "antd";
-import { MinusIcon } from "@heroicons/react/24/outline";
+import { Form, Select, Switch, Tooltip, notification } from "antd";
+import { ArrowPathIcon, MinusIcon } from "@heroicons/react/24/outline";
 import APICodeGenerator from "./APICodeGenerator";
 import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiResponse } from "./ApiResponse";
+import api from "../../../../services/api";
+import { useParams } from "react-router-dom";
 const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
   const [form] = Form.useForm();
 
@@ -16,12 +18,39 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
 
   const stream = Form.useWatch("stream", form);
 
+  const client = useQueryClient();
+
+  const param = useParams<{ id: string }>();
+
   const [hostUrl] = React.useState<string>(
     () =>
       import.meta.env.VITE_HOST_URL ||
       window.location.protocol + "//" + window.location.host
   );
-
+  const { mutate: regenerateAPIKey, isLoading: isGeneratingAPIKey } =
+    useMutation(
+      async () => {
+        const response = await api.put(`/bot/integration/${param.id}/api`);
+        return response.data;
+      },
+      {
+        onSuccess: () => {
+          notification.success({
+            message: "Success",
+            description: "API key re-generated successfully.",
+          });
+          client.invalidateQueries(["getBotIntegrationAPI"]);
+        },
+        onError: (e) => {
+          console.log(e);
+          notification.error({
+            message: "Error",
+            description:
+              "Something went wrong while re-generating the API key.",
+          });
+        },
+      }
+    );
 
   const [apiResponse, setApiResponse] = React.useState<any>(null);
 
@@ -40,24 +69,20 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
       return {
         data: res.data,
         status: res.status,
-      }
+      };
     } catch (err: any) {
       return {
         data: err?.response?.data,
         status: err?.response?.status || 500,
-      }
+      };
     }
   };
 
-
-  const {
-    mutate: showResponse,
-    isLoading
-  } = useMutation(handleSubmit, {
+  const { mutate: showResponse, isLoading } = useMutation(handleSubmit, {
     onSuccess: (data) => {
-      setApiResponse(data)
-    }
-  })
+      setApiResponse(data);
+    },
+  });
 
   return (
     <div className="min-h-screen ">
@@ -72,7 +97,7 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
               className="block w-full rounded-md border-gray-200 focus:border-sky-500 focus:ring-sky-500 sm:text-sm bg-gray-50"
             />
           </div>
-          <div>
+          <div className="flex flex-row gap-2">
             <CopyBtn
               showText={false}
               value={`${hostUrl}/bot/${data.public_url}/api`}
@@ -91,6 +116,14 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
                 className="block w-full rounded-md border-gray-200 focus:border-sky-500 focus:ring-sky-500 sm:text-sm bg-gray-50"
               />
               <CopyBtn showText={false} value={data.api_key || ""} />
+              <Tooltip title="Regenerate API Key">
+                <button
+                  onClick={() => !isGeneratingAPIKey && regenerateAPIKey()}
+                  className={isGeneratingAPIKey ? "animate-spin" : ""}
+                >
+                  <ArrowPathIcon className="h-5 w-5 text-gray-500" />
+                </button>
+              </Tooltip>
             </div>
 
             <h6 className="text-sm font-semibold mb-2">BODY PARAMS</h6>
@@ -239,12 +272,12 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
               </Form.Item>
 
               <div className="flex flex-row justify-end">
-              <button
-                type="submit"
-                className="inline-flex  justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white  hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-              >
-                {isLoading ? "Loading..." : "Test API"}
-              </button>
+                <button
+                  type="submit"
+                  className="inline-flex  justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white  hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                  {isLoading ? "Loading..." : "Test API"}
+                </button>
               </div>
             </Form>
           </div>
@@ -268,7 +301,10 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
             <div className="border-t border-gray-200 my-4"></div>
 
             {apiResponse && (
-              <ApiResponse status={apiResponse.status} data={JSON.stringify(apiResponse.data, null, 2)} />
+              <ApiResponse
+                status={apiResponse.status}
+                data={JSON.stringify(apiResponse.data, null, 2)}
+              />
             )}
           </div>
         </div>
