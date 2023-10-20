@@ -6,6 +6,8 @@ import api from "../../../services/api";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { ClipboardIcon } from "@heroicons/react/24/outline";
+// import Switch from antd as AntdSwitch
+import { Switch as AntdSwitch } from "antd";
 
 //@ts-ignore
 function classNames(...classes) {
@@ -176,6 +178,17 @@ export const IntegrationForm: React.FC<Props> = ({ onClose, data }) => {
                     </button>
                   </div>
                 </div>
+              </Form.Item>
+            );
+          } else if (field.inputType === "boolean") {
+            return (
+              <Form.Item
+                key={index}
+                label={field.title}
+                name={field.name}
+                valuePropName="checked"
+              >
+                <AntdSwitch />
               </Form.Item>
             );
           }

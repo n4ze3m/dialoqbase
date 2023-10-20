@@ -98,6 +98,8 @@ model BotIntegration {
   discord_slash_command_description String?  @default("Use this command to get help")
   discord_application_id            String?
   whatsapp_access_token             String?
+  discord_show_sources              Boolean? @default(false)
+  discord_smart_label               Boolean? @default(false)
   whatsapp_verify_token             String?
   whatsapp_phone_number             String?
   slack_auth_token                  String?
@@ -172,4 +174,18 @@ model botWebHistory {
   human     String?
   bot       String?
   createdAt DateTime @default(now())
+}
+
+model DialoqbaseModels {
+  id               Int      @id @default(autoincrement())
+  name             String?
+  model_id         String   @unique
+  model_type       String   @default("chat")
+  stream_available Boolean  @default(false)
+  model_provider   String?
+  local_model      Boolean  @default(false)
+  config           Json     @default("{}") @db.Json
+  hide             Boolean  @default(false)
+  deleted          Boolean  @default(false)
+  createdAt        DateTime @default(now())
 }

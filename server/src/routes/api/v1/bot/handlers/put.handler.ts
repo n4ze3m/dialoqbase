@@ -1,15 +1,13 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { UpdateBotById } from "./types";
-import { modelProviderName } from "../../../../../utils/provider";
 import {
   apiKeyValidaton,
   apiKeyValidatonMessage,
 } from "../../../../../utils/validate";
-import { isStreamingSupported } from "../../../../../utils/models";
 
 export const updateBotByIdHandler = async (
   request: FastifyRequest<UpdateBotById>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const prisma = request.server.prisma;
   const id = request.params.id;
@@ -27,31 +25,35 @@ export const updateBotByIdHandler = async (
     });
   }
 
-  const providerName = modelProviderName(request.body.model);
+  const modelInfo = await prisma.dialoqbaseModels.findFirst({
+    where: {
+      model_id: request.body.model,
+      hide: false,
+      deleted: false,
+    },
+  });
 
-  const isModelValid = providerName !== "Unknown";
-
-  if (!isModelValid) {
+  if (!modelInfo) {
     return reply.status(400).send({
       message: "Model not found",
     });
   }
 
-  const isAPIKeyAddedForProvider = apiKeyValidaton(providerName);
+  const isAPIKeyAddedForProvider = apiKeyValidaton(
+    `${modelInfo.model_provider}`.toLocaleLowerCase()
+  );
 
   if (!isAPIKeyAddedForProvider) {
     return reply.status(400).send({
-      message: apiKeyValidatonMessage(providerName),
+      message: apiKeyValidatonMessage(modelInfo.model_provider || ""),
     });
   }
 
-
-  if (!isStreamingSupported(request.body.model) && request.body.streaming) {
+  if (!modelInfo.stream_available && request.body.streaming) {
     return reply.status(400).send({
       message: "Streaming is not supported for this model",
     });
   }
-
 
   await prisma.bot.update({
     where: {
@@ -59,7 +61,7 @@ export const updateBotByIdHandler = async (
     },
     data: {
       ...request.body,
-      provider: providerName,
+      provider: modelInfo.model_provider || "",
     },
   });
 

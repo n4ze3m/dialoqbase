@@ -4,7 +4,7 @@ import { GetBotRequestById } from "./types";
 
 export const getBotByIdEmbeddingsHandler = async (
   request: FastifyRequest<GetBotRequestById>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const prisma = request.server.prisma;
   const id = request.params.id;
@@ -37,7 +37,7 @@ export const getBotByIdEmbeddingsHandler = async (
 
 export const getBotByIdAllSourcesHandler = async (
   request: FastifyRequest<GetBotRequestById>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const prisma = request.server.prisma;
   const id = request.params.id;
@@ -71,7 +71,7 @@ export const getBotByIdAllSourcesHandler = async (
 
 export const getBotByIdHandler = async (
   request: FastifyRequest<GetBotRequestById>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const prisma = request.server.prisma;
   const id = request.params.id;
@@ -95,7 +95,7 @@ export const getBotByIdHandler = async (
 
 export const getAllBotsHandler = async (
   request: FastifyRequest,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const prisma = request.server.prisma;
 
@@ -117,4 +117,111 @@ export const getAllBotsHandler = async (
   });
 
   return bots;
+};
+
+export const getCreateBotConfigHandler = async (
+  request: FastifyRequest,
+  reply: FastifyReply
+) => {
+  const prisma = request.server.prisma;
+  const models = await prisma.dialoqbaseModels.findMany({
+    where: {
+      hide: false,
+      deleted: false
+    },
+  });
+
+  const chatModel = models.map((model) => {
+    return {
+      label: model.name || model.model_id,
+      value: model.model_id,
+      stream: model.stream_available,
+    };
+  });
+
+  const embeddingModel = [
+    { value: "openai", label: "OpenAI" },
+    { value: "tensorflow", label: "Tensorflow (cpu)" },
+    { value: "cohere", label: "Cohere" },
+    { value: "huggingface-api", label: "HuggingFace (Inference)" },
+    {
+      value: "transformer",
+      label: "Xenova/all-MiniLM-L6-v2 (cpu)",
+    },
+    {
+      value: "supabase",
+      label: "Supabase/gte-small (cpu)",
+    },
+    {
+      value: "google-gecko",
+      label: "Google text-gecko-001 (beta)",
+    },
+  ];
+
+  return {
+    chatModel,
+    embeddingModel,
+  };
+};
+
+
+
+export const getBotByIdSettingsHandler = async (
+  request: FastifyRequest<GetBotRequestById>,
+  reply: FastifyReply
+) => {
+  const prisma = request.server.prisma;
+  const id = request.params.id;
+
+  const bot = await prisma.bot.findFirst({
+    where: {
+      id,
+      user_id: request.user.user_id,
+    },
+  });
+
+  const models = await prisma.dialoqbaseModels.findMany({
+    where: {
+      hide: false,
+      deleted: false
+    },
+  });
+
+  const chatModel = models.map((model) => {
+    return {
+      label: model.name || model.model_id,
+      value: model.model_id,
+      stream: model.stream_available,
+    };
+  });
+
+  const embeddingModel = [
+    { value: "openai", label: "OpenAI" },
+    { value: "tensorflow", label: "Tensorflow (cpu)" },
+    { value: "cohere", label: "Cohere" },
+    { value: "huggingface-api", label: "HuggingFace (Inference)" },
+    {
+      value: "transformer",
+      label: "Xenova/all-MiniLM-L6-v2 (cpu)",
+    },
+    {
+      value: "supabase",
+      label: "Supabase/gte-small (cpu)",
+    },
+    {
+      value: "google-gecko",
+      label: "Google text-gecko-001 (beta)",
+    },
+  ];
+
+  if (!bot) {
+    return reply.status(404).send({
+      message: "Bot not found",
+    });
+  }
+  return {
+    data: bot,
+    chatModel,
+    embeddingModel,
+  };
 };

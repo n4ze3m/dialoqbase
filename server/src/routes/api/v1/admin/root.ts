@@ -4,15 +4,27 @@ import {
   updateDialoqbaseSettingsHandler,
   getAllUsersHandler,
   registerUserByAdminHandler,
-  resetUserPasswordByAdminHandler
+  resetUserPasswordByAdminHandler,
+  fetchModelFromInputedUrlHandler,
+  getAllModelsHandler,
+  saveModelFromInputedUrlHandler,
+  deleteModelHandler,
+  hideModelHandler
 } from "./handlers";
 import {
   dialoqbaseSettingsSchema,
   updateDialoqbaseSettingsSchema,
   getAllUsersSchema,
   registerUserByAdminSchema,
-  resetUserPasswordByAdminSchema
+  resetUserPasswordByAdminSchema,
 } from "./schema";
+
+import {
+  fetchModelFromInputedUrlSchema,
+  getAllModelsSchema,
+  saveModelFromInputedUrlSchema,
+  toogleModelSchema
+} from "./schema/model";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   fastify.get(
@@ -21,7 +33,7 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       schema: dialoqbaseSettingsSchema,
       onRequest: [fastify.authenticate],
     },
-    dialoqbaseSettingsHandler,
+    dialoqbaseSettingsHandler
   );
 
   fastify.post(
@@ -30,7 +42,7 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       schema: updateDialoqbaseSettingsSchema,
       onRequest: [fastify.authenticate],
     },
-    updateDialoqbaseSettingsHandler,
+    updateDialoqbaseSettingsHandler
   );
 
   fastify.get(
@@ -39,7 +51,7 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       schema: getAllUsersSchema,
       onRequest: [fastify.authenticate],
     },
-    getAllUsersHandler,
+    getAllUsersHandler
   );
 
   fastify.post(
@@ -48,7 +60,7 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       schema: registerUserByAdminSchema,
       onRequest: [fastify.authenticate],
     },
-    registerUserByAdminHandler,
+    registerUserByAdminHandler
   );
 
   fastify.post(
@@ -57,7 +69,54 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       schema: resetUserPasswordByAdminSchema,
       onRequest: [fastify.authenticate],
     },
-    resetUserPasswordByAdminHandler,
+    resetUserPasswordByAdminHandler
+  );
+
+  fastify.get(
+    "/models",
+    {
+      schema: getAllModelsSchema,
+      onRequest: [fastify.authenticate],
+    },
+    getAllModelsHandler
+  );
+
+  fastify.post(
+    "/models",
+    {
+      schema: saveModelFromInputedUrlSchema,
+      onRequest: [fastify.authenticate],
+    },
+    saveModelFromInputedUrlHandler
+  );
+
+  fastify.post(
+    "/models/fetch",
+    {
+      schema: fetchModelFromInputedUrlSchema,
+      onRequest: [fastify.authenticate],
+    },
+    fetchModelFromInputedUrlHandler
+  );
+
+
+  fastify.post(
+    "/models/delete",
+    {
+      schema: toogleModelSchema,
+      onRequest: [fastify.authenticate],
+    },
+    deleteModelHandler
+  );
+
+
+  fastify.post(
+    "/models/hide",
+    {
+      schema: toogleModelSchema,
+      onRequest: [fastify.authenticate],
+    },
+    hideModelHandler
   );
 };
 

@@ -46,8 +46,8 @@ export type GetIntergationType = {
     description: string;
     help: string;
     requiredMessage: string;
-    value: string;
-    defaultValue: string;
+    value: string | boolean;
+    defaultValue: string | boolean;
   }[];
   isPaused?: boolean;
   status?: string;
@@ -76,4 +76,11 @@ export type WhatsAppIntergationBodyType = {
     "x-hub-signature": string;
   }
   Body: Record<string, any>; 
+}
+
+
+export type GetAPIIntergationRequest  = {
+  Params: {
+    id: string;
+  };
 }

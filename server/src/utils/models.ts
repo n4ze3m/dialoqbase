@@ -9,11 +9,15 @@ export const chatModelProvider = (
   provider: string,
   modelName: string,
   temperature: number,
-  otherFields?: any,
+  otherFields?: any
 ) => {
+  modelName = modelName.replace("-dbase", "");
+
   console.log("provider", provider);
   console.log("modelName", modelName);
-  switch (provider) {
+
+
+  switch (provider.toLowerCase()) {
     case "openai":
       console.log("using openai");
       return new ChatOpenAI({
@@ -38,13 +42,13 @@ export const chatModelProvider = (
     case "huggingface-api":
       console.log("using huggingface-api");
       return new HuggingFaceInference({
-        modelName: huggingfaceModels[modelName],
+        modelName: modelName,
         temperature: temperature,
         ...otherFields,
       });
     case "fireworks":
       return new DialoqbaseFireworksModel({
-        model: fireworksModels[modelName],
+        model: modelName,
         temperature: temperature,
         is_chat: !notChatModels.includes(modelName),
         ...otherFields,
@@ -55,6 +59,16 @@ export const chatModelProvider = (
         modelName: modelName,
         temperature: temperature,
         ...otherFields,
+      });
+    case "local":
+      console.log("using local");
+      return new ChatOpenAI({
+        modelName: modelName,
+        temperature: temperature,
+        ...otherFields,
+        configuration: {
+          baseURL: otherFields.baseURL,
+        },
       });
     default:
       console.log("using default");
@@ -112,9 +126,9 @@ export const isStreamingSupported = (model: string) => {
 };
 
 export const notChatModels = [
-  "llama-v2-13b-code-instruct",
-  "llama-v2-34b-code-instruct-w8a16",
-  "mistral-7b-instruct-4k",
+  "accounts/fireworks/models/llama-v2-13b-code-instruct",
+  "accounts/fireworks/models/llama-v2-34b-code-instruct-w8a16",
+  "accounts/fireworks/models/mistral-7b-instruct-4k",
 ];
 
 export const supportedModels = [
@@ -135,5 +149,5 @@ export const supportedModels = [
   "llama-v2-13b-code-instruct",
   "llama-v2-34b-code-instruct-w8a16",
   "gpt-3.5-turbo-instruct",
-  "mistral-7b-instruct-4k"
+  "mistral-7b-instruct-4k",
 ];

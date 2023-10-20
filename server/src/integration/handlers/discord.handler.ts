@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 export const discordBotHandler = async (
   identifer: string,
   message: string,
-  user_id: string,
+  user_id: string
 ) => {
   try {
     const bot_id = identifer.split("-")[2];
@@ -22,7 +22,7 @@ export const discordBotHandler = async (
     });
 
     if (!bot) {
-      return "Opps! Bot not found";
+      return { text: "Opps! Bot not found" };
     }
 
     const chat_history = await prisma.botDiscordHistory.findMany({
@@ -36,9 +36,11 @@ export const discordBotHandler = async (
       chat_history.splice(0, chat_history.length - 10);
     }
 
-    let history = chat_history.map((chat) => {
-      return `Human: ${chat.human}\nAssistant: ${chat.bot}`;
-    }).join("\n");
+let history = chat_history
+      .map((chat) => {
+        return `Human: ${chat.human}\nAssistant: ${chat.bot}`;
+      })
+      .join("\n");
 
     const temperature = bot.temperature;
 
@@ -50,14 +52,28 @@ export const discordBotHandler = async (
       {
         botId: bot.id,
         sourceId: null,
-      },
+      }
     );
 
-    const model = chatModelProvider(
-      bot.provider,
-      bot.model,
-      temperature,
-    );
+    const modelinfo = await prisma.dialoqbaseModels.findFirst({
+      where: {
+        model_id: bot.model,
+        hide: false,
+        deleted: false,
+      },
+    });
+
+    if (!modelinfo) {
+      return {
+        text: "Opps! Model not found",
+      }
+    }
+
+    const botConfig = (modelinfo.config as {}) || {};
+
+    const model = chatModelProvider(bot.provider, bot.model, temperature, {
+      ...botConfig,
+    });
 
     const chain = ConversationalRetrievalQAChain.fromLLM(
       model,
@@ -66,7 +82,7 @@ export const discordBotHandler = async (
         qaTemplate: bot.qaPrompt,
         questionGeneratorTemplate: bot.questionGeneratorPrompt,
         returnSourceDocuments: true,
-      },
+      }
     );
 
     const response = await chain.call({
@@ -74,29 +90,27 @@ export const discordBotHandler = async (
       chat_history: history,
     });
 
-    const bot_response = response["text"];
-
     await prisma.botDiscordHistory.create({
       data: {
         identifier: identifer,
         chat_id: user_id,
         human: message,
-        bot: bot_response,
+        bot: response.text,
       },
     });
 
     await prisma.$disconnect();
 
-    return bot_response;
+    return response;
   } catch (error) {
     console.log(error);
-    return "Opps! Something went wrong";
+    return { text: "Opps! Something went wrong" };
   }
 };
 
 export const clearDiscordChatHistory = async (
   identifer: string,
-  user_id: string,
+  user_id: string
 ) => {
   try {
     const bot_id = identifer.split("-")[2];

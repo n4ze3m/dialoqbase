@@ -44,7 +44,7 @@ export const DashboardGrid = () => {
                     <div className="w-full">
                       <div className="flex items-end justify-between">
                         <span className="text-xs lowercase text-scale-1000 text-gray-600">
-                          {bot.model}
+                          {bot.model.replace("-dbase", "")}
                         </span>
                       </div>
                     </div>

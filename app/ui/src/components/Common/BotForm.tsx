@@ -5,6 +5,7 @@ import {
   FormInstance,
   Row,
   Select,
+  Skeleton,
   Switch,
   Upload,
   message,
@@ -17,13 +18,12 @@ import {
   InboxIcon,
 } from "@heroicons/react/24/outline";
 import React from "react";
-import { availableEmbeddingTypes } from "../../utils/embeddings";
-import { availableChatModels } from "../../utils/chatModels";
 import { SpiderIcon } from "../Icons/SpiderIcon";
 import { GithubIcon } from "../Icons/GithubIcon";
 import { YoutubeIcon } from "../Icons/YoutubeIcon";
 import { ApiIcon } from "../Icons/ApiIcon";
 import { SitemapIcon } from "../Icons/SitemapIcon";
+import { useCreateConfig } from "../../hooks/useCreateConfig";
 
 type Props = {
   createBot: (values: any) => void;
@@ -44,6 +44,8 @@ export const BotForm = ({
   form,
   showEmbeddingAndModels,
 }: Props) => {
+  const { data: botConfig, status: botConfigStatus } = useCreateConfig();
+
   const embeddingType = Form.useWatch("embedding", form);
 
   const [availableSources] = React.useState([
@@ -60,7 +62,6 @@ export const BotForm = ({
               required: true,
               message: "Please enter the webpage URL",
             },
-           
           ]}
         >
           <input
@@ -440,7 +441,7 @@ export const BotForm = ({
             {
               required: true,
               message: "Please enter the sitemap URL",
-            }
+            },
           ]}
         >
           <input
@@ -458,158 +459,171 @@ export const BotForm = ({
   );
 
   return (
-    <Form
-      layout="vertical"
-      onFinish={createBot}
-      form={form}
-      className="space-y-6"
-      initialValues={{
-        embedding: "openai",
-        model: "gpt-3.5-turbo",
-        maxDepth: 2,
-        maxLinks: 10,
-        options: {
-          branch: "main",
-          is_private: false,
-          method: "get",
-          headers: "{}",
-          body: "{}",
-        },
-      }}
-    >
-      <RadioGroup
-        value={selectedSource}
-        onChange={(e: any) => {
-          _setSelectedSource(e);
-          setSelectedSource(e);
-        }}
-      >
-        <RadioGroup.Label className="text-base font-medium text-gray-800">
-          Select a data source
-        </RadioGroup.Label>
+    <>
+      {botConfigStatus === "success" && (
+        <Form
+          layout="vertical"
+          onFinish={createBot}
+          form={form}
+          className="space-y-6"
+          initialValues={{
+            embedding: "openai",
+            model: "gpt-3.5-turbo-dbase",
+            maxDepth: 2,
+            maxLinks: 10,
+            options: {
+              branch: "main",
+              is_private: false,
+              method: "get",
+              headers: "{}",
+              body: "{}",
+            },
+          }}
+        >
+          <RadioGroup
+            value={selectedSource}
+            onChange={(e: any) => {
+              _setSelectedSource(e);
+              setSelectedSource(e);
+            }}
+          >
+            <RadioGroup.Label className="text-base font-medium text-gray-800">
+              Select a data source
+            </RadioGroup.Label>
 
-        <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
-          {availableSources.map((source) => (
-            <RadioGroup.Option
-              key={source.id}
-              value={source}
-              className={({ checked, active }) =>
-                classNames(
-                  checked ? "border-transparent" : "border-gray-300",
-                  active ? "border-indigo-500 ring-2 ring-indigo-500" : "",
-                  "relative  items-center justify-center flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
-                )
-              }
-            >
-              {({ checked, active }) => (
-                <>
-                  <span className="flex-shrink-0 flex items-center justify-centerrounded-lg">
-                    <RadioGroup.Label
-                      as="span"
-                      className="block text-sm font-medium text-gray-900"
-                    >
-                      <source.icon
-                        className="h-6 w-6 mr-3"
+            <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
+              {availableSources.map((source) => (
+                <RadioGroup.Option
+                  key={source.id}
+                  value={source}
+                  className={({ checked, active }) =>
+                    classNames(
+                      checked ? "border-transparent" : "border-gray-300",
+                      active ? "border-indigo-500 ring-2 ring-indigo-500" : "",
+                      "relative  items-center justify-center flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
+                    )
+                  }
+                >
+                  {({ checked, active }) => (
+                    <>
+                      <span className="flex-shrink-0 flex items-center justify-centerrounded-lg">
+                        <RadioGroup.Label
+                          as="span"
+                          className="block text-sm font-medium text-gray-900"
+                        >
+                          <source.icon
+                            className="h-6 w-6 mr-3"
+                            aria-hidden="true"
+                          />
+                        </RadioGroup.Label>
+                        {source.title}
+                      </span>
+
+                      <span
+                        className={classNames(
+                          active ? "border" : "border-2",
+                          checked ? "border-indigo-500" : "border-transparent",
+                          "pointer-events-none absolute -inset-px rounded-lg"
+                        )}
                         aria-hidden="true"
                       />
-                    </RadioGroup.Label>
-                    {source.title}
-                  </span>
+                    </>
+                  )}
+                </RadioGroup.Option>
+              ))}
+            </div>
+          </RadioGroup>
 
-                  <span
-                    className={classNames(
-                      active ? "border" : "border-2",
-                      checked ? "border-indigo-500" : "border-transparent",
-                      "pointer-events-none absolute -inset-px rounded-lg"
-                    )}
-                    aria-hidden="true"
+          {selectedSource && selectedSource.formComponent}
+
+          {selectedSource && selectedSource.value === "rest" && (
+            <Row gutter={24}>
+              <Col span={12}>
+                <Form.Item name={["options", "headers"]} label="Headers">
+                  <textarea
+                    placeholder="Enter the headers"
+                    className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
                   />
-                </>
-              )}
-            </RadioGroup.Option>
-          ))}
-        </div>
-      </RadioGroup>
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name={["options", "body"]}
+                  label="Body (JSON)"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter a valid JSON",
+                    },
+                  ]}
+                >
+                  <textarea
+                    placeholder="Enter the body"
+                    className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          )}
 
-      {selectedSource && selectedSource.formComponent}
+          <Form.Item hidden={!showEmbeddingAndModels} noStyle>
+            <Divider />
+          </Form.Item>
 
-      {selectedSource && selectedSource.value === "rest" && (
-        <Row gutter={24}>
-          <Col span={12}>
-            <Form.Item name={["options", "headers"]} label="Headers">
-              <textarea
-                placeholder="Enter the headers"
-                className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-              />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              name={["options", "body"]}
-              label="Body (JSON)"
-              rules={[
-                {
-                  required: true,
-                  message: "Please enter a valid JSON",
-                },
-              ]}
+          <Form.Item
+            hidden={!showEmbeddingAndModels}
+            label={
+              <span className="font-medium text-gray-800 text-sm">
+                Chat Model
+              </span>
+            }
+            name="model"
+          >
+            <Select
+              placeholder="Select a chat model"
+              options={botConfig.chatModel}
+            />
+          </Form.Item>
+          <Form.Item
+            hidden={!showEmbeddingAndModels}
+            label={
+              <span className="font-medium text-gray-800 text-sm">
+                Embedding model
+              </span>
+            }
+            name="embedding"
+            hasFeedback={embeddingType === "tensorflow"}
+            help={
+              embeddingType === "tensorflow"
+                ? "TensorFlow embeddings can be slow and memory-intensive."
+                : null
+            }
+            validateStatus={
+              embeddingType === "tensorflow" ? "warning" : undefined
+            }
+          >
+            <Select
+              placeholder="Select an embedding method"
+              options={botConfig.embeddingModel}
+            />
+          </Form.Item>
+
+          <Form.Item>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-              <textarea
-                placeholder="Enter the body"
-                className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-              />
-            </Form.Item>
-          </Col>
-        </Row>
+              {isLoading ? "Creating..." : "Create"}
+            </button>
+          </Form.Item>
+        </Form>
       )}
-
-      <Form.Item hidden={!showEmbeddingAndModels} noStyle>
-        <Divider />
-      </Form.Item>
-
-      <Form.Item
-        hidden={!showEmbeddingAndModels}
-        label={
-          <span className="font-medium text-gray-800 text-sm">Chat Model</span>
-        }
-        name="model"
-      >
-        <Select
-          placeholder="Select a chat model"
-          options={availableChatModels}
-        />
-      </Form.Item>
-      <Form.Item
-        hidden={!showEmbeddingAndModels}
-        label={
-          <span className="font-medium text-gray-800 text-sm">
-            Embedding model
-          </span>
-        }
-        name="embedding"
-        hasFeedback={embeddingType === "tensorflow"}
-        help={
-          embeddingType === "tensorflow"
-            ? "TensorFlow embeddings can be slow and memory-intensive."
-            : null
-        }
-        validateStatus={embeddingType === "tensorflow" ? "warning" : undefined}
-      >
-        <Select
-          placeholder="Select an embedding method"
-          options={availableEmbeddingTypes}
-        />
-      </Form.Item>
-
-      <Form.Item>
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        >
-          {isLoading ? "Creating..." : "Create"}
-        </button>
-      </Form.Item>
-    </Form>
+      {botConfigStatus === "loading" && (
+        <div className="flex justify-center items-center">
+          <Skeleton active paragraph={{ rows: 5 }} />
+        </div>
+      )}
+    </>
   );
 };

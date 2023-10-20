@@ -44,8 +44,8 @@ export default defineConfig({
       { text: "Home", link: "/" },
       { text: "Guide", link: "/guide/what-is-dialoqbase" },
       {
-        text: "AI Providers",
-        link: "/guide/ai-providers/openai",
+        text: "Use Local AI Models",
+        link: "/guide/localai-model",
       },
       { text: "Self Hosting", link: "/guide/self-hosting" },
     ],
@@ -132,6 +132,10 @@ export default defineConfig({
         text: "AI Providers",
         collapsed: false,
         items: [
+          {
+            text: "Use Local AI Models",
+            link: "/guide/localai-model",
+          },
           {
             text: "OpenAI",
             link: "/guide/ai-providers/openai",

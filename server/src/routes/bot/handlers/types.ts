@@ -28,3 +28,21 @@ export interface ChatStyleRequest {
     id: string;
   };
 }
+
+export interface ChatAPIRequest {
+  Headers: {
+    "x-api-key": string;
+  };
+  Params: {
+    id: string;
+  };
+  Body: {
+    message: string;
+    stream: string;
+    history_id?: string;
+    history: {
+      role: string;
+      text: string;
+    }[];
+  };
+}

@@ -135,6 +135,7 @@ and more...
 - [x] Google chat-bison-001
 - [x] fireworks.ai's llama 2 models
 - [x] fireworks.ai's mistral
+- [X] Local AI models
 
 ### Embedding models
 
@@ -155,7 +156,7 @@ need more ? create an issue...
 - [x] Vector search
 - [x] Bot embed script for websites
 - [x] Prompt Editor
-- [ ] Chatbot API
+- [X] Chatbot API
 - [x] Chatbot theme editor
 - [x] Streaming responses
 
