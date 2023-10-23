@@ -23,7 +23,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          platforms: linux/amd64,linux/arm64
           tags: |
             n4z3m/dialoqbase-next:latest
           push: true
