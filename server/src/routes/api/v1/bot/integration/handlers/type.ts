@@ -65,6 +65,9 @@ export type WhatsAppIntergationType = {
     "hub.verify_token": string;
     "hub.mode": string;
     "hub.challenge": string;
+  },
+  Params: {
+    id: string;
   }
 }
 
