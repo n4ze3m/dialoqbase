@@ -126,6 +126,7 @@ export const SettingsCard: React.FC<BotSettings> = ({
             use_hybrid_search: data.use_hybrid_search,
             bot_protect: data.bot_protect,
             use_rag: data.use_rag,
+            bot_model_api_key: data.bot_model_api_key,
           }}
           form={form}
           requiredMark={false}
@@ -325,7 +326,19 @@ export const SettingsCard: React.FC<BotSettings> = ({
                   tooltip="This will activate the public bot protection using session to avoid misuse of the bot"
                 >
                   <Switch />
-                </Form.Item>               
+                </Form.Item>
+
+                <Form.Item
+                  name="bot_model_api_key"
+                  label="Chat Model API Key"
+                  help="Enter your API key here. If you don't have one, you can leave this field blank."
+                  tooltip="Enter your API key to use your own chat model. Currently, only OpenAI API keys are supported."
+                >
+                  <input
+                    type="password"
+                    className="mt-1 block w-full sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                  />
+                </Form.Item>
               </div>
             </div>
 

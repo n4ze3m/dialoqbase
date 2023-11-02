@@ -18,12 +18,13 @@ export const chatModelProvider = (
 
   switch (provider.toLowerCase()) {
     case "openai":
-      console.log("using openai");
+      console.log("using openai", otherFields);
       return new ChatOpenAI({
         modelName: modelName,
         temperature: temperature,
         ...otherFields,
         configuration: {
+          ...otherFields.configuration,
           baseURL: process.env.OPENAI_API_URL,
         },
       });
