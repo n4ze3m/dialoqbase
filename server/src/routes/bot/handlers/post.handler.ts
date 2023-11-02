@@ -4,6 +4,21 @@ import { DialoqbaseVectorStore } from "../../../utils/store";
 import { ConversationalRetrievalQAChain } from "langchain/chains";
 import { embeddings } from "../../../utils/embeddings";
 import { chatModelProvider } from "../../../utils/models";
+import { BaseRetriever } from "langchain/schema/retriever";
+import { DialoqbaseHybridRetrival } from "../../../utils/hybrid";
+import { Document } from "langchain/document";
+import { PromptTemplate } from "langchain/prompts";
+import {
+  RunnablePassthrough,
+  RunnableSequence,
+} from "langchain/schema/runnable";
+import { StringOutputParser } from "langchain/schema/output_parser";
+import {
+  ChatMessage,
+  ConversationalRetrievalQAChainInput,
+  combineDocumentsFn,
+  formatChatHistory,
+} from "../../../utils/rag";
 
 export const chatRequestHandler = async (
   request: FastifyRequest<ChatRequestBody>,
@@ -67,14 +82,42 @@ export const chatRequestHandler = async (
 
     const sanitizedQuestion = message.trim().replaceAll("\n", " ");
     const embeddingModel = embeddings(bot.embedding);
-
-    const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
-      embeddingModel,
-      {
+    let retriever: BaseRetriever;
+    let resolveWithDocuments: (value: Document[]) => void;
+    const documentPromise = new Promise<Document[]>((resolve) => {
+      resolveWithDocuments = resolve;
+    });
+    if (bot.use_hybrid_search) {
+      retriever = new DialoqbaseHybridRetrival(embeddingModel, {
         botId: bot.id,
         sourceId: null,
-      }
-    );
+        callbacks: [
+          {
+            handleRetrieverEnd(documents) {
+              resolveWithDocuments(documents);
+            },
+          },
+        ],
+      });
+    } else {
+      const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
+        embeddingModel,
+        {
+          botId: bot.id,
+          sourceId: null,
+        }
+      );
+
+      retriever = vectorstore.asRetriever({
+        callbacks: [
+          {
+            handleRetrieverEnd(documents) {
+              resolveWithDocuments(documents);
+            },
+          },
+        ],
+      });
+    }
 
     const modelinfo = await prisma.dialoqbaseModels.findFirst({
       where: {
@@ -104,67 +147,138 @@ export const chatRequestHandler = async (
       };
     }
 
-    const botConfig = (modelinfo.config as {}) || {};
+    const botConfig: any = (modelinfo.config as {}) || {};
+    if (bot.provider.toLowerCase() === "openai") {
+      if (bot.bot_model_api_key && bot.bot_model_api_key.trim() !== "") {
+        botConfig.configuration = {
+          apiKey: bot.bot_model_api_key,
+        };
+      }
+    }
 
     const model = chatModelProvider(bot.provider, bot.model, temperature, {
       ...botConfig,
     });
 
-    const chain = ConversationalRetrievalQAChain.fromLLM(
-      model,
-      vectorstore.asRetriever(),
-      {
+    if (!bot.use_rag) {
+      const chain = ConversationalRetrievalQAChain.fromLLM(model, retriever, {
         qaTemplate: bot.qaPrompt,
         questionGeneratorTemplate: bot.questionGeneratorPrompt,
         returnSourceDocuments: true,
-      }
-    );
+      });
 
-    const chat_history = history
-      .map((chatMessage: any) => {
-        if (chatMessage.type === "human") {
-          return `Human: ${chatMessage.text}`;
-        } else if (chatMessage.type === "ai") {
-          return `Assistant: ${chatMessage.text}`;
-        } else {
-          return `${chatMessage.text}`;
-        }
-      })
-      .join("\n");
+      const chat_history = history
+        .map((chatMessage: any) => {
+          if (chatMessage.type === "human") {
+            return `Human: ${chatMessage.text}`;
+          } else if (chatMessage.type === "ai") {
+            return `Assistant: ${chatMessage.text}`;
+          } else {
+            return `${chatMessage.text}`;
+          }
+        })
+        .join("\n");
 
-    const response = await chain.call({
-      question: sanitizedQuestion,
-      chat_history: chat_history,
-    });
+      const response = await chain.call({
+        question: sanitizedQuestion,
+        chat_history: chat_history,
+      });
 
-    await prisma.botWebHistory.create({
-      data: {
-        chat_id: history_id,
-        bot_id: bot.id,
-        bot: response.text,
-        human: message,
-        metadata: {
-          ip: request?.ip,
-          user_agent: request?.headers["user-agent"],
+      await prisma.botWebHistory.create({
+        data: {
+          chat_id: history_id,
+          bot_id: bot.id,
+          bot: response.text,
+          human: message,
+          metadata: {
+            ip: request?.ip,
+            user_agent: request?.headers["user-agent"],
+          },
+          sources: response?.sources,
         },
-        sources: response?.sources,
-      },
-    });
+      });
 
-    return {
-      bot: response,
-      history: [
-        ...history,
+      return {
+        bot: response,
+        history: [
+          ...history,
+          {
+            type: "human",
+            text: message,
+          },
+          {
+            type: "ai",
+            text: response.text,
+          },
+        ],
+      };
+    } else {
+      const standaloneQuestionChain = RunnableSequence.from([
         {
-          type: "human",
-          text: message,
+          question: (input: ConversationalRetrievalQAChainInput) =>
+            input.question,
+          chat_history: (input: ConversationalRetrievalQAChainInput) =>
+            formatChatHistory(input.chat_history),
         },
+        PromptTemplate.fromTemplate(bot.questionGeneratorPrompt),
+        model,
+        new StringOutputParser(),
+      ]);
+
+      //@ts-ignore
+      const answerChain = RunnableSequence.from([
         {
-          type: "ai",
-          text: response.text,
+          context: retriever.pipe(combineDocumentsFn),
+          question: new RunnablePassthrough(),
         },
-      ],
-    };
+        PromptTemplate.fromTemplate(bot.qaPrompt),
+        model,
+      ]);
+
+      const chain = standaloneQuestionChain.pipe(answerChain);
+      const botResponse = await chain.invoke({
+        question: sanitizedQuestion,
+        chat_history: history as ChatMessage[],
+      });
+
+      const documents = await documentPromise;
+
+      await prisma.botWebHistory.create({
+        data: {
+          chat_id: history_id,
+          bot_id: bot.id,
+          bot: botResponse.content,
+          human: message,
+          metadata: {
+            ip: request?.ip,
+            user_agent: request?.headers["user-agent"],
+          },
+          sources: documents.map((doc) => {
+            return {
+              ...doc,
+            };
+          }),
+        },
+      });
+
+      return {
+        bot: {
+          text: botResponse.content,
+          sourceDocuments: documents,
+        },
+        history: [
+          ...history,
+          {
+            type: "human",
+            text: message,
+          },
+          {
+            type: "ai",
+            text: botResponse.content,
+          },
+        ],
+      };
+    }
   } catch (e) {
     return {
       bot: {
@@ -274,13 +388,42 @@ export const chatRequestStreamHandler = async (
     const sanitizedQuestion = message.trim().replaceAll("\n", " ");
     const embeddingModel = embeddings(bot.embedding);
 
-    const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
-      embeddingModel,
-      {
+    let retriever: BaseRetriever;
+    let resolveWithDocuments: (value: Document[]) => void;
+    const documentPromise = new Promise<Document[]>((resolve) => {
+      resolveWithDocuments = resolve;
+    });
+    if (bot.use_hybrid_search) {
+      retriever = new DialoqbaseHybridRetrival(embeddingModel, {
         botId: bot.id,
         sourceId: null,
-      }
-    );
+        callbacks: [
+          {
+            handleRetrieverEnd(documents) {
+              resolveWithDocuments(documents);
+            },
+          },
+        ],
+      });
+    } else {
+      const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
+        embeddingModel,
+        {
+          botId: bot.id,
+          sourceId: null,
+        }
+      );
+
+      retriever = vectorstore.asRetriever({
+        callbacks: [
+          {
+            handleRetrieverEnd(documents) {
+              resolveWithDocuments(documents);
+            },
+          },
+        ],
+      });
+    }
 
     let response: any = null;
 
@@ -325,7 +468,14 @@ export const chatRequestStreamHandler = async (
       return reply.raw.end();
     }
 
-    const botConfig = (modelinfo.config as {}) || {};
+    const botConfig: any = (modelinfo.config as {}) || {};
+    if (bot.provider.toLowerCase() === "openai") {
+      if (bot.bot_model_api_key && bot.bot_model_api_key.trim() !== "") {
+        botConfig.configuration = {
+          apiKey: bot.bot_model_api_key,
+        };
+      }
+    }
 
     const streamedModel = chatModelProvider(
       bot.provider,
@@ -364,73 +514,146 @@ export const chatRequestStreamHandler = async (
         ...botConfig,
       }
     );
-
-    const chain = ConversationalRetrievalQAChain.fromLLM(
-      streamedModel,
-      vectorstore.asRetriever(),
-      {
-        qaTemplate: bot.qaPrompt,
-        questionGeneratorTemplate: bot.questionGeneratorPrompt,
-        returnSourceDocuments: true,
-        questionGeneratorChainOptions: {
-          llm: nonStreamingModel,
-        },
-      }
-    );
-
-    const chat_history = history
-      .map((chatMessage: any) => {
-        if (chatMessage.type === "human") {
-          return `Human: ${chatMessage.text}`;
-        } else if (chatMessage.type === "ai") {
-          return `Assistant: ${chatMessage.text}`;
-        } else {
-          return `${chatMessage.text}`;
+    if (!bot.use_rag) {
+      const chain = ConversationalRetrievalQAChain.fromLLM(
+        streamedModel,
+        retriever,
+        {
+          qaTemplate: bot.qaPrompt,
+          questionGeneratorTemplate: bot.questionGeneratorPrompt,
+          returnSourceDocuments: true,
+          questionGeneratorChainOptions: {
+            llm: nonStreamingModel,
+          },
         }
-      })
-      .join("\n");
+      );
 
-    console.log("Waiting for response...");
+      const chat_history = history
+        .map((chatMessage: any) => {
+          if (chatMessage.type === "human") {
+            return `Human: ${chatMessage.text}`;
+          } else if (chatMessage.type === "ai") {
+            return `Assistant: ${chatMessage.text}`;
+          } else {
+            return `${chatMessage.text}`;
+          }
+        })
+        .join("\n");
 
-    response = await chain.call({
-      question: sanitizedQuestion,
-      chat_history: chat_history,
-    });
+      console.log("Waiting for response...");
 
-    await prisma.botWebHistory.create({
-      data: {
-        chat_id: history_id,
-        bot_id: bot.id,
-        bot: response.text,
-        human: message,
-        metadata: {
-          ip: request?.ip,
-          user_agent: request?.headers["user-agent"],
+      response = await chain.call({
+        question: sanitizedQuestion,
+        chat_history: chat_history,
+      });
+
+      await prisma.botWebHistory.create({
+        data: {
+          chat_id: history_id,
+          bot_id: bot.id,
+          bot: response.text,
+          human: message,
+          metadata: {
+            ip: request?.ip,
+            user_agent: request?.headers["user-agent"],
+          },
+          sources: response?.sources || response?.sourceDocuments || [],
         },
-        sources: response?.sources || response?.sourceDocuments || [],
-      },
-    });
+      });
 
-    reply.sse({
-      event: "result",
-      id: "",
-      data: JSON.stringify({
-        bot: response,
-        history: [
-          ...history,
-          {
-            type: "human",
-            text: message,
+      reply.sse({
+        event: "result",
+        id: "",
+        data: JSON.stringify({
+          bot: response,
+          history: [
+            ...history,
+            {
+              type: "human",
+              text: message,
+            },
+            {
+              type: "ai",
+              text: response.text,
+            },
+          ],
+        }),
+      });
+      await nextTick();
+      return reply.raw.end();
+    } else {
+      const standaloneQuestionChain = RunnableSequence.from([
+        {
+          question: (input: ConversationalRetrievalQAChainInput) =>
+            input.question,
+          chat_history: (input: ConversationalRetrievalQAChainInput) =>
+            formatChatHistory(input.chat_history),
+        },
+        PromptTemplate.fromTemplate(bot.questionGeneratorPrompt),
+        nonStreamingModel,
+        new StringOutputParser(),
+      ]);
+
+      //@ts-ignore
+      const answerChain = RunnableSequence.from([
+        {
+          context: retriever.pipe(combineDocumentsFn),
+          question: new RunnablePassthrough(),
+        },
+        PromptTemplate.fromTemplate(bot.qaPrompt),
+        streamedModel,
+      ]);
+
+      const chain = standaloneQuestionChain.pipe(answerChain);
+      response = await chain.invoke({
+        question: sanitizedQuestion,
+        chat_history: history as ChatMessage[],
+      });
+
+      const documents = await documentPromise;
+
+      await prisma.botWebHistory.create({
+        data: {
+          chat_id: history_id,
+          bot_id: bot.id,
+          bot: response.text,
+          human: message,
+          metadata: {
+            ip: request?.ip,
+            user_agent: request?.headers["user-agent"],
           },
-          {
-            type: "ai",
-            text: response.text,
+          sources: documents.map((doc) => {
+            return {
+              ...doc,
+            };
+          }),
+        },
+      });
+
+      reply.sse({
+        event: "result",
+        id: "",
+        data: JSON.stringify({
+          bot: {
+            text: response.content,
+            sourceDocuments: documents,
           },
-        ],
-      }),
-    });
-    await nextTick();
-    return reply.raw.end();
+          history: [
+            ...history,
+            {
+              type: "human",
+              text: message,
+            },
+            {
+              type: "ai",
+              text: response.text,
+            },
+          ],
+        }),
+      });
+      await nextTick();
+      return reply.raw.end();
+    }
   } catch (e) {
     console.log(e);
     reply.raw.setHeader("Content-Type", "text/event-stream");

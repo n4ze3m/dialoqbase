@@ -9,7 +9,7 @@ export const whatsappBotHandler = async (
   bot_id: string,
   hash: string,
   from: string,
-  message: string,
+  message: string
 ) => {
   try {
     await prisma.$connect();
@@ -45,9 +45,11 @@ export const whatsappBotHandler = async (
       chat_history.splice(0, chat_history.length - 10);
     }
 
-    let history = chat_history.map((chat) => {
-      return `Human: ${chat.human}\nAssistant: ${chat.bot}`;
-    }).join("\n");
+    let history = chat_history
+      .map((chat) => {
+        return `Human: ${chat.human}\nAssistant: ${chat.bot}`;
+      })
+      .join("\n");
 
     const temperature = bot.temperature;
 
@@ -59,7 +61,7 @@ export const whatsappBotHandler = async (
       {
         botId: bot.id,
         sourceId: null,
-      },
+      }
     );
 
     const modelinfo = await prisma.dialoqbaseModels.findFirst({
@@ -74,16 +76,18 @@ export const whatsappBotHandler = async (
       return "Unable to find model";
     }
 
-    const botConfig = (modelinfo.config as {}) || {};
+    const botConfig: any = (modelinfo.config as {}) || {};
+    if (bot.provider.toLowerCase() === "openai") {
+      if (bot.bot_model_api_key && bot.bot_model_api_key.trim() !== "") {
+        botConfig.configuration = {
+          apiKey: bot.bot_model_api_key,
+        };
+      }
+    }
 
-    const model = chatModelProvider(
-      bot.provider,
-      bot.model,
-      temperature,
-      {
-        ...botConfig,
-      },
-    );
+    const model = chatModelProvider(bot.provider, bot.model, temperature, {
+      ...botConfig,
+    });
 
     const chain = ConversationalRetrievalQAChain.fromLLM(
       model,
@@ -92,7 +96,7 @@ export const whatsappBotHandler = async (
         qaTemplate: bot.qaPrompt,
         questionGeneratorTemplate: bot.questionGeneratorPrompt,
         returnSourceDocuments: true,
-      },
+      }
     );
 
     const response = await chain.call({
@@ -121,12 +125,8 @@ export const whatsappBotHandler = async (
   }
 };
 
-export const clearHistoryWhatsapp = async (
-    bot_id: string,
-  from: string,
-) => {
+export const clearHistoryWhatsapp = async (bot_id: string, from: string) => {
   try {
-
     await prisma.$connect();
 
     const bot = await prisma.bot.findFirst({

@@ -125,6 +125,9 @@ export const updateBotByIdSchema: FastifySchema = {
       use_rag: {
         type: "boolean",
       },
+      bot_model_api_key: {
+        type: "string",
+      }
     },
   },
 };

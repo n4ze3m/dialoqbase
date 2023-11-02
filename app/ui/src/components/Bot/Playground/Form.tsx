@@ -30,7 +30,6 @@ export const PlaygroundgForm = () => {
     stop,
   } = useSpeechRecognition();
 
-
   React.useEffect(() => {
     const defaultLanguageFromLocalStorage = localStorage.getItem(
       "defaultSpeechToTextLanguage"

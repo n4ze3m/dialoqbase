@@ -34,6 +34,7 @@ model Bot {
   use_rag                     Boolean          @default(false)
   bot_protect                 Boolean          @default(false)
   bot_api_key                 String?
+  bot_model_api_key           String?
   options                     Json?            @default("{}") @db.Json
   BotAppearance               BotAppearance[]
   document                    BotDocument[]

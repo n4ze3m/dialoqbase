@@ -1,6 +1,6 @@
 {
   "name": "dialoqbase",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "Create chatbots with ease",
   "scripts": {
     "ui:dev": "pnpm run --filter ui dev",
