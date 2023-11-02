@@ -73,6 +73,11 @@ export const chatModelProvider = (
         ...otherFields,
         configuration: {
           baseURL: otherFields.baseURL,
+          apiKey: otherFields.apiKey || process.env.OPENAI_API_KEY,
+          defaultHeaders: {
+            "HTTP-Referer": process.env.LOCAL_REFER_URL || "https://dialoqbase.n4ze3m.com/",
+            "X-Title": process.env.LOCAL_TITLE || "Dialoqbase",
+          },
         },
       });
     default:

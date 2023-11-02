@@ -25,6 +25,7 @@ export type RegisterUserbyAdminRequestBody = {
 export type FetchModelFromInputedUrlRequest = {
   Body: {
     url: string;
+    api_key?: string;
   };
 };
 export type SaveModelFromInputedUrlRequest = {
@@ -33,6 +34,7 @@ export type SaveModelFromInputedUrlRequest = {
     model_id: string;
     name: string;
     stream_available: boolean;
+    api_key?: string;
   };
 };
 

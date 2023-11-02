@@ -8,9 +8,16 @@ import {
 } from "./type";
 import axios from "axios";
 
-const _getModelFromUrl = async (url: string) => {
+const _getModelFromUrl = async (url: string, apiKey?: string) => {
   try {
-    const response = await axios.get(`${url}/models`);
+    const response = await axios.get(`${url}/models`, {
+      headers: {
+        "HTTP-Referer":
+          process.env.LOCAL_REFER_URL || "https://dialoqbase.n4ze3m.com/",
+        "X-Title": process.env.LOCAL_TITLE || "Dialoqbase",
+        Authorization: apiKey && `Bearer ${apiKey}`,
+      },
+    });
     return response.data as {
       type: string;
       data: {
@@ -58,7 +65,7 @@ export const fetchModelFromInputedUrlHandler = async (
   reply: FastifyReply
 ) => {
   try {
-    const { url } = request.body;
+    const { url, api_key } = request.body;
     const user = request.user;
     if (!user.is_admin) {
       return reply.status(403).send({
@@ -66,7 +73,7 @@ export const fetchModelFromInputedUrlHandler = async (
       });
     }
 
-    const model = await _getModelFromUrl(url);
+    const model = await _getModelFromUrl(url, api_key);
 
     if (!model) {
       return reply.status(404).send({
@@ -100,7 +107,7 @@ export const saveModelFromInputedUrlHandler = async (
       });
     }
 
-    const { url, model_id, name, stream_available } = request.body;
+    const { url, api_key, model_id, name, stream_available } = request.body;
 
     const modelExist = await prisma.dialoqbaseModels.findFirst({
       where: {
@@ -125,6 +132,7 @@ export const saveModelFromInputedUrlHandler = async (
         model_provider: "local",
         config: {
           baseURL: url,
+          apiKey: api_key,
         },
       },
     });

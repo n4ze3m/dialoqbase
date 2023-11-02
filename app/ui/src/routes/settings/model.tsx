@@ -75,6 +75,7 @@ export default function SettingsModelRoot() {
     const response = await api.post("/admin/models", {
       ...values,
       url: fetchUrlForm.getFieldValue("url"),
+      api_key: fetchUrlForm.getFieldValue("api_key"),
     });
     return response.data;
   };
@@ -308,6 +309,14 @@ export default function SettingsModelRoot() {
                     type="url"
                     className="border border-gray-200 rounded-md px-3 py-2 w-full"
                     placeholder="http://localhost:5000/v1"
+                  />
+                </Form.Item>
+
+                <Form.Item name="api_key" label="API Key (Optional)">
+                  <input
+                    type="text"
+                    className="border border-gray-200 rounded-md px-3 py-2 w-full"
+                    placeholder="API Key (Optional)"
                   />
                 </Form.Item>
 
