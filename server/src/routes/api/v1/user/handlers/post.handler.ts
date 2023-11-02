@@ -224,6 +224,7 @@ export const registerUserHandler = async (
       to: "/",
     });
   } catch (e) {
+    console.log(e);
     return reply.status(500).send({
       message: "Error registering user",
     });
