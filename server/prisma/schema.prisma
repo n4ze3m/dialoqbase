@@ -75,6 +75,7 @@ model User {
   email           String?  @unique
   isFirstLogin    Boolean  @default(true)
   isAdministrator Boolean  @default(false)
+  api_config      Json?    @default("{\"OPENAI_API_KEY\": null, \"ANTHROPIC_API_KEY\": null, \"GOOGLE_API_KEY\": null, \"COHERE_API_KEY\": null, \"FIREWORKS_API_KEY\": null}") @db.Json
   createdAt       DateTime @default(now())
   bots            Bot[]
 }
