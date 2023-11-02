@@ -13,35 +13,12 @@ import {
 import { StringOutputParser } from "langchain/schema/output_parser";
 import { PromptTemplate } from "langchain/prompts";
 import { Document } from "langchain/document";
-
-type ChatMessage = {
-  type: "human" | "ai" | "other";
-  text: string;
-};
-
-type ConversationalRetrievalQAChainInput = {
-  question: string;
-  chat_history: ChatMessage[];
-};
-
-const formatChatHistory = (history: ChatMessage[]): string => {
-  return history
-    .map((chatMessage: ChatMessage) => {
-      if (chatMessage.type === "human") {
-        return `Human: ${chatMessage.text}`;
-      } else if (chatMessage.type === "ai") {
-        return `Assistant: ${chatMessage.text}`;
-      } else {
-        return `${chatMessage.text}`;
-      }
-    })
-    .join("\n");
-};
-
-const combineDocumentsFn = (docs: Document[], separator = "\n\n") => {
-  const serializedDocs = docs.map((doc) => doc.pageContent);
-  return serializedDocs.join(separator);
-};
+import {
+  ChatMessage,
+  ConversationalRetrievalQAChainInput,
+  combineDocumentsFn,
+  formatChatHistory,
+} from "../../../../../../utils/rag";
 
 export const chatRequestHandler = async (
   request: FastifyRequest<ChatRequestBody>,
@@ -289,14 +266,9 @@ export const chatRequestHandler = async (
         },
       });
 
-      const response = await chain.invoke({
-        question: sanitizedQuestion,
-        chat_history: history as ChatMessage[],
-      });
-
       return {
         bot: {
-          text: response.content,
+          text: botResponse.content,
           sourceDocuments: documents,
         },
         history: [
@@ -307,7 +279,7 @@ export const chatRequestHandler = async (
           },
           {
             type: "ai",
-            text: response.content,
+            text: botResponse.content,
           },
         ],
       };

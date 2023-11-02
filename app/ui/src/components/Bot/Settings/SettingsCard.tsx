@@ -304,29 +304,28 @@ export const SettingsCard: React.FC<BotSettings> = ({
 
                 <Form.Item
                   name="use_hybrid_search"
-                  label="Use Hybrid Search Retrieval (Beta)"
+                  label="Use Hybrid Search Retrieval"
                   valuePropName="checked"
                   tooltip="This will use the hybrid search retrieval method instead of the default semantic search retrieval method. Only work on playground ui."
+                >
+                  <Switch />
+                </Form.Item>
+                <Form.Item
+                  name="use_rag"
+                  label="Use Retrieval Augmented Generation"
+                  valuePropName="checked"
                 >
                   <Switch />
                 </Form.Item>
 
                 <Form.Item
                   name="bot_protect"
-                  label="Activate Public Bot Protection (Beta)"
+                  label="Activate Public Bot Protection"
                   valuePropName="checked"
                   tooltip="This will activate the public bot protection using session to avoid misuse of the bot"
                 >
                   <Switch />
-                </Form.Item>
-
-                <Form.Item
-                  name="use_rag"
-                  label="Use Retrieval Augmented Generation (RAG)"
-                  valuePropName="checked"
-                >
-                  <Switch />
-                </Form.Item>
+                </Form.Item>               
               </div>
             </div>
 
