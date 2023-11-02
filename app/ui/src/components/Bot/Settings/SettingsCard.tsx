@@ -313,7 +313,7 @@ export const SettingsCard: React.FC<BotSettings> = ({
                 </Form.Item>
                 <Form.Item
                   name="use_rag"
-                  label="Use Retrieval Augmented Generation"
+                  label="Use Retrieval Augmented Generation (RAG)"
                   valuePropName="checked"
                 >
                   <Switch />
