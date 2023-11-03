@@ -21,10 +21,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PWD }}
       - name: Build and push
         uses: docker/build-push-action@v5
-        platform: linux/amd64,linux/arm64
         with:
           tags: |
             n4z3m/dialoqbase-next:latest
           push: true
+          platform: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
