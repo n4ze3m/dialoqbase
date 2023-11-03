@@ -6,9 +6,9 @@ RUN apt update
 
 COPY ./server/ .
 
-RUN npm install --legacy-peer-deps 
+RUN yarn install
 
-RUN npm run build
+RUN yarn build
 
 FROM node:18-slim as build
 WORKDIR /app
@@ -31,7 +31,6 @@ RUN npm --no-update-notifier --no-fund --global install pnpm
 COPY --from=server /app/dist/ .
 COPY --from=server /app/prisma/ ./prisma
 COPY --from=server /app/package.json .
-COPY --from=server /app/node_modules/ ./node_modules
 # Copy UI
 COPY --from=build /app/app/ui/dist/ ./public
 # Copy widgets 
@@ -40,7 +39,8 @@ COPY --from=build /app/app/widget/dist/index.html ./public/bot.html
 # Copy script
 COPY --from=build /app/app/script/dist/chat.min.js ./public/chat.min.js
 
+RUN yarn install --production
 
 ENV NODE_ENV=production
 
-CMD ["npm", "start"]
+CMD ["yarn", "start"]
