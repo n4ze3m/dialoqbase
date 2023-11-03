@@ -31,6 +31,7 @@ RUN npm --no-update-notifier --no-fund --global install pnpm
 COPY --from=server /app/dist/ .
 COPY --from=server /app/prisma/ ./prisma
 COPY --from=server /app/package.json .
+COPY --from=server /app/node_modules/ ./node_modules
 # Copy UI
 COPY --from=build /app/app/ui/dist/ ./public
 # Copy widgets 
@@ -39,7 +40,6 @@ COPY --from=build /app/app/widget/dist/index.html ./public/bot.html
 # Copy script
 COPY --from=build /app/app/script/dist/chat.min.js ./public/chat.min.js
 
-RUN npm install --production --legacy-peer-deps --no-optional 
 
 ENV NODE_ENV=production
 
