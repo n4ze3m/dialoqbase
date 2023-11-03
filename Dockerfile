@@ -6,9 +6,9 @@ RUN apt update
 
 COPY ./server/ .
 
-RUN yarn install
+RUN npm install
 
-RUN yarn build
+RUN npm run build
 
 FROM node:18-slim as build
 WORKDIR /app
@@ -39,8 +39,8 @@ COPY --from=build /app/app/widget/dist/index.html ./public/bot.html
 # Copy script
 COPY --from=build /app/app/script/dist/chat.min.js ./public/chat.min.js
 
-RUN yarn install --production
+RUN npm install --production
 
 ENV NODE_ENV=production
 
-CMD ["yarn", "start"]
+CMD ["npm", "start"]
