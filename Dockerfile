@@ -6,9 +6,9 @@ RUN apt update
 
 COPY ./server/ .
 
-RUN yarn install
+RUN npm install --legacy-peer-deps 
 
-RUN yarn build
+RUN npm run build
 
 FROM node:18-slim as build
 WORKDIR /app
