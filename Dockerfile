@@ -39,7 +39,7 @@ COPY --from=build /app/app/widget/dist/index.html ./public/bot.html
 # Copy script
 COPY --from=build /app/app/script/dist/chat.min.js ./public/chat.min.js
 
-RUN npm install --production
+RUN npm install --production --legacy-peer-deps --no-optional 
 
 ENV NODE_ENV=production
 
