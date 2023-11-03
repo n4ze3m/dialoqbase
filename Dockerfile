@@ -6,9 +6,9 @@ RUN apt update
 
 COPY ./server/ .
 
-RUN npm install
+RUN yarn install
 
-RUN npm run build
+RUN yarn build
 
 FROM node:18-slim as build
 WORKDIR /app
