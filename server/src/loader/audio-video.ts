@@ -4,16 +4,13 @@ import {
   piplelineTransformer,
   //@ts-ignore
 } from "../utils/pipleline.js";
-import {WaveFile} from "wavefile";
+import { WaveFile } from "wavefile";
 
 export class DialoqbaseAudioVideoLoader extends BufferLoader {
   transcriber: any;
 
-  constructor(
-    filePath: string,
-  ) {
+  constructor(filePath: string) {
     super(filePath);
-
   }
 
   private async init() {
@@ -23,7 +20,7 @@ export class DialoqbaseAudioVideoLoader extends BufferLoader {
 
     this.transcriber = await pipeline(
       "automatic-speech-recognition",
-      "Xenova/whisper-tiny.en",
+      process.env.WHISPER_MODEL || "distil-whisper/distil-medium.en"
     );
   }
 
@@ -34,7 +31,7 @@ export class DialoqbaseAudioVideoLoader extends BufferLoader {
     let audioData = wav.getSamples();
     if (Array.isArray(audioData)) {
       console.log(
-        "Multiple channels detected. Selecting the first channel only.",
+        "Multiple channels detected. Selecting the first channel only."
       );
       audioData = audioData[0];
     }
@@ -43,14 +40,14 @@ export class DialoqbaseAudioVideoLoader extends BufferLoader {
 
   public async parse(
     raw: Buffer,
-    metadata: Document["metadata"],
+    metadata: Document["metadata"]
   ): Promise<Document[]> {
     await this.init();
     const audioData = await this._convert(raw);
-    let output = await this.transcriber(audioData, {
+    let output = (await this.transcriber(audioData, {
       chunk_length_s: 30,
       return_timestamps: true,
-    }) as {
+    })) as {
       text: string;
       chunks: {
         timestamp: number[];
