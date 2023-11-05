@@ -1281,10 +1281,10 @@
   resolved "https://registry.yarnpkg.com/@webgpu/types/-/types-0.1.30.tgz#b6406dc4a1c1e0d469028ceb30ddffbbd2fa706c"
   integrity sha512-9AXJSmL3MzY8ZL//JjudA//q+2kBRGhLBFpkdGksWIuxrMy81nFrCzj2Am+mbh8WoU6rXmv7cY5E3rdlyru2Qg==
 
-"@xenova/transformers@^2.6.2":
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/@xenova/transformers/-/transformers-2.6.2.tgz#f856d1a060b5a5341a8c16baf813a6491bc8587f"
-  integrity sha512-GmyAIPN4eBzPHQqduSeKAYS3SpEogRFhky7KLciAPq9Ba2NoP7UVKSTBlKJz/chsO4IQ5et6TKHPpLKNlR1SGQ==
+"@xenova/transformers@^2.7.0":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@xenova/transformers/-/transformers-2.7.0.tgz#0aabc8700d32ed8e28f6aa61abf8653f62fb1678"
+  integrity sha512-py5RqZt9lL/FFUT5X6St+TOSBoVaEmDETI98lK9ApEOvlWeX4bTS2nMQDFe3nFMpv24+wllhmPw2Www/f/ubJA==
   dependencies:
     onnxruntime-web "1.14.0"
     sharp "^0.32.0"
