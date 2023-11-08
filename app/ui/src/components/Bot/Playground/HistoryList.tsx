@@ -19,7 +19,7 @@ export const PlaygroundHistoryList = () => {
     setDefualtTextSpeechSettings,
     setElevenLabsApiKeyPresent,
     setElevenLabsApiKeyValid,
-    setVoices
+    setVoices,
   } = useStoreMessage();
 
   const { data, status } = useQuery(
@@ -51,7 +51,7 @@ export const PlaygroundHistoryList = () => {
         setHistory(
           data.messages.map((item) => {
             return {
-              message: item.message,
+              text: item.message,
               type: item.type,
             };
           })

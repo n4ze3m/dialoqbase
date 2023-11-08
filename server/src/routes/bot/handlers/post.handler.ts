@@ -1,24 +1,12 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { ChatRequestBody } from "./types";
 import { DialoqbaseVectorStore } from "../../../utils/store";
-import { ConversationalRetrievalQAChain } from "langchain/chains";
 import { embeddings } from "../../../utils/embeddings";
 import { chatModelProvider } from "../../../utils/models";
 import { BaseRetriever } from "langchain/schema/retriever";
 import { DialoqbaseHybridRetrival } from "../../../utils/hybrid";
 import { Document } from "langchain/document";
-import { PromptTemplate } from "langchain/prompts";
-import {
-  RunnablePassthrough,
-  RunnableSequence,
-} from "langchain/schema/runnable";
-import { StringOutputParser } from "langchain/schema/output_parser";
-import {
-  ChatMessage,
-  ConversationalRetrievalQAChainInput,
-  combineDocumentsFn,
-  formatChatHistory,
-} from "../../../utils/rag";
+import { createChain, groupMessagesByConversation } from "../../../chain";
 
 export const chatRequestHandler = async (
   request: FastifyRequest<ChatRequestBody>,
@@ -160,125 +148,61 @@ export const chatRequestHandler = async (
       ...botConfig,
     });
 
-    if (!bot.use_rag) {
-      const chain = ConversationalRetrievalQAChain.fromLLM(model, retriever, {
-        qaTemplate: bot.qaPrompt,
-        questionGeneratorTemplate: bot.questionGeneratorPrompt,
-        returnSourceDocuments: true,
-      });
+    const chain = createChain({
+      llm: model,
+      question_llm: model,
+      question_template: bot.questionGeneratorPrompt,
+      response_template: bot.qaPrompt,
+      retriever,
+    });
 
-      const chat_history = history
-        .map((chatMessage: any) => {
-          if (chatMessage.type === "human") {
-            return `Human: ${chatMessage.text}`;
-          } else if (chatMessage.type === "ai") {
-            return `Assistant: ${chatMessage.text}`;
-          } else {
-            return `${chatMessage.text}`;
-          }
-        })
-        .join("\n");
+    const botResponse = await chain.invoke({
+      question: sanitizedQuestion,
+      chat_history: groupMessagesByConversation(
+        history.map((message) => ({
+          type: message.type,
+          content: message.text,
+        }))
+      ),
+    });
 
-      const response = await chain.call({
-        question: sanitizedQuestion,
-        chat_history: chat_history,
-      });
+    const documents = await documentPromise;
 
-      await prisma.botWebHistory.create({
-        data: {
-          chat_id: history_id,
-          bot_id: bot.id,
-          bot: response.text,
-          human: message,
-          metadata: {
-            ip: request?.ip,
-            user_agent: request?.headers["user-agent"],
-          },
-          sources: response?.sources,
+    await prisma.botWebHistory.create({
+      data: {
+        chat_id: history_id,
+        bot_id: bot.id,
+        bot: botResponse,
+        human: message,
+        metadata: {
+          ip: request?.ip,
+          user_agent: request?.headers["user-agent"],
         },
-      });
+        sources: documents.map((doc) => {
+          return {
+            ...doc,
+          };
+        }),
+      },
+    });
 
-      return {
-        bot: response,
-        history: [
-          ...history,
-          {
-            type: "human",
-            text: message,
-          },
-          {
-            type: "ai",
-            text: response.text,
-          },
-        ],
-      };
-    } else {
-      const standaloneQuestionChain = RunnableSequence.from([
+    return {
+      bot: {
+        text: botResponse,
+        sourceDocuments: documents,
+      },
+      history: [
+        ...history,
         {
-          question: (input: ConversationalRetrievalQAChainInput) =>
-            input.question,
-          chat_history: (input: ConversationalRetrievalQAChainInput) =>
-            formatChatHistory(input.chat_history),
+          type: "human",
+          text: message,
         },
-        PromptTemplate.fromTemplate(bot.questionGeneratorPrompt),
-        model,
-        new StringOutputParser(),
-      ]);
-
-      //@ts-ignore
-      const answerChain = RunnableSequence.from([
         {
-          context: retriever.pipe(combineDocumentsFn),
-          question: new RunnablePassthrough(),
+          type: "ai",
+          text: botResponse,
         },
-        PromptTemplate.fromTemplate(bot.qaPrompt),
-        model,
-      ]);
-
-      const chain = standaloneQuestionChain.pipe(answerChain);
-      const botResponse = await chain.invoke({
-        question: sanitizedQuestion,
-        chat_history: history as ChatMessage[],
-      });
-
-      const documents = await documentPromise;
-
-      await prisma.botWebHistory.create({
-        data: {
-          chat_id: history_id,
-          bot_id: bot.id,
-          bot: botResponse.content,
-          human: message,
-          metadata: {
-            ip: request?.ip,
-            user_agent: request?.headers["user-agent"],
-          },
-          sources: documents.map((doc) => {
-            return {
-              ...doc,
-            };
-          }),
-        },
-      });
-
-      return {
-        bot: {
-          text: botResponse.content,
-          sourceDocuments: documents,
-        },
-        history: [
-          ...history,
-          {
-            type: "human",
-            text: message,
-          },
-          {
-            type: "ai",
-            text: botResponse.content,
-          },
-        ],
-      };
-    }
+      ],
+    };
   } catch (e) {
     return {
       bot: {
@@ -425,8 +349,6 @@ export const chatRequestStreamHandler = async (
       });
     }
 
-    let response: any = null;
-
     reply.raw.on("close", () => {
       console.log("closed");
     });
@@ -514,146 +436,68 @@ export const chatRequestStreamHandler = async (
         ...botConfig,
       }
     );
-    if (!bot.use_rag) {
-      const chain = ConversationalRetrievalQAChain.fromLLM(
-        streamedModel,
-        retriever,
-        {
-          qaTemplate: bot.qaPrompt,
-          questionGeneratorTemplate: bot.questionGeneratorPrompt,
-          returnSourceDocuments: true,
-          questionGeneratorChainOptions: {
-            llm: nonStreamingModel,
-          },
-        }
-      );
 
-      const chat_history = history
-        .map((chatMessage: any) => {
-          if (chatMessage.type === "human") {
-            return `Human: ${chatMessage.text}`;
-          } else if (chatMessage.type === "ai") {
-            return `Assistant: ${chatMessage.text}`;
-          } else {
-            return `${chatMessage.text}`;
-          }
-        })
-        .join("\n");
+    const chain = createChain({
+      llm: streamedModel,
+      question_llm: nonStreamingModel,
+      question_template: bot.questionGeneratorPrompt,
+      response_template: bot.qaPrompt,
+      retriever,
+    });
 
-      console.log("Waiting for response...");
+    let response = await chain.invoke({
+      question: sanitizedQuestion,
+      chat_history: groupMessagesByConversation(
+        history.map((message) => ({
+          type: message.type,
+          content: message.text,
+        }))
+      ),
+    });
 
-      response = await chain.call({
-        question: sanitizedQuestion,
-        chat_history: chat_history,
-      });
+    const documents = await documentPromise;
 
-      await prisma.botWebHistory.create({
-        data: {
-          chat_id: history_id,
-          bot_id: bot.id,
-          bot: response.text,
-          human: message,
-          metadata: {
-            ip: request?.ip,
-            user_agent: request?.headers["user-agent"],
-          },
-          sources: response?.sources || response?.sourceDocuments || [],
+    await prisma.botWebHistory.create({
+      data: {
+        chat_id: history_id,
+        bot_id: bot.id,
+        bot: response,
+        human: message,
+        metadata: {
+          ip: request?.ip,
+          user_agent: request?.headers["user-agent"],
         },
-      });
-
-      reply.sse({
-        event: "result",
-        id: "",
-        data: JSON.stringify({
-          bot: response,
-          history: [
-            ...history,
-            {
-              type: "human",
-              text: message,
-            },
-            {
-              type: "ai",
-              text: response.text,
-            },
-          ],
+        sources: documents.map((doc) => {
+          return {
+            ...doc,
+          };
         }),
-      });
-      await nextTick();
-      return reply.raw.end();
-    } else {
-      const standaloneQuestionChain = RunnableSequence.from([
-        {
-          question: (input: ConversationalRetrievalQAChainInput) =>
-            input.question,
-          chat_history: (input: ConversationalRetrievalQAChainInput) =>
-            formatChatHistory(input.chat_history),
+      },
+    });
+
+    reply.sse({
+      event: "result",
+      id: "",
+      data: JSON.stringify({
+        bot: {
+          text: response,
+          sourceDocuments: documents,
         },
-        PromptTemplate.fromTemplate(bot.questionGeneratorPrompt),
-        nonStreamingModel,
-        new StringOutputParser(),
-      ]);
-
-      //@ts-ignore
-      const answerChain = RunnableSequence.from([
-        {
-          context: retriever.pipe(combineDocumentsFn),
-          question: new RunnablePassthrough(),
-        },
-        PromptTemplate.fromTemplate(bot.qaPrompt),
-        streamedModel,
-      ]);
-
-      const chain = standaloneQuestionChain.pipe(answerChain);
-      response = await chain.invoke({
-        question: sanitizedQuestion,
-        chat_history: history as ChatMessage[],
-      });
-
-      const documents = await documentPromise;
-
-      await prisma.botWebHistory.create({
-        data: {
-          chat_id: history_id,
-          bot_id: bot.id,
-          bot: response.text,
-          human: message,
-          metadata: {
-            ip: request?.ip,
-            user_agent: request?.headers["user-agent"],
+        history: [
+          ...history,
+          {
+            type: "human",
+            text: message,
           },
-          sources: documents.map((doc) => {
-            return {
-              ...doc,
-            };
-          }),
-        },
-      });
-
-      reply.sse({
-        event: "result",
-        id: "",
-        data: JSON.stringify({
-          bot: {
-            text: response.content,
-            sourceDocuments: documents,
+          {
+            type: "ai",
+            text: response,
           },
-          history: [
-            ...history,
-            {
-              type: "human",
-              text: message,
-            },
-            {
-              type: "ai",
-              text: response.text,
-            },
-          ],
-        }),
-      });
-      await nextTick();
-      return reply.raw.end();
-    }
+        ],
+      }),
+    });
+    await nextTick();
+    return reply.raw.end();
   } catch (e) {
     console.log(e);
     reply.raw.setHeader("Content-Type", "text/event-stream");
