@@ -1,10 +1,13 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { ChatAPIRequest } from "./types";
 import { DialoqbaseVectorStore } from "../../../utils/store";
-import { ConversationalRetrievalQAChain } from "langchain/chains";
 import { embeddings } from "../../../utils/embeddings";
 import { chatModelProvider } from "../../../utils/models";
 import { nextTick } from "./post.handler";
+import { Document } from "langchain/document";
+import { BaseRetriever } from "langchain/schema/retriever";
+import { DialoqbaseHybridRetrival } from "../../../utils/hybrid";
+import { createChain, groupMessagesByConversation } from "../../../chain";
 
 export const chatRequestAPIHandler = async (
   request: FastifyRequest<ChatAPIRequest>,
@@ -39,16 +42,6 @@ export const chatRequestAPIHandler = async (
       const sanitizedQuestion = message.trim().replaceAll("\n", " ");
       const embeddingModel = embeddings(bot.embedding);
 
-      const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
-        embeddingModel,
-        {
-          botId: bot.id,
-          sourceId: null,
-        }
-      );
-
-      let response: any = null;
-
       reply.raw.on("close", () => {
         console.log("closed");
       });
@@ -68,6 +61,42 @@ export const chatRequestAPIHandler = async (
       }
 
       const botConfig = (modelinfo.config as {}) || {};
+      let retriever: BaseRetriever;
+      let resolveWithDocuments: (value: Document[]) => void;
+      const documentPromise = new Promise<Document[]>((resolve) => {
+        resolveWithDocuments = resolve;
+      });
+      if (bot.use_hybrid_search) {
+        retriever = new DialoqbaseHybridRetrival(embeddingModel, {
+          botId: bot.id,
+          sourceId: null,
+          callbacks: [
+            {
+              handleRetrieverEnd(documents) {
+                resolveWithDocuments(documents);
+              },
+            },
+          ],
+        });
+      } else {
+        const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
+          embeddingModel,
+          {
+            botId: bot.id,
+            sourceId: null,
+          }
+        );
+
+        retriever = vectorstore.asRetriever({
+          callbacks: [
+            {
+              handleRetrieverEnd(documents) {
+                resolveWithDocuments(documents);
+              },
+            },
+          ],
+        });
+      }
 
       const streamedModel = chatModelProvider(
         bot.provider,
@@ -106,42 +135,33 @@ export const chatRequestAPIHandler = async (
           ...botConfig,
         }
       );
-
-      const chain = ConversationalRetrievalQAChain.fromLLM(
-        streamedModel,
-        vectorstore.asRetriever(),
-        {
-          qaTemplate: bot.qaPrompt,
-          questionGeneratorTemplate: bot.questionGeneratorPrompt,
-          returnSourceDocuments: true,
-          questionGeneratorChainOptions: {
-            llm: nonStreamingModel,
-          },
-        }
-      );
-
-      const chat_history = history
-        .map((chatMessage: any) => {
-          if (chatMessage.role === "human") {
-            return `Human: ${chatMessage.text}`;
-          } else if (chatMessage.role === "ai") {
-            return `Assistant: ${chatMessage.text}`;
-          } else {
-            return `${chatMessage.text}`;
-          }
-        })
-        .join("\n");
-
-      response = await chain.call({
-        question: sanitizedQuestion,
-        chat_history: chat_history,
+      const chain = createChain({
+        llm: streamedModel,
+        question_llm: nonStreamingModel,
+        question_template: bot.questionGeneratorPrompt,
+        response_template: bot.qaPrompt,
+        retriever,
       });
+
+      let response = await chain.invoke({
+        question: sanitizedQuestion,
+        chat_history: groupMessagesByConversation(
+          history.map((message) => ({
+            type: message.role,
+            content: message.text,
+          }))
+        ),
+      });
+      const documents = await documentPromise;
 
       reply.sse({
         event: "result",
         id: "",
         data: JSON.stringify({
-          bot: response,
+          bot: {
+            text: response,
+            sourceDocuments: documents,
+          },
           history: [
             ...history,
             {
@@ -150,7 +170,7 @@ export const chatRequestAPIHandler = async (
             },
             {
               type: "ai",
-              text: response.text,
+              text: response,
             },
           ],
         }),
@@ -191,13 +211,42 @@ export const chatRequestAPIHandler = async (
       const sanitizedQuestion = message.trim().replaceAll("\n", " ");
       const embeddingModel = embeddings(bot.embedding);
 
-      const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
-        embeddingModel,
-        {
+      let retriever: BaseRetriever;
+      let resolveWithDocuments: (value: Document[]) => void;
+      const documentPromise = new Promise<Document[]>((resolve) => {
+        resolveWithDocuments = resolve;
+      });
+      if (bot.use_hybrid_search) {
+        retriever = new DialoqbaseHybridRetrival(embeddingModel, {
           botId: bot.id,
           sourceId: null,
-        }
-      );
+          callbacks: [
+            {
+              handleRetrieverEnd(documents) {
+                resolveWithDocuments(documents);
+              },
+            },
+          ],
+        });
+      } else {
+        const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
+          embeddingModel,
+          {
+            botId: bot.id,
+            sourceId: null,
+          }
+        );
+
+        retriever = vectorstore.asRetriever({
+          callbacks: [
+            {
+              handleRetrieverEnd(documents) {
+                resolveWithDocuments(documents);
+              },
+            },
+          ],
+        });
+      }
 
       const modelinfo = await prisma.dialoqbaseModels.findFirst({
         where: {
@@ -208,46 +257,63 @@ export const chatRequestAPIHandler = async (
       });
 
       if (!modelinfo) {
-        return reply.status(404).send({
-          message: "Model not found",
-        });
+        return {
+          bot: {
+            text: "There was an error processing your request.",
+            sourceDocuments: [],
+          },
+          history: [
+            ...history,
+            {
+              type: "human",
+              text: message,
+            },
+            {
+              type: "ai",
+              text: "There was an error processing your request.",
+            },
+          ],
+        };
       }
 
-      const botConfig = (modelinfo.config as {}) || {};
+      const botConfig: any = (modelinfo.config as {}) || {};
+      if (bot.provider.toLowerCase() === "openai") {
+        if (bot.bot_model_api_key && bot.bot_model_api_key.trim() !== "") {
+          botConfig.configuration = {
+            apiKey: bot.bot_model_api_key,
+          };
+        }
+      }
 
       const model = chatModelProvider(bot.provider, bot.model, temperature, {
         ...botConfig,
       });
 
-      const chain = ConversationalRetrievalQAChain.fromLLM(
-        model,
-        vectorstore.asRetriever(),
-        {
-          qaTemplate: bot.qaPrompt,
-          questionGeneratorTemplate: bot.questionGeneratorPrompt,
-          returnSourceDocuments: true,
-        }
-      );
-
-      const chat_history = history
-        .map((chatMessage: any) => {
-          if (chatMessage.role === "human") {
-            return `Human: ${chatMessage.text}`;
-          } else if (chatMessage.role === "ai") {
-            return `Assistant: ${chatMessage.text}`;
-          } else {
-            return `${chatMessage.text}`;
-          }
-        })
-        .join("\n");
-
-      const response = await chain.call({
-        question: sanitizedQuestion,
-        chat_history: chat_history,
+      const chain = createChain({
+        llm: model,
+        question_llm: model,
+        question_template: bot.questionGeneratorPrompt,
+        response_template: bot.qaPrompt,
+        retriever,
       });
 
+      const botResponse = await chain.invoke({
+        question: sanitizedQuestion,
+        chat_history: groupMessagesByConversation(
+          history.map((message) => ({
+            type: message.role,
+            content: message.text,
+          }))
+        ),
+      });
+
+      const documents = await documentPromise;
+
       return {
-        bot: response,
+        bot: {
+          text: botResponse,
+          sourceDocuments: documents,
+        },
         history: [
           ...history,
           {
@@ -256,7 +322,7 @@ export const chatRequestAPIHandler = async (
           },
           {
             type: "ai",
-            text: response.text,
+            text: botResponse,
           },
         ],
       };
