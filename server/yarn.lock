@@ -1281,10 +1281,10 @@
   resolved "https://registry.yarnpkg.com/@webgpu/types/-/types-0.1.30.tgz#b6406dc4a1c1e0d469028ceb30ddffbbd2fa706c"
   integrity sha512-9AXJSmL3MzY8ZL//JjudA//q+2kBRGhLBFpkdGksWIuxrMy81nFrCzj2Am+mbh8WoU6rXmv7cY5E3rdlyru2Qg==
 
-"@xenova/transformers@^2.6.2":
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/@xenova/transformers/-/transformers-2.6.2.tgz#f856d1a060b5a5341a8c16baf813a6491bc8587f"
-  integrity sha512-GmyAIPN4eBzPHQqduSeKAYS3SpEogRFhky7KLciAPq9Ba2NoP7UVKSTBlKJz/chsO4IQ5et6TKHPpLKNlR1SGQ==
+"@xenova/transformers@^2.7.0":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@xenova/transformers/-/transformers-2.7.0.tgz#0aabc8700d32ed8e28f6aa61abf8653f62fb1678"
+  integrity sha512-py5RqZt9lL/FFUT5X6St+TOSBoVaEmDETI98lK9ApEOvlWeX4bTS2nMQDFe3nFMpv24+wllhmPw2Www/f/ubJA==
   dependencies:
     onnxruntime-web "1.14.0"
     sharp "^0.32.0"
@@ -4103,10 +4103,10 @@ klaw@^3.0.0:
   dependencies:
     graceful-fs "^4.1.9"
 
-langchain@^0.0.160:
-  version "0.0.160"
-  resolved "https://registry.yarnpkg.com/langchain/-/langchain-0.0.160.tgz#3792a18fa835af079ec0aa8aa9c4ad096fb40620"
-  integrity sha512-G4G3/3BOsG7JVmP7v5ii+xvmKG3a1ID+/T8eQbcSybOuaKCSKw2anksB95UYUtY2onIbaD/hc62SfhH5YFOB3A==
+langchain@^0.0.183:
+  version "0.0.183"
+  resolved "https://registry.yarnpkg.com/langchain/-/langchain-0.0.183.tgz#6862cca367e772760c52ffa07c5b9e6a9731e9e3"
+  integrity sha512-Atyd2CWMycTfLiw6ZO9+FzESkW989PFUipQ53Jp0fffDYZWODB2AbjSI1a0pjFj2JTB06RMXt8hqk+vkT5G2Mw==
   dependencies:
     "@anthropic-ai/sdk" "^0.6.2"
     ansi-styles "^5.0.0"
@@ -4119,10 +4119,9 @@ langchain@^0.0.160:
     js-yaml "^4.1.0"
     jsonpointer "^5.0.1"
     langchainhub "~0.0.6"
-    langsmith "~0.0.31"
+    langsmith "~0.0.48"
     ml-distance "^4.0.0"
-    object-hash "^3.0.0"
-    openai "~4.4.0"
+    openai "^4.16.1"
     openapi-types "^12.1.3"
     p-queue "^6.6.2"
     p-retry "4"
@@ -4136,10 +4135,10 @@ langchainhub@~0.0.6:
   resolved "https://registry.yarnpkg.com/langchainhub/-/langchainhub-0.0.6.tgz#9d2d06e4ce0807b4e8a31e19611f57aef990b54d"
   integrity sha512-SW6105T+YP1cTe0yMf//7kyshCgvCTyFBMTgH2H3s9rTAR4e+78DA/BBrUL/Mt4Q5eMWui7iGuAYb3pgGsdQ9w==
 
-langsmith@~0.0.31:
-  version "0.0.38"
-  resolved "https://registry.yarnpkg.com/langsmith/-/langsmith-0.0.38.tgz#7946b4f6b91c66a450132d8853cf010e3c4a44ac"
-  integrity sha512-SNeje3mF+90aAX2Br919rraA21+EaNw1IfaXSrWxkqYJjJifWs0knLlAki8Vg1Sg5uv5ay/6MOO8v5mU5mL0yw==
+langsmith@~0.0.48:
+  version "0.0.48"
+  resolved "https://registry.yarnpkg.com/langsmith/-/langsmith-0.0.48.tgz#3a9a8ce257271ddb43d01ebf585c4370a3a3ba79"
+  integrity sha512-s0hW8iZ90Q9XLTnDK0Pgee245URV3b1cXQjPDj5OKm1+KN7iSK1pKx+4CO7RcFLz58Ixe7Mt+mVcomYqUuryxQ==
   dependencies:
     "@types/uuid" "^9.0.1"
     commander "^10.0.1"
@@ -4830,10 +4829,10 @@ onnxruntime-web@1.14.0:
     onnxruntime-common "~1.14.0"
     platform "^1.3.6"
 
-openai@~4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/openai/-/openai-4.4.0.tgz#dbaab326eb044ddec479951b245850c482678031"
-  integrity sha512-JN0t628Kh95T0IrXl0HdBqnlJg+4Vq0Bnh55tio+dfCnyzHvMLiWyCM9m726MAJD2YkDU4/8RQB6rNbEq9ct2w==
+openai@^4.16.1:
+  version "4.16.1"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-4.16.1.tgz#6377682ad2af805affd1b401958fb6eb92a87d61"
+  integrity sha512-Gr+uqUN1ICSk6VhrX64E+zL7skjI1TgPr/XUN+ZQuNLLOvx15+XZulx/lSW4wFEAQzgjBDlMBbBeikguGIjiMg==
   dependencies:
     "@types/node" "^18.11.18"
     "@types/node-fetch" "^2.6.4"
@@ -4843,6 +4842,7 @@ openai@~4.4.0:
     form-data-encoder "1.7.2"
     formdata-node "^4.3.2"
     node-fetch "^2.6.7"
+    web-streams-polyfill "^3.2.1"
 
 openapi-types@^12.1.3:
   version "12.1.3"
@@ -6491,6 +6491,11 @@ web-streams-polyfill@4.0.0-beta.3:
   version "4.0.0-beta.3"
   resolved "https://registry.yarnpkg.com/web-streams-polyfill/-/web-streams-polyfill-4.0.0-beta.3.tgz#2898486b74f5156095e473efe989dcf185047a38"
   integrity sha512-QW95TCTaHmsYfHDybGMwO5IJIM93I/6vTRk+daHTWFPhwh+C8Cg7j7XyKrwrj8Ib6vYXe0ocYNrmzY4xAAN6ug==
+
+web-streams-polyfill@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/web-streams-polyfill/-/web-streams-polyfill-3.2.1.tgz#71c2718c52b45fd49dbeee88634b3a60ceab42a6"
+  integrity sha512-e0MO3wdXWKrLbL0DgGnUV7WHVuw9OUvL4hjgnPkIeEvESk74gAITi5G606JtZPp39cd8HA9VQzCIvA49LpPN5Q==
 
 webidl-conversions@^3.0.0:
   version "3.0.1"

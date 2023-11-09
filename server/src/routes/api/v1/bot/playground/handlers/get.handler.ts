@@ -118,6 +118,5 @@ export async function getPlaygroundHistoryByBotIdAndHistoryId(
     eleven_labs_api_key_present,
     eleven_labs_api_key_valid,
     voices,
-    
   };
 }

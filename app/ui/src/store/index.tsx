@@ -8,7 +8,7 @@ export type Message = {
 
 export type History = {
   type: string;
-  message: string;
+  text: string;
 }[];
 
 type State = {

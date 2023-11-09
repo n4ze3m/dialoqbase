@@ -3,6 +3,7 @@ export const apiKeyValidaton = (embeddingsType: string) => {
     case "tensorflow":
       return true;
     case "transformer":
+    case "jina":
       return true;
     case "supabase":
       return true;
@@ -42,7 +43,7 @@ export const apiKeyValidaton = (embeddingsType: string) => {
     case "local":
         return true;
     default:
-      true;
+      return false;
   }
 };
 
@@ -63,5 +64,7 @@ export const apiKeyValidatonMessage = (embeddingsType: string) => {
       return "Please add ANTHROPIC_API_KEY to your .env file";
     case "fireworks":
       return "Please add FIREWORKS_API_KEY to your .env file";
+    default:
+      return "Unable to validate API key"
   }
 };

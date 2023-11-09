@@ -6,7 +6,7 @@ RUN apt update
 
 COPY ./server/ .
 
-RUN yarn install
+RUN yarn install --network-timeout 10000000
 
 RUN yarn build
 
@@ -39,7 +39,7 @@ COPY --from=build /app/app/widget/dist/index.html ./public/bot.html
 # Copy script
 COPY --from=build /app/app/script/dist/chat.min.js ./public/chat.min.js
 
-RUN yarn install --production
+RUN yarn install --production --network-timeout 10000000
 
 ENV NODE_ENV=production
 

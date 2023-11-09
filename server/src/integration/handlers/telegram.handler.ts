@@ -2,7 +2,9 @@ import { PrismaClient } from "@prisma/client";
 import { embeddings } from "../../utils/embeddings";
 import { DialoqbaseVectorStore } from "../../utils/store";
 import { chatModelProvider } from "../../utils/models";
-import { ConversationalRetrievalQAChain } from "langchain/chains";
+import { DialoqbaseHybridRetrival } from "../../utils/hybrid";
+import { BaseRetriever } from "langchain/schema/retriever";
+import { createChain } from "../../chain";
 const prisma = new PrismaClient();
 
 export const telegramBotHandler = async (
@@ -32,28 +34,38 @@ export const telegramBotHandler = async (
       },
     });
 
-    if (chat_history.length > 10) {
-      chat_history.splice(0, chat_history.length - 10);
-    }
+    // if (chat_history.length > 10) {
+    //   chat_history.splice(0, chat_history.length - 10);
+    // }
 
-    let history = chat_history
-      .map((chat) => {
-        return `Human: ${chat.human}\nAssistant: ${chat.bot}`;
-      })
-      .join("\n");
+    let history = chat_history.map((message) => ({
+      human: message.human,
+      ai: message.bot,
+    }));
 
     const temperature = bot.temperature;
 
     const sanitizedQuestion = message.trim().replaceAll("\n", " ");
     const embeddingModel = embeddings(bot.embedding);
 
-    const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
-      embeddingModel,
-      {
+    let retriever: BaseRetriever;
+
+    if (bot.use_hybrid_search) {
+      retriever = new DialoqbaseHybridRetrival(embeddingModel, {
         botId: bot.id,
         sourceId: null,
-      }
-    );
+      });
+    } else {
+      const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
+        embeddingModel,
+        {
+          botId: bot.id,
+          sourceId: null,
+        }
+      );
+
+      retriever = vectorstore.asRetriever({});
+    }
 
     const modelinfo = await prisma.dialoqbaseModels.findFirst({
       where: {
@@ -80,35 +92,100 @@ export const telegramBotHandler = async (
       ...botConfig,
     });
 
-    const chain = ConversationalRetrievalQAChain.fromLLM(
-      model,
-      vectorstore.asRetriever(),
-      {
-        qaTemplate: bot.qaPrompt,
-        questionGeneratorTemplate: bot.questionGeneratorPrompt,
-        returnSourceDocuments: true,
-      }
-    );
+    const chain = createChain({
+      llm: model,
+      question_llm: model,
+      question_template: bot.questionGeneratorPrompt,
+      response_template: bot.qaPrompt,
+      retriever,
+    });
 
-    const response = await chain.call({
+    const response = await chain.invoke({
       question: sanitizedQuestion,
       chat_history: history,
     });
-
-    const bot_response = response["text"];
 
     await prisma.botTelegramHistory.create({
       data: {
         identifier: identifer,
         new_chat_id: `${user_id}`,
         human: message,
-        bot: bot_response,
+        bot: response,
       },
     });
 
     await prisma.$disconnect();
 
-    return bot_response;
+    return response;
+  } catch (error) {
+    console.log(error);
+    return "Opps! Something went wrong";
+  }
+};
+
+export const deleteTelegramChatHistory = async (
+  identifier: string,
+  chat_id: number
+) => {
+  try {
+    const bot_id = identifier.split("-")[2];
+
+    await prisma.$connect();
+
+    const bot = await prisma.bot.findFirst({
+      where: {
+        id: bot_id,
+      },
+    });
+
+    if (!bot) {
+      return "Opps! Bot not found";
+    }
+
+    await prisma.botTelegramHistory.deleteMany({
+      where: {
+        identifier: identifier,
+        new_chat_id: `${chat_id}`,
+      },
+    });
+
+    await prisma.$disconnect();
+
+    return "Chat history deleted successfully";
+  } catch (error) {
+    console.log(error);
+    return "Opps! Something went wrong";
+  }
+};
+
+export const welcomeMessage = async (identifier: string) => {
+  try {
+    const bot_id = identifier.split("-")[2];
+
+    await prisma.$connect();
+
+    const bot = await prisma.bot.findFirst({
+      where: {
+        id: bot_id,
+      },
+      include: {
+        BotAppearance: true,
+      },
+    });
+
+    if (!bot) {
+      return "Hey, How can I assist you?";
+    }
+
+    let message = "Hey, How can I assist you?";
+
+    if (bot.BotAppearance.length > 0) {
+      message = bot.BotAppearance[0].first_message;
+    }
+
+    await prisma.$disconnect();
+
+    return message;
   } catch (error) {
     console.log(error);
     return "Opps! Something went wrong";

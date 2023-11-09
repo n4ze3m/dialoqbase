@@ -25,7 +25,7 @@ function url_to_label(
   if (smart_label) {
     let label = url;
 
-    if (!label.includes("?")) {
+    if (!label?.includes("?")) {
       // "https://en.wikipedia.org/wiki/Linux_kernel" => "Linux kernel"
       label = decodeURI(label.split("/").slice(-1)[0].replaceAll("_", " "));
     } else {
@@ -122,8 +122,8 @@ export default class DiscordBot {
             // i.e. sources made from the same source will be "merged"
             new Set(
               bot_response?.sourceDocuments?.map(
-                (d: { metadata: { source: string } }): string =>
-                  d.metadata.source
+                (d: { metadata: { source?: string; path?: string } }): string =>
+                  d.metadata?.source || d.metadata?.path || ""
               )
             )
           );

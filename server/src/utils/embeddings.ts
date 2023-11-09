@@ -22,6 +22,10 @@ export const embeddings = (embeddingsType: string) => {
           model: "Xenova/all-MiniLM-L6-v2",
         },
       );
+    case "jina":
+      return new  TransformersEmbeddings({
+        model: "Xenova/jina-embeddings-v2-small-en"
+      })
     case "supabase":
       return new TransformersEmbeddings({
         model: "Supabase/gte-small",
@@ -42,4 +46,5 @@ export const supportedEmbeddings = [
   "transformer",
   "google-gecko",
   "supabase",
+  "jina"
 ];

@@ -312,14 +312,6 @@ export const SettingsCard: React.FC<BotSettings> = ({
                   <Switch />
                 </Form.Item>
                 <Form.Item
-                  name="use_rag"
-                  label="Use Retrieval Augmented Generation (RAG)"
-                  valuePropName="checked"
-                >
-                  <Switch />
-                </Form.Item>
-
-                <Form.Item
                   name="bot_protect"
                   label="Activate Public Bot Protection"
                   valuePropName="checked"

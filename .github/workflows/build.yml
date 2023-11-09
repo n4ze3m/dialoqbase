@@ -27,5 +27,5 @@ jobs:
             n4z3m/dialoqbase:latest
             n4z3m/dialoqbase:${{ github.ref_name}}
           push: true
-          cache-from: type=registry,ref=n4z3m/dialoqbase:latest
-          cache-to: type=inline
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
