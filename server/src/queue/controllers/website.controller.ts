@@ -1,15 +1,13 @@
 import { QSource } from "../type";
-import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { DialoqbaseVectorStore } from "../../utils/store";
 import { embeddings } from "../../utils/embeddings";
 import * as fs from "fs/promises";
 import axios from "axios";
 import { DialoqbasePDFLoader } from "../../loader/pdf";
+import { DialoqbaseWebLoader } from "../../loader/web";
 
-export const websiteQueueController = async (
-  source: QSource,
-) => {
+export const websiteQueueController = async (source: QSource) => {
   // check if url is html or pdf or other
   // if html, use cheerio
 
@@ -43,10 +41,12 @@ export const websiteQueueController = async (
       {
         botId: source.botId,
         sourceId: source.id,
-      },
+      }
     );
   } else {
-    const loader = new CheerioWebBaseLoader(source.content!);
+    const loader = new DialoqbaseWebLoader({
+      url: source.content!,
+    });
     const docs = await loader.load();
 
     const textSplitter = new RecursiveCharacterTextSplitter({
@@ -61,7 +61,7 @@ export const websiteQueueController = async (
       {
         botId: source.botId,
         sourceId: source.id,
-      },
+      }
     );
   }
 };
