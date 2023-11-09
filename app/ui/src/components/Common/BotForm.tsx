@@ -274,7 +274,7 @@ export const BotForm = ({
               },
               {
                 pattern: new RegExp(
-                  "^(https?://)?(www.)?github.com/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)(.git)?$"
+                  "^(https?://)?(www\.)?github\.com/([a-zA-Z0-9-]+)/([a-zA-Z0-9_-]+)(\.git)?$"
                 ),
                 message: "Please enter a valid public github repo URL",
               },
