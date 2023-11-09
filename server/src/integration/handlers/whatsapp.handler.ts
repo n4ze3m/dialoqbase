@@ -2,7 +2,9 @@ import { PrismaClient } from "@prisma/client";
 import { embeddings } from "../../utils/embeddings";
 import { DialoqbaseVectorStore } from "../../utils/store";
 import { chatModelProvider } from "../../utils/models";
-import { ConversationalRetrievalQAChain } from "langchain/chains";
+import { BaseRetriever } from "langchain/schema/retriever";
+import { DialoqbaseHybridRetrival } from "../../utils/hybrid";
+import { createChain } from "../../chain";
 const prisma = new PrismaClient();
 
 export const whatsappBotHandler = async (
@@ -45,24 +47,34 @@ export const whatsappBotHandler = async (
       chat_history.splice(0, chat_history.length - 10);
     }
 
-    let history = chat_history
-      .map((chat) => {
-        return `Human: ${chat.human}\nAssistant: ${chat.bot}`;
-      })
-      .join("\n");
+    let history = chat_history.map((message) => ({
+      human: message.human,
+      ai: message.bot,
+    }));
 
     const temperature = bot.temperature;
 
     const sanitizedQuestion = message.trim().replaceAll("\n", " ");
     const embeddingModel = embeddings(bot.embedding);
 
-    const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
-      embeddingModel,
-      {
+    let retriever: BaseRetriever;
+
+    if (bot.use_hybrid_search) {
+      retriever = new DialoqbaseHybridRetrival(embeddingModel, {
         botId: bot.id,
         sourceId: null,
-      }
-    );
+      });
+    } else {
+      const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
+        embeddingModel,
+        {
+          botId: bot.id,
+          sourceId: null,
+        }
+      );
+
+      retriever = vectorstore.asRetriever({});
+    }
 
     const modelinfo = await prisma.dialoqbaseModels.findFirst({
       where: {
@@ -89,22 +101,18 @@ export const whatsappBotHandler = async (
       ...botConfig,
     });
 
-    const chain = ConversationalRetrievalQAChain.fromLLM(
-      model,
-      vectorstore.asRetriever(),
-      {
-        qaTemplate: bot.qaPrompt,
-        questionGeneratorTemplate: bot.questionGeneratorPrompt,
-        returnSourceDocuments: true,
-      }
-    );
+    const chain = createChain({
+      llm: model,
+      question_llm: model,
+      question_template: bot.questionGeneratorPrompt,
+      response_template: bot.qaPrompt,
+      retriever,
+    });
 
-    const response = await chain.call({
+    const response = await chain.invoke({
       question: sanitizedQuestion,
       chat_history: history,
     });
-
-    const bot_response = response["text"];
 
     await prisma.botWhatsappHistory.create({
       data: {
@@ -112,13 +120,13 @@ export const whatsappBotHandler = async (
         chat_id: hash,
         from: from,
         human: message,
-        bot: bot_response,
+        bot: response,
       },
     });
 
     await prisma.$disconnect();
 
-    return bot_response;
+    return response;
   } catch (error) {
     console.log(error);
     return "Opps! Something went wrong";
