@@ -157,3 +157,37 @@ export const deleteTelegramChatHistory = async (
     return "Opps! Something went wrong";
   }
 };
+
+export const welcomeMessage = async (identifier: string) => {
+  try {
+    const bot_id = identifier.split("-")[2];
+
+    await prisma.$connect();
+
+    const bot = await prisma.bot.findFirst({
+      where: {
+        id: bot_id,
+      },
+      include: {
+        BotAppearance: true,
+      },
+    });
+
+    if (!bot) {
+      return "Hey, How can I assist you?";
+    }
+
+    let message = "Hey, How can I assist you?";
+
+    if (bot.BotAppearance.length > 0) {
+      message = bot.BotAppearance[0].first_message;
+    }
+
+    await prisma.$disconnect();
+
+    return message;
+  } catch (error) {
+    console.log(error);
+    return "Opps! Something went wrong";
+  }
+};

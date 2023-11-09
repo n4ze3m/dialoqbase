@@ -3,6 +3,7 @@ import axios from "axios";
 import {
   deleteTelegramChatHistory,
   telegramBotHandler,
+  welcomeMessage,
 } from "./handlers/telegram.handler";
 
 export default class TelegramBot {
@@ -29,7 +30,14 @@ export default class TelegramBot {
         { command: "clear", description: "Clear chat history" },
       ]);
 
-      bot.command("start", (ctx) => ctx.reply("Hey, How can I assist you?"));
+      bot.command("start", async (ctx) => {
+        if (ctx.chat.type !== "private") {
+          return ctx.reply("Hi, I can only work in private chats.");
+        }
+        await ctx.replyWithChatAction("typing");
+        const message = await welcomeMessage(identifier);
+        return await ctx.reply(message);
+      });
       bot.command("ping", (ctx) => ctx.reply("pong"));
       bot.command("clear", async (ctx) => {
         if (ctx.chat.type !== "private") {
@@ -61,7 +69,7 @@ export default class TelegramBot {
 
         return await ctx.reply(message);
       });
-      
+
       bot.start();
       bot.catch((err) => console.log(`${identifier} error: ${err}`));
       this._clients.set(identifier, bot);
