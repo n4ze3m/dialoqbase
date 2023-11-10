@@ -6,6 +6,7 @@ import * as fs from "fs/promises";
 import axios from "axios";
 import { DialoqbasePDFLoader } from "../../loader/pdf";
 import { DialoqbaseWebLoader } from "../../loader/web";
+import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
 
 export const websiteQueueController = async (source: QSource) => {
   // check if url is html or pdf or other
@@ -44,10 +45,16 @@ export const websiteQueueController = async (source: QSource) => {
       }
     );
   } else {
-    const loader = new DialoqbaseWebLoader({
-      url: source.content!,
-    });
-    const docs = await loader.load();
+    let docs: any[] = [];
+    if (process.env.USE_LEGACY_WEB_LOADER === "true") {
+      const loader = new CheerioWebBaseLoader(source.content!);
+      docs = await loader.load();
+    } else {
+      const loader = new DialoqbaseWebLoader({
+        url: source.content!,
+      });
+      docs = await loader.load();
+    }
 
     const textSplitter = new RecursiveCharacterTextSplitter({
       chunkSize: 1000,
