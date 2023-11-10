@@ -1,6 +1,6 @@
 # Jina
 
-Founded in February 2020, Jina AI has swiftly emerged as a global pioneer in multimodal AI technology. Within an impressive timeframe of 20 months, we have successfully raised $37.5M, marking our strong position in the AI industry. Our ground-breaking technology, open-sourced on GitHub, has empowered over 40,000 developers around the globe to seamlessly build and deploy sophisticated multimodal applications.
+Established in February 2020, Jina AI has quickly become a leader in the field of multimodal AI technology. Achieving a noteworthy milestone within a span of 20 months, Jina AI has raised $37.5 million in funding, demonstrating its significant impact on the AI sector. Their groundbreaking open-source technology is accessible on GitHub, where it serves a thriving community of over 40,000 developers across the globe, facilitating the creation and deployment of advanced multimodal applications.
 
 Official Website: [https://jina.ai/](https://jina.ai/?ref=dialoqbase)
 
