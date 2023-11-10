@@ -5,7 +5,6 @@ export default defineConfig({
   title: "Dialoqbase",
   description: "Create chatbots with ease",
   lastUpdated: true,
-
   head: [
     // [
     //   "script",
@@ -78,7 +77,7 @@ export default defineConfig({
         ],
       },
       {
-        text: "Integrations (beta)",
+        text: "Integrations",
         collapsed: false,
         items: [
           {
@@ -86,11 +85,11 @@ export default defineConfig({
             link: "/guide/integration/telegram",
           },
           {
-            text: "Discord (beta)",
+            text: "Discord",
             link: "/guide/integration/discord",
           },
           {
-            text: "Whatsapp (experimental)",
+            text: "Whatsapp (beta)",
             link: "/guide/integration/whatsapp",
           },
         ],
@@ -102,10 +101,6 @@ export default defineConfig({
           {
             text: "Running locally for development",
             link: "/guide/running-locally-for-development",
-          },
-          {
-            text: "Transitioning from Single-User to Multi-User mode",
-            link: "/guide/transitioning-from-single-user-to-multi-user-mode",
           },
         ],
       },
@@ -155,6 +150,10 @@ export default defineConfig({
           {
             text: "Cohere",
             link: "/guide/ai-providers/cohere",
+          },
+          {
+            text: "Jina",
+            link: "/guide/ai-providers/jina",
           },
           {
             text: "TensorFlow",

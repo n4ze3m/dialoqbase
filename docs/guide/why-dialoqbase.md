@@ -21,6 +21,8 @@ Here is a list of chat models that are currently supported by dialoqbase:
 * gpt-4
 * gpt-4-0613
 * gpt-3.5-turbo-instruct
+* gpt-3.5-turbo-1106
+* gpt-4-1106-preview
 
 #### Anthropic
 
@@ -44,7 +46,12 @@ Here is a list of chat models that are currently supported by dialoqbase:
 
 * mistral 7b instruct 4k
 
+
 Note: In order to use Llama models you need to provide [fireworks.ai](https://fireworks.ai/) API key. You can get a free API key from [here](https://fireworks.ai/).
+
+## Bringing Your Own Model
+
+You can also bring your own model. Dialoqbase supports all the models that are supported by compitable with OpenAI API.
 
 ### Embedding Models
 
@@ -56,6 +63,7 @@ Here is a list of embedding models that are currently supported by dialoqbase:
 * Hugging Face Embedding
 * Sentence Transformers (all-MiniLM-L6-v2)
 * Google text-gecko-001
+* jina-embeddings-v2-base-en
 
 ## Multi-Platform
 
@@ -91,6 +99,7 @@ Here is a list of data loaders that are currently supported by dialoqbase:
 * Github repository
 * mp3, mp4
 * Youtube
+* Sitemap
 
 ## Vector Search with PostgreSQL
 
