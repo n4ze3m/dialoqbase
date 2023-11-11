@@ -152,6 +152,10 @@ export const getCreateBotConfigHandler = async (
       label: "Google text-gecko-001",
     },
     {
+      value: "jina-api",
+      label: "jina-embeddings-v2-base-en (API)",
+    },
+    {
       value: "jina",
       label: "jina-embeddings-v2-small-en (cpu)",
     },
@@ -203,6 +207,10 @@ export const getBotByIdSettingsHandler = async (
     {
       value: "google-gecko",
       label: "Google text-gecko-001",
+    },
+    {
+      value: "jina-api",
+      label: "jina-embeddings-v2-base-en (API)",
     },
     {
       value: "jina",

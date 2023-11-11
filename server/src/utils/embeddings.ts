@@ -17,22 +17,27 @@ export const embeddings = (embeddingsType: string) => {
     case "huggingface-api":
       return new HuggingFaceInferenceEmbeddings();
     case "transformer":
-      return new TransformersEmbeddings(
-        {
-          model: "Xenova/all-MiniLM-L6-v2",
-        },
-      );
+      return new TransformersEmbeddings({
+        model: "Xenova/all-MiniLM-L6-v2",
+      });
     case "jina":
-      return new  TransformersEmbeddings({
-        model: "Xenova/jina-embeddings-v2-small-en"
-      })
+      return new TransformersEmbeddings({
+        model: "Xenova/jina-embeddings-v2-small-en",
+      });
     case "supabase":
       return new TransformersEmbeddings({
         model: "Supabase/gte-small",
       });
     case "google-gecko":
-      console.log("using google-gecko");
       return new GoogleGeckoEmbeddings();
+    case "jina-api":
+      return new OpenAIEmbeddings({
+        modelName: "jina-embeddings-v2-base-en",
+        openAIApiKey: process.env.JINA_API_KEY,
+        configuration: {
+          baseURL: "https://api.jina.ai/v1",
+        },
+      });
     default:
       return new OpenAIEmbeddings();
   }
@@ -46,5 +51,5 @@ export const supportedEmbeddings = [
   "transformer",
   "google-gecko",
   "supabase",
-  "jina"
+  "jina",
 ];

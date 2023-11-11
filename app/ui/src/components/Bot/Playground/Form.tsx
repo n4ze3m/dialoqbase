@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useMessage } from "../../../hooks/useMessage";
 import { useForm } from "@mantine/form";
 import React from "react";
@@ -13,6 +13,8 @@ export const PlaygroundgForm = () => {
       isBot: false,
     },
   });
+
+  const client = useQueryClient();
 
   const {
     defaultSpeechToTextLanguage,
@@ -87,6 +89,7 @@ export const PlaygroundgForm = () => {
     onSubmit,
     {
       onSuccess: () => {
+        client.invalidateQueries(["getBotPlaygroundHistory"]);
         form.setFieldValue("message", "");
       },
       onError: (error) => {

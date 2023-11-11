@@ -3,6 +3,7 @@ import api, { baseURL } from "../services/api";
 import { useParams } from "react-router-dom";
 import { getToken } from "../services/cookie";
 import { useQueryClient } from "@tanstack/react-query";
+import React from "react";
 
 export type BotResponse = {
   bot: {
@@ -50,6 +51,7 @@ export const useMessage = () => {
   } = useStoreMessage();
 
   const param = useParams<{ id: string; history_id?: string }>();
+  const abortControllerRef = React.useRef<AbortController | null>(null);
 
   const client = useQueryClient();
 
@@ -85,6 +87,8 @@ export const useMessage = () => {
   };
 
   const streamingRequest = async (message: string) => {
+    abortControllerRef.current = new AbortController();
+
     let newMessage = [
       ...messages,
       {
@@ -110,6 +114,7 @@ export const useMessage = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${getToken()}`,
       },
+      signal: abortControllerRef.current.signal,
     });
 
     if (!response.ok) {
@@ -187,6 +192,13 @@ export const useMessage = () => {
     ]);
   };
 
+  const stopStreamingRequest = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+  };
+
   return {
     messages,
     setMessages,
@@ -200,5 +212,6 @@ export const useMessage = () => {
     isLoading,
     setIsLoading,
     isProcessing,
+    stopStreamingRequest,
   };
 };

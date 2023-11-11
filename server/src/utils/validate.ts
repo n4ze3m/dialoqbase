@@ -5,6 +5,8 @@ export const apiKeyValidaton = (embeddingsType: string) => {
     case "transformer":
     case "jina":
       return true;
+    case "jina-api":
+      return process.env.JINA_API_KEY ? process.env.JINA_API_KEY.length > 0 : false;
     case "supabase":
       return true;
     case "google-bison":
@@ -64,6 +66,8 @@ export const apiKeyValidatonMessage = (embeddingsType: string) => {
       return "Please add ANTHROPIC_API_KEY to your .env file";
     case "fireworks":
       return "Please add FIREWORKS_API_KEY to your .env file";
+    case "jina-api":
+      return "Please add JINA_API_KEY to your .env file";
     default:
       return "Unable to validate API key"
   }
