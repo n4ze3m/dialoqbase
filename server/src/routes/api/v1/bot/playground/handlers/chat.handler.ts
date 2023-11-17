@@ -6,8 +6,10 @@ import { chatModelProvider } from "../../../../../../utils/models";
 import { DialoqbaseHybridRetrival } from "../../../../../../utils/hybrid";
 import { BaseRetriever } from "langchain/schema/retriever";
 import { Document } from "langchain/document";
-import { createChain, groupMessagesByConversation } from "../../../../../../chain";
-
+import {
+  createChain,
+  groupMessagesByConversation,
+} from "../../../../../../chain";
 
 export const chatRequestHandler = async (
   request: FastifyRequest<ChatRequestBody>,
@@ -140,10 +142,12 @@ export const chatRequestHandler = async (
 
     const botResponse = await chain.invoke({
       question: sanitizedQuestion,
-      chat_history: groupMessagesByConversation(history.map((message) => ({
-        type: message.type,
-        content: message.text,
-      })),)
+      chat_history: groupMessagesByConversation(
+        history.map((message) => ({
+          type: message.type,
+          content: message.text,
+        }))
+      ),
     });
 
     const documents = await documentPromise;
@@ -230,10 +234,6 @@ export const chatRequestStreamHandler = async (
   const bot_id = request.params.id;
 
   const { message, history, history_id } = request.body;
-  // const history = JSON.parse(chatHistory) as {
-  //   type: string;
-  //   text: string;
-  // }[];
   try {
     const prisma = request.server.prisma;
 
@@ -351,27 +351,13 @@ export const chatRequestStreamHandler = async (
       }
     }
 
-    let response: any = null;
+    let response: string = "";
     const streamedModel = chatModelProvider(
       bot.provider,
       bot.model,
       temperature,
       {
         streaming: true,
-        callbacks: [
-          {
-            handleLLMNewToken(token: string) {
-              return reply.sse({
-                id: "",
-                event: "chunk",
-                data: JSON.stringify({
-                  message: token || "",
-                }),
-              });
-         
-            },
-          },
-        ],
         ...botConfig,
       }
     );
@@ -397,7 +383,7 @@ export const chatRequestStreamHandler = async (
       retriever,
     });
 
-    response = await chain.invoke({
+    let stream = await chain.stream({
       question: sanitizedQuestion,
       chat_history: groupMessagesByConversation(
         history.map((message) => ({
@@ -406,6 +392,17 @@ export const chatRequestStreamHandler = async (
         }))
       ),
     });
+
+    for await (const token of stream) {
+      reply.sse({
+        id: "",
+        event: "chunk",
+        data: JSON.stringify({
+          message: token || "",
+        }),
+      });
+      response += token;
+    }
 
     let historyId = history_id;
     const documents = await documentPromise;
