@@ -156,6 +156,9 @@ export const useMessage = () => {
   };
 
   const onSubmit = async (message: string) => {
+    if (message.trim().length === 0) {
+      return;
+    }
     if (streaming) {
       await streamingRequest(message);
     } else {
