@@ -297,6 +297,7 @@ export default function BotPlaygroundLayout({
             </div>
           </div>
           {children}
+          
         </div>
       </div>
     </>
