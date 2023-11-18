@@ -1,4 +1,4 @@
-FROM node:18 as server
+FROM node:18-slim as server
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ RUN yarn install --frozen-lockfile
 
 RUN yarn build
 
-FROM node:18 as build
+FROM node:18-slim as build
 WORKDIR /app
 
 RUN apt update
@@ -24,7 +24,7 @@ RUN pnpm install
 
 RUN pnpm build
 
-FROM node:18
+FROM node:18-slim
 WORKDIR /app
 
 RUN yarn config set registry https://registry.npmjs.org/
