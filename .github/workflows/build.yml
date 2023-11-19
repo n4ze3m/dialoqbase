@@ -28,3 +28,5 @@ jobs:
             n4z3m/dialoqbase:${{ github.ref_name}}
           push: true
           platforms: linux/amd64,linux/arm64
+          cache-from: type=registry,ref=n4z3m/dialoqbase:latest
+          cache-to: type=inline
