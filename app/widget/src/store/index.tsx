@@ -25,7 +25,7 @@ export const useStoreMessage = create<State>((set) => ({
   setMessages: (messages) => set({ messages }),
   history: [],
   setHistory: (history) => set({ history }),
-  streaming: false,
+  streaming: true,
   setStreaming: (streaming) => set({ streaming }),
 }));
 

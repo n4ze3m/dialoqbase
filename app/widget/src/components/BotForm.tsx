@@ -23,13 +23,6 @@ export default function BotForm({
       onSuccess: () => {
         form.setFieldValue("message", "");
       },
-      onError: (error) => {
-        console.error(error);
-        // setMessages([
-        //   ...messages,
-        //   { isBot: true, message: "Unable to send message" },
-        // ]);
-      },
     }
   );
   return (
