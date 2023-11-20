@@ -1,16 +1,15 @@
-import { DocxLoader } from "langchain/document_loaders/fs/docx";
+// import { DocxLoader } from "langchain/document_loaders/fs/docx";
 import { QSource } from "../type";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { DialoqbaseVectorStore } from "../../utils/store";
 import { embeddings } from "../../utils/embeddings";
+import { DialoqbaseDocxLoader } from "../../loader/docx";
 
-export const DocxQueueController = async (
-  source: QSource,
-) => {
+export const DocxQueueController = async (source: QSource) => {
   console.log("loading docx");
 
   const location = source.location!;
-  const loader = new DocxLoader(location);
+  const loader = new DialoqbaseDocxLoader(location);
   const docs = await loader.load();
 
   const textSplitter = new RecursiveCharacterTextSplitter({
@@ -25,6 +24,6 @@ export const DocxQueueController = async (
     {
       botId: source.botId,
       sourceId: source.id,
-    },
+    }
   );
 };
