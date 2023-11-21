@@ -25,6 +25,3 @@ jobs:
           tags: |
             n4z3m/dialoqbase-next:latest
           push: true
-          platforms: linux/amd64,linux/arm64
-          cache-from: type=registry,ref=n4z3m/dialoqbase-next:latest
-          cache-to: type=inline
