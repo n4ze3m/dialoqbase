@@ -64,11 +64,7 @@ export const PlaygroundMessage = (props: Props) => {
           </div>
           <div className="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]">
             <div className="flex flex-grow flex-col gap-3">
-              {props.isBot ? (
-                <Markdown message={props.message} />
-              ) : (
-                <p className="text-sm">{props.message}</p>
-              )}
+              <Markdown message={props.message} />
             </div>
 
             {props.isBot && (

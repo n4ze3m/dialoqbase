@@ -110,13 +110,16 @@ export const PlaygroundgForm = () => {
             })}
             className="shrink-0 flex-grow  flex items-center "
           >
-            <div className="relative flex max-h-40 w-full grow flex-col overflow-hidden bg-background px-8 rounded-md border sm:px-12 items-center">
+            <div className="flex items-center p-2 rounded-full border  bg-gray-100 w-full">
               <textarea
                 // disabled={isSendinhg}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey && !isSending) {
                     e.preventDefault();
                     form.onSubmit(async (value) => {
+                      if (value.message.trim().length === 0) {
+                        return;
+                      }
                       form.reset();
                       resetHeight();
                       await sendMessage(value.message);
@@ -124,10 +127,10 @@ export const PlaygroundgForm = () => {
                   }
                 }}
                 ref={textareaRef}
-                className={`min-h-[40px] w-full resize-none border-0 bg-transparent  py-[1rem] m-0 focus:ring-0 focus-visible:ring-0 dark:bg-transparent pr-2 md:pr-0 ${
-                  listening && "placeholder:italic"
-                }`}
-                // className="min-h-[60px] w-full resize-none bg-transparent px-4 py-[1.3rem] focus-within:outline-none sm:text-sm focus:ring-0 focus-visible:ring-0 dark:bg-transparent "
+                // className={`min-h-[32px] w-full resize-none border-0 bg-transparent  py-[0.8rem] m-0 focus:ring-0 focus-visible:ring-0 dark:bg-transparent ${
+                //   listening && "placeholder:italic"
+                // }`}
+                className="rounded-full pl-4 pr-2 py-2 w-full resize-none bg-transparent focus-within:outline-none sm:text-sm focus:ring-0 focus-visible:ring-0 ring-0 dark:ring-0 border-0"
                 required
                 rows={1}
                 tabIndex={0}
@@ -137,60 +140,58 @@ export const PlaygroundgForm = () => {
                 {...form.getInputProps("message")}
               />
               {!hideListening && (
-                <div className="absolute right-0 top-4 sm:right-4">
-                  <button
-                    disabled={isSending}
-                    onClick={() => {
-                      if (!listening) {
-                        listen({
-                          lang: defaultSpeechToTextLanguage,
-                        });
-                      } else {
-                        stop();
-                      }
-                    }}
-                    type="button"
-                    className={`p-0 mr-2 text-gray-500  ${
-                      listening &&
-                      "animate-pulse ring-2 ring-blue-500 rounded-full ring-opacity-50"
-                    }`}
+                <button
+                  disabled={isSending}
+                  onClick={() => {
+                    if (!listening) {
+                      listen({
+                        lang: defaultSpeechToTextLanguage,
+                      });
+                    } else {
+                      stop();
+                    }
+                  }}
+                  type="button"
+                  className={`p-0 mr-2 text-gray-500  ${
+                    listening &&
+                    "animate-pulse ring-2 ring-blue-500 rounded-full ring-opacity-50"
+                  }`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    className="h-6 w-6"
+                    viewBox="0 0 24 24"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-6 w-6"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 2a3 3 0 00-3 3v7a3 3 0 006 0V5a3 3 0 00-3-3z"></path>
-                      <path d="M19 10v2a7 7 0 01-14 0v-2"></path>
-                      <path d="M12 19L12 22"></path>
-                    </svg>
-                  </button>
-                </div>
+                    <path d="M12 2a3 3 0 00-3 3v7a3 3 0 006 0V5a3 3 0 00-3-3z"></path>
+                    <path d="M19 10v2a7 7 0 01-14 0v-2"></path>
+                    <path d="M12 19L12 22"></path>
+                  </svg>
+                </button>
               )}
-            </div>
-            <button
-              disabled={isSending}
-              className="ml-6 rounded-md  bg-black  p-3 text-white disabled:opacity-40"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                className="h-4 w-4"
-                viewBox="0 0 24 24"
+              <button
+                disabled={isSending || form.values.message.length === 0}
+                className="mx-2  flex items-center justify-center w-10 h-10  text-white bg-black rounded-xl disabled:opacity-50"
               >
-                <path d="M9 10L4 15 9 20"></path>
-                <path d="M20 4v7a4 4 0 01-4 4H4"></path>
-              </svg>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  className="h-6 w-6"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M9 10L4 15 9 20"></path>
+                  <path d="M20 4v7a4 4 0 01-4 4H4"></path>
+                </svg>
+              </button>
+            </div>
           </form>
         </div>
       </div>
