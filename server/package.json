@@ -9,7 +9,8 @@
   "scripts": {
     "test": "npm run build:ts && tsc -p test/tsconfig.json && tap --ts \"test/**/*.test.ts\"",
     "start:test": "npm run build:ts && fastify start  dist/app.js",
-    "start": "npx prisma migrate deploy && fastify start  app.js",
+    "start": "npx prisma migrate deploy && npx prisma db seed && fastify start app.js",
+    "seed": "npx prisma db seed",
     "build:ts": "tsc && copyfiles -u 1 \"src/**/*.js \" dist",
     "build": "tsc && copyfiles -u 1 \"src/**/*.js \" dist",
     "db": "prisma generate",
@@ -19,7 +20,7 @@
     "dev:start": "fastify start --ignore-watch=uploads,.ts$ -w  -P dist/app.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "", 
   "license": "MIT",
   "dependencies": {
     "@fastify/autoload": "^5.0.0",
@@ -71,6 +72,7 @@
     "sitemapper": "^3.2.6",
     "unique-names-generator": "^4.7.1",
     "wavefile": "^11.0.0",
+    "ts-node": "^10.9.1",
     "ytdl-core": "^4.11.5"
   },
   "devDependencies": {
@@ -81,7 +83,9 @@
     "fastify-tsconfig": "^1.0.1",
     "prisma": "5",
     "tap": "^16.1.0",
-    "ts-node": "^10.4.0",
     "typescript": "^4.5.4"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }
