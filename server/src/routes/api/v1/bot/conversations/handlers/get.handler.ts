@@ -242,7 +242,8 @@ export const getChatIntergationHistoryByTypeHandler = async (
             human: discordHistoryGroupByChatId[key][0].human,
             bot: discordHistoryGroupByChatId[key][0].bot,
             all_messages: getAllMessagesHelper(
-              discordHistoryGroupByChatId[key]
+              discordHistoryGroupByChatId[key],
+              "discord"
             ),
           };
         }
@@ -294,7 +295,8 @@ export const getChatIntergationHistoryByTypeHandler = async (
             human: whatsappHistoryGroupByChatId[key][0].human,
             bot: whatsappHistoryGroupByChatId[key][0].bot,
             all_messages: getAllMessagesHelper(
-              whatsappHistoryGroupByChatId[key]
+              whatsappHistoryGroupByChatId[key],
+              "whatsapp"
             ),
           };
         }
