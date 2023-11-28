@@ -39,7 +39,7 @@ export const ConversationSidebar = ({
                     { label: "Website", value: "website" },
                     { label: "Telegram", value: "telegram" },
                     { label: "Discord", value: "discord" },
-                    { label: "WhatsApp", value: "whatsapp" },
+                    // { label: "WhatsApp", value: "whatsapp" },
                   ]}
                   onChange={(value) => onChannelChange(value)}
                   defaultValue={defaultChannel}
