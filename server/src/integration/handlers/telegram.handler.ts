@@ -34,14 +34,14 @@ export const telegramBotHandler = async (
       },
     });
 
-    // if (chat_history.length > 10) {
-    //   chat_history.splice(0, chat_history.length - 10);
-    // }
-
     let history = chat_history.map((message) => ({
       human: message.human,
       ai: message.bot,
     }));
+    
+    if (history.length > 20) {
+      history.splice(0, history.length - 20);
+    }
 
     const temperature = bot.temperature;
 
