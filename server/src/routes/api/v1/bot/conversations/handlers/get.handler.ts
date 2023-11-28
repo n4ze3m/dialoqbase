@@ -3,10 +3,19 @@ import {
   ChatIntergationHistoryByChatIdRequest,
   ChatIntergationHistoryByTypeRequest,
 } from "./type";
-import { botWebHistory, BotTelegramHistory } from "@prisma/client";
+import {
+  botWebHistory,
+  BotTelegramHistory,
+  BotWhatsappHistory,
+  BotDiscordHistory,
+} from "@prisma/client";
 
 const getAllMessagesHelper = (
-  webHistory: botWebHistory[] | BotTelegramHistory[],
+  webHistory:
+    | botWebHistory[]
+    | BotTelegramHistory[]
+    | BotWhatsappHistory[]
+    | BotDiscordHistory[],
   type: string = "website"
 ) => {
   const messages: {
@@ -51,7 +60,35 @@ const getAllMessagesHelper = (
       });
     }
     return messages;
+  } else if (type === "discord") {
+    for (const message of webHistory as BotDiscordHistory[]) {
+      messages.push({
+        isBot: false,
+        message: message.human,
+      });
+
+      messages.push({
+        isBot: true,
+        message: message.bot,
+      });
+    }
+    return messages;
+  } else if (type === "whatsapp") {
+    for (const message of webHistory as BotWhatsappHistory[]) {
+      messages.push({
+        isBot: false,
+        message: message.human,
+      });
+
+      messages.push({
+        isBot: true,
+        message: message.bot,
+      });
+    }
+    return messages;
   }
+
+  return messages;
 };
 
 export const getChatIntergationHistoryByTypeHandler = async (
@@ -162,6 +199,110 @@ export const getChatIntergationHistoryByTypeHandler = async (
       return reply.status(200).send({
         message: "Success",
         data: telegramResult,
+      });
+
+    case "discord":
+      const process_discord = await prisma.botIntegration.findFirst({
+        where: {
+          bot_id: id,
+          provider: "discord",
+        },
+      });
+      if (!process_discord) {
+        return reply.status(200).send({
+          message: "Success",
+          data: [],
+        });
+      }
+
+      const discordHistory = await prisma.botDiscordHistory.findMany({
+        where: {
+          identifier: process_discord.identifier,
+        },
+      });
+
+      // group by chat_id
+      const discordHistoryGroupByChatId: Record<string, BotDiscordHistory[]> =
+        discordHistory
+          .filter((item) => item.chat_id)
+          .reduce((acc, cur) => {
+            if (cur && cur.chat_id) {
+              if (!acc[cur.chat_id]) {
+                acc[cur.chat_id] = [];
+              }
+              acc[cur.chat_id].push(cur);
+            }
+            return acc;
+          }, {} as Record<string, BotDiscordHistory[]>);
+
+      const discordResult = Object.keys(discordHistoryGroupByChatId).map(
+        (key) => {
+          return {
+            chat_id: key,
+            human: discordHistoryGroupByChatId[key][0].human,
+            bot: discordHistoryGroupByChatId[key][0].bot,
+            all_messages: getAllMessagesHelper(
+              discordHistoryGroupByChatId[key]
+            ),
+          };
+        }
+      );
+
+      return reply.status(200).send({
+        message: "Success",
+        data: discordResult,
+      });
+
+    case "whatsapp":
+      const process_whatsapp = await prisma.botIntegration.findFirst({
+        where: {
+          bot_id: id,
+          provider: "whatsapp",
+        },
+      });
+      if (!process_whatsapp) {
+        return reply.status(200).send({
+          message: "Success",
+          data: [],
+        });
+      }
+
+      const whatsappHistory = await prisma.botWhatsappHistory.findMany({
+        where: {
+          identifier: process_whatsapp.identifier,
+        },
+      });
+
+      // group by chat_id
+      const whatsappHistoryGroupByChatId: Record<string, BotWhatsappHistory[]> =
+        whatsappHistory
+          .filter((item) => item.chat_id)
+          .reduce((acc, cur) => {
+            if (cur && cur.chat_id) {
+              if (!acc[cur.chat_id]) {
+                acc[cur.chat_id] = [];
+              }
+              acc[cur.chat_id].push(cur);
+            }
+            return acc;
+          }, {} as Record<string, BotWhatsappHistory[]>);
+
+      const whatsappResult = Object.keys(whatsappHistoryGroupByChatId).map(
+        (key) => {
+          return {
+            chat_id: key,
+            human: whatsappHistoryGroupByChatId[key][0].human,
+            bot: whatsappHistoryGroupByChatId[key][0].bot,
+            all_messages: getAllMessagesHelper(
+              whatsappHistoryGroupByChatId[key]
+            ),
+          };
+        }
+      );
+
+      return reply.status(200).send({
+        message: "Success",
+        data: whatsappResult,
       });
 
     default:
