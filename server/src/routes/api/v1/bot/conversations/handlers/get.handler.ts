@@ -3,41 +3,60 @@ import {
   ChatIntergationHistoryByChatIdRequest,
   ChatIntergationHistoryByTypeRequest,
 } from "./type";
-import { botWebHistory } from "@prisma/client";
+import { botWebHistory, BotTelegramHistory } from "@prisma/client";
 
-const getAllMessagesHelper =  (webHistory: botWebHistory[]) => {
+const getAllMessagesHelper = (
+  webHistory: botWebHistory[] | BotTelegramHistory[],
+  type: string = "website"
+) => {
   const messages: {
     isBot: boolean;
     message?: string | null;
     sources?: any;
-    createdAt: Date;
+    createdAt?: Date;
   }[] = [];
-  for (const message of webHistory) {
-    messages.push({
-      isBot: false,
-      message: message.human,
-      sources: null,
-      createdAt: message.createdAt,
+  if (type === "website") {
+    for (const message of webHistory as botWebHistory[]) {
+      messages.push({
+        isBot: false,
+        message: message.human,
+        sources: null,
+        createdAt: message.createdAt,
+      });
+
+      messages.push({
+        isBot: true,
+        message: message.bot,
+        sources: message.sources,
+        createdAt: message.createdAt,
+      });
+    }
+
+    messages.sort((a, b) => {
+      // @ts-ignore
+      return a.createdAt.getTime() - b.createdAt.getTime();
     });
 
-    messages.push({
-      isBot: true,
-      message: message.bot,
-      sources: message.sources,
-      createdAt: message.createdAt,
-    });
+    return messages;
+  } else if (type === "telegram") {
+    for (const message of webHistory as BotTelegramHistory[]) {
+      messages.push({
+        isBot: false,
+        message: message.human,
+      });
+
+      messages.push({
+        isBot: true,
+        message: message.bot,
+      });
+    }
+    return messages;
   }
-
-  messages.sort((a, b) => {
-    return a.createdAt.getTime() - b.createdAt.getTime();
-  });
-
-  return messages;
 };
 
 export const getChatIntergationHistoryByTypeHandler = async (
   request: FastifyRequest<ChatIntergationHistoryByTypeRequest>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const { id, type } = request.params;
   const prisma = request.server.prisma;
@@ -57,24 +76,19 @@ export const getChatIntergationHistoryByTypeHandler = async (
 
   switch (type) {
     case "website":
-      prisma.botWebHistory;
-
       const webHistory = await prisma.botWebHistory.findMany({
         where: {
           bot_id: id,
         },
       });
-      const webHistoyGroupByChatId: Record<string, botWebHistory[]> = webHistory
-        .reduce(
-          (acc, cur) => {
-            if (!acc[cur.chat_id]) {
-              acc[cur.chat_id] = [];
-            }
-            acc[cur.chat_id].push(cur);
-            return acc;
-          },
-          {} as Record<string, botWebHistory[]>,
-        );
+      const webHistoyGroupByChatId: Record<string, botWebHistory[]> =
+        webHistory.reduce((acc, cur) => {
+          if (!acc[cur.chat_id]) {
+            acc[cur.chat_id] = [];
+          }
+          acc[cur.chat_id].push(cur);
+          return acc;
+        }, {} as Record<string, botWebHistory[]>);
 
       const result = Object.keys(webHistoyGroupByChatId).map((key) => {
         return {
@@ -90,10 +104,64 @@ export const getChatIntergationHistoryByTypeHandler = async (
         return (
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         );
-      }); 
+      });
       return reply.status(200).send({
         message: "Success",
         data: result,
+      });
+
+    case "telegram":
+      const process_tg = await prisma.botIntegration.findFirst({
+        where: {
+          bot_id: id,
+          provider: "telegram",
+        },
+      });
+      if (!process_tg) {
+        return reply.status(200).send({
+          message: "Success",
+          data: [],
+        });
+      }
+
+      const telegramHistory = await prisma.botTelegramHistory.findMany({
+        where: {
+          identifier: process_tg.identifier,
+        },
+      });
+      console.log(telegramHistory);
+
+      // group by chat_id
+      const telegramHistoryGroupByChatId: Record<string, BotTelegramHistory[]> =
+        telegramHistory
+          .filter((item) => item.new_chat_id)
+          .reduce((acc, cur) => {
+            if (cur && cur.new_chat_id) {
+              if (!acc[cur.new_chat_id]) {
+                acc[cur.new_chat_id] = [];
+              }
+              acc[cur.new_chat_id].push(cur);
+            }
+            return acc;
+          }, {} as Record<string, BotTelegramHistory[]>);
+
+      const telegramResult = Object.keys(telegramHistoryGroupByChatId).map(
+        (key) => {
+          return {
+            chat_id: key,
+            human: telegramHistoryGroupByChatId[key][0].human,
+            bot: telegramHistoryGroupByChatId[key][0].bot,
+            all_messages: getAllMessagesHelper(
+              telegramHistoryGroupByChatId[key],
+              "telegram"
+            ),
+          };
+        }
+      );
+
+      return reply.status(200).send({
+        message: "Success",
+        data: telegramResult,
       });
 
     default:
@@ -105,7 +173,7 @@ export const getChatIntergationHistoryByTypeHandler = async (
 
 export const getChatHistoryByChatIdHandler = async (
   request: FastifyRequest<ChatIntergationHistoryByChatIdRequest>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const { id, type, chat_id } = request.params;
   const prisma = request.server.prisma;
