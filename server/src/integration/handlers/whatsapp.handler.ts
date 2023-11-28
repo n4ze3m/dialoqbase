@@ -43,8 +43,8 @@ export const whatsappBotHandler = async (
       },
     });
 
-    if (chat_history.length > 10) {
-      chat_history.splice(0, chat_history.length - 10);
+    if (chat_history.length > 20) {
+      chat_history.splice(0, chat_history.length - 20);
     }
 
     let history = chat_history.map((message) => ({

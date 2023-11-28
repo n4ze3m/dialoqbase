@@ -14,20 +14,17 @@ export default function BotConversationsRoot() {
     conversation_id?: string;
   }>();
   const navigate = useNavigate();
-  const [defaultType] = React.useState<string>(param.type || "website");
+  const [type, setType] = React.useState<string>(param.type || "website");
   const { data, status } = useQuery(
-    ["getBotConversations", param.id, param.type],
+    ["getBotConversations", param.id, param.type, type],
     async () => {
-      const response = await api.get(
-        `/bot/conversations/${param.id}/${defaultType}`
-      );
+      const response = await api.get(`/bot/conversations/${param.id}/${type}`);
       return response.data as {
         data: ConversationsByType[];
       };
     },
     {
       enabled: !!param.id,
-      refetchInterval: 1000,
     }
   );
 
@@ -39,11 +36,13 @@ export default function BotConversationsRoot() {
   return (
     <>
       {status === "loading" && (
-        <div className="p-4 m-3">
-          <SkeletonLoading />
+        <div className="mx-auto my-3 w-full max-w-7xl">
+          <SkeletonLoading className="mt-6" />
         </div>
       )}
-      {status === "success" && <ConversationBody data={data.data} />}
+      {status === "success" && (
+        <ConversationBody setType={setType} type={type} data={data.data} />
+      )}
     </>
   );
 }

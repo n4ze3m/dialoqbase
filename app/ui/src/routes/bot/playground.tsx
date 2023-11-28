@@ -33,7 +33,7 @@ export default function BotPreviewRoot() {
   return (
     <>
       {status === "loading" && (
-        <div className="p-4 m-3">
+        <div className="mx-auto my-3 w-full max-w-7xl">
           <SkeletonLoading />
         </div>
       )}

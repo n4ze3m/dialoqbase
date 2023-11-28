@@ -42,7 +42,6 @@ export default function BotIntegrationRoot() {
     },
     {
       enabled: !!param.id,
-      refetchInterval: 1000,
     }
   );
 
@@ -54,8 +53,7 @@ export default function BotIntegrationRoot() {
 
   return (
     <div className="mx-auto my-3 w-full max-w-7xl">
-
-      {status === "loading" && <SkeletonLoading />}
+      {status === "loading" && <SkeletonLoading className="mt-6" />}
       {status === "success" && <IntegrationGrid data={data.data} />}
     </div>
   );

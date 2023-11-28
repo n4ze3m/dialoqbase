@@ -11,10 +11,14 @@ export const ConversationSidebar = ({
   data,
   defaultIndex,
   setDefaultIndex,
+  onChannelChange,
+  defaultChannel,
 }: {
   data: ConversationsByType[];
   defaultIndex: number | null;
   setDefaultIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  onChannelChange: (value: string) => void;
+  defaultChannel: string;
 }) => {
   const [hideMenu] = React.useState(false);
   return (
@@ -31,8 +35,14 @@ export const ConversationSidebar = ({
               <div className="flex flex-col gap-2">
                 <h2 className="text-lg font-semibold">Conversations</h2>
                 <Select
-                  options={[{ label: "Website", value: "website" }]}
-                  defaultValue="website"
+                  options={[
+                    { label: "Website", value: "website" },
+                    { label: "Telegram", value: "telegram" },
+                    { label: "Discord", value: "discord" },
+                    // { label: "WhatsApp", value: "whatsapp" },
+                  ]}
+                  onChange={(value) => onChannelChange(value)}
+                  defaultValue={defaultChannel}
                   style={{ width: "100%" }}
                 />
               </div>
@@ -59,7 +69,7 @@ export const ConversationSidebar = ({
                             : `Anonymous`}
                         </h3>
                         <span className="text-xs font-thin">
-                          {dayjs(item?.created_at).fromNow()}
+                          {item?.created_at && dayjs(item?.created_at).fromNow()}
                         </span>
                       </div>
                       <div className="flex mt-2  flex-col gap-1">

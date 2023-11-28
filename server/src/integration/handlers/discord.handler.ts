@@ -44,6 +44,10 @@ export const discordBotHandler = async (
       ai: message.bot,
     }));
 
+    if (history.length > 20) {
+      history.splice(0, history.length - 20);
+    }
+
     const temperature = bot.temperature;
 
     const sanitizedQuestion = message.trim().replaceAll("\n", " ");
