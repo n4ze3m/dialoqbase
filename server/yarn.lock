@@ -497,6 +497,11 @@
   dependencies:
     google-gax "^3.5.8"
 
+"@grammyjs/files@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@grammyjs/files/-/files-1.0.4.tgz#255d8e92bde0f43768840b80a230394f0a97dba6"
+  integrity sha512-GT7JWRH9cs5kIrBtUGwMwVEhb1w7Vtnc93UT3zM/HYigmeVd93wWaIqyuSYsZq1VIB+9CSk0oz+ZsnxK83z7tg==
+
 "@grammyjs/types@3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@grammyjs/types/-/types-3.1.1.tgz#dd80c018ffaf44bd89c56160edb3d9e86b84251f"

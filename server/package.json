@@ -20,7 +20,7 @@
     "dev:start": "fastify start --ignore-watch=uploads,.ts$ -w  -P dist/app.js"
   },
   "keywords": [],
-  "author": "", 
+  "author": "",
   "license": "MIT",
   "dependencies": {
     "@fastify/autoload": "^5.0.0",
@@ -34,6 +34,7 @@
     "@ffmpeg.wasm/core-mt": "^0.12.0",
     "@ffmpeg.wasm/main": "^0.12.0",
     "@google-ai/generativelanguage": "^0.2.0",
+    "@grammyjs/files": "^1.0.4",
     "@huggingface/inference": "1",
     "@prisma/client": "5",
     "@slack/bolt": "^3.13.2",
@@ -70,9 +71,9 @@
     "pdfjs-dist": "^3.7.107",
     "pubsub-js": "^1.9.4",
     "sitemapper": "^3.2.6",
+    "ts-node": "^10.9.1",
     "unique-names-generator": "^4.7.1",
     "wavefile": "^11.0.0",
-    "ts-node": "^10.9.1",
     "ytdl-core": "^4.11.5"
   },
   "devDependencies": {
