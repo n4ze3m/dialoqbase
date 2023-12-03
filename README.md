@@ -93,6 +93,8 @@ _Important: After the first login, remember to change the default credentials._
 
 - Utilize PostgreSQL for vector search and storing the knowledge base.
 
+- Use any language models or embedding models you want
+
 ## Stack 📚
 
 - [React](https://reactjs.org/)
