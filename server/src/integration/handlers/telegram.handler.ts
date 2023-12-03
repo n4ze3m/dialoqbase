@@ -38,7 +38,7 @@ export const telegramBotHandler = async (
       human: message.human,
       ai: message.bot,
     }));
-    
+
     if (history.length > 20) {
       history.splice(0, history.length - 20);
     }

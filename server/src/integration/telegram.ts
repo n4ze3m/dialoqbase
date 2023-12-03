@@ -1,17 +1,21 @@
-import { Bot } from "grammy";
+import { Bot, Context } from "grammy";
 import axios from "axios";
 import {
   deleteTelegramChatHistory,
   telegramBotHandler,
   welcomeMessage,
 } from "./handlers/telegram.handler";
-
+import { convertTextToAudio } from "./handlers/utils/audio-to-text";
+import { FileFlavor, hydrateFiles } from "@grammyjs/files";
+import * as fs from "fs/promises";
+import { convertOggToWave } from "../utils/ffmpeg";
+type DialoqBaseContext = FileFlavor<Context>;
 export default class TelegramBot {
   static get clients() {
     return this._clients.values();
   }
 
-  private static _clients: Map<string, Bot> = new Map();
+  private static _clients: Map<string, any> = new Map();
 
   static totolClients() {
     return this._clients.size;
@@ -23,7 +27,9 @@ export default class TelegramBot {
         await this.disconnect(identifier);
       }
 
-      const bot = new Bot(token);
+      const bot = new Bot<DialoqBaseContext>(token);
+      bot.api.config.use(hydrateFiles(bot.token));
+
       await bot.api.setMyCommands([
         { command: "start", description: "Start the bot" },
         { command: "ping", description: "Ping the bot" },
@@ -68,6 +74,37 @@ export default class TelegramBot {
         );
 
         return await ctx.reply(message);
+      });
+
+      bot.on("message:voice", async (ctx) => {
+        try {
+          if (ctx.chat.type !== "private") {
+            return ctx.reply("I can only work in private chats.");
+          }
+
+          await ctx.replyWithChatAction("typing");
+
+          const file = await ctx.getFile();
+          const path = await file.download();
+
+          const audioWav = await convertOggToWave(path);
+          const audio = await fs.readFile(audioWav);
+
+          const response = await convertTextToAudio(audio);
+
+          const user_id = ctx.from.id;
+
+          const message = await telegramBotHandler(
+            identifier,
+            response.text,
+            user_id
+          );
+
+          return await ctx.reply(message);
+        } catch (error) {
+          console.log(error);
+          return await ctx.reply("Opps! Something went wrong");
+        }
       });
 
       bot.start();
