@@ -46,6 +46,15 @@ const MODELS: {
     local_model: false,
     config: "{}",
   },
+  {
+    model_id:"accounts/fireworks/models/mixtral-8x7b-fw-chat",
+    name: "Mixtral MoE 8x7B Chat (Fireworks)",
+    model_type: "chat",
+    stream_available: true,
+    model_provider: "Fireworks",
+    local_model: false,
+    config: "{}",
+  }
 ];
 
 const newModels = async () => {
