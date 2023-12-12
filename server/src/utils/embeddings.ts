@@ -1,5 +1,3 @@
-import "@tensorflow/tfjs-backend-cpu";
-import { TensorFlowEmbeddings } from "langchain/embeddings/tensorflow";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { CohereEmbeddings } from "langchain/embeddings/cohere";
 import { HuggingFaceInferenceEmbeddings } from "langchain/embeddings/hf";
@@ -8,8 +6,6 @@ import { GoogleGeckoEmbeddings } from "../embeddings/google-gecko-embedding";
 
 export const embeddings = (embeddingsType: string) => {
   switch (embeddingsType) {
-    case "tensorflow":
-      return new TensorFlowEmbeddings();
     case "openai":
       return new OpenAIEmbeddings();
     case "cohere":
@@ -44,7 +40,6 @@ export const embeddings = (embeddingsType: string) => {
 };
 
 export const supportedEmbeddings = [
-  "tensorflow",
   "openai",
   "cohere",
   "huggingface-api",

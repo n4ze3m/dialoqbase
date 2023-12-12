@@ -46,7 +46,6 @@ export const BotForm = ({
 }: Props) => {
   const { data: botConfig, status: botConfigStatus } = useCreateConfig();
 
-  const embeddingType = Form.useWatch("embedding", form);
 
   const [availableSources] = React.useState([
     {
@@ -592,15 +591,6 @@ export const BotForm = ({
               </span>
             }
             name="embedding"
-            hasFeedback={embeddingType === "tensorflow"}
-            help={
-              embeddingType === "tensorflow"
-                ? "TensorFlow embeddings can be slow and memory-intensive."
-                : null
-            }
-            validateStatus={
-              embeddingType === "tensorflow" ? "warning" : undefined
-            }
           >
             <Select
               placeholder="Select an embedding method"

@@ -221,7 +221,7 @@ export default function BotLayout({
         </div>
 
         <div className="flex flex-col">
-          <div className="sticky top-0 z-10 flex h-14  bg-white border-b border-gray-200 ">
+          <div className="sticky top-0 z-[999] flex h-14  bg-white border-b border-gray-200 ">
             <button
               type="button"
               className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"

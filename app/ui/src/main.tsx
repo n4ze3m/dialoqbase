@@ -55,17 +55,17 @@ const router = createHashRouter([
   {
     path: "/bot/:id",
     element: (
-      <BotPlaygroundLayout>
+      <BotLayout>
         <BotPreviewRoot />
-      </BotPlaygroundLayout>
+      </BotLayout>
     ),
   },
   {
     path: "/bot/:id/playground/:history_id",
     element: (
-      <BotPlaygroundLayout>
+      <BotLayout>
         <BotPreviewRoot />
-      </BotPlaygroundLayout>
+      </BotLayout>
     ),
   },
   {

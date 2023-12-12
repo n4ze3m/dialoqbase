@@ -909,38 +909,6 @@
   dependencies:
     defer-to-connect "^2.0.0"
 
-"@tensorflow-models/universal-sentence-encoder@^1.3.3":
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/@tensorflow-models/universal-sentence-encoder/-/universal-sentence-encoder-1.3.3.tgz#39874e8a49a42c9c06716a3cdc25eea844f4de50"
-  integrity sha512-mipL7ad0CW6uQ68FUkNgkNj/zgA4qgBnNcnMMkNTdL9MUMnzCxu3AE8pWnx2ReKHwdqEG4e8IpaYKfH4B8bojg==
-
-"@tensorflow/tfjs-backend-cpu@^4.7.0":
-  version "4.7.0"
-  resolved "https://registry.yarnpkg.com/@tensorflow/tfjs-backend-cpu/-/tfjs-backend-cpu-4.7.0.tgz#898fbde630b2872d0e4f6dc91d07f7b1c1f55448"
-  integrity sha512-jHtDUWTjNGhExbm4OKzSOBrbntlcHKU9VJV+EBcqqWR4fZpD3NhyqXrxFMgtyAJ4c5/z1KvYMwiliyKQPJVK9w==
-  dependencies:
-    "@types/seedrandom" "^2.4.28"
-    seedrandom "^3.0.5"
-
-"@tensorflow/tfjs-converter@^4.7.0":
-  version "4.7.0"
-  resolved "https://registry.yarnpkg.com/@tensorflow/tfjs-converter/-/tfjs-converter-4.7.0.tgz#c01b1314810313ccd8b40bf70e22e9f5bd93b462"
-  integrity sha512-UpNWjNl8/TrP57HpA9CuDWuQ4FHByVGVmgQQCibDqnNLExLjydWxjskiwDETg/JLm31H+SH2FcSBoPgAcP0vEA==
-
-"@tensorflow/tfjs-core@^4.7.0":
-  version "4.7.0"
-  resolved "https://registry.yarnpkg.com/@tensorflow/tfjs-core/-/tfjs-core-4.7.0.tgz#8f697ef929dc8da69e3cf220c11b9350d6edb707"
-  integrity sha512-Yxxo7iJQ+UJyOzL+b32vmrYMgQPTqGyL+wM7kLrLSCBg7e2pmp3s6Uvm7HvQYyEM7yY7gcP0a0gAE20JDh69RA==
-  dependencies:
-    "@types/long" "^4.0.1"
-    "@types/offscreencanvas" "~2019.7.0"
-    "@types/seedrandom" "^2.4.28"
-    "@types/webgl-ext" "0.0.30"
-    "@webgpu/types" "0.1.30"
-    long "4.0.0"
-    node-fetch "~2.6.1"
-    seedrandom "^3.0.5"
-
 "@tokenizer/token@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@tokenizer/token/-/token-0.3.0.tgz#fe98a93fe789247e998c75e74e9c7c63217aa276"
@@ -1136,11 +1104,6 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.17.1.tgz#84c32903bf3a09f7878c391d31ff08f6fe7d8335"
   integrity sha512-xlR1jahfizdplZYRU59JlUx9uzF1ARa8jbhM11ccpCJya8kvos5jwdm2ZAgxSCwOl0fq21svP18EVwPBXMQudw==
 
-"@types/offscreencanvas@~2019.7.0":
-  version "2019.7.0"
-  resolved "https://registry.yarnpkg.com/@types/offscreencanvas/-/offscreencanvas-2019.7.0.tgz#e4a932069db47bb3eabeb0b305502d01586fa90d"
-  integrity sha512-PGcyveRIpL1XIqK8eBsmRBt76eFgtzuPiSTyKHZxnGemp2yzGzWpjYKAfK3wIMiU7eH+851yEpiuP8JZerTmWg==
-
 "@types/p-queue@^2.3.2":
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/@types/p-queue/-/p-queue-2.3.2.tgz#16bc5fece69ef85efaf2bce8b13f3ebe39c5a1c8"
@@ -1210,11 +1173,6 @@
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.3.tgz#cef09e3ec9af1d63d2a6cc5b383a737e24e6dcf5"
   integrity sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==
 
-"@types/seedrandom@^2.4.28":
-  version "2.4.30"
-  resolved "https://registry.yarnpkg.com/@types/seedrandom/-/seedrandom-2.4.30.tgz#d2efe425869b84163c2d56e779dddadb9372cbfa"
-  integrity sha512-AnxLHewubLVzoF/A4qdxBGHCKifw8cY32iro3DQX9TPcetE95zBeVt3jnsvtvAUf1vwzMfwzp4t/L2yqPlnjkQ==
-
 "@types/send@*":
   version "0.17.1"
   resolved "https://registry.yarnpkg.com/@types/send/-/send-0.17.1.tgz#ed4932b8a2a805f1fe362a70f4e62d0ac994e301"
@@ -1248,11 +1206,6 @@
   version "9.0.2"
   resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-9.0.2.tgz#ede1d1b1e451548d44919dc226253e32a6952c4b"
   integrity sha512-kNnC1GFBLuhImSnV7w4njQkUiJi0ZXUycu1rUaouPqiKlXkh77JKgdRnTAp1x5eBwcIwbtI+3otwzuIDEuDoxQ==
-
-"@types/webgl-ext@0.0.30":
-  version "0.0.30"
-  resolved "https://registry.yarnpkg.com/@types/webgl-ext/-/webgl-ext-0.0.30.tgz#0ce498c16a41a23d15289e0b844d945b25f0fb9d"
-  integrity sha512-LKVgNmBxN0BbljJrVUwkxwRYqzsAEPcZOe6S2T6ZaBDIrFp0qu4FNlpc5sM1tGbXUYFgdVQIoeLk1Y1UoblyEg==
 
 "@types/websocket@^1.0.3":
   version "1.0.5"
@@ -1293,11 +1246,6 @@
     fastify-plugin "^4.3.0"
     it-pushable "^1.4.2"
     it-to-stream "^1.0.0"
-
-"@webgpu/types@0.1.30":
-  version "0.1.30"
-  resolved "https://registry.yarnpkg.com/@webgpu/types/-/types-0.1.30.tgz#b6406dc4a1c1e0d469028ceb30ddffbbd2fa706c"
-  integrity sha512-9AXJSmL3MzY8ZL//JjudA//q+2kBRGhLBFpkdGksWIuxrMy81nFrCzj2Am+mbh8WoU6rXmv7cY5E3rdlyru2Qg==
 
 "@xenova/transformers@^2.7.0":
   version "2.7.0"
@@ -4285,7 +4233,7 @@ lodash@^4.17.15, lodash@^4.17.20, lodash@^4.17.21:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
-long@4.0.0, long@^4.0.0:
+long@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/long/-/long-4.0.0.tgz#9a7b71cfb7d361a194ea555241c92f7468d5bf28"
   integrity sha512-XsP+KhQif4bjX1kbuSiySJFNAehNxgLb6hPRGJ9QsUr8ajHkuXGdrHmFUTUUXhDwVX2R5bY4JNZEwbUiMhV+MA==
@@ -4655,7 +4603,7 @@ node-ensure@^0.0.0:
   resolved "https://registry.yarnpkg.com/node-ensure/-/node-ensure-0.0.0.tgz#ecae764150de99861ec5c810fd5d096b183932a7"
   integrity sha512-DRI60hzo2oKN1ma0ckc6nQWlHU69RH6xN0sjQTjMpChPfTYvKZdcQFfdYK2RWbJcKyUizSIy/l8OTGxMAM1QDw==
 
-node-fetch@^2.6.1, node-fetch@^2.6.7, node-fetch@^2.6.9, node-fetch@~2.6.1:
+node-fetch@^2.6.1, node-fetch@^2.6.7, node-fetch@^2.6.9:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.11.tgz#cde7fc71deef3131ef80a738919f999e6edfff25"
   integrity sha512-4I6pdBY1EthSqDmJkiNk3JIT8cswwR9nfeW/cPdUagJYEQG7R95WRH74wpz7ma8Gh/9dI9FP+OU+0E4FvtA55w==
@@ -5716,11 +5664,6 @@ secure-json-parse@^2.4.0, secure-json-parse@^2.5.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/secure-json-parse/-/secure-json-parse-2.7.0.tgz#5a5f9cd6ae47df23dba3151edd06855d47e09862"
   integrity sha512-6aU+Rwsezw7VR8/nyvKTx8QpWH9FrcYiXXlqC4z5d5XQBDRqtbfsRjnwGyqbi3gddNtWHuEk9OANUotL26qKUw==
-
-seedrandom@^3.0.5:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/seedrandom/-/seedrandom-3.0.5.tgz#54edc85c95222525b0c7a6f6b3543d8e0b3aa0a7"
-  integrity sha512-8OwmbklUNzwezjGInmZ+2clQmExQPvomqjL7LFqOYqtmuxRgQYqOD3mHaU+MvZn5FLUeVxVfQjwLZW/n/JFuqg==
 
 selderee@^0.11.0:
   version "0.11.0"

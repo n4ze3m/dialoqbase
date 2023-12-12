@@ -155,10 +155,6 @@ export default defineConfig({
             text: "Jina",
             link: "/guide/ai-providers/jina",
           },
-          {
-            text: "TensorFlow",
-            link: "/guide/ai-providers/tensorflow",
-          },
         ],
       },
     ],

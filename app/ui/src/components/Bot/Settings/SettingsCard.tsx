@@ -80,7 +80,6 @@ export const SettingsCard: React.FC<BotSettings> = ({
     },
   });
 
-  const embeddingType = Form.useWatch("embedding", form);
   const currentModel = Form.useWatch("model", form);
 
   const isStreamingSupported = (model: string) => {
@@ -220,15 +219,6 @@ export const SettingsCard: React.FC<BotSettings> = ({
                     </span>
                   }
                   name="embedding"
-                  hasFeedback={embeddingType === "tensorflow"}
-                  help={
-                    embeddingType === "tensorflow"
-                      ? "TensorFlow embeddings can be slow and memory-intensive."
-                      : null
-                  }
-                  validateStatus={
-                    embeddingType === "tensorflow" ? "warning" : undefined
-                  }
                 >
                   <Select
                     disabled

@@ -1,19 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { GetAPIIntergationRequest } from "./type";
-import { randomBytes } from "crypto";
+import { generateAPIKey } from "../../../../../../utils/api";
 
-const generateAPIKey = (length = 32) => {
-  const charset =
-    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  const bytes = randomBytes(length);
-  let result = "";
-
-  for (let i = 0; i < length; i++) {
-    result += charset.charAt(bytes[i] % charset.length);
-  }
-
-  return result;
-};
 
 export const getAPIIntegrationHandler = async (
   request: FastifyRequest<GetAPIIntergationRequest>,
