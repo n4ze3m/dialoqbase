@@ -17,11 +17,11 @@ export const QueryBoundaries = ({
 );
 
 const LoadingView = () => (
-  <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-white opacity-75 flex flex-col items-center justify-center">
+  <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-white opacity-75 flex flex-col items-center justify-center dark:bg-black">
     <div role="status">
       <svg
         aria-hidden="true"
-        className="w-8 h-8 mr-2 text-blue-200 animate-spin fill-[#3021fc]"
+        className="w-8 h-8 mr-2 text-blue-200 animate-spin fill-[#3021fc] "
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +36,7 @@ const LoadingView = () => (
         />
       </svg>
     </div>
-    <h2 className="text-center text-green-900 text-xl font-semibold">
+    <h2 className="text-center text-gray-900 text-xl font-semibold dark:text-white">
       Loading...
     </h2>
   </div>

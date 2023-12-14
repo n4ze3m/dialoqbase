@@ -26,10 +26,10 @@ export const PlaygroundChat = () => {
     }
   });
   return (
-    <div className="grow  flex flex-col md:translate-x-0 transition-transform duration-300 ease-in-out">
+    <div className=" flex flex-col md:translate-x-0 transition-transform duration-300 ease-in-out">
       <div className="relative w-full transition-width flex flex-col overflow-hidden items-stretch flex-1">
         <div className="flex-1">
-          <div className="h-full dark:bg-gray-800">
+          <div className="h-full ">
             <div className="">
               <div className="grow">
                 {messages.length === 0 && (

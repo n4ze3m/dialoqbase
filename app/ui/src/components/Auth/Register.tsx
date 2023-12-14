@@ -1,4 +1,4 @@
-import { Form, notification } from "antd";
+import { Form, Input, notification } from "antd";
 import api from "../../services/api";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -61,19 +61,21 @@ export const AuthRegister = () => {
   return (
     <>
       {" "}
-      <div className="flex min-h-full bg-white flex-1">
+      <div className="flex min-h-full bg-white flex-1 dark:bg-black">
         <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
           <div className="mx-auto w-full max-w-sm lg:w-96">
             <div>
               <div className="focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-700 flex items-center">
                 <img className="h-8 w-auto" src="/logo.png" alt="Dialoqbase" />
-                <span className="text-lg font-bold">Dialoqbase</span>
+                <span className="text-lg font-bold dark:text-white">
+                  Dialoqbase
+                </span>
                 <span className="inline-block flex-shrink-0 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 ml-2">
                   {/* @ts-ignore */}
                   {`v${__APP_VERSION__}`}
                 </span>
               </div>
-              <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">
+              <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white">
                 Create an account
               </h2>
             </div>
@@ -89,11 +91,7 @@ export const AuthRegister = () => {
                   {" "}
                   <Form.Item
                     name="username"
-                    label={
-                      <label className="block text-sm font-medium leading-6 text-gray-900">
-                        Username
-                      </label>
-                    }
+                    label={"Username"}
                     rules={[
                       {
                         required: true,
@@ -101,19 +99,15 @@ export const AuthRegister = () => {
                       },
                     ]}
                   >
-                    <input
+                    <Input
+                      size="large"
                       autoComplete="username"
                       placeholder="Username"
-                      className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset  sm:text-sm sm:leading-6 px-3"
                     />
                   </Form.Item>
                   <Form.Item
                     name="email"
-                    label={
-                      <label className="block text-sm font-medium leading-6 text-gray-900">
-                        Email
-                      </label>
-                    }
+                    label={"Email"}
                     rules={[
                       {
                         required: true,
@@ -121,19 +115,16 @@ export const AuthRegister = () => {
                       },
                     ]}
                   >
-                    <input
+                    <Input
+                      size="large"
+                      type="email"
                       autoComplete="email"
                       placeholder="Email"
-                      className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset  sm:text-sm sm:leading-6 px-3"
                     />
                   </Form.Item>
                   <Form.Item
                     name="password"
-                    label={
-                      <label className="block text-sm font-medium leading-6 text-gray-900">
-                        Password
-                      </label>
-                    }
+                    label={"Password"}
                     rules={[
                       {
                         required: true,
@@ -141,11 +132,10 @@ export const AuthRegister = () => {
                       },
                     ]}
                   >
-                    <input
+                    <Input.Password
+                      size="large"
                       autoComplete="current-password"
                       placeholder="Password"
-                      type="password"
-                      className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3"
                     />
                   </Form.Item>
                   <div>
@@ -172,7 +162,7 @@ export const AuthRegister = () => {
           </div>
         </div>
         <div className="relative hidden w-0 flex-1 lg:block">
-          <div className="absolute h-full w-full object-cover rounded-sm bg-gradient-to-r from-sky-400 to-blue-500"></div>
+          <div className="absolute h-full w-full object-cover rounded-sm bg-gradient-to-r from-sky-400 to-blue-500 dark:from-sky-900 dark:to-gray-900"></div>
         </div>
       </div>
     </>

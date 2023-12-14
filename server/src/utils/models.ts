@@ -4,6 +4,7 @@ import { ChatGooglePaLM } from "langchain/chat_models/googlepalm";
 import { HuggingFaceInference } from "langchain/llms/hf";
 import { DialoqbaseFireworksModel } from "../models/fireworks";
 import { OpenAI } from "langchain/llms/openai";
+import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 
 export const chatModelProvider = (
   provider: string,
@@ -36,7 +37,7 @@ export const chatModelProvider = (
         ...otherFields,
       });
     case "google-bison":
-      console.log("using google-bison");
+      console.log("using google");
       return new ChatGooglePaLM({
         temperature: temperature,
         apiKey: process.env.GOOGLE_API_KEY,
@@ -76,10 +77,18 @@ export const chatModelProvider = (
           baseURL: otherFields.baseURL,
           apiKey: otherFields.apiKey || process.env.OPENAI_API_KEY,
           defaultHeaders: {
-            "HTTP-Referer": process.env.LOCAL_REFER_URL || "https://dialoqbase.n4ze3m.com/",
+            "HTTP-Referer":
+              process.env.LOCAL_REFER_URL || "https://dialoqbase.n4ze3m.com/",
             "X-Title": process.env.LOCAL_TITLE || "Dialoqbase",
           },
         },
+      });
+    case "google":
+      console.log("using google");
+      return new ChatGoogleGenerativeAI({
+        modelName: modelName,
+        maxOutputTokens: 2048,
+        apiKey: process.env.GOOGLE_API_KEY,
       });
     default:
       console.log("using default");

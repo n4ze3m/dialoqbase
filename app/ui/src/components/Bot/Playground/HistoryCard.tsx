@@ -21,9 +21,9 @@ export const PlaygroundHistoryCard = ({
       className={`flex py-2 px-2 items-center gap-3 relative rounded-md truncate hover:pr-4 group transition-opacity duration-300 ease-in-out ${
         historyId === item.id
           ? item.id === params.history_id
-            ? "bg-gray-300 dark:bg-gray-700"
-            : "bg-gray-300 dark:bg-gray-700"
-          : "bg-gray-100 dark:bg-gray-800"
+            ? "bg-gray-300 dark:bg-[#232222] dark:text-white"
+            : "bg-gray-300 dark:bg-[#232222] dark:text-white"
+          : "bg-gray-100 dark:bg-[#0a0a0a] dark:text-gray-200"
       }`}
     >
       <ChatBubbleLeftIcon className="w-5 h-5 text-gray-400 dark:text-gray-600 group-hover:text-gray-500 dark:group-hover:text-gray-400 transition-colors" />

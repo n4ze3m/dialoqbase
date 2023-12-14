@@ -142,7 +142,7 @@ and more...
 ### Embedding models
 
 - [x] OpenAI
-- [x] TensorFlow
+- [x] TensorFlow (removed)
 - [x] Hugging Face
 - [x] Cohere
 - [x] all-MiniLM-L6-v2 using [xenova/transformers.js](https://github.com/xenova/transformers.js/)

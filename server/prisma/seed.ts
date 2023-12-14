@@ -47,14 +47,32 @@ const MODELS: {
     config: "{}",
   },
   {
-    model_id:"accounts/fireworks/models/mixtral-8x7b-fw-chat",
-    name: "Mixtral MoE 8x7B Chat (Fireworks)",
-    model_type: "chat",
+    model_id: "accounts/fireworks/models/zephyr-7b-beta",
+    name: "Zephyr 7B Beta (Fireworks)",
+    model_type: "instruct",
     stream_available: true,
     model_provider: "Fireworks",
     local_model: false,
     config: "{}",
-  }
+  },
+  {
+    model_id: "accounts/fireworks/models/mixtral-8x7b-instruct",
+    name: "Mixtral MoE 8x7B Instruct (Fireworks)",
+    model_type: "instruct",
+    stream_available: true,
+    model_provider: "Fireworks",
+    local_model: false,
+    config: "{}",
+  },
+  {
+    model_id: "gemini-pro",
+    name: "Gemini Pro (Google)",
+    model_type: "chat",
+    stream_available: false,
+    model_provider: "Google",
+    local_model: false,
+    config: "{}",
+  },
 ];
 
 const newModels = async () => {
@@ -70,8 +88,20 @@ const newModels = async () => {
   }
 };
 
+const removeTensorflowSupport = async () => {
+  await prisma.bot.updateMany({
+    where: {
+      embedding: "tensorflow",
+    },
+    data: {
+      embedding: "transformer",
+    },
+  });
+};
+
 const main = async () => {
   await newModels();
+  await removeTensorflowSupport();
 };
 
 main()

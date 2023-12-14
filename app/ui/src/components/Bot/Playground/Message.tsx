@@ -42,7 +42,7 @@ export const PlaygroundMessage = (props: Props) => {
   return (
     <div
       className={`group w-full text-gray-800 dark:text-gray-100 border-b border-black/10 dark:border-gray-900/50 ${
-        !props.isBot ? "dark:bg-gray-800" : "bg-gray-50 dark:bg-[#444654]"
+        !props.isBot ? "dark:bg-black" : "bg-gray-50  dark:bg-[#0a0a0a]"
       }`}
     >
       <div className="text-base gap-4 md:gap-6 md:max-w-2xl lg:max-w-xl xl:max-w-3xl flex lg:px-0 m-auto w-full">
@@ -51,12 +51,12 @@ export const PlaygroundMessage = (props: Props) => {
             <div className="relative h-7 w-7 p-1 rounded-sm text-white flex items-center justify-center  text-opacity-100r">
               {props.isBot ? (
                 !props.botAvatar ? (
-                  <div className="absolute h-7 w-7 rounded-sm bg-gradient-to-r from-green-300 to-purple-400"></div>
+                  <div className="absolute h-8 w-8 rounded-full bg-gradient-to-r from-green-300 to-purple-400"></div>
                 ) : (
                   props.botAvatar
                 )
               ) : !props.userAvatar ? (
-                <div className="absolute h-7 w-7 rounded-sm bg-black/50"></div>
+                <div className="absolute h-8 w-8 rounded-full from-blue-400 to-blue-600 bg-gradient-to-r"></div>
               ) : (
                 props.userAvatar
               )}

@@ -1,4 +1,4 @@
-import { Form, notification, Select, Slider, Switch } from "antd";
+import { Form, Input, notification, Select, Slider, Switch } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../services/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -80,7 +80,6 @@ export const SettingsCard: React.FC<BotSettings> = ({
     },
   });
 
-  const embeddingType = Form.useWatch("embedding", form);
   const currentModel = Form.useWatch("model", form);
 
   const isStreamingSupported = (model: string) => {
@@ -105,8 +104,10 @@ export const SettingsCard: React.FC<BotSettings> = ({
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-xl font-semibold text-gray-900">Settings</h1>
-          <p className="mt-2 text-sm text-gray-700">
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Settings
+          </h1>
+          <p className="mt-2 text-sm text-gray-700 dark:text-gray-400">
             Configure your bot settings.
           </p>
         </div>
@@ -134,13 +135,13 @@ export const SettingsCard: React.FC<BotSettings> = ({
           layout="vertical"
           className="space-y-6 mb-6 "
         >
-          <div className="px-4 py-5 bg-white  border sm:rounded-lg sm:p-6">
+          <div className="px-4 py-5 bg-white  border sm:rounded-lg sm:p-6 dark:bg-[#0a0a0a] dark:border-[#232222]">
             <div className="md:grid md:grid-cols-3 md:gap-6">
               <div className="md:col-span-1">
-                <h3 className="text-lg font-medium leading-6 text-gray-900">
+                <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">
                   General Settings
                 </h3>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                   Bot general settings and information.
                 </p>
               </div>
@@ -155,10 +156,7 @@ export const SettingsCard: React.FC<BotSettings> = ({
                     },
                   ]}
                 >
-                  <input
-                    type="text"
-                    className="mt-1 block w-full sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-                  />
+                  <Input size="large" />
                 </Form.Item>
 
                 <Form.Item
@@ -214,21 +212,8 @@ export const SettingsCard: React.FC<BotSettings> = ({
                 </Form.Item>
 
                 <Form.Item
-                  label={
-                    <span className="font-medium text-gray-800 text-sm">
-                      Embedding model
-                    </span>
-                  }
+                  label={"Embedding Method"}
                   name="embedding"
-                  hasFeedback={embeddingType === "tensorflow"}
-                  help={
-                    embeddingType === "tensorflow"
-                      ? "TensorFlow embeddings can be slow and memory-intensive."
-                      : null
-                  }
-                  validateStatus={
-                    embeddingType === "tensorflow" ? "warning" : undefined
-                  }
                 >
                   <Select
                     disabled
@@ -238,11 +223,7 @@ export const SettingsCard: React.FC<BotSettings> = ({
                 </Form.Item>
 
                 <Form.Item
-                  label={
-                    <span className="font-medium text-gray-800 text-sm">
-                      Question Answering Prompt (System Prompt)
-                    </span>
-                  }
+                  label={"Question Answering Prompt (System Prompt)"}
                   name="qaPrompt"
                   rules={[
                     {
@@ -251,8 +232,8 @@ export const SettingsCard: React.FC<BotSettings> = ({
                     },
                   ]}
                 >
-                  <textarea
-                    className="mt-1 block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                  <Input.TextArea
+                   size="large"
                     rows={5}
                     placeholder=""
                   />
@@ -265,7 +246,7 @@ export const SettingsCard: React.FC<BotSettings> = ({
                         qaPrompt: HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT,
                       });
                     }}
-                    className="flex items-center rounded-md py-[0.4375rem] pl-2 pr-2 lg:pr-3 bg-white border text-xs"
+                    className="flex items-center rounded-md py-[0.4375rem] pl-2 pr-2 lg:pr-3 bg-white border text-xs dark:bg-[#0a0a0a] dark:border-[#232222]"
                   >
                     PROMPT WITH CONTEXT
                   </button>
@@ -276,18 +257,14 @@ export const SettingsCard: React.FC<BotSettings> = ({
                         qaPrompt: HELPFUL_ASSISTANT_WITHOUT_CONTEXT_PROMPT,
                       });
                     }}
-                    className="flex items-center rounded-md py-[0.4375rem] pl-2 pr-2 lg:pr-3 bg-white border text-xs"
+                    className="flex items-center rounded-md py-[0.4375rem] pl-2 pr-2 lg:pr-3 bg-white border text-xs dark:bg-[#0a0a0a] dark:border-[#232222]"
                   >
                     PROMPT WITHOUT CONTEXT
                   </button>
                 </div>
 
                 <Form.Item
-                  label={
-                    <span className="font-medium text-gray-800 text-sm">
-                      Question Generator Prompt
-                    </span>
-                  }
+                  label={"Question Generator Prompt"}
                   name="questionGeneratorPrompt"
                   rules={[
                     {
@@ -296,10 +273,9 @@ export const SettingsCard: React.FC<BotSettings> = ({
                     },
                   ]}
                 >
-                  <textarea
-                    className="mt-1 block w-full sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                  <Input.TextArea
+                    size="large"
                     rows={5}
-                    placeholder=""
                   />
                 </Form.Item>
 
@@ -326,9 +302,9 @@ export const SettingsCard: React.FC<BotSettings> = ({
                   help="Enter your API key here. If you don't have one, you can leave this field blank."
                   tooltip="Enter your API key to use your own chat model. Currently, only OpenAI API keys are supported."
                 >
-                  <input
-                    type="password"
-                    className="mt-1 block w-full sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                  <Input.Password
+                    size="large"
+                    placeholder="Enter your API key here"
                   />
                 </Form.Item>
               </div>
@@ -345,12 +321,12 @@ export const SettingsCard: React.FC<BotSettings> = ({
           </div>
         </Form>
 
-        <div className="bg-white border sm:rounded-lg">
+        <div className="bg-white border sm:rounded-lg dark:bg-[#0a0a0a] dark:border-[#232222]">
           <div className="px-4 py-5 sm:p-6">
-            <h3 className="text-lg font-medium leading-6 text-gray-900">
+            <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">
               Delete your bot
             </h3>
-            <div className="mt-2 max-w-xl text-sm text-gray-500">
+            <div className="mt-2 max-w-xl text-sm text-gray-500 dark:text-gray-400">
               <p>
                 This action cannot be undone. This will permanently delete your
                 bot and all of its data.
@@ -367,7 +343,7 @@ export const SettingsCard: React.FC<BotSettings> = ({
                   }
                 }}
                 type="button"
-                className="inline-flex items-center justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 font-medium text-red-700 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:text-sm"
+                className="inline-flex items-center justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 font-medium text-red-700 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:text-sm dark:bg-red-900 dark:text-red-100 dark:hover:bg-red-800 dark:focus:ring-red-900"
               >
                 {isDeleting ? "Deleting..." : "Delete bot"}
               </button>

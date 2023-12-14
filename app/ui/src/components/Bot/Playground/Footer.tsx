@@ -6,7 +6,7 @@ export default function PlaygroundFooter() {
   const [openModal, setOpenModal] = React.useState(false);
 
   return (
-    <div className="flex-shrink-0 flex flex-col items-center justify-center py-1 bg-white">
+    <div className="flex-shrink-0 flex flex-col items-center justify-center py-1 ">
       <div className="flex items-center justify-center space-x-2">
         <button
           onClick={() => setOpenModal(true)}

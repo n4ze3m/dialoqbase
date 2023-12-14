@@ -141,7 +141,6 @@ export const getCreateBotConfigHandler = async (
 
   const embeddingModel = [
     { value: "openai", label: "text-embedding-ada-002" },
-    { value: "tensorflow", label: "tensorflow (cpu)" },
     { value: "cohere", label: "Cohere" },
     {
       value: "transformer",
@@ -158,6 +157,10 @@ export const getCreateBotConfigHandler = async (
     {
       value: "jina",
       label: "jina-embeddings-v2-small-en (cpu)",
+    },
+    {
+      value: "google",
+      label: "embedding-001 (google)",
     },
   ];
 
@@ -198,7 +201,6 @@ export const getBotByIdSettingsHandler = async (
 
   const embeddingModel = [
     { value: "openai", label: "text-embedding-ada-002" },
-    { value: "tensorflow", label: "tensorflow (cpu)" },
     { value: "cohere", label: "Cohere" },
     {
       value: "transformer",
@@ -215,6 +217,10 @@ export const getBotByIdSettingsHandler = async (
     {
       value: "jina",
       label: "jina-embeddings-v2-small-en (cpu)",
+    },
+    {
+      value: "google",
+      label: "embedding-001 (google)",
     },
   ];
 

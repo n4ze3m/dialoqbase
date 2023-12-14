@@ -3,7 +3,7 @@ FROM node:18-slim as server
 WORKDIR /app
 
 RUN apt update && apt -y install g++ make python3
-RUN npm install -g node-gyp
+# RUN npm install -g node-gyp
 
 COPY ./server/ .
 
@@ -32,7 +32,7 @@ RUN yarn config set network-timeout 1200000
 
 RUN apt update && apt -y install --no-install-recommends ca-certificates git git-lfs openssh-client curl jq cmake sqlite3 openssl psmisc python3
 RUN apt -y install g++ make
-RUN npm install -g node-gyp
+# RUN npm install -g node-gyp
 RUN apt-get clean autoclean && apt-get autoremove --yes && rm -rf /var/lib/{apt,dpkg,cache,log}/
 RUN npm --no-update-notifier --no-fund --global install pnpm
 # Copy API

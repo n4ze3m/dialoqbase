@@ -1,7 +1,7 @@
 import React from "react";
 import { BotIntegrationAPI } from "../../../../@types/bot";
 import { CopyBtn } from "../../../Common/CopyBtn";
-import { Form, Select, Switch, Tooltip, notification } from "antd";
+import { Form, Input, Select, Switch, Tooltip, notification } from "antd";
 import { ArrowPathIcon, MinusIcon } from "@heroicons/react/24/outline";
 import APICodeGenerator from "./APICodeGenerator";
 import axios from "axios";
@@ -86,15 +86,16 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
 
   return (
     <div className="min-h-screen ">
-      <div className="bg-white border rounded-md p-4 max-w-screen-xl mx-auto">
+      <div className="bg-white border rounded-md p-4 max-w-screen-xl mx-auto dark:bg-[#0a0a0a] dark:border-[#232222]">
         <div className="flex mb-4">
           {/* span green [POST] tailwind */}
           <div className="flex-1">
-            <input
+            <Input
+              size="large"
               type="text"
               readOnly
               value={`${hostUrl}/bot/${data.public_url}/api`}
-              className="block w-full rounded-md border-gray-200 focus:border-sky-500 focus:ring-sky-500 sm:text-sm bg-gray-50"
+              // className="block w-full rounded-md border-gray-200 focus:border-sky-500 focus:ring-sky-500 sm:text-sm bg-gray-50"
             />
           </div>
           <div className="flex flex-row gap-2">
@@ -106,14 +107,16 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
         </div>
 
         <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="border rounded-md p-4">
-            <h6 className="text-sm font-semibold mb-2">API KEY</h6>
+          <div className="border rounded-md p-4 dark:bg-[#0a0a0a] dark:border-[#232222]">
+            <h6 className="text-sm font-semibold mb-2 dark:text-gray-300">
+              API KEY
+            </h6>
             <div className="flex flex-row mb-2">
-              <input
+              <Input
+                size="large"
                 type="text"
                 readOnly
                 value={data.api_key || ""}
-                className="block w-full rounded-md border-gray-200 focus:border-sky-500 focus:ring-sky-500 sm:text-sm bg-gray-50"
               />
               <CopyBtn showText={false} value={data.api_key || ""} />
               <Tooltip title="Regenerate API Key">
@@ -126,7 +129,9 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
               </Tooltip>
             </div>
 
-            <h6 className="text-sm font-semibold mb-2">BODY PARAMS</h6>
+            <h6 className="text-sm font-semibold mb-2 dark:text-gray-300">
+              BODY PARAMS
+            </h6>
 
             <Form
               form={form}
@@ -155,16 +160,16 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
                 ]}
                 name="message"
               >
-                <input
+                <Input
+                  size="large"
                   type="text"
                   placeholder="Enter your message here"
-                  className="block w-full rounded-md border-gray-200 focus:border-sky-500 focus:ring-sky-500 sm:text-sm bg-gray-50"
                 />
               </Form.Item>
 
               <Form.List name="history">
                 {(fields, { add, remove }) => (
-                  <div className="bg-gray-50 p-3 rounded-md border mb-6">
+                  <div className="bg-gray-50 p-3 rounded-md border mb-6 dark:bg-[#0a0a0a] dark:border-[#232222]">
                     <div className="text-sm font-semibold mb-3">
                       history
                       <span className="ml-2 text-xs text-gray-500 font-normal">
@@ -172,7 +177,10 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
                       </span>
                     </div>
                     {fields.map((field, index) => (
-                      <div key={index} className="border p-2 rounded mb-2">
+                      <div
+                        key={index}
+                        className="border p-2 rounded mb-2 dark:bg-[#0a0a0a] dark:border-[#232222]"
+                      >
                         <div className="flex flex-row justify-between">
                           <div>
                             <span className="text-sm font-semibold mb-2">
@@ -231,10 +239,9 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
                           name={[field.name, "text"]}
                           help="The text of the message. text is required for all messages."
                         >
-                          <input
-                            type="text"
+                          <Input
+                            size="large"
                             placeholder="Enter your message here"
-                            className="block w-full rounded-md border-gray-200 focus:border-sky-500 focus:ring-sky-500 sm:text-sm bg-gray-50"
                           />
                         </Form.Item>
                       </div>
@@ -248,7 +255,7 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
                           text: "",
                         })
                       }
-                      className="flex items-center justify-center p-2 transition-colors duration-200 rounded hover:bg-gray-100 focus:outline-none focus:ring focus:ring-opacity-50"
+                      className="flex items-center justify-center p-2 transition-colors duration-200 rounded hover:bg-gray-100 focus:outline-none focus:ring focus:ring-opacity-50 dark:hover:bg-gray-800 dark:focus:ring-gray-900"
                     >
                       <span className="text-blue-800">Add history</span>
                     </button>
@@ -282,7 +289,7 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
             </Form>
           </div>
 
-          <div className="border rounded-md p-4">
+          <div className="border rounded-md p-4 dark:bg-[#0a0a0a] dark:border-[#232222]">
             <APICodeGenerator
               api={`${hostUrl}/bot/${data.public_url}/api`}
               xApiKey={data.api_key || ""}

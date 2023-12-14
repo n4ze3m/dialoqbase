@@ -1,7 +1,5 @@
 export const apiKeyValidaton = (embeddingsType: string) => {
   switch (embeddingsType.toLocaleLowerCase()) {
-    case "tensorflow":
-      return true;
     case "transformer":
     case "jina":
       return true;

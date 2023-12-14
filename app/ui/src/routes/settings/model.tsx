@@ -7,6 +7,7 @@ import {
   notification,
   Select,
   Tooltip,
+  Input,
 } from "antd";
 import React from "react";
 import api from "../../services/api";
@@ -154,7 +155,7 @@ export default function SettingsModelRoot() {
           <div>
             <div>
               <div className="flex justify-between">
-                <h2 className="text-base font-semibold leading-7 text-gray-900">
+                <h2 className="text-base font-semibold leading-7 text-gray-900 dark:text-white">
                   All Models
                 </h2>
                 <button
@@ -165,7 +166,7 @@ export default function SettingsModelRoot() {
                   Add New Model
                 </button>
               </div>
-              <p className="mt-1 text-sm leading-6 text-gray-500">
+              <p className="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-200">
                 Manage all the AI models in your organization.
               </p>
 
@@ -305,18 +306,18 @@ export default function SettingsModelRoot() {
                     },
                   ]}
                 >
-                  <input
+                  <Input
+                    size="large"
                     type="url"
-                    className="border border-gray-200 rounded-md px-3 py-2 w-full"
                     placeholder="http://localhost:5000/v1"
                   />
                 </Form.Item>
 
                 <Form.Item name="api_key" label="API Key (Optional)">
-                  <input
+                  <Input.Password
+                    size="large"
                     type="text"
-                    className="border border-gray-200 rounded-md px-3 py-2 w-full"
-                    placeholder="API Key (Optional)"
+                    placeholder="Enter API Key (Optional)"
                   />
                 </Form.Item>
 
@@ -351,11 +352,7 @@ export default function SettingsModelRoot() {
                   name="name"
                   label="Model Name"
                 >
-                  <input
-                    type="text"
-                    className="border border-gray-200 rounded-md px-3 py-2 w-full"
-                    placeholder="Enter a model name"
-                  />
+                  <Input size="large" placeholder="Enter a model name" />
                 </Form.Item>
 
                 <Form.Item
