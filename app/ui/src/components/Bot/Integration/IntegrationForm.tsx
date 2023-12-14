@@ -1,4 +1,4 @@
-import { Divider, Form, notification } from "antd";
+import { Divider, Form, Input, notification } from "antd";
 import { Switch } from "@headlessui/react";
 import React from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -152,12 +152,12 @@ export const IntegrationForm: React.FC<Props> = ({ onClose, data }) => {
               <Form.Item key={index} label={field.title} name={field.name}>
                 <div className="flex">
                   <div className="relative flex-grow focus-within:z-10">
-                    <input
+                    <Input
+                      size="large"
                       readOnly
                       value={`${hostUrl}/api/v1/bot/integration/${params.id}/whatsapp`}
                       type={field.inputType}
                       placeholder={field.help}
-                      className="border border-gray-300 rounded-md text-gray-400 px-4 py-2 w-full focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                     />
                   </div>
                   <div className="flex-shrink-0 ml-3">
@@ -200,10 +200,10 @@ export const IntegrationForm: React.FC<Props> = ({ onClose, data }) => {
               name={field.name}
               rules={[{ required: true, message: field.requiredMessage }]}
             >
-              <input
+              <Input
+                size="large"
                 type={field.inputType}
                 placeholder={field.help}
-                className="border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </Form.Item>
           );

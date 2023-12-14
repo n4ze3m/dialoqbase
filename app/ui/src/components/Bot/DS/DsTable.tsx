@@ -109,8 +109,9 @@ export const DsTable = ({
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-xl font-semibold text-gray-900">Data Sources</h1>
-          <p className="mt-2 text-sm text-gray-700">
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Data Sources</h1>
+          <p className="mt-2 text-sm text-gray-700 dark:text-gray-400">
             List of data sources that are currently being used by your bot.
           </p>
         </div>
@@ -127,35 +128,35 @@ export const DsTable = ({
       <div className="mt-8 flex flex-col">
         <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-            <div className="overflow-hidden bg-white ring-1 ring-black ring-opacity-5 md:rounded-lg">
+            <div className="overflow-hidden bg-white ring-1 ring-black ring-opacity-5 md:rounded-lg dark:bg-[#0a0a0a]">
               {data.length === 0 && (
                 <Empty description="No data sources found." className="m-8" />
               )}
               {data.length > 0 && (
                 <table className="min-w-full divide-y divide-gray-300">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-gray-50 dark:bg-[#141414]">
                     <tr>
                       <th
                         scope="col"
-                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 dark:text-gray-200"
                       >
                         Type
                       </th>
                       <th
                         scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200"
                       >
                         Content
                       </th>
                       <th
                         scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200"
                       >
                         Status
                       </th>
                       <th
                         scope="col"
-                        className="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                        className="relative py-3.5 pl-3 pr-4 sm:pr-6 text-right text-sm font-semibold text-gray-900 dark:text-gray-200"
                       >
                         <span className="sr-only">Re-fetch</span>
 
@@ -163,7 +164,7 @@ export const DsTable = ({
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200 bg-white">
+                  <tbody className="divide-y divide-gray-200 bg-white dark:bg-[#0a0a0a] dark:divide-gray-800">
                     {data.map((source) => (
                       <tr key={source.id}>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">

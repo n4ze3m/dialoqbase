@@ -1,4 +1,4 @@
-import { Form, Switch, notification } from "antd";
+import { Form, InputNumber, Switch, notification } from "antd";
 import React from "react";
 import api from "../../services/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -55,14 +55,14 @@ export default function SettingsApplicationRoot() {
       {status === "success" && (
         <>
           <div>
-            <h2 className="text-base font-semibold leading-7 text-gray-900">
+          <h2 className="text-base font-semibold leading-7 text-gray-900 dark:text-white">
               Application Settings
             </h2>
-            <p className="mt-1 text-sm leading-6 text-gray-500">
+            <p className="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-200">
               Configure your application settings
             </p>
 
-            <dl className="mt-6 space-y-6 divide-y divide-gray-100  border-gray-200 text-sm leading-6 ">
+            <dl className="mt-6 space-y-6 divide-y divide-gray-100  border-gray-200 text-sm leading-6 dark:text-gray-200">
               <div className="mt-5 md:col-span-2 md:mt-0">
                 <Form
                   form={form}
@@ -73,7 +73,7 @@ export default function SettingsApplicationRoot() {
                   onFinish={updateApplicationSettings}
                 >
                   <div className="sm:overflow-hidden ">
-                    <div className="space-y-6 border-t border rounded-t-md  bg-white px-4 py-5 sm:p-6">
+                    <div className="space-y-6 border-t border rounded-t-md  bg-white px-4 py-5 sm:p-6 dark:bg-black dark:border-gray-800">
                       <Form.Item
                         label="No of bots per user"
                         name="noOfBotsPerUser"
@@ -84,9 +84,9 @@ export default function SettingsApplicationRoot() {
                           },
                         ]}
                       >
-                         <input
-                          type="number"
-                          className="mt-1 block w-full border-gray-300 rounded-md  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                         <InputNumber
+                         size="large"
+                         style={{ width: "100%" }}
                         />
                       </Form.Item>
                       <Form.Item
@@ -116,7 +116,7 @@ export default function SettingsApplicationRoot() {
                         <Switch />
                       </Form.Item>
                     </div>
-                    <div className="bg-gray-50 border-x border-b rounded-b-md rounded-x-md px-4 py-3 text-right sm:px-6">
+                    <div className="bg-gray-50 border-x border-b rounded-b-md rounded-x-md px-4 py-3 text-right sm:px-6 dark:bg-[#141414] dark:border-gray-800">
                       <button
                         disabled={isLoading}
                         type="submit"

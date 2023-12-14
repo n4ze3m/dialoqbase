@@ -119,7 +119,7 @@ export default function PlaygroundSettings({ close }: { close: () => void }) {
               >
                 <Form.Item label="Speech to Text Languages" name="language">
                   <select
-                    className="w-full h-10 px-3 text-base placeholder-gray-600 border rounded-lg focus:shadow-outline"
+                    className="w-full h-10 px-3 text-base placeholder-gray-600 border rounded-lg focus:shadow-outline dark:bg-[#0a0a0a] dark:border-[#232222]"
                     name="language"
                     id="language"
                   >
@@ -133,7 +133,7 @@ export default function PlaygroundSettings({ close }: { close: () => void }) {
                 <Form.Item>
                   <button
                     disabled={isSavingSpeechToText}
-                    className="w-full h-10 placeholder-gray-600 border rounded-lg focus:shadow-outline  transition-all duration-200  bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    className="w-full h-10 placeholder-gray-600 border rounded-lg focus:shadow-outline  transition-all duration-200  bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:border-gray-800"
                   >
                     {isSavingSpeechToText ? "Saving..." : "Save"}
                   </button>
@@ -169,7 +169,7 @@ export default function PlaygroundSettings({ close }: { close: () => void }) {
                 name="textToSpeechType"
               >
                 <select
-                  className="w-full h-10 px-3 text-base placeholder-gray-600 border rounded-lg focus:shadow-outline"
+                  className="w-full h-10 px-3 text-base placeholder-gray-600 border rounded-lg focus:shadow-outline dark:bg-[#0a0a0a] dark:border-[#232222]"
                   name="textToSpeechType"
                   id="textToSpeechType"
                 >
@@ -193,7 +193,7 @@ export default function PlaygroundSettings({ close }: { close: () => void }) {
                         ]}
                       >
                         <select
-                          className="w-full h-10 px-3 text-base placeholder-gray-600 border rounded-lg focus:shadow-outline"
+                          className="w-full h-10 px-3 text-base placeholder-gray-600 border rounded-lg focus:shadow-outline dark:bg-[#0a0a0a] dark:border-[#232222]"
                           name="webApiDefaultVoice"
                           id="webApiDefaultVoice"
                         >
@@ -261,7 +261,7 @@ export default function PlaygroundSettings({ close }: { close: () => void }) {
                         ]}
                       >
                         <select
-                          className="w-full h-10 px-3 text-base placeholder-gray-600 border rounded-lg focus:shadow-outline"
+                          className="w-full h-10 px-3 text-base placeholder-gray-600 border rounded-lg focus:shadow-outline dark:bg-[#0a0a0a] dark:border-[#232222]"
                           name="elevenLabsDefaultVoice"
                           id="elevenLabsDefaultVoice"
                         >
@@ -280,7 +280,7 @@ export default function PlaygroundSettings({ close }: { close: () => void }) {
                 <button
                   type="submit"
                   disabled={isSavingTextToSpeech}
-                  className="w-full h-10 placeholder-gray-600 border rounded-lg focus:shadow-outline  transition-all duration-200  bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="w-full h-10 placeholder-gray-600 border rounded-lg focus:shadow-outline  transition-all duration-200  bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:border-gray-800"
                 >
                   {isSavingTextToSpeech ? "Saving..." : "Save"}
                 </button>

@@ -1,4 +1,4 @@
-import { Form, notification } from "antd";
+import { Form, Input, notification } from "antd";
 import React from "react";
 import api from "../../services/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -93,14 +93,14 @@ export default function SettingsRoot() {
       {status === "success" && (
         <>
           <div>
-            <h2 className="text-base font-semibold leading-7 text-gray-900">
+            <h2 className="text-base font-semibold leading-7 text-gray-900 dark:text-white">
               Profile
             </h2>
-            <p className="mt-1 text-sm leading-6 text-gray-500">
+            <p className="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-200">
               Update your profile details.
             </p>
 
-            <dl className="mt-6 space-y-6 divide-y divide-gray-100  border-gray-200 text-sm leading-6 ">
+            <dl className="mt-6 space-y-6 divide-y divide-gray-100  border-gray-200 text-sm leading-6 dark:text-gray-200">
               <div className="mt-5 md:col-span-2 md:mt-0">
                 <Form
                   form={form}
@@ -111,7 +111,7 @@ export default function SettingsRoot() {
                   onFinish={updateProfile}
                 >
                   <div className="sm:overflow-hidden ">
-                    <div className="space-y-6 border-t border rounded-t-md  bg-white px-4 py-5 sm:p-6">
+                    <div className="space-y-6 border-t border rounded-t-md  bg-white px-4 py-5 sm:p-6 dark:bg-black dark:border-gray-800">
                       <Form.Item
                         label="Username"
                         name="username"
@@ -122,10 +122,7 @@ export default function SettingsRoot() {
                           },
                         ]}
                       >
-                        <input
-                          type="text"
-                          className="mt-1 block w-full border-gray-300 rounded-md  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        />
+                        <Input size="large" type="text" />
                       </Form.Item>
                       <Form.Item
                         label="Email"
@@ -137,13 +134,14 @@ export default function SettingsRoot() {
                           },
                         ]}
                       >
-                        <input
+                        <Input
+                          size="large"
                           type="email"
                           className="mt-1 block w-full border-gray-300 rounded-md  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                       </Form.Item>
                     </div>
-                    <div className="bg-gray-50 border-x border-b rounded-b-md rounded-x-md px-4 py-3 text-right sm:px-6">
+                    <div className="bg-gray-50 border-x border-b rounded-b-md rounded-x-md px-4 py-3 text-right sm:px-6 dark:bg-[#141414] dark:border-gray-800">
                       <button
                         disabled={isLoading}
                         type="submit"
@@ -159,18 +157,18 @@ export default function SettingsRoot() {
           </div>
 
           <div>
-            <h2 className="text-base font-semibold leading-7 text-gray-900">
+            <h2 className="text-base font-semibold leading-7 text-gray-900 dark:text-white">
               Password
             </h2>
-            <p className="mt-1 text-sm leading-6 text-gray-500">
+            <p className="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-200">
               Update your password.
             </p>
 
-            <dl className="mt-6 space-y-6 divide-y divide-gray-100  border-gray-200 text-sm leading-6 ">
+            <dl className="mt-6 space-y-6 divide-y divide-gray-100  border-gray-200 text-sm leading-6 dark:text-gray-200">
               <div className="mt-5 md:col-span-2 md:mt-0">
                 <Form layout="vertical" onFinish={updatePassowrd}>
                   <div className="overflow-hidden sm:rounded-md">
-                    <div className="bg-white border-t border rounded-t-md  px-4 py-5 sm:p-6">
+                    <div className="bg-white border-t border rounded-t-md  px-4 py-5 sm:p-6 dark:bg-black dark:border-gray-800">
                       <Form.Item
                         label="Current Password"
                         name="oldPassword"
@@ -181,10 +179,7 @@ export default function SettingsRoot() {
                           },
                         ]}
                       >
-                        <input
-                          type="password"
-                          className="mt-1 block w-full border-gray-300 rounded-md  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        />
+                        <Input.Password size="large" type="password" />
                       </Form.Item>
                       <Form.Item
                         label="New Password"
@@ -196,13 +191,10 @@ export default function SettingsRoot() {
                           },
                         ]}
                       >
-                        <input
-                          type="password"
-                          className="mt-1 block w-full border-gray-300 rounded-md  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        />
+                        <Input.Password size="large" />
                       </Form.Item>
                     </div>
-                    <div className="bg-gray-50 border-x border-b rounded-b-md rounded-x-md  px-4 py-3 text-right sm:px-6">
+                    <div className="bg-gray-50 border-x border-b rounded-b-md rounded-x-md  px-4 py-3 text-right sm:px-6 dark:bg-[#141414] dark:border-gray-800">
                       <button
                         disabled={isPasswordLoading}
                         type="submit"

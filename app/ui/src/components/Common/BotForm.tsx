@@ -3,6 +3,8 @@ import {
   Divider,
   Form,
   FormInstance,
+  Input,
+  InputNumber,
   Row,
   Select,
   Skeleton,
@@ -62,11 +64,7 @@ export const BotForm = ({
             },
           ]}
         >
-          <input
-            type="url"
-            placeholder="Enter the webpage URL"
-            className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-          />
+          <Input type="url" placeholder="Enter the webpage URL" />
         </Form.Item>
       ),
     },
@@ -85,7 +83,7 @@ export const BotForm = ({
             },
           ]}
         >
-          <textarea
+          <Input.TextArea
             placeholder="Enter the text"
             className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
           />
@@ -201,11 +199,7 @@ export const BotForm = ({
               },
             ]}
           >
-            <input
-              type="url"
-              placeholder="Enter the website URL"
-              className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-            />
+            <Input type="url" placeholder="Enter the website URL" />
           </Form.Item>
           <Form.Item
             name="maxDepth"
@@ -217,10 +211,9 @@ export const BotForm = ({
               },
             ]}
           >
-            <input
-              type="number"
+            <InputNumber
               placeholder="Enter the max depth"
-              className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+              style={{ width: "100%" }}
             />
           </Form.Item>
 
@@ -234,10 +227,9 @@ export const BotForm = ({
               },
             ]}
           >
-            <input
-              type="number"
+            <InputNumber
               placeholder="Enter the max depth"
-              className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+              style={{ width: "100%" }}
             />
           </Form.Item>
 
@@ -278,11 +270,7 @@ export const BotForm = ({
               },
             ]}
           >
-            <input
-              type="url"
-              placeholder="Enter the github repo URL"
-              className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-            />
+            <Input type="url" placeholder="Enter the github repo URL" />
           </Form.Item>
           <Row gutter={16}>
             <Col span={12}>
@@ -296,11 +284,7 @@ export const BotForm = ({
                   },
                 ]}
               >
-                <input
-                  type="text"
-                  placeholder="Enter the branch"
-                  className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-                />
+                <Input placeholder="Enter the branch" />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -347,11 +331,7 @@ export const BotForm = ({
               },
             ]}
           >
-            <input
-              type="url"
-              placeholder="Enter the youtube URL"
-              className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-            />
+            <Input type="url" placeholder="Enter the youtube URL" />
           </Form.Item>
 
           <p className="text-sm text-gray-500">
@@ -388,7 +368,6 @@ export const BotForm = ({
                 ]}
               >
                 <Select
-                  size="large"
                   options={[
                     {
                       label: "GET",
@@ -416,11 +395,7 @@ export const BotForm = ({
                   },
                 ]}
               >
-                <input
-                  type="url"
-                  placeholder="Enter the REST API URL"
-                  className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-                />
+                <Input type="url" placeholder="Enter the REST API URL" />
               </Form.Item>
             </Col>
           </Row>
@@ -442,11 +417,7 @@ export const BotForm = ({
             },
           ]}
         >
-          <input
-            type="url"
-            placeholder="Enter the sitemap URL"
-            className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-          />
+          <Input type="url" placeholder="Enter the sitemap URL" />
         </Form.Item>
       ),
     },
@@ -485,7 +456,7 @@ export const BotForm = ({
               setSelectedSource(e);
             }}
           >
-            <RadioGroup.Label className="text-base font-medium text-gray-800">
+            <RadioGroup.Label className="text-base font-medium text-gray-800 dark:text-gray-200">
               Select a data source
             </RadioGroup.Label>
 
@@ -496,9 +467,9 @@ export const BotForm = ({
                   value={source}
                   className={({ checked, active }) =>
                     classNames(
-                      checked ? "border-transparent" : "border-gray-300",
-                      active ? "border-indigo-500 ring-2 ring-indigo-500" : "",
-                      "relative  items-center justify-center flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
+                      checked ? "border-transparent" : "border-gray-300 dark:border-gray-700",
+                      active ? "border-indigo-500 ring-0 ring-indigo-500 dark:border-gray-700 dark:ring-gray-900" : "",
+                      "relative  items-center justify-center flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none dark:bg-[#141414]"
                     )
                   }
                 >
@@ -507,7 +478,7 @@ export const BotForm = ({
                       <span className="flex-shrink-0 flex items-center justify-centerrounded-lg">
                         <RadioGroup.Label
                           as="span"
-                          className="block text-sm font-medium text-gray-900"
+                          className="block text-sm font-medium text-gray-900 dark:text-gray-200"
                         >
                           <source.icon
                             className="h-6 w-6 mr-3"
@@ -538,10 +509,7 @@ export const BotForm = ({
             <Row gutter={24}>
               <Col span={12}>
                 <Form.Item name={["options", "headers"]} label="Headers">
-                  <textarea
-                    placeholder="Enter the headers"
-                    className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-                  />
+                  <Input.TextArea placeholder="Enter the headers" />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -555,10 +523,7 @@ export const BotForm = ({
                     },
                   ]}
                 >
-                  <textarea
-                    placeholder="Enter the body"
-                    className=" block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-                  />
+                  <Input.TextArea placeholder="Enter the body" />
                 </Form.Item>
               </Col>
             </Row>
@@ -571,7 +536,7 @@ export const BotForm = ({
           <Form.Item
             hidden={!showEmbeddingAndModels}
             label={
-              <span className="font-medium text-gray-800 text-sm">
+              <span className="font-medium text-gray-800 text-sm dark:text-gray-200">
                 Chat Model
               </span>
             }
@@ -585,7 +550,7 @@ export const BotForm = ({
           <Form.Item
             hidden={!showEmbeddingAndModels}
             label={
-              <span className="font-medium text-gray-800 text-sm">
+              <span className="font-medium text-gray-800 text-sm dark:text-gray-200">
                 Embedding model
               </span>
             }

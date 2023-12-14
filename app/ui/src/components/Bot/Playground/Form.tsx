@@ -99,7 +99,7 @@ export const PlaygroundgForm = () => {
   };
 
   return (
-    <div className="p-3 md:p-6 md:bg-white md:dark:bg-[#444654] md:border md:rounded-t-xl dark:border-zinc-500  border-black/10 dark:border-gray-900/50">
+    <div className="p-3 md:p-6 md:bg-white md:dark:bg-[#0a0a0a] md:border md:rounded-t-xl   border-black/10 dark:border-gray-900/50">
       <div className="flex-grow space-y-6 ">
         <div className="flex">
           <form
@@ -110,7 +110,7 @@ export const PlaygroundgForm = () => {
             })}
             className="shrink-0 flex-grow  flex items-center "
           >
-            <div className="flex items-center p-2 rounded-full border  bg-gray-100 w-full dark:bg-gray-800 dark:border-[#444654]">
+            <div className="flex items-center p-2 rounded-full border  bg-gray-100 w-full dark:bg-black dark:border-gray-800">
               <textarea
                 // disabled={isSendinhg}
                 onKeyDown={(e) => {
@@ -194,6 +194,11 @@ export const PlaygroundgForm = () => {
             </div>
           </form>
         </div>
+        {/* <div className="text-center text-xs text-gray-500 dark:text-gray-400">
+          <span className="inline-block">
+            {"LLM can make mistakes, please verify the answer always."}
+          </span>
+        </div> */}
       </div>
     </div>
   );

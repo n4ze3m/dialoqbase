@@ -28,22 +28,22 @@ export const DashboardGrid = () => {
         <Empty description="No bots created yet" />
       )}
       {status === "success" && data.length > 0 && (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="grid grid-cols-1 mt-6 gap-4 sm:grid-cols-3">
           {data.map((bot: any) => (
             <Link
               to={`/bot/${bot.id}`}
               className="flex rounded-md hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
               key={bot.id}
             >
-              <div className="w-full truncate rounded-md border border-gray-200 bg-white">
+              <div className="w-full truncate rounded-md border border-gray-200 bg-white dark:bg-[#0a0a0a] dark:border-[#232222]">
                 <div className="flex flex-1 items-center justify-between ">
                   <div className="flex-1 truncate px-4 py-4">
-                    <h3 className="text-xl font-semibold text-gray-900 hover:text-gray-600 flex-shrink truncate">
+                    <h3 className="text-xl font-semibold text-gray-900 hover:text-gray-600 flex-shrink truncate dark:text-gray-200 dark:hover:text-gray-300">
                       {bot.name}
                     </h3>
                     <div className="w-full">
                       <div className="flex items-end justify-between">
-                        <span className="text-xs lowercase text-scale-1000 text-gray-600">
+                        <span className="text-xs lowercase text-scale-1000 text-gray-600 dark:text-gray-400">
                           {bot.model.replace("-dbase", "")}
                         </span>
                       </div>
@@ -52,7 +52,7 @@ export const DashboardGrid = () => {
                   <div className="flex-shrink-0 pr-2">
                     <button
                       type="button"
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-full  bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-1 focus:ring-indigo-500  dark:text-white dark:hover:text-gray-300 dark:focus:ring-gray-900"
                     >
                       <span className="sr-only">Open options</span>
                       <ChevronRightIcon
@@ -63,11 +63,11 @@ export const DashboardGrid = () => {
                   </div>
                 </div>
 
-                <div className="px-4 my-3 flex flex-wrap gap-2 text-gray-500 text-xs">
+                <div className="px-4 my-3 flex flex-wrap gap-2 text-gray-500 text-xs dark:text-gray-400">
                   {bot.source.map((source: any) => (
-                    <span
-                    title={`${source.type} source`}
-                    >{sources[source.type as keyof typeof sources]}</span>
+                    <span title={`${source.type} source`}>
+                      {sources[source.type as keyof typeof sources]}
+                    </span>
                   ))}
                 </div>
               </div>

@@ -19,8 +19,9 @@ export const AppearanceBody = (props: Props) => {
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-xl font-semibold text-gray-900">Appearance</h1>
-          <p className="mt-2 text-sm text-gray-700">
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
+            Appearance</h1>
+          <p className="mt-2 text-sm text-gray-700 dark:text-gray-400">
             Customize the appearance of your bot.
           </p>
         </div>
@@ -29,7 +30,7 @@ export const AppearanceBody = (props: Props) => {
         <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
           <div className="grid grid-cols-1 gap-4 lg:col-span-2">
             <section aria-labelledby="section-1-title">
-              <div className="overflow-hidden rounded-lg bg-white border">
+              <div className="overflow-hidden rounded-lg bg-white border dark:bg-[#0a0a0a] dark:border-[#232222]">
                 <div className="p-6">
                   <AppearanceForm initialData={props} form={form} />
                 </div>

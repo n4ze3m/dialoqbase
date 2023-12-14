@@ -1,4 +1,4 @@
-import { Divider, Form, FormInstance, notification } from "antd";
+import { Divider, Form, FormInstance, Input, notification } from "antd";
 import { AppearanceType } from "./types";
 import { DbColorPicker } from "../../Common/DbColorPicker";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -98,10 +98,7 @@ export const AppearanceForm = ({
         label="Bot Name"
         name="bot_name"
       >
-        <input
-          type="text"
-          className="mt-1 block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-        />
+        <Input size="large" type="text" />
       </Form.Item>
 
       <Form.Item
@@ -114,10 +111,7 @@ export const AppearanceForm = ({
         label="Greeting Message"
         name="first_message"
       >
-        <input
-          type="text"
-          className="mt-1 block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-        />
+        <Input size="large" />
       </Form.Item>
 
       <Divider orientation="left">Style</Divider>

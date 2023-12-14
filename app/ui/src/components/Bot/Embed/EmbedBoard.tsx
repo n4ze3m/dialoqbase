@@ -1,5 +1,5 @@
 import { ClipboardIcon } from "@heroicons/react/24/outline";
-import { notification } from "antd";
+import { Input, notification } from "antd";
 import React from "react";
 
 type Props = {
@@ -45,20 +45,22 @@ function EmbedBoardTitle({
   description: string;
 }) {
   return (
-    <div className="px-4 py-6 sm:p-6 lg:pb-8 mb-3 bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div className="px-4 py-6 sm:p-6 lg:pb-8 mb-3 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-[#0a0a0a] dark:border-[#232222]">
       <div>
-        <h2 className="text-lg font-medium leading-6 text-gray-900">{title}</h2>
-        <p className="mt-1 text-sm text-gray-500">{description}</p>
+        <h2 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">
+          {title}</h2>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          {description}</p>
       </div>
       <div className="mt-6 flex flex-col lg:flex-row">
         <div className="flex-grow space-y-6">
           <div className="flex">
             <div className="flex-grow">
-              <input
+              <Input
+              size="large"
                 type="text"
                 readOnly
                 defaultValue={content}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
               />
             </div>
             <span className="ml-3">
@@ -71,7 +73,7 @@ function EmbedBoardTitle({
                     placement: "bottomRight",
                   });
                 }}
-                className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+                className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 dark:bg-[#232222] dark:border-[#232222] dark:text-white dark:hover:bg-[#232222] dark:focus:ring-gray-900"
               >
                 <ClipboardIcon
                   className="h-5 w-5 text-gray-500"

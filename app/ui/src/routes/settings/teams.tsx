@@ -1,4 +1,4 @@
-import { Form, Modal, Table, Tag, Tooltip, notification } from "antd";
+import { Form, Input, Modal, Table, Tag, Tooltip, notification } from "antd";
 import React from "react";
 import api from "../../services/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -116,7 +116,7 @@ export default function SettingsTeamsRoot() {
         <>
           <div>
             <div className="flex justify-between">
-              <h2 className="text-base font-semibold leading-7 text-gray-900">
+              <h2 className="text-base font-semibold leading-7 text-gray-900 dark:text-white">
                 All Users
               </h2>
               <button
@@ -127,7 +127,7 @@ export default function SettingsTeamsRoot() {
                 Add New User
               </button>
             </div>
-            <p className="mt-1 text-sm leading-6 text-gray-500">
+            <p className="mt-1 text-sm leading-6 text-gray-500 dark:text-gray-200">
               Manage all users in your Dialoqbase Application
             </p>
 
@@ -202,10 +202,7 @@ export default function SettingsTeamsRoot() {
                   },
                 ]}
               >
-                <input
-                  type="password"
-                  className="mt-1 block w-full border-gray-300 rounded-md  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                />
+                <Input.Password size="large" type="password" />
               </Form.Item>
 
               <div className="flex justify-end">
@@ -241,9 +238,8 @@ export default function SettingsTeamsRoot() {
                   },
                 ]}
               >
-                <input
-                  type="text"
-                  className="mt-1 block w-full border-gray-300 rounded-md  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                <Input
+                size="large"
                 />
               </Form.Item>
               <Form.Item
@@ -256,9 +252,9 @@ export default function SettingsTeamsRoot() {
                   },
                 ]}
               >
-                <input
+                <Input
+                size="large"  
                   type="email"
-                  className="mt-1 block w-full border-gray-300 rounded-md  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
               </Form.Item>
               <Form.Item
@@ -271,9 +267,8 @@ export default function SettingsTeamsRoot() {
                   },
                 ]}
               >
-                <input
-                  type="password"
-                  className="mt-1 block w-full border-gray-300 rounded-md  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                <Input.Password
+                size="large"
                 />
               </Form.Item>
 
