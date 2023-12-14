@@ -2,7 +2,8 @@ import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { CohereEmbeddings } from "langchain/embeddings/cohere";
 import { HuggingFaceInferenceEmbeddings } from "langchain/embeddings/hf";
 import { TransformersEmbeddings } from "../embeddings/transformer-embedding";
-import { GoogleGeckoEmbeddings } from "../embeddings/google-gecko-embedding";
+import { GooglePaLMEmbeddings } from "langchain/embeddings/googlepalm";
+import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 
 export const embeddings = (embeddingsType: string) => {
   switch (embeddingsType) {
@@ -25,7 +26,14 @@ export const embeddings = (embeddingsType: string) => {
         model: "Supabase/gte-small",
       });
     case "google-gecko":
-      return new GoogleGeckoEmbeddings();
+      return new GooglePaLMEmbeddings({
+        apiKey: process.env.GOOGLE_API_KEY!,
+        modelName: "models/embedding-gecko-001",
+      });
+    case "goolge":
+      return new GoogleGenerativeAIEmbeddings({
+        apiKey: process.env.GOOGLE_API_KEY!,
+      });
     case "jina-api":
       return new OpenAIEmbeddings({
         modelName: "jina-embeddings-v2-base-en",
@@ -47,4 +55,5 @@ export const supportedEmbeddings = [
   "google-gecko",
   "supabase",
   "jina",
+  "google"
 ];

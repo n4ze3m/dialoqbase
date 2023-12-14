@@ -51,12 +51,14 @@ export const PlaygroundMessage = (props: Props) => {
             <div className="relative h-7 w-7 p-1 rounded-sm text-white flex items-center justify-center  text-opacity-100r">
               {props.isBot ? (
                 !props.botAvatar ? (
-                  <div className="absolute h-7 w-7 rounded-full bg-gradient-to-r from-green-300 to-purple-400"></div>
+                  <div className="absolute h-8 w-8 rounded-full bg-gradient-to-r from-green-300 to-purple-400">
+                    
+                  </div>
                 ) : (
                   props.botAvatar
                 )
               ) : !props.userAvatar ? (
-                <div className="absolute h-7 w-7 rounded-full bg-black/50"></div>
+                <div className="absolute h-8 w-8 rounded-full from-blue-400 to-blue-600 bg-gradient-to-r"></div>
               ) : (
                 props.userAvatar
               )}

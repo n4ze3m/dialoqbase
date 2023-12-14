@@ -138,7 +138,6 @@ export const chatRequestHandler = async (
       retriever,
     });
 
-    console.log("sdas", history);
 
     const botResponse = await chain.invoke({
       question: sanitizedQuestion,
@@ -203,6 +202,7 @@ export const chatRequestHandler = async (
       ],
     };
   } catch (e) {
+    console.log(e);
     return {
       bot: {
         text: "There was an error processing your request.",

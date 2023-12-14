@@ -158,6 +158,10 @@ export const getCreateBotConfigHandler = async (
       value: "jina",
       label: "jina-embeddings-v2-small-en (cpu)",
     },
+    {
+      value: "google",
+      label: "embedding-001 (google)",
+    },
   ];
 
   return {
@@ -213,6 +217,10 @@ export const getBotByIdSettingsHandler = async (
     {
       value: "jina",
       label: "jina-embeddings-v2-small-en (cpu)",
+    },
+    {
+      value: "google",
+      label: "embedding-001 (google)",
     },
   ];
 
