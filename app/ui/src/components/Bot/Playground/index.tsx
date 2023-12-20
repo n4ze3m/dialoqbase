@@ -20,7 +20,7 @@ export const PlaygroundBody = () => {
             </div>
           ) : (
             <div>
-              <div>
+              <div className="md:ml-[150px]">
                 <PlaygroundChat />
               </div>
               <div>
