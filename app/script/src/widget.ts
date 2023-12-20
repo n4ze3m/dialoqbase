@@ -14,6 +14,8 @@ export function createChatWidget(
   let widgetContainerStyle: WidgetContainerStyle = widgetContainer.style;
   widgetContainerStyle.boxSizing = "border-box";
   widgetContainerStyle.height = "80vh";
+  widgetContainerStyle.maxWidth = "90vw";
+  widgetContainerStyle.maxHeight = "90vh";
   widgetContainerStyle.position = "fixed";
   widgetContainerStyle.display = "none";
   widgetContainerStyle.zIndex = "99999999";
