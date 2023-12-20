@@ -73,6 +73,15 @@ const MODELS: {
     local_model: false,
     config: "{}",
   },
+  {
+    model_id: "accounts/fireworks/models/qwen-72b-chat",
+    name: "Qwen 72b chat (Fireworks)",
+    model_type: "chat",
+    stream_available: true,
+    model_provider: "Fireworks",
+    local_model: false,
+    config: "{}",
+  },
 ];
 
 const newModels = async () => {
