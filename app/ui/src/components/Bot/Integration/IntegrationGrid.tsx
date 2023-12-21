@@ -72,7 +72,7 @@ export const IntegrationGrid: React.FC<Props> = ({ data }) => {
       {/* GRID */}
       <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {data.map((integration) => (
-          <div className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer dark:bg-[#0a0a0a] dark:border-[#232222]">
+          <div className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer dark:bg-[#0a0a0a] dark:border-[#232222]  dark:hover:bg-[#1a1a1a] dark:hover:border-[#232222] hover:bg-gray-50">
             <div
               onClick={() => {
                 setSelectedIntegration(integration);
@@ -124,7 +124,7 @@ export const IntegrationGrid: React.FC<Props> = ({ data }) => {
 
         <Link
           to={`/bot/${param.id}/embed`}
-          className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer dark:bg-[#0a0a0a] dark:border-[#232222]"
+          className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer dark:bg-[#0a0a0a] dark:border-[#232222]  dark:hover:bg-[#1a1a1a] dark:hover:border-[#232222] hover:bg-gray-50"
         >
           <div>
             <div className="mb-4">
@@ -148,10 +148,10 @@ export const IntegrationGrid: React.FC<Props> = ({ data }) => {
             </div>
           </div>
         </Link>
-
+ 
         <Link
           to={`/bot/${param.id}/integrations/api`}
-          className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer dark:bg-[#0a0a0a] dark:border-[#232222]"
+          className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer dark:bg-[#0a0a0a] dark:border-[#232222]  dark:hover:bg-[#1a1a1a] dark:hover:border-[#232222] hover:bg-gray-50"
         >
           <div>
             <div className="mb-4">

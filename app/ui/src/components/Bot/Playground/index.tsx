@@ -20,11 +20,11 @@ export const PlaygroundBody = () => {
             </div>
           ) : (
             <div>
-              <div>
+              <div className="md:ml-[150px]">
                 <PlaygroundChat />
               </div>
               <div>
-                <div className="bottom-0 w-full md:!bg-transparent md:!border-0 fixed border-t bg-white pt-2">
+                <div className="bottom-0 w-full bg-transparent border-0 fixed pt-2">
                   <div className="stretch mx-2 flex flex-row gap-3 md:mx-4 lg:mx-auto lg:max-w-2xl xl:max-w-3xl">
                     <div className="relative flex flex-col h-full flex-1 items-stretch md:flex-col">
                       <PlaygroundgForm />

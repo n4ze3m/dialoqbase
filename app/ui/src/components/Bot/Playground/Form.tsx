@@ -97,9 +97,9 @@ export const PlaygroundgForm = () => {
       textarea.style.height = "auto";
     }
   };
-
+ 
   return (
-    <div className="p-3 md:p-6 md:bg-white md:dark:bg-[#0a0a0a] md:border md:rounded-t-xl   border-black/10 dark:border-gray-900/50">
+    <div className="p-3 md:p-6 md:bg-white dark:bg-[#0a0a0a] border rounded-t-xl   border-black/10 dark:border-gray-900/50">
       <div className="flex-grow space-y-6 ">
         <div className="flex">
           <form
