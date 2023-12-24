@@ -2,6 +2,14 @@ import { FastifySchema } from "fastify";
 import { SUPPORTED_SOURCE_TYPES } from "../../../../../utils/datasource";
 
 export const createBotSchema: FastifySchema = {
+  tags: ["Bot"],
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
   body: {
     type: "object",
     properties: {
@@ -35,6 +43,14 @@ export const createBotSchema: FastifySchema = {
 };
 
 export const getBotByIdSchema: FastifySchema = {
+  tags: ["Bot"],
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
   params: {
     type: "object",
     required: ["id"],
@@ -47,6 +63,14 @@ export const getBotByIdSchema: FastifySchema = {
 };
 
 export const addNewSourceByIdSchema: FastifySchema = {
+  tags: ["Bot"],
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
   params: {
     type: "object",
     required: ["id"],
@@ -82,6 +106,14 @@ export const addNewSourceByIdSchema: FastifySchema = {
 };
 
 export const updateBotByIdSchema: FastifySchema = {
+  tags: ["Bot"],
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
   params: {
     type: "object",
     required: ["id"],
@@ -127,7 +159,7 @@ export const updateBotByIdSchema: FastifySchema = {
       },
       bot_model_api_key: {
         type: "string",
-      }
+      },
     },
   },
 };

@@ -21,7 +21,7 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     {
       schema: userLoginSchema,
     },
-    userLoginHandler,
+    userLoginHandler
   );
 
   fastify.post(
@@ -30,7 +30,7 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       schema: updateProfileSchema,
       onRequest: [fastify.authenticate],
     },
-    updateProfileHandler,
+    updateProfileHandler
   );
 
   fastify.post(
@@ -39,7 +39,7 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       schema: updatePasswordSchema,
       onRequest: [fastify.authenticate],
     },
-    updatePasswordHandler,
+    updatePasswordHandler
   );
 
   fastify.get(
@@ -47,7 +47,7 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     {
       schema: isRegisterationAllowedSchema,
     },
-    isRegisterationAllowedHandler,
+    isRegisterationAllowedHandler
   );
 
   fastify.post(
@@ -55,25 +55,47 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     {
       schema: userRegisterSchema,
     },
-    registerUserHandler,
+    registerUserHandler
   );
 
   fastify.get(
     "/is-admin",
     {
       onRequest: [fastify.authenticate],
+      schema: {
+        tags: ["User"],
+        summary: "Check if user is admin",
+        headers: {
+          type: "object",
+          properties: {
+            Authorization: { type: "string" },
+          },
+          required: ["Authorization"],
+        },
+      },
     },
     async (request, reply) => {
       reply.send({ is_admin: request.user.is_admin });
-    },
+    }
   );
 
   fastify.get(
     "/me",
     {
       onRequest: [fastify.authenticate],
+      schema: {
+        tags: ["User"],
+        summary: "Get user profile",
+        headers: {
+          type: "object",
+          properties: {
+            Authorization: { type: "string" },
+          },
+          required: ["Authorization"],
+        },
+      },
     },
-    meHandler,
+    meHandler
   );
 };
 

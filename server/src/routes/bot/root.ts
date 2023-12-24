@@ -46,9 +46,28 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     chatRequestAPIHandler
   );
 
-  fastify.get("/:id", async (request, reply) => {
-    return reply.sendFile("bot.html");
-  });
+  fastify.get(
+    "/:id",
+    {
+      schema: {
+        tags: ["Widget"],
+        summary: "Get widget",
+        hide: true,
+        params: {
+          type: "object",
+          required: ["id"],
+          properties: {
+            id: {
+              type: "string",
+            },
+          },
+        },
+      },
+    },
+    async (request, reply) => {
+      return reply.sendFile("bot.html");
+    }
+  );
 };
 
 export default root;

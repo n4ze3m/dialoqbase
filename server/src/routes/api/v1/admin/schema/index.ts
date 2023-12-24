@@ -1,6 +1,15 @@
 import { FastifySchema } from "fastify";
 
 export const dialoqbaseSettingsSchema: FastifySchema = {
+  tags: ["Admin"],
+  summary: "API to get dialoqbase settings",
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
   response: {
     200: {
       noOfBotsPerUser: { type: "number" },
@@ -11,6 +20,15 @@ export const dialoqbaseSettingsSchema: FastifySchema = {
 };
 
 export const updateDialoqbaseSettingsSchema: FastifySchema = {
+  tags: ["Admin"],
+  summary: "API to update dialoqbase settings",
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
   body: {
     type: "object",
     properties: {
@@ -35,6 +53,15 @@ export const updateDialoqbaseSettingsSchema: FastifySchema = {
 };
 
 export const getAllUsersSchema: FastifySchema = {
+  tags: ["Admin"],
+  summary: "API to get all users",
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
   response: {
     200: {
       type: "array",
@@ -54,6 +81,15 @@ export const getAllUsersSchema: FastifySchema = {
 };
 
 export const resetUserPasswordByAdminSchema: FastifySchema = {
+  tags: ["Admin"],
+  summary: "API to reset user password by admin",
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
   body: {
     type: "object",
     properties: {
@@ -73,6 +109,15 @@ export const resetUserPasswordByAdminSchema: FastifySchema = {
 };
 
 export const registerUserByAdminSchema: FastifySchema = {
+  tags: ["Admin"],
+  summary: "API to register user by admin",
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
   body: {
     type: "object",
     properties: {

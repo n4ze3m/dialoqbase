@@ -47,14 +47,41 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   fastify.get(
     "/:id",
     {
+      schema: {
+        tags: ["Bot", "Integration"],
+        summary: "Get all bot channels",
+        headers: {
+          type: "object",
+          properties: {
+            Authorization: { type: "string" },
+          },
+          required: ["Authorization"],
+        },
+      },
       onRequest: [fastify.authenticate],
     },
     getChannelsByProvider
   );
 
   // whatsapp integration
-  fastify.get("/:id/whatsapp", {}, whatsappIntergationHandler);
-  fastify.post("/:id/whatsapp", {}, whatsappIntergationHandlerPost);
+  fastify.get(
+    "/:id/whatsapp",
+    {
+      schema: {
+        hide: true,
+      },
+    },
+    whatsappIntergationHandler
+  );
+  fastify.post(
+    "/:id/whatsapp",
+    {
+      schema: {
+        hide: true,
+      },
+    },
+    whatsappIntergationHandlerPost
+  );
 
   // api key integration
   fastify.get(

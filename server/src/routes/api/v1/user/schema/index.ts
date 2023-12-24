@@ -1,6 +1,8 @@
 import { FastifySchema } from "fastify";
 
 export const userLoginSchema: FastifySchema = {
+  tags: ["User"],
+  summary: "API to login user",
   body: {
     type: "object",
     required: ["username", "password"],
@@ -16,6 +18,15 @@ export const userLoginSchema: FastifySchema = {
 };
 
 export const updateProfileSchema: FastifySchema = {
+  tags: ["User"],
+  summary: "API to update user profile",
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
   body: {
     type: "object",
     required: ["username", "email"],
@@ -31,6 +42,15 @@ export const updateProfileSchema: FastifySchema = {
 };
 
 export const updatePasswordSchema: FastifySchema = {
+  tags: ["User"],
+  summary: "API to update user password",
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
   body: {
     type: "object",
     required: ["oldPassword", "newPassword"],
@@ -45,10 +65,22 @@ export const updatePasswordSchema: FastifySchema = {
   },
 };
 
-export const isRegisterationAllowedSchema: FastifySchema = {};
-
+export const isRegisterationAllowedSchema: FastifySchema = {
+  tags: ["User"],
+  summary: "API to check if registeration is allowed",
+  response: {
+    200: {
+      type: "object",
+      properties: {
+        isRegistrationAllowed: { type: "boolean" },
+      },
+    }
+  }
+};
 
 export const userRegisterSchema: FastifySchema = {
+  tags: ["User"],
+  summary: "API to register user",
   body: {
     type: "object",
     required: ["username", "password", "email"],
