@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import { ClipboardIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { clcx } from "../../utils/classname";
 
 type Props = {
   value: string;
   showText?: boolean;
   iconSize?: string;
+  className?: string;
 };
 
 export const CopyBtn: React.FC<Props> = ({
   value,
   showText = true,
   iconSize = "w-6 h-6",
+  className = "",
 }) => {
   const [copied, setCopied] = useState(false);
 
@@ -27,7 +30,10 @@ export const CopyBtn: React.FC<Props> = ({
   return (
     <button
       onClick={handleCopy}
-      className="flex items-center justify-center p-2 transition-colors duration-200 rounded  focus:outline-none focus:ring focus:ring-opacity-50"
+      className={clcx(
+        className,
+        "flex items-center justify-center p-2 transition-colors duration-200 rounded  focus:outline-none focus:ring focus:ring-opacity-50"
+      )}
     >
       {copied ? (
         <>

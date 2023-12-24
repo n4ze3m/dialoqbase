@@ -1,6 +1,6 @@
-import { ClipboardIcon } from "@heroicons/react/24/outline";
-import { Input, notification } from "antd";
 import React from "react";
+import { EmbedBoardCard } from "./EmbedBoardCard";
+import { EmbedBoardScript } from "./EmbedBoardScript";
 
 type Props = {
   public_id: string;
@@ -14,77 +14,27 @@ export const EmbedBoard = ({ public_id }: Props) => {
   );
 
   return (
-    <div className="divide-y lg:col-span-9">
-      <EmbedBoardTitle
+    <div className="lg:col-span-9">
+      {/* <EmbedBoardTitle
+              title="Script"
+              description="You can use this script to embed your bot to your website or web app"
+            /> */}
+
+      <EmbedBoardScript
+      hostUrl={hostUrl}
+      public_id={public_id}
+      />
+      <EmbedBoardCard
         title="Public URL"
         description="This is the public URL of your bot. You can use this URL to embed"
         content={`${hostUrl}/bot/${public_id}`}
       />
 
-      <EmbedBoardTitle
+      <EmbedBoardCard
         title="Iframe"
         description="You can use this iframe to embed your bot"
         content={`<iframe src="${hostUrl}/bot/${public_id}?mode=iframe" width="400" height="500" />`}
       />
-
-      <EmbedBoardTitle
-        title="Script"
-        description="You can use this script to embed your bot to your website or web app"
-        content={`<script src="${hostUrl}/chat.min.js" data-chat-url="${hostUrl}/bot/${public_id}" data-btn-position="bottom-right" defer></script>`}
-      />
     </div>
   );
 };
-function EmbedBoardTitle({
-  content,
-  title,
-  description,
-}: {
-  content: string;
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="px-4 py-6 sm:p-6 lg:pb-8 mb-3 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-[#0a0a0a] dark:border-[#232222]">
-      <div>
-        <h2 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">
-          {title}</h2>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          {description}</p>
-      </div>
-      <div className="mt-6 flex flex-col lg:flex-row">
-        <div className="flex-grow space-y-6">
-          <div className="flex">
-            <div className="flex-grow">
-              <Input
-              size="large"
-                type="text"
-                readOnly
-                defaultValue={content}
-              />
-            </div>
-            <span className="ml-3">
-              <button
-                type="button"
-                onClick={() => {
-                  navigator.clipboard.writeText(content);
-                  notification.success({
-                    message: "Copied!",
-                    placement: "bottomRight",
-                  });
-                }}
-                className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 dark:bg-[#232222] dark:border-[#232222] dark:text-white dark:hover:bg-[#232222] dark:focus:ring-gray-900"
-              >
-                <ClipboardIcon
-                  className="h-5 w-5 text-gray-500"
-                  aria-hidden="true"
-                />
-                <span className="ml-2">Copy</span>
-              </button>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
