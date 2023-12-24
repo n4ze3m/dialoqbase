@@ -467,8 +467,12 @@ export const BotForm = ({
                   value={source}
                   className={({ checked, active }) =>
                     classNames(
-                      checked ? "border-transparent" : "border-gray-300 dark:border-gray-700",
-                      active ? "border-indigo-500 ring-0 ring-indigo-500 dark:border-gray-700 dark:ring-gray-900" : "",
+                      checked
+                        ? "border-transparent"
+                        : "border-gray-300 dark:border-gray-700",
+                      active
+                        ? "border-indigo-500 ring-0 ring-indigo-500 dark:border-gray-700 dark:ring-gray-900"
+                        : "",
                       "relative  items-center justify-center flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none dark:bg-[#141414]"
                     )
                   }
@@ -543,6 +547,17 @@ export const BotForm = ({
             name="model"
           >
             <Select
+              showSearch
+              filterOption={(input, option) =>
+                (option?.label ? option?.label?.toLowerCase() : "").includes(
+                  input?.toLowerCase()
+                )
+              }
+              filterSort={(optionA, optionB) =>
+                (optionA?.label ?? "")
+                  .toLowerCase()
+                  .localeCompare((optionB?.label ?? "").toLowerCase())
+              }
               placeholder="Select a chat model"
               options={botConfig.chatModel}
             />
@@ -557,7 +572,15 @@ export const BotForm = ({
             name="embedding"
           >
             <Select
-              placeholder="Select an embedding method"
+              showSearch
+              filterOption={(input, option) =>
+                (option?.label ?? "").includes(input)
+              }
+              filterSort={(optionA, optionB) =>
+                (optionA?.label ?? "")
+                  .toLowerCase()
+                  .localeCompare((optionB?.label ?? "").toLowerCase())
+              }
               options={botConfig.embeddingModel}
             />
           </Form.Item>

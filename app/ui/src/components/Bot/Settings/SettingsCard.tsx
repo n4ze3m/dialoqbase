@@ -169,7 +169,21 @@ export const SettingsCard: React.FC<BotSettings> = ({
                     },
                   ]}
                 >
-                  <Select options={chatModel} />
+                  <Select
+                    showSearch
+                    filterOption={(input, option) =>
+                      (option?.label
+                        ? option?.label?.toLowerCase()
+                        : ""
+                      ).includes(input?.toLowerCase())
+                    }
+                    filterSort={(optionA, optionB) =>
+                      (optionA?.label ?? "")
+                        .toLowerCase()
+                        .localeCompare((optionB?.label ?? "").toLowerCase())
+                    }
+                    options={chatModel}
+                  />
                 </Form.Item>
 
                 <Form.Item
@@ -211,10 +225,7 @@ export const SettingsCard: React.FC<BotSettings> = ({
                   />
                 </Form.Item>
 
-                <Form.Item
-                  label={"Embedding Method"}
-                  name="embedding"
-                >
+                <Form.Item label={"Embedding Method"} name="embedding">
                   <Select
                     disabled
                     placeholder="Select an embedding method"
@@ -232,11 +243,7 @@ export const SettingsCard: React.FC<BotSettings> = ({
                     },
                   ]}
                 >
-                  <Input.TextArea
-                   size="large"
-                    rows={5}
-                    placeholder=""
-                  />
+                  <Input.TextArea size="large" rows={5} placeholder="" />
                 </Form.Item>
                 <div className="flex flex-row justify-start gap-4">
                   <button
@@ -273,10 +280,7 @@ export const SettingsCard: React.FC<BotSettings> = ({
                     },
                   ]}
                 >
-                  <Input.TextArea
-                    size="large"
-                    rows={5}
-                  />
+                  <Input.TextArea size="large" rows={5} />
                 </Form.Item>
 
                 <Form.Item

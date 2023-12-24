@@ -4,11 +4,10 @@ import {
   WindowWithMatchMedia,
 } from "./types";
 
-export function createChatWidget(
-  scriptElement: HTMLScriptElement,
-): void {
-  let mediaQuery: MediaQueryList = (window as WindowWithMatchMedia)
-    .matchMedia("(min-width: 768px)");
+export function createChatWidget(scriptElement: HTMLScriptElement): void {
+  let mediaQuery: MediaQueryList = (window as WindowWithMatchMedia).matchMedia(
+    "(min-width: 768px)"
+  );
   let widgetContainer: HTMLDivElement = document.createElement("div");
   widgetContainer.setAttribute("id", "dialoq");
   let widgetContainerStyle: WidgetContainerStyle = widgetContainer.style;
@@ -70,28 +69,49 @@ export function createChatWidget(
     widgetContainerStyle.height = "100%";
     iframeStyle.borderRadius = "0";
     iframeStyle.border = "0";
-    if (position === "bottom-left") {
-      widgetContainerStyle.bottom = "80px";
-      widgetContainerStyle.left = "20px";
-    } else if (position === "bottom-right") {
-      widgetContainerStyle.bottom = "80px";
-      widgetContainerStyle.right = "20px";
-    } else if (position === "top-left") {
-      widgetContainerStyle.top = "80px";
-      widgetContainerStyle.left = "20px";
-    } else if (position === "top-right") {
-      widgetContainerStyle.top = "80px";
-      widgetContainerStyle.right = "20px";
-    } else {
-      widgetContainerStyle.bottom = "80px";
-      widgetContainerStyle.right = "20px";
-    }
+    //  make iframe full screen
+    iframeStyle.position = "fixed";
+    iframeStyle.top = "0";
+    iframeStyle.left = "0";
+    iframeStyle.right = "0";
+    iframeStyle.bottom = "0";
+    // make it fit the screen
+    iframeStyle.width = "100%";
+    iframeStyle.height = "100%";
   }
   widgetContainer.appendChild(iframe);
   let chatbotUrl: string = scriptElement.getAttribute(
-    "data-chat-url",
+    "data-chat-url"
   ) as string;
   let iframeSource: string = `${chatbotUrl}?mode=iframe`;
   iframe.src = iframeSource;
   document.body.appendChild(widgetContainer);
+
+  // listen to media query changes
+  mediaQuery.addEventListener("change", (e) => {
+    if (e.matches) {
+      widgetContainerStyle.width = "400px";
+      // make it not full screen
+      iframeStyle.position = "absolute";
+      iframeStyle.right = "0";
+      iframeStyle.top = "0";
+      iframeStyle.width = "100%";
+      iframeStyle.height = "100%";
+      
+    } else {
+      widgetContainerStyle.width = "100%";
+      widgetContainerStyle.height = "100%";
+      iframeStyle.borderRadius = "0";
+      iframeStyle.border = "0";
+      //  make iframe full screen
+      iframeStyle.position = "fixed";
+      iframeStyle.top = "0";
+      iframeStyle.left = "0";
+      iframeStyle.right = "0";
+      iframeStyle.bottom = "0";
+      // make it fit the screen
+      iframeStyle.width = "100%";
+      iframeStyle.height = "100%";
+    }
+  });
 }

@@ -2,7 +2,6 @@
 
 * {
   font-family: "Inter", sans-serif !important;
-  
 }
 
 @tailwind base;
@@ -46,7 +45,13 @@ pre:has(div.code) {
   margin: 0;
 }
 
-markdown-processing { 
+markdown-processing {
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+/* make focus 0 without any border */
+.ant-select-selection-search-input {
+  border: none !important;
+  box-shadow: none !important;
 }
