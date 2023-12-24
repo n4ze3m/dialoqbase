@@ -42,7 +42,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
     staticCSP: true,
     transformStaticCSP: (header: string) => header,
     theme: {
-      title: "Dialoqbots API Docs",
+      title: "Dialoqbase API Docs",
     },
     uiConfig: {
       docExpansion: "none",
