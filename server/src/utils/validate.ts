@@ -41,6 +41,7 @@ export const apiKeyValidaton = (embeddingsType: string) => {
         ? process.env.FIREWORKS_API_KEY.length > 0
         : false;
     case "local":
+    case "ollama":
         return true;
     default:
       return false;

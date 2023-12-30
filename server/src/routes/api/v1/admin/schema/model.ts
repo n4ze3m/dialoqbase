@@ -26,8 +26,10 @@ export const fetchModelFromInputedUrlSchema: FastifySchema = {
     type: "object",
     properties: {
       url: { type: "string" },
+      api_key: { type: "string" },
+      api_type: { type: "string" },
+      ollama_url: { type: "string" },
     },
-    required: ["url"],
   },
 };
 
@@ -48,8 +50,10 @@ export const saveModelFromInputedUrlSchema: FastifySchema = {
       model_id: { type: "string" },
       name: { type: "string" },
       stream_available: { type: "boolean" },
+      api_key: { type: "string" },
+      api_type: { type: "string" },
     },
-    required: ["url", "model_id", "name", "stream_available"],
+    required: ["url", "model_id", "name", "stream_available", "api_type"],
   },
 };
 
