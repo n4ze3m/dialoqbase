@@ -138,6 +138,7 @@ and more...
 - [x] fireworks.ai's llama 2 models
 - [x] fireworks.ai's mistral
 - [X] Local AI models
+- [X] Ollama
 
 ### Embedding models
 

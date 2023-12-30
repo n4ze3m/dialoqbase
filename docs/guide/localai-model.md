@@ -1,39 +1,79 @@
 # Support for Custom AI Models
 
-## Introduction
+Dialoqbase supports custom AI models, allowing you to utilize your own AI model to generate responses. This is particularly beneficial if you prefer using a model that Dialoqbase does not support or if you wish to avoid relying on third-party services.
 
-Starting from version `1.2.0`, our platform provides support for local AI models which are compatible with the OpenAI API. A notable instance for such local AI deployment is the [LocalAI](https://github.com/go-skynet/LocalAI/) project.
+## Providers
 
-This documentation will guide you through the steps needed to integrate a custom model deployed via LocalAI into our system.
+We support two types of Custom AI model providers:
 
-## Prerequisites
+1. AI models API compatible with the OpenAI API.
+2. Ollama (*recommended*).
 
-1. Ensure you've already set up your local AI model using LocalAI or any other platform that offers OpenAI API compatibility.
-2. Admin access to our platform is required to add new models.
+### Prerequisites
 
-## Integration Steps
+- Ensure a running instance of the AI model API or the Ollama server.
 
-### 1. Login as Administrator
+### Integration Steps
 
-Ensure that you're logged in with administrator rights to have the permissions necessary for this process.
+To integrate a custom AI model with Dialoqbase, follow these steps:
 
-### 2. Navigate to Model Settings
+#### 1. Log in as an Administrator
+
+- Log in to Dialoqbase as an administrator.
+
+#### 2. Navigate to Model Settings
 
 - Go to `Settings`.
 - From the side menu, select `Models`.
-- Click on `Add Models`.
 
-### 3. Add Your Local or Custom Model URL
+#### 3. Add a New Model
 
-You'll be presented with a form asking for details about the model you wish to integrate:
+- Click on `Add Model`.
 
-- **URL**: Here, you need to provide the endpoint of your locally deployed AI model.
-    - If you're using LocalAI and it's running on its default port (8080), you would enter `http://localhost:8080/v1`.
-- **Model Selection**: Choose the model you want to use from your local AI instance.
-- **Name**: Give your model a recognizable name.
-  
-Click `Save` to finalize adding your custom model.
+#### 4. Fill in the Model Details
 
-## Conclusion
+- By default, the custom model type is set to OpenAI API-compatible models.
 
-Once integrated, you can now utilize your custom model in the same way you'd use any other model in the platform. This allows for greater flexibility, especially when working in environments that may benefit from localized data processing, without the need to send data over the internet.
+::: warning IMPORTANT
+
+If you are using a local AI server from the local machine, make sure to use `host.docker.internal` instead of `localhost` in the URL. For example:
+
+For OpenAI API-compatible models:
+
+`http://host.docker.internal:8080/v1`
+
+For Ollama:
+
+`http://host.docker.internal:11434`
+
+:::
+
+##### 4.1. Adding an OpenAI API Compatible Model
+
+Add the following details:
+
+- **URL**: The URL of the AI model API.
+
+   For example, if you are using the LocalAI server, the URL will be `http://localhost:8080/v1`. Ensure to include `/v1` at the end of the URL.
+
+- **API Key**: The API key of the AI model API (optional).
+
+Then click on `Fetch Models` to retrieve the list of models from the API.
+
+The list of models will be displayed in the `Model` dropdown. Select the desired model and provide a name. Then click on `Save`.
+
+##### 4.2. Adding an Ollama Model
+
+Add the following details:
+
+- **URL**: The URL of the Ollama server.
+
+   For example, if you are using the LocalAI server, the URL will be `http://localhost:11434`.
+
+Then click on `Fetch Models` to retrieve the list of models from the API.
+
+The list of models will be displayed in the `Model` dropdown. Select the desired model and provide a name. Then click on `Save`.
+
+### Conclusion
+
+That's it! You have successfully integrated a custom AI model with Dialoqbase. Now, you can use it to generate responses or engage in a conversation with a document.

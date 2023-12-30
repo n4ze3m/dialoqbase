@@ -132,12 +132,12 @@ export default defineConfig({
             link: "/guide/localai-model",
           },
           {
-            text: "OpenAI",
-            link: "/guide/ai-providers/openai",
-          },
-          {
             text: "Fireworks",
             link: "/guide/ai-providers/fireworks",
+          },
+          {
+            text: "OpenAI",
+            link: "/guide/ai-providers/openai",
           },
           {
             text: "Google",
