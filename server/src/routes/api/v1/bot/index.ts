@@ -13,7 +13,7 @@ import {
   refreshSourceByIdHandler,
   updateBotByIdHandler,
   getCreateBotConfigHandler,
-  getBotByIdSettingsHandler
+  getBotByIdSettingsHandler,
 } from "./handlers";
 import {
   addNewSourceByIdSchema,
@@ -118,6 +118,17 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     "/",
     {
       onRequest: [fastify.authenticate],
+      schema: {
+        tags: ["Bot"],
+        summary: "API to get all bots",
+        headers: {
+          type: "object",
+          properties: {
+            Authorization: { type: "string" },
+          },
+          required: ["Authorization"],
+        },
+      },
     },
     getAllBotsHandler
   );
@@ -127,6 +138,17 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     "/upload",
     {
       onRequest: [fastify.authenticate],
+      schema: {
+        tags: ["Bot"],
+        summary: "API to upload pdf",
+        headers: {
+          type: "object",
+          properties: {
+            Authorization: { type: "string" },
+          },
+          required: ["Authorization"],
+        },
+      },
     },
     createBotFileHandler
   );
@@ -136,12 +158,32 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     "/:id/source/upload",
     {
       onRequest: [fastify.authenticate],
+      schema: {
+        tags: ["Bot"],
+        summary: "API to upload pdf",
+        headers: {
+          type: "object",
+          properties: {
+            Authorization: { type: "string" },
+          },
+          required: ["Authorization"],
+        },
+      },
     },
     addNewSourceFileByIdHandler
   );
 
   // get bot config
-  fastify.get("/config", getCreateBotConfigHandler);
+  fastify.get(
+    "/config",
+    {
+      schema: {
+        tags: ["Bot"],
+        summary: "API to get bot configuraion",
+      },
+    },
+    getCreateBotConfigHandler
+  );
 
   // get bot settings by id
   fastify.get(

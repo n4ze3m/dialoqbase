@@ -5,6 +5,7 @@ import { HuggingFaceInference } from "langchain/llms/hf";
 import { DialoqbaseFireworksModel } from "../models/fireworks";
 import { OpenAI } from "langchain/llms/openai";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { ChatOllama } from "langchain/chat_models/ollama";
 
 export const chatModelProvider = (
   provider: string,
@@ -89,6 +90,12 @@ export const chatModelProvider = (
         modelName: modelName,
         maxOutputTokens: 2048,
         apiKey: process.env.GOOGLE_API_KEY,
+      });
+    case "ollama":
+      console.log("using ollama");
+      return new ChatOllama({
+        baseUrl: otherFields.baseURL,
+        model: modelName,
       });
     default:
       console.log("using default");

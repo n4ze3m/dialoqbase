@@ -1,6 +1,8 @@
 import { FastifySchema } from "fastify";
 
 export const chatRequestSchema: FastifySchema = {
+  tags: ["Widget"],
+  summary: "API to send message to bot",
   params: {
     type: "object",
     required: ["id"],
@@ -25,6 +27,8 @@ export const chatRequestSchema: FastifySchema = {
 };
 
 export const chatStyleSchema: FastifySchema = {
+  tags: ["Widget"],
+  summary: "API to get style of widget",
   params: {
     type: "object",
     required: ["id"],
@@ -37,6 +41,8 @@ export const chatStyleSchema: FastifySchema = {
 };
 
 export const chatRequestStreamSchema: FastifySchema = {
+  tags: ["Widget"],
+  summary: "API to get stream of message from bot",
   params: {
     type: "object",
     required: ["id"],
@@ -61,6 +67,8 @@ export const chatRequestStreamSchema: FastifySchema = {
 };
 
 export const chatAPIRequestSchema: FastifySchema = {
+  tags: ["Widget"],
+  summary: "Public API to send message to bot on widget",
   headers: {
     type: "object",
     required: ["x-api-key"],

@@ -1,6 +1,15 @@
 import { FastifySchema } from "fastify";
 
 export const getBotAppearanceByIdSchema: FastifySchema = {
+  tags: ["Bot", "Appearance"],
+  summary: "API to get bot appearance by id",
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
   params: {
     type: "object",
     properties: {
@@ -12,6 +21,15 @@ export const getBotAppearanceByIdSchema: FastifySchema = {
 };
 
 export const saveBotAppearanceSchema: FastifySchema = {
+  tags: ["Bot", "Appearance"],
+  summary: "API to save bot appearance by id",
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
   params: {
     type: "object",
     properties: {

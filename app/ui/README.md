@@ -1,7 +1,6 @@
-# Backend
+# Frontend
 
-Backend code for the dialoqbase project.
-
+This is the frontend of the dialoqbase project.
 
 ## Setup
 
@@ -25,4 +24,4 @@ cp .env.example .env
 npm run dev
 ```
 
-The server will be running on `http://localhost:3000`. API documentation is available at `http://localhost:3000/docs`. 
+The server will be running on `http://localhost:5123`.

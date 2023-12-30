@@ -2,6 +2,15 @@ import { FastifySchema } from "fastify";
 import { CHANNELS } from "../../../../../../utils/intergation";
 
 export const getChatHistoryByTypeSchema: FastifySchema = {
+  tags: ["Bot", "Conversation"],
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
+  summary: "Get chat history by intergation type",
   params: {
     type: "object",
     required: ["id", "type"],
@@ -17,23 +26,30 @@ export const getChatHistoryByTypeSchema: FastifySchema = {
   },
 };
 
-
-
 export const getChatHistoryByChatIdSchema: FastifySchema = {
-    params: {
-        type: "object",
-        required: ["id", "type", "chat_id"],
-        properties: {
-            id: {
-                type: "string",
-            },
-            type: {
-                type: "string",
-                enum: CHANNELS,
-            },
-            chat_id: {
-                type: "string",
-            }
-        },
+  tags: ["Bot", "Conversation"],
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
     },
+    required: ["Authorization"],
+  },
+  summary: "Get chat history by chat id",
+  params: {
+    type: "object",
+    required: ["id", "type", "chat_id"],
+    properties: {
+      id: {
+        type: "string",
+      },
+      type: {
+        type: "string",
+        enum: CHANNELS,
+      },
+      chat_id: {
+        type: "string",
+      },
+    },
+  },
 };

@@ -8,7 +8,8 @@ import { FastifySSEPlugin } from "@waylaidwanderer/fastify-sse-v2";
 import fastifyCookie from "@fastify/cookie";
 import fastifySession from "@fastify/session";
 import { getSessionSecret, isCookieSecure } from "./utils/session";
-
+import swagger from "@fastify/swagger";
+import swaggerUi from "@fastify/swagger-ui";
 declare module "fastify" {
   interface Session {
     is_bot_allowed: boolean;
@@ -21,7 +22,7 @@ const options: AppOptions = {};
 
 const app: FastifyPluginAsync<AppOptions> = async (
   fastify,
-  opts,
+  opts
 ): Promise<void> => {
   void fastify.register(cors);
 
@@ -31,6 +32,21 @@ const app: FastifyPluginAsync<AppOptions> = async (
     limits: {
       files: 10,
       fileSize: 100 * 1024 * 1024,
+    },
+  });
+
+  void fastify.register(swagger);
+
+  void fastify.register(swaggerUi, {
+    routePrefix: "/docs",
+    staticCSP: true,
+    transformStaticCSP: (header: string) => header,
+    theme: {
+      title: "Dialoqbase API Docs",
+    },
+    uiConfig: {
+      docExpansion: "none",
+      withCredentials: true,
     },
   });
 
