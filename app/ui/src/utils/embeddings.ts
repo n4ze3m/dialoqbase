@@ -7,6 +7,10 @@ export const availableEmbeddingTypes = [
     label: "Xenova/all-MiniLM-L6-v2 (cpu)",
   },
   {
+    value: "ollama",
+    label: "Ollama Embeddings",
+  },
+  {
     value: "supabase",
     label: "Supabase/gte-small (cpu)",
   },

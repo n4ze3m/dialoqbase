@@ -4,6 +4,8 @@ import { HuggingFaceInferenceEmbeddings } from "langchain/embeddings/hf";
 import { TransformersEmbeddings } from "../embeddings/transformer-embedding";
 import { GooglePaLMEmbeddings } from "langchain/embeddings/googlepalm";
 import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
+import { OllamaEmbeddings } from "langchain/embeddings/ollama";
+
 
 export const embeddings = (embeddingsType: string) => {
   switch (embeddingsType) {
@@ -17,6 +19,8 @@ export const embeddings = (embeddingsType: string) => {
       return new TransformersEmbeddings({
         model: "Xenova/all-MiniLM-L6-v2",
       });
+    case "ollama":
+      return new OllamaEmbeddings({ baseUrl: process.env.OLLAMA_EMBEDDING_API_URL, model: process.env.OLLAMA_EMBEDDING_API_MODEL });
     case "jina":
       return new TransformersEmbeddings({
         model: "Xenova/jina-embeddings-v2-small-en",
@@ -52,6 +56,7 @@ export const supportedEmbeddings = [
   "cohere",
   "huggingface-api",
   "transformer",
+  "ollama",
   "google-gecko",
   "supabase",
   "jina",

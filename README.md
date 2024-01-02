@@ -3,11 +3,12 @@
  Create chatbots with ease
 </p>
 
-<div align="center"> 
-  
+<div align="center">
+
   [![Join dialoqbase #welcome](https://img.shields.io/badge/discord-join%20chat-blue.svg)](https://discord.gg/SPE3npH7Wu)
   [![Build Status](https://github.com/n4ze3m/dialoqbase/actions/workflows/build.yml/badge.svg)](https://github.com/n4ze3m/dialoqbase/actions/workflows/build.yml)
   [![License: MIT](https://img.shields.io/github/license/n4ze3m/dialoqbase)](https://github.com/n4ze3m/dialoqbase/blob/master/LICENSE)
+
 </div>
 
 Dialoqbase is an open-source application designed to facilitate the creation of custom chatbots using a personalized knowledge base. The application leverages advanced language models to generate accurate and context-aware responses. Additionally, it utilizes PostgreSQL, a robust relational database management system, for efficient vector search operations and for storing the knowledge base.
@@ -24,7 +25,7 @@ Want to check more demo videos? Follow me on [Twitter](https://twitter.com/n4ze3
 
 ## Quick Deployments 🚀
 
-### Railway with Supabase 
+### Railway with Supabase
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/TXdjD7?referralCode=olbszX)
 
@@ -75,7 +76,6 @@ docker compose up -d
 ```
 
 4. Open your browser and go to `http://localhost:3000`.
-
 5. Log in using the default credentials:
 
 ```bash
@@ -88,11 +88,8 @@ _Important: After the first login, remember to change the default credentials._
 ## Features 🚀
 
 - Create custom chatbots with your own knowledge base
-
 - Utilize powerful language models to generate responses
-
 - Utilize PostgreSQL for vector search and storing the knowledge base.
-
 - Use any language models or embedding models you want
 
 ## Stack 📚
@@ -113,61 +110,61 @@ Dialoqbase is a side project and is not ready for production. It is still in the
 
 ## Roadmap 🗺️
 
-
 ### Data loaders
 
-- [x] Website (_one page only_)
-- [x] Plane text
-- [x] PDF (beta)
-- [x] Web crawler (beta)
-- [x] Microsoft Word documents (beta)
-- [x] Github repository
-- [x] mp3
-- [x] mp4
+- [X] Website (_one page only_)
+- [X] Plane text
+- [X] PDF (beta)
+- [X] Web crawler (beta)
+- [X] Microsoft Word documents (beta)
+- [X] Github repository
+- [X] mp3
+- [X] mp4
 - [X] Sitemap
-- [x] Youtube
+- [X] Youtube
 - [ ] Notion
 
 and more...
 
 ### Language models
 
-- [x] OpenAI
-- [x] Anthropic
-- [x] Google chat-bison-001
-- [x] fireworks.ai's llama 2 models
-- [x] fireworks.ai's mistral
+- [X] OpenAI
+- [X] Anthropic
+- [X] Google chat-bison-001
+- [X] fireworks.ai's llama 2 models
+- [X] fireworks.ai's mistral
 - [X] Local AI models
 - [X] Ollama
 
 ### Embedding models
 
-- [x] OpenAI
-- [x] TensorFlow (removed)
-- [x] Hugging Face
-- [x] Cohere
-- [x] all-MiniLM-L6-v2 using [xenova/transformers.js](https://github.com/xenova/transformers.js/)
-- [x] Google text-gecko-001
+- [X] OpenAI
+- [X] TensorFlow (removed)
+- [X] Hugging Face
+- [X] Cohere
+- [X] all-MiniLM-L6-v2 using [xenova/transformers.js](https://github.com/xenova/transformers.js/)
+- [X] Ollama embedding
+- [X] Google text-gecko-001
 
 need more ? create an issue...
 
 ### Application
 
-- [x] Create chatbots
-- [x] Create knowledge base
-- [x] Generate responses
-- [x] Vector search
-- [x] Bot embed script for websites
-- [x] Prompt Editor
+- [X] Create chatbots
+- [X] Create knowledge base
+- [X] Generate responses
+- [X] Vector search
+- [X] Bot embed script for websites
+- [X] Prompt Editor
 - [X] Chatbot API
-- [x] Chatbot theme editor
-- [x] Streaming responses
+- [X] Chatbot theme editor
+- [X] Streaming responses
 
-### Integrations 
+### Integrations
 
-- [x] Web embed script
-- [x] Telegram (beta)
-- [x] Discord (beta)
+- [X] Web embed script
+- [X] Telegram (beta)
+- [X] Discord (beta)
 - [ ] Slack
 - [X] Whatsapp (experimental)
 
