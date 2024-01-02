@@ -178,16 +178,6 @@ need more ? create an issue...
 
 Interested in contributing? Check out the [contributing guide](CONTRIBUTION.md).
 
-## Sponsors 💖
-
-<p>
-  <a href="https://flogesoft.com/?utm_source=dialoqbase&utm_medium=sponsor&utm_campaign=dialoqbase">
-    <img src="https://flogesoft.com/images/floges_sponsored.svg" width="150"
-    height="50"
-     />
-  </a>
-</p>
-
 ## License 📝
 
 [MIT](LICENSE)
