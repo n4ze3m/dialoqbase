@@ -40,7 +40,7 @@ git clone https://github.com/n4ze3m/dialoqbase.git
 cd dialoqbase/docker
 ```
 
-2. Edit the `.env` file and set the following environment variables:
+2. Edit the `.env` <!--(see the [Environment Variables](#environment-variables) section for more details)-->:
 
 - On Linux:
 
@@ -60,7 +60,6 @@ vim .env
 notepad .env
 ```
 
-Set the `OPENAI_API_KEY` variable to your OpenAI API key. You can obtain an API key [here](https://platform.openai.com/account/api-keys).
 Set the `DB_SECRET_KEY` varible.
 
 3. Run the docker-compose file:
@@ -112,63 +111,60 @@ Dialoqbase is a side project and is not ready for production. It is still in the
 
 ### Data loaders
 
-- [X] Website (_one page only_)
-- [X] Plane text
-- [X] PDF (beta)
-- [X] Web crawler (beta)
-- [X] Microsoft Word documents (beta)
-- [X] Github repository
-- [X] mp3
-- [X] mp4
-- [X] Sitemap
-- [X] Youtube
-- [ ] Notion
+| Loader | Description | Status |
+| ----------- | ----------- | ------ |
+| Website | Load data from a website | ✅ |
+| Plane text | Load data from a plane text file | ✅ |
+| PDF | Load data from a PDF file | ✅ |
+| Web crawler | Load data from a website using a web crawler | ✅ |
+| Microsoft Word documents | Load data from a Microsoft Word document | ✅ |
+| Github repository | Load data from a Github repository | ✅ |
+| mp3 | Load data from a mp3 file | ✅ |
+| mp4 | Load data from a mp4 file | ✅ |
+| Sitemap | Load data from a sitemap | ✅ |
+| Youtube | Load data from a Youtube video | ✅ |
+| Notion | Load data from a Notion page | ❌ |
 
-and more...
 
 ### Language models
 
-- [X] OpenAI
-- [X] Anthropic
-- [X] Google chat-bison-001
-- [X] fireworks.ai's llama 2 models
-- [X] fireworks.ai's mistral
-- [X] Local AI models
-- [X] Ollama
+
+| Provider | Models |
+| ----------- | ----------- |
+| OpenAI | gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-4, gpt-4-0613, gpt-3.5-instruct, gpt-3.5-turbo-1106, gpt-4-1106-preview	| 
+| Anthropic | Claude 1, Claude 2 |
+| Google | chat-bison-001, Gemini |
+| Fireworks | Llama 2, Mistral, Mixtral and more |
+| Local AI | Local AI models |
+| Ollama | All Ollama supported models |
 
 ### Embedding models
 
-- [X] OpenAI
-- [X] TensorFlow (removed)
-- [X] Hugging Face
-- [X] Cohere
-- [X] all-MiniLM-L6-v2 using [xenova/transformers.js](https://github.com/xenova/transformers.js/)
-- [X] Ollama embedding
-- [X] Google text-gecko-001
+| Provider | Models | Status |
+| ----------- | ----------- | ------ |
+| OpenAI | text-embedding-ada-002 | ✅ |
+| TensorFlow | universal-sentence-encoder | ❌ |
+| Hugging Face | distilbert-base-uncased | ✅ |
+| Cohere | Embed | ✅ |
+| Huggingface Transformers.js | all-MiniLM-L6-v2 | ✅ |
+| Ollama | Ollama embedding | ✅ |
+| Google | text-gecko-001, embedding-001 | ✅ |
+| Jina | Jina embedding | ✅ |
 
 need more ? create an issue...
-
-### Application
-
-- [X] Create chatbots
-- [X] Create knowledge base
-- [X] Generate responses
-- [X] Vector search
-- [X] Bot embed script for websites
-- [X] Prompt Editor
-- [X] Chatbot API
-- [X] Chatbot theme editor
-- [X] Streaming responses
 
 ### Integrations
 
-- [X] Web embed script
-- [X] Telegram (beta)
-- [X] Discord (beta)
-- [ ] Slack
-- [X] Whatsapp (experimental)
+| Type | Stage | Status |
+| ----------- | ----------- | ------ |
+| Web embed script |  stable | ✅ |
+| Telegram | beta | ✅ |
+| Discord | beta | ✅ |
+| Slack | beta | ❌ |
+| Whatsapp | experimental | ✅ |
 
 need more ? create an issue...
+
 
 ## Contributors ✨
 
