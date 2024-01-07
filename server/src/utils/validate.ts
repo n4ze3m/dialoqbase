@@ -40,9 +40,13 @@ export const apiKeyValidaton = (embeddingsType: string) => {
       return process.env.FIREWORKS_API_KEY
         ? process.env.FIREWORKS_API_KEY.length > 0
         : false;
-    case "local":
     case "ollama":
-        return true;
+      return process.env.OLLAMA_EMBEDDING_API_URL && process.env.OLLAMA_EMBEDDING_MODEL
+        ? process.env.OLLAMA_EMBEDDING_API_URL.length > 0 && process.env.OLLAMA_EMBEDDING_MODEL.length > 0
+        : false;
+
+    case "local":
+      return true;
     default:
       return false;
   }
@@ -57,6 +61,8 @@ export const apiKeyValidatonMessage = (embeddingsType: string) => {
       return "Please add COHERE_API_KEY to your .env file";
     case "huggingface-api":
       return "Please add HUGGINGFACEHUB_API_KEY to your .env file";
+    case "ollama":
+      return "Please add OLLAMA_EMBEDDING_API_URL and OLLAMA_EMBEDDING_MODEL to your .env file";
     case "google-bison":
     case "google-gecko":
     case "google":

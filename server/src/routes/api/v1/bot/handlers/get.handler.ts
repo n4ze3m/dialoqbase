@@ -147,6 +147,10 @@ export const getCreateBotConfigHandler = async (
       label: "all-MiniLM-L6-v2 (cpu)",
     },
     {
+      value: "ollama",
+      label: "Ollama Embeddings",
+    },
+    {
       value: "google-gecko",
       label: "Google text-gecko-001",
     },
@@ -205,6 +209,10 @@ export const getBotByIdSettingsHandler = async (
     {
       value: "transformer",
       label: "all-MiniLM-L6-v2 (cpu)",
+    },
+    {
+      value: "ollama",
+      label: "Ollama Embeddings",
     },
     {
       value: "google-gecko",
