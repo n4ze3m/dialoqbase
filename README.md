@@ -111,19 +111,19 @@ Dialoqbase is a side project and is not ready for production. It is still in the
 
 ### Data loaders
 
-| Loader | Description | Status |
-| ----------- | ----------- | ------ |
-| Website | Load data from a website | ✅ |
-| Plane text | Load data from a plane text file | ✅ |
-| PDF | Load data from a PDF file | ✅ |
-| Web crawler | Load data from a website using a web crawler | ✅ |
-| Microsoft Word documents | Load data from a Microsoft Word document | ✅ |
-| Github repository | Load data from a Github repository | ✅ |
-| mp3 | Load data from a mp3 file | ✅ |
-| mp4 | Load data from a mp4 file | ✅ |
-| Sitemap | Load data from a sitemap | ✅ |
-| Youtube | Load data from a Youtube video | ✅ |
-| Notion | Load data from a Notion page | ❌ |
+| Loader |Status |
+| ----------- |  ------ |
+| Website | ✅ |
+| Plane text |  ✅ |
+| PDF |  ✅ |
+| Web crawler |  ✅ |
+| Microsoft Word documents |  ✅ |
+| Github repository | ✅ |
+| mp3 | ✅ |
+| mp4 |  ✅ |
+| Sitemap |  ✅ |
+| Youtube | ✅ |
+| Notion |  ❌ |
 
 
 ### Language models
@@ -160,7 +160,7 @@ need more ? create an issue...
 | Web embed script |  stable | ✅ |
 | Telegram | beta | ✅ |
 | Discord | beta | ✅ |
-| Slack | beta | ❌ |
+| Slack | development | ❌ |
 | Whatsapp | experimental | ✅ |
 
 need more ? create an issue...
