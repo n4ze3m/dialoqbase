@@ -372,7 +372,7 @@ const replaceOldEmbeddings = async () => {
       embedding: "cohere",
     },
     data: {
-      embedding: "embed-english-v2.0",
+      embedding: "small",
     },
   })
 
