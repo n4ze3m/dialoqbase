@@ -52,10 +52,6 @@ export const NewDsForm = ({ onClose }: { onClose: () => void }) => {
         description: "New Source added successfully.",
       });
       form.resetFields();
-      setSelectedSource({
-        id: 1,
-        value: "Website",
-      });
     },
     onError: (e) => {
       if (axios.isAxiosError(e)) {

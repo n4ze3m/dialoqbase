@@ -16,7 +16,6 @@ import React from "react";
 import { GithubIcon } from "../../Icons/GithubIcon";
 import { YoutubeIcon } from "../../Icons/YoutubeIcon";
 import { ApiIcon } from "../../Icons/ApiIcon";
-
 export const DsTable = ({
   data,
 }: {

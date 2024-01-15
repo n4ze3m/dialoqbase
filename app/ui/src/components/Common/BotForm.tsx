@@ -33,9 +33,9 @@ type Props = {
   setSelectedSource: React.Dispatch<React.SetStateAction<any>>;
   form: FormInstance<any>;
   showEmbeddingAndModels: boolean;
+  newSelectedSource?: any;
 };
-// @ts-ignore
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
