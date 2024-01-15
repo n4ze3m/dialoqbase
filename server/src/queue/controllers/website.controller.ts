@@ -7,8 +7,12 @@ import axios from "axios";
 import { DialoqbasePDFLoader } from "../../loader/pdf";
 import { DialoqbaseWebLoader } from "../../loader/web";
 import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
+import { PrismaClient } from "@prisma/client";
 
-export const websiteQueueController = async (source: QSource) => {
+export const websiteQueueController = async (
+  source: QSource,
+  prisma: PrismaClient
+) => {
   // check if url is html or pdf or other
   // if html, use cheerio
 
@@ -36,9 +40,25 @@ export const websiteQueueController = async (source: QSource) => {
     });
     const chunks = await textSplitter.splitDocuments(docs);
 
+    const embeddingInfo = await prisma.dialoqbaseModels.findFirst({
+      where: {
+        model_id: source.embedding,
+        hide: false,
+        deleted: false,
+      },
+    });
+
+    if (!embeddingInfo) {
+      throw new Error("Embedding not found. Please verify the embedding id");
+    }
+
     await DialoqbaseVectorStore.fromDocuments(
       chunks,
-      embeddings(source.embedding),
+      embeddings(
+        embeddingInfo.model_provider!.toLowerCase(),
+        embeddingInfo.model_id,
+        embeddingInfo?.config
+      ),
       {
         botId: source.botId,
         sourceId: source.id,
@@ -62,9 +82,25 @@ export const websiteQueueController = async (source: QSource) => {
     });
     const chunks = await textSplitter.splitDocuments(docs);
 
+    const embeddingInfo = await prisma.dialoqbaseModels.findFirst({
+      where: {
+        model_id: source.embedding,
+        hide: false,
+        deleted: false,
+      },
+    });
+
+    if (!embeddingInfo) {
+      throw new Error("Embedding not found. Please verify the embedding id");
+    }
+
     await DialoqbaseVectorStore.fromDocuments(
       chunks,
-      embeddings(source.embedding),
+      embeddings(
+        embeddingInfo.model_provider!.toLowerCase(),
+        embeddingInfo.model_id,
+        embeddingInfo?.config
+      ),
       {
         botId: source.botId,
         sourceId: source.id,

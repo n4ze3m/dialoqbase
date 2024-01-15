@@ -10,6 +10,7 @@ export const apiKeyValidaton = (embeddingsType: string) => {
     case "google-bison":
     case "google-gecko":
     case "google":
+    case "google palm":
       return process.env.GOOGLE_API_KEY
         ? process.env.GOOGLE_API_KEY.length > 0
         : false;
@@ -66,6 +67,7 @@ export const apiKeyValidatonMessage = (embeddingsType: string) => {
     case "google-bison":
     case "google-gecko":
     case "google":
+    case "google palm":
       return "Please add GOOGLE_API_KEY to your .env file";
     case "anthropic":
       return "Please add ANTHROPIC_API_KEY to your .env file";

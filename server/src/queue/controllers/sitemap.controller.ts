@@ -47,7 +47,7 @@ export const sitemapQueueController = async (
     await websiteQueueController({
       ...newSource,
       embedding: source.embedding,
-    });
+    }, prisma);
 
     await prisma.botSource.update({
       where: {

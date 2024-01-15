@@ -15,12 +15,8 @@ export const chatModelProvider = (
 ) => {
   modelName = modelName.replace("-dbase", "");
 
-  console.log("provider", provider);
-  console.log("modelName", modelName);
-
   switch (provider.toLowerCase()) {
     case "openai":
-      console.log("using openai", otherFields);
       return new ChatOpenAI({
         modelName: modelName,
         temperature: temperature,
@@ -31,21 +27,18 @@ export const chatModelProvider = (
         },
       });
     case "anthropic":
-      console.log("using anthropic");
       return new ChatAnthropic({
         modelName: modelName,
         temperature: temperature,
         ...otherFields,
       });
     case "google-bison":
-      console.log("using google");
       return new ChatGooglePaLM({
         temperature: temperature,
         apiKey: process.env.GOOGLE_API_KEY,
         ...otherFields,
       });
     case "huggingface-api":
-      console.log("using huggingface-api");
       return new HuggingFaceInference({
         modelName: modelName,
         temperature: temperature,
@@ -59,7 +52,6 @@ export const chatModelProvider = (
         ...otherFields,
       });
     case "openai-instruct":
-      console.log("using openai-instruct");
       return new OpenAI({
         modelName: modelName,
         temperature: temperature,
@@ -69,10 +61,10 @@ export const chatModelProvider = (
         },
       });
     case "local":
-      console.log("using local");
       return new ChatOpenAI({
         modelName: modelName,
         temperature: temperature,
+        openAIApiKey: otherFields.apiKey || process.env.OPENAI_API_KEY,
         ...otherFields,
         configuration: {
           baseURL: otherFields.baseURL,
@@ -85,14 +77,12 @@ export const chatModelProvider = (
         },
       });
     case "google":
-      console.log("using google");
       return new ChatGoogleGenerativeAI({
         modelName: modelName,
         maxOutputTokens: 2048,
         apiKey: process.env.GOOGLE_API_KEY,
       });
     case "ollama":
-      console.log("using ollama");
       return new ChatOllama({
         baseUrl: otherFields.baseURL,
         model: modelName,

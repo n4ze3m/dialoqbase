@@ -2,11 +2,11 @@ import { FastifyPluginAsync } from "fastify";
 import {
   getChatHistoryByChatIdHandler,
   getChatIntergationHistoryByTypeHandler,
-} from "./handlers";
+} from "../../../../../handlers/api/v1/bot/conversations";
 import {
   getChatHistoryByChatIdSchema,
   getChatHistoryByTypeSchema,
-} from "./schema";
+} from "../../../../../schema/api/v1/bot/conversations";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   fastify.get(

@@ -6,14 +6,14 @@ import {
   updatePasswordHandler,
   updateProfileHandler,
   userLoginHandler,
-} from "./handlers";
+} from "../../../../handlers/api/v1/user";
 import {
   isRegisterationAllowedSchema,
   updatePasswordSchema,
   updateProfileSchema,
   userLoginSchema,
   userRegisterSchema,
-} from "./schema";
+} from "../../../../schema/api/v1/user";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   fastify.post(

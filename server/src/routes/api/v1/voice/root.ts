@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
-import { voiceTTSHandler } from "./handlers/post.handler";
+import { voiceTTSHandler } from "../../../../handlers/api/v1/voice/post.handler";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   fastify.post(
