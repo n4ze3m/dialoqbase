@@ -177,42 +177,24 @@ export const getBotByIdSettingsHandler = async (
     },
   });
 
-  const chatModel = models.map((model) => {
-    return {
-      label: model.name || model.model_id,
-      value: model.model_id,
-      stream: model.stream_available,
-    };
-  });
+  const chatModel = models
+    .filter((model) => model.model_type !== "embedding")
+    .map((model) => {
+      return {
+        label: model.name || model.model_id,
+        value: model.model_id,
+        stream: model.stream_available,
+      };
+    });
 
-  const embeddingModel = [
-    { value: "openai", label: "text-embedding-ada-002" },
-    { value: "cohere", label: "Cohere" },
-    {
-      value: "transformer",
-      label: "all-MiniLM-L6-v2 (cpu)",
-    },
-    {
-      value: "ollama",
-      label: "Ollama Embeddings",
-    },
-    {
-      value: "google-gecko",
-      label: "Google text-gecko-001",
-    },
-    {
-      value: "jina-api",
-      label: "jina-embeddings-v2-base-en (API)",
-    },
-    {
-      value: "jina",
-      label: "jina-embeddings-v2-small-en (cpu)",
-    },
-    {
-      value: "google",
-      label: "embedding-001 (google)",
-    },
-  ];
+  const embeddingModel = models
+    .filter((model) => model.model_type === "embedding")
+    .map((model) => {
+      return {
+        label: model.name || model.model_id,
+        value: model.model_id,
+      };
+    });
 
   if (!bot) {
     return reply.status(404).send({

@@ -280,8 +280,8 @@ const EMBEDDING_MODELS: {
     model_type: "embedding",
   },
   {
-    model_id: "embed-english-v2.0",
-    name: "Cohere embed-english-v2.0",
+    model_id: "small",
+    name: "Cohere",
     model_provider: "Cohere",
     model_type: "embedding",
   },
