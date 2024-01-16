@@ -274,49 +274,49 @@ const EMBEDDING_MODELS: {
   config?: string;
 }[] = [
   {
-    model_id: "text-embedding-ada-002",
+    model_id: "dialoqbase_eb_text-embedding-ada-002",
     name: "text-embedding-ada-002",
     model_provider: "OpenAI",
     model_type: "embedding",
   },
   {
-    model_id: "small",
+    model_id: "dialoqbase_eb_small",
     name: "Cohere",
     model_provider: "Cohere",
     model_type: "embedding",
   },
   {
-    model_id: "Xenova/all-MiniLM-L6-v2",
+    model_id: "dialoqbase_eb_Xenova/all-MiniLM-L6-v2",
     name: "all-MiniLM-L6-v2 (cpu)",
     model_type: "embedding",
     model_provider: "Transformer",
   },
   {
-    model_id: "dialoqbase-ollama",
+    model_id: "dialoqbase_eb_dialoqbase-ollama",
     name: "Ollama Embeddings",
     model_type: "embedding",
     model_provider: "Ollama",
   },
   {
-    model_id: "models/embedding-gecko-001",
+    model_id: "dialoqbase_eb_models/embedding-gecko-001",
     name: "Google text-gecko-001",
     model_type: "embedding",
     model_provider: "Google PaLM",
   },
   {
-    model_id: "jina-embeddings-v2-base-en",
+    model_id: "dialoqbase_eb_jina-embeddings-v2-base-en",
     name: "jina-embeddings-v2-base-en (API)",
     model_type: "embedding",
     model_provider: "Jina",
   },
   {
-    model_id: "Xenova/jina-embeddings-v2-small-en",
+    model_id: "dialoqbase_eb_Xenova/jina-embeddings-v2-small-en",
     name: "jina-embeddings-v2-small-en (cpu)",
     model_type: "embedding",
     model_provider: "Transformer",
   },
   {
-    model_id: "embedding-001",
+    model_id: "dialoqbase_eb_embedding-001",
     name: "Google embedding-001",
     model_type: "embedding",
     model_provider: "Google",
@@ -363,7 +363,7 @@ const replaceOldEmbeddings = async () => {
       embedding: "openai",
     },
     data: {
-      embedding: "text-embedding-ada-002",
+      embedding: "dialoqbase_eb_text-embedding-ada-002",
     },
   })
 
@@ -372,17 +372,17 @@ const replaceOldEmbeddings = async () => {
       embedding: "cohere",
     },
     data: {
-      embedding: "small",
+      embedding: "dialoqbase_eb_small",
     },
   })
 
 
   await prisma.bot.updateMany({
     where: {
-      embedding: "transformer",
+      embedding: "dialoqbase_eb_transformer",
     },
     data: {
-      embedding: "Xenova/all-MiniLM-L6-v2",
+      embedding: "dialoqbase_eb_Xenova/all-MiniLM-L6-v2",
     },
   })
 
@@ -391,7 +391,7 @@ const replaceOldEmbeddings = async () => {
       embedding: "google-gecko",
     },
     data: {
-      embedding: "models/embedding-gecko-001",
+      embedding: "dialoqbase_eb_models/embedding-gecko-001",
     },
   })
 
@@ -400,7 +400,7 @@ const replaceOldEmbeddings = async () => {
       embedding: "jina-api",
     },
     data: {
-      embedding: "jina-embeddings-v2-base-en",
+      embedding: "dialoqbase_eb_jina-embeddings-v2-base-en",
     },
   })
  
@@ -409,7 +409,7 @@ const replaceOldEmbeddings = async () => {
       embedding: "jina",
     },
     data: {
-      embedding: "Xenova/jina-embeddings-v2-small-en",
+      embedding: "dialoqbase_eb_Xenova/jina-embeddings-v2-small-en",
     },
   })
 
@@ -418,7 +418,7 @@ const replaceOldEmbeddings = async () => {
       embedding: "google",
     },
     data: {
-      embedding: "embedding-001",
+      embedding: "dialoqbase_eb_embedding-001",
     },
   })
 

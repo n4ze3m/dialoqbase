@@ -436,7 +436,7 @@ export const BotForm = ({
           form={form}
           className="space-y-6"
           initialValues={{
-            embedding: "text-embedding-ada-002",
+            embedding: "dialoqbase_eb_text-embedding-ada-002",
             model: "gpt-3.5-turbo-dbase",
             maxDepth: 2,
             maxLinks: 10,

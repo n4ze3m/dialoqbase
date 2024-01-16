@@ -11,7 +11,7 @@ export const embeddings = (
   modelName: string,
   otherFields: any
 ) => {
-  console.log("Using Embeddings", provider, modelName);
+  modelName = modelName.replace("dialoqbase_eb_", "");
   switch (provider.toLocaleLowerCase()) {
     case "openai":
       return new OpenAIEmbeddings({

@@ -348,6 +348,7 @@ export default function SettingsModelRoot() {
                           title: "Model ID",
                           key: "model_id",
                           className: "text-gray-500",
+                          render: (text) => text.replace("dialoqbase_eb_", ""),
                         },
                         {
                           dataIndex: "model_provider",
