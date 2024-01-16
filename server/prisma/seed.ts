@@ -379,7 +379,7 @@ const replaceOldEmbeddings = async () => {
 
   await prisma.bot.updateMany({
     where: {
-      embedding: "dialoqbase_eb_transformer",
+      embedding: "transformer",
     },
     data: {
       embedding: "dialoqbase_eb_Xenova/all-MiniLM-L6-v2",
