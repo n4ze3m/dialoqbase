@@ -51,7 +51,25 @@ export const discordBotHandler = async (
     const temperature = bot.temperature;
 
     const sanitizedQuestion = message.trim().replaceAll("\n", " ");
-    const embeddingModel = embeddings(bot.embedding);
+    const embeddingInfo = await prisma.dialoqbaseModels.findFirst({
+      where: {
+        model_id: bot.embedding,
+        hide: false,
+        deleted: false,
+      },
+    });
+
+    if (!embeddingInfo) {
+      return {
+        text: "Opps! Model not found",
+      };
+    }
+
+    const embeddingModel = embeddings(
+      embeddingInfo.model_provider!.toLowerCase(),
+      embeddingInfo.model_id,
+      embeddingInfo?.config
+    );
 
     let retriever: BaseRetriever;
     let resolveWithDocuments: (value: Document[]) => void;

@@ -34,64 +34,42 @@ export default async function queueHandler(job: Job, done: DoneCallback) {
         });
         switch (source.type.toLowerCase()) {
           case "website":
-            await websiteQueueController(
-              source,
-            );
+            await websiteQueueController(source, prisma);
             break;
           case "text":
-            await textQueueController(
-              source,
-            );
+            await textQueueController(source, prisma);
             break;
           case "pdf":
-            await pdfQueueController(
-              source,
-            );
+            await pdfQueueController(source, prisma);
             break;
           case "crawl":
-            await crawlQueueController(
-              source,
-            );
+            await crawlQueueController(source);
             break;
 
           case "docx":
-            await DocxQueueController(
-              source,
-            );
+            await DocxQueueController(source, prisma);
             break;
 
           case "csv":
-            await csvQueueController(
-              source,
-            );
+            await csvQueueController(source, prisma);
             break;
           case "github":
-            await githubQueueController(
-              source,
-            );
+            await githubQueueController(source, prisma);
             break;
           case "txt":
-            await txtQueueController(
-              source,
-            );
+            await txtQueueController(source, prisma);
             break;
           case "mp3":
-            await audioQueueController(
-              source,
-            );
+            await audioQueueController(source, prisma);
             break;
           case "mp4":
-            await videoQueueController(
-              source,
-            );
+            await videoQueueController(source, prisma);
             break;
           case "youtube":
-            await youtubeQueueController(
-              source,
-            );
+            await youtubeQueueController(source, prisma);
             break;
           case "rest":
-            await restQueueController(source);
+            await restQueueController(source, prisma);
             break;
           case "sitemap":
             await sitemapQueueController(source);
