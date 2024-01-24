@@ -134,3 +134,48 @@ export const audioSettingsSchema: FastifySchema = {
     },
   },
 };
+
+export const updateBotPlaygroundTitleByIdSchema: FastifySchema = {
+  tags: ["Bot", "Playground"],
+  summary: "API to update bot playground title by id",
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
+  body: {
+    type: "object",
+    required: ["title", "playgroud_id"],
+    properties: {
+      title: {
+        type: "string",
+      },
+      playgroud_id: {
+        type: "string",
+      },
+    },
+  },
+};
+
+export const deleteBotByPlaygroundIdSchema: FastifySchema = {
+  tags: ["Bot", "Playground"],
+  summary: "API to delete bot playground by id",
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
+  params: {
+    type: "object",
+    required: ["id"],
+    properties: {
+      id: {
+        type: "string",
+      },
+    },
+  },
+};

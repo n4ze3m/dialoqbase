@@ -26,3 +26,8 @@ npm run dev
 ```
 
 The server will be running on `http://localhost:3000`. API documentation is available at `http://localhost:3000/docs`. 
+
+
+## Note
+
+I made a huge mistake on migrations folder naming. :/ I don't know how to fix it. I'm sorry.
