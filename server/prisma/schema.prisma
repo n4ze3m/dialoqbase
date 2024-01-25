@@ -85,6 +85,7 @@ model DialoqbaseSettings {
   noOfBotsPerUser       Int     @default(10)
   allowUserToCreateBots Boolean @default(true)
   allowUserToRegister   Boolean @default(false)
+  numberOfDocuments     Int     @default(10)
 }
 
 model BotIntegration {

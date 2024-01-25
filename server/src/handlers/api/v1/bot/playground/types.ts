@@ -51,3 +51,18 @@ export interface UpdateBotAudioSettings {
     enabled: boolean;
   };
 }
+
+export interface DeleteBotByPlaygroundId {
+  Params: {
+    id: string;
+  };
+}
+
+export interface UpdateBotPlaygroundTitleById {
+  Body: {
+    title: string;
+  };
+  Params: {
+    id: string;
+  };
+}
