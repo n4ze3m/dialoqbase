@@ -8,11 +8,12 @@ export const updateBotPlaygroundTitleById = async (
   const user = request.user;
   const prisma = request.server.prisma;
 
-  const { playgroud_id, title } = request.body;
+  const { title } = request.body;
+  const { id } = request.params;
 
   const isRealOwner = await prisma.botPlayground.findFirst({
     where: {
-      id: playgroud_id,
+      id,
       Bot: {
         user_id: user.user_id,
       },
@@ -27,7 +28,7 @@ export const updateBotPlaygroundTitleById = async (
 
   await prisma.botPlayground.update({
     where: {
-      id: playgroud_id,
+      id,
     },
     data: {
       title,

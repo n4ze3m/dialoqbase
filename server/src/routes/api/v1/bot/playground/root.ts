@@ -75,7 +75,7 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   );
 
   fastify.put(
-    "/history",
+    "/history/:id",
     {
       onRequest: [fastify.authenticate],
       schema: updateBotPlaygroundTitleByIdSchema

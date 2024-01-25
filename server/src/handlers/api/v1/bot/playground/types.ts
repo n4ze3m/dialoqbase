@@ -52,7 +52,6 @@ export interface UpdateBotAudioSettings {
   };
 }
 
-
 export interface DeleteBotByPlaygroundId {
   Params: {
     id: string;
@@ -60,8 +59,10 @@ export interface DeleteBotByPlaygroundId {
 }
 
 export interface UpdateBotPlaygroundTitleById {
- Body: {
+  Body: {
     title: string;
-    playgroud_id: string;
- } 
+  };
+  Params: {
+    id: string;
+  };
 }

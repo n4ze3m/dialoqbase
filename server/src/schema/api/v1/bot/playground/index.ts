@@ -147,16 +147,22 @@ export const updateBotPlaygroundTitleByIdSchema: FastifySchema = {
   },
   body: {
     type: "object",
-    required: ["title", "playgroud_id"],
+    required: ["title"],
     properties: {
       title: {
         type: "string",
       },
-      playgroud_id: {
+    },
+  },
+  params: {
+    type: "object",
+    required: ["id"],
+    properties: {
+      id: {
         type: "string",
       },
     },
-  },
+  }
 };
 
 export const deleteBotByPlaygroundIdSchema: FastifySchema = {
