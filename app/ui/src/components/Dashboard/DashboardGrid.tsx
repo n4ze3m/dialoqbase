@@ -28,7 +28,7 @@ export const DashboardGrid = () => {
         <Empty description="No bots created yet" />
       )}
       {status === "success" && data.length > 0 && (
-        <div className="grid grid-cols-1 mt-6 gap-4 sm:grid-cols-3">
+        <div className="grid grid-cols-1 mt-6 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {data.map((bot: any) => (
             <Link
               to={`/bot/${bot.id}`}
