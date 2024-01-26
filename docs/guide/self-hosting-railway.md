@@ -6,6 +6,8 @@ Here are the steps to get a Railway instance of the dialoqbase server up and run
 Dialoqbase use nice amount of memory. So, make sure you add credit limit to your Railway account.
 :::
 
+In case any issue related to Railway, you can check out this thread on GitHub: [#203](https://github.com/n4ze3m/dialoqbase/issues/203)
+
 
 ## Prerequisites
 
