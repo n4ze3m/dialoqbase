@@ -549,7 +549,10 @@ export const BotForm = ({
             <Select
               showSearch
               filterOption={(input, option) =>
-                (option?.label ? option?.label?.toLowerCase() : "").includes(
+                (option?.label?.toLowerCase() ?? "").includes(
+                  input?.toLowerCase()
+                ) ||
+                (option?.value?.toLowerCase() ?? "").includes(
                   input?.toLowerCase()
                 )
               }
@@ -574,7 +577,12 @@ export const BotForm = ({
             <Select
               showSearch
               filterOption={(input, option) =>
-                (option?.label ?? "").includes(input)
+                (option?.label?.toLowerCase() ?? "").includes(
+                  input?.toLowerCase()
+                ) ||
+                (option?.value?.toLowerCase() ?? "").includes(
+                  input?.toLowerCase()
+                )
               }
               filterSort={(optionA, optionB) =>
                 (optionA?.label ?? "")

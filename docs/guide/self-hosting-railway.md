@@ -6,6 +6,8 @@ Here are the steps to get a Railway instance of the dialoqbase server up and run
 Dialoqbase use nice amount of memory. So, make sure you add credit limit to your Railway account.
 :::
 
+In case any issue related to Railway, you can check out this thread on GitHub: [#203](https://github.com/n4ze3m/dialoqbase/issues/203)
+
 
 ## Prerequisites
 
@@ -25,13 +27,12 @@ Just click on the button below to deploy the template on Railway.
 
 You need to provide the following environment variables:
 
-- `OPENAI_API_KEY`
 - `DATABASE_URL`
 
 
-You can skip the rest of the steps by watching the video below.
+<!-- You can skip the rest of the steps by watching the video below  -->
 
-<video src="https://video.twimg.com/ext_tw_video/1668206930240864256/pu/vid/1354x720/vL4jyYEHTANSaxpF.mp4" controls="controls" style="width: 100%;"></video>
+<!-- <video src="https://video.twimg.com/ext_tw_video/1668206930240864256/pu/vid/1354x720/vL4jyYEHTANSaxpF.mp4" controls="controls" style="width: 100%;"></video> -->
 
 ### Setting up a Supabase Database
 
@@ -48,26 +49,24 @@ You need to remember the password you provide to the project 😁.
 
 #### 2. Copy the URL
 
+:::warning
+You must use `Session Mode` instead of `Connection Pool` otherwise the server will not work properly.
+:::
+
 Once the project is created, next step is to get the database URL.
 
 1. Click on the cog icon on the left sidebar.
 
 2. Click on the `Database`  from project settings sidebar.
 
-3. Scroll down to the `Connection String` section and select the `Node.js` tab.
+3. Select `Session Mode` instead of `Connection Pool` and Select `Node.js` as the URL format.
 
 4. Copy the `DATABASE_URL` and replace `[YOUR-PASSWORD]` with the password you provided to the project.
 
 5. Paste the `DATABASE_URL` in the railway environment variables. 
 
 
-
 That's it! You have successfully setup the database.
-
-
-### Setting up the OpenAI API Key
-
-Just copy paste your `OPENAI_API_KEY` in the railway environment variables.
 
 
 ### Launch the server

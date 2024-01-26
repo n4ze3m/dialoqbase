@@ -321,6 +321,18 @@ const EMBEDDING_MODELS: {
     model_type: "embedding",
     model_provider: "Google",
   },
+  {
+    model_id: "dialoqbase_eb_text-embedding-3-small",
+    name: "text-embedding-3-small (OpenAI)",
+    model_type: "embedding",
+    model_provider: "OpenAI",
+  },
+  {
+    model_id: "dialoqbase_eb_text-embedding-3-large",
+    name: "text-embedding-3-large (OpenAI)",
+    model_type: "embedding",
+    model_provider: "OpenAI",
+  }
 ];
 
 const newModels = async () => {

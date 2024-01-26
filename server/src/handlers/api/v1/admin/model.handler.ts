@@ -324,7 +324,7 @@ export const saveEmbedddingModelFromInputedUrlHandler = async (
     await prisma.dialoqbaseModels.create({
       data: {
         name: model_name,
-        model_id: `dialoqbase_eb_${model_id}`,
+        model_id: `dialoqbase_eb_${model_id}`.trim(),
         local_model: true,
         model_type: "embedding",
         model_provider: model_provider[api_type],
