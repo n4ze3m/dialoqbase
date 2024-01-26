@@ -439,7 +439,7 @@ export default function SettingsModelRoot() {
                 }}
                 initialValues={{
                   api_type: "openai",
-                  ollama_url: "http://localhost:11434",
+                  ollama_url: "http://host.docker.internal:11434",
                 }}
               >
                 {apiType === "openai" && (
@@ -712,6 +712,9 @@ export default function SettingsModelRoot() {
                   }}
                   form={embeddingForm}
                   layout="vertical"
+                  initialValues={{
+                    url: "http://host.docker.internal:11434",
+                  }}
                 >
                   <Form.Item
                     name="url"
