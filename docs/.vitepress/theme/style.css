@@ -1,0 +1,58 @@
+:root {
+  /* Indigo Palette */
+  --vp-c-brand: #3f51b5;
+  --vp-c-brand-light: #5c6bc0;
+  --vp-c-brand-lighter: #9fa8da;
+  --vp-c-brand-dark: #303f9f;
+  --vp-c-brand-darker: #283593;
+
+  /* Teal Palette */
+  --vp-c-brand-alt: #009688;
+  --vp-c-brand-alt-light: #4db6ac;
+  --vp-c-brand-alt-lighter: #b2dfdb;
+  --vp-c-brand-alt-dark: #00796b;
+  --vp-c-brand-alt-darker: #00695c;
+
+  /* Additional UI color variables */
+  --vp-c-bg-alt-up: #fff;
+  --vp-c-bg-alt-down: #fff;
+
+  --vp-code-editor-plain: #24292e;
+  --vp-code-editor-comment: #6a737d;
+  --vp-code-editor-keyword: #1e88e5;
+  --vp-code-editor-tag: #26a69a;
+  --vp-code-editor-punctuation: #24292e;
+  --vp-code-editor-definition: #6f42c1;
+  --vp-code-editor-property: #00897b;
+  --vp-code-editor-static: #f78c6c;
+  --vp-code-editor-string: #7e57c2;
+}
+
+.dark {
+  --vp-c-bg-alt-up: #1b1b1d;
+  --vp-c-bg-alt-down: #0f0f10;
+
+  --vp-code-editor-plain: #e1e4e8;
+  --vp-code-editor-comment: #6a737d;
+  --vp-code-editor-keyword: #82b1ff;
+  --vp-code-editor-tag: #64ffda;
+  --vp-code-editor-punctuation: #9ecbff;
+  --vp-code-editor-definition: #b392f0;
+  --vp-code-editor-property: #4db6ac;
+  --vp-code-editor-static: #f78c6c;
+  --vp-code-editor-string: #b39ddb;
+}
+
+.VPHomeHero .container .main h1.name {
+  color: var(--vp-c-text);
+}
+.VPHomeHero .container .main h1.name .clip {
+  color: inherit;
+  -webkit-text-fill-color: unset;
+  color: var(--vp-c-text);
+
+}
+
+.VPHomeHero .container .main p.tagline {
+ font-size: 20px;
+}

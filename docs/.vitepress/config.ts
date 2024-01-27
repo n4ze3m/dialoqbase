@@ -6,14 +6,6 @@ export default defineConfig({
   description: "Create chatbots with ease",
   lastUpdated: true,
   head: [
-    // [
-    //   "script",
-    //   {
-    //     src: "https://static.cloudflareinsights.com/beacon.min.js",
-    //     "data-cf-beacone": '{"token": "7bc549b39629497a9668db8e00ec41eb"}',
-    //     defer: "",
-    //   },
-    // ],
     [
       "script",
       {
@@ -166,7 +158,7 @@ export default defineConfig({
     ],
     footer: {
       message: "MIT Licensed Open Source Project",
-      copyright: "Copyright © 2023 Muhammed Nazeem  & Dialoqbase Contributors",
+      copyright: `Copyright © ${new Date().getFullYear()} Muhammed Nazeem  & Dialoqbase Contributors`,
     },
   },
   sitemap: {
