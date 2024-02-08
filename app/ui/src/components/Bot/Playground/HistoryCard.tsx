@@ -81,8 +81,8 @@ export const PlaygroundHistoryCard = ({
       className={`flex py-2 px-2 items-center gap-3 relative rounded-md truncate hover:pr-4 group transition-opacity duration-300 ease-in-out ${
         historyId === item.id
           ? item.id === params.history_id
-            ? "bg-gray-300 dark:bg-[#232222] dark:text-white"
-            : "bg-gray-300 dark:bg-[#232222] dark:text-white"
+            ? "bg-gray-300 dark:bg-[#262626] dark:text-white"
+            : "bg-gray-300 dark:bg-[#262626] dark:text-white"
           : "bg-gray-100 dark:bg-[#0a0a0a] dark:text-gray-200"
       }`}
     >

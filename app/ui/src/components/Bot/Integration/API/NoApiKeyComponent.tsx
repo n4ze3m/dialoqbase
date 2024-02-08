@@ -32,7 +32,7 @@ const NoApiKeyComponent: React.FC = () => {
 
   return (
     <div className="m-0 p-0 h-screen flex flex-col justify-start items-center">
-      <div className="mt-20 p-8 border bg-gray-50 border-gray-300 rounded-lg dark:bg-[#0a0a0a] dark:border-[#232222]">
+      <div className="mt-20 p-8 border bg-gray-50 border-gray-300 rounded-lg dark:bg-[#0a0a0a] dark:border-gray-700">
         <h1 className="text-2xl font-semibold mb-4 dark:text-white">No API Key Found</h1>
         <p className="mb-4 dark:text-gray-500">You need to generate an API key to get started.</p>
         <button

@@ -10,7 +10,7 @@ export const PlaygroundMenu = () => {
       id="menu"
       className={`bg-white z-[998] border fixed md:inset-y-0 md:flex md:w-[260px] md:flex-col transition-transform  max-md:w-3/4  ${
         hideMenu ? "translate-x-[-100%]" : "translate-x-[0%]"
-      } dark:bg-black dark:border-gray-800`}
+      } dark:bg-[#171717] dark:border-gray-600`}
     >
       <div className="flex mt-16 h-full min-h-0 flex-col">
         <div className="flex h-full w-full flex-1 items-start">

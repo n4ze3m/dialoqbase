@@ -86,7 +86,7 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
 
   return (
     <div className="min-h-screen ">
-      <div className="bg-white border rounded-md p-4 max-w-screen-xl mx-auto dark:bg-[#0a0a0a] dark:border-[#232222]">
+      <div className="bg-white border rounded-md p-4 max-w-screen-xl mx-auto dark:bg-[#0a0a0a] dark:border-gray-700">
         <div className="flex mb-4">
           {/* span green [POST] tailwind */}
           <div className="flex-1">
@@ -107,7 +107,7 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
         </div>
 
         <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="border rounded-md p-4 dark:bg-[#0a0a0a] dark:border-[#232222]">
+          <div className="border rounded-md p-4 dark:bg-[#0a0a0a] dark:border-gray-700">
             <h6 className="text-sm font-semibold mb-2 dark:text-gray-300">
               API KEY
             </h6>
@@ -169,7 +169,7 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
 
               <Form.List name="history">
                 {(fields, { add, remove }) => (
-                  <div className="bg-gray-50 p-3 rounded-md border mb-6 dark:bg-[#0a0a0a] dark:border-[#232222]">
+                  <div className="bg-gray-50 p-3 rounded-md border mb-6 dark:bg-[#0a0a0a] dark:border-gray-700">
                     <div className="text-sm font-semibold mb-3">
                       history
                       <span className="ml-2 text-xs text-gray-500 font-normal">
@@ -179,7 +179,7 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
                     {fields.map((field, index) => (
                       <div
                         key={index}
-                        className="border p-2 rounded mb-2 dark:bg-[#0a0a0a] dark:border-[#232222]"
+                        className="border p-2 rounded mb-2 dark:bg-[#0a0a0a] dark:border-gray-700"
                       >
                         <div className="flex flex-row justify-between">
                           <div>
@@ -255,7 +255,7 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
                           text: "",
                         })
                       }
-                      className="flex items-center justify-center p-2 transition-colors duration-200 rounded hover:bg-gray-100 focus:outline-none focus:ring focus:ring-opacity-50 dark:hover:bg-gray-800 dark:focus:ring-gray-900"
+                      className="flex items-center justify-center p-2 transition-colors duration-200 rounded hover:bg-gray-100 focus:outline-none focus:ring focus:ring-opacity-50 dark:hover:bg-[#262626] dark:focus:ring-gray-900"
                     >
                       <span className="text-blue-800">Add history</span>
                     </button>
@@ -289,7 +289,7 @@ const ApiPlaygroundComponent: React.FC<BotIntegrationAPI> = ({ data }) => {
             </Form>
           </div>
 
-          <div className="border rounded-md p-4 dark:bg-[#0a0a0a] dark:border-[#232222]">
+          <div className="border rounded-md p-4 dark:bg-[#0a0a0a] dark:border-gray-700">
             <APICodeGenerator
               api={`${hostUrl}/bot/${data.public_url}/api`}
               xApiKey={data.api_key || ""}

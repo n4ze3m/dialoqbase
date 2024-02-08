@@ -41,9 +41,7 @@ export const PlaygroundMessage = (props: Props) => {
 
   return (
     <div
-      className={`group w-full text-gray-800 dark:text-gray-100 border-b border-black/10 dark:border-gray-900/50 ${
-        !props.isBot ? "dark:bg-black" : "bg-gray-50  dark:bg-[#0a0a0a]"
-      }`}
+      className={`group w-full text-gray-800 dark:text-gray-100 `}
     >
       <div className="text-base gap-4 md:gap-6 md:max-w-2xl lg:max-w-xl xl:max-w-3xl flex lg:px-0 m-auto w-full">
         <div className="flex flex-row gap-4 md:gap-6 md:max-w-2xl lg:max-w-xl xl:max-w-3xl p-4 md:py-6 lg:px-0 m-auto w-full">
@@ -96,12 +94,12 @@ export const PlaygroundMessage = (props: Props) => {
                     navigator.clipboard.writeText(props.message);
                     setIsBtnPressed(true);
                   }}
-                  className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                  className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                 >
                   {!isBtnPressed ? (
-                    <ClipboardIcon className="w-4 h-4 text-gray-400 group-hover:text-gray-500" />
+                    <ClipboardIcon className="w-3 h-3 text-gray-400 group-hover:text-gray-500" />
                   ) : (
-                    <CheckIcon className="w-4 h-4 text-green-400 group-hover:text-green-500" />
+                    <CheckIcon className="w-3 h-3 text-green-400 group-hover:text-green-500" />
                   )}
                 </button>
               )}
@@ -117,12 +115,12 @@ export const PlaygroundMessage = (props: Props) => {
                       cancel();
                     }
                   }}
-                  className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                  className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                 >
                   {!isWebSpeaking ? (
-                    <PlayIcon className="w-4 h-4 text-gray-400 group-hover:text-gray-500" />
+                    <PlayIcon className="w-3 h-3 text-gray-400 group-hover:text-gray-500" />
                   ) : (
-                    <StopIcon className="w-4 h-4 text-red-400 group-hover:text-red-500" />
+                    <StopIcon className="w-3 h-3 text-red-400 group-hover:text-red-500" />
                   )}
                 </button>
               )}
@@ -140,13 +138,13 @@ export const PlaygroundMessage = (props: Props) => {
                         cancelElevenLabs();
                       }
                     }}
-                    className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                    className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                   >
                     {!isElevenLabsLoading ? (
                       !isElevenLabsPlaying ? (
-                        <PlayIcon className="w-4 h-4 text-gray-400 group-hover:text-gray-500" />
+                        <PlayIcon className="w-3 h-3 text-gray-400 group-hover:text-gray-500" />
                       ) : (
-                        <StopIcon className="w-4 h-4 text-red-400 group-hover:text-red-500" />
+                        <StopIcon className="w-3 h-3 text-red-400 group-hover:text-red-500" />
                       )
                     ) : (
                       <svg

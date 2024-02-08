@@ -99,7 +99,7 @@ export const PlaygroundgForm = () => {
   };
 
   return (
-    <div className="p-3 md:p-6 md:bg-white dark:bg-[#0a0a0a] border rounded-t-xl   border-black/10 dark:border-gray-900/50">
+    <div className="p-3 md:p-6 md:bg-white dark:bg-[#1e1e1e] border rounded-t-xl   border-black/10 dark:border-gray-600">
       <div className="flex-grow space-y-6 ">
         <div className="flex">
           <form
@@ -110,9 +110,8 @@ export const PlaygroundgForm = () => {
             })}
             className="shrink-0 flex-grow  flex items-center "
           >
-            <div className="flex items-center p-2 rounded-full border  bg-gray-100 w-full dark:bg-black dark:border-gray-800">
+            <div className="flex items-center p-2 rounded-xl border  bg-gray-100 w-full dark:bg-[#1e1e1e] dark:border-gray-600">
               <textarea
-                // disabled={isSendinhg}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey && !isSending) {
                     e.preventDefault();
@@ -127,9 +126,6 @@ export const PlaygroundgForm = () => {
                   }
                 }}
                 ref={textareaRef}
-                // className={`min-h-[32px] w-full resize-none border-0 bg-transparent  py-[0.8rem] m-0 focus:ring-0 focus-visible:ring-0 dark:bg-transparent ${
-                //   listening && "placeholder:italic"
-                // }`}
                 className="rounded-full pl-4 pr-2 py-2 w-full resize-none bg-transparent focus-within:outline-none sm:text-sm focus:ring-0 focus-visible:ring-0 ring-0 dark:ring-0 border-0 dark:text-gray-100"
                 required
                 rows={1}

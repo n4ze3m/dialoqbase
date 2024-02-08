@@ -26,7 +26,7 @@ export const IntegrationCard: React.FC<Prosp> = ({
   const { mode } = useDarkMode();
 
   return !href ? (
-    <div className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer dark:bg-[#0a0a0a] dark:border-[#232222]  dark:hover:bg-[#1a1a1a] dark:hover:border-[#232222] hover:bg-gray-50">
+    <div className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer dark:bg-[#262626] dark:border-gray-700  dark:hover:bg-[#1a1a1a] dark:hover:border-[#232222] hover:bg-gray-50">
       <button
         // onClick={() => {
         //   setSelectedIntegration(integration);
@@ -39,7 +39,7 @@ export const IntegrationCard: React.FC<Prosp> = ({
             <img className="h-12 w-auto" src={logo} alt={name} />
             <div className="ml-2 flex flex-shrink-0">
               <p
-                className={`inline-flex rounded-md px-2 text-sm  leading-5 border border-transparent uppercase tracking-widest dark:bg-[#232222] dark:text-[#fff] dark:border-[#232222] dark:hover:bg-[#232222] dark:hover:text-[#fff] dark:hover:border-[#232222]
+                className={`inline-flex rounded-md px-2 text-sm  leading-5 border border-transparent uppercase tracking-widest dark:bg-[#171717] dark:text-[#fff] dark:border-gray-700 dark:hover:bg-[#232222] dark:hover:text-[#fff] dark:hover:border-[#232222]
               `}
                 style={{
                   backgroundColor: mode !== "dark" ? color : undefined,
@@ -72,7 +72,7 @@ export const IntegrationCard: React.FC<Prosp> = ({
   ) : (
     <Link
       to={href}
-      className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer dark:bg-[#0a0a0a] dark:border-[#232222]  dark:hover:bg-[#1a1a1a] dark:hover:border-[#232222] hover:bg-gray-50"
+      className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer dark:bg-[#262626] dark:border-gray-700  dark:hover:bg-[#1a1a1a] dark:hover:border-[#232222] hover:bg-gray-50"
     >
       <div>
         <div className="mb-4">

@@ -104,7 +104,7 @@ export default function BotLayout({
                 leaveFrom="translate-x-0"
                 leaveTo="-translate-x-full"
               >
-                <Dialog.Panel className="relative flex w-full max-w-xs flex-1 flex-col bg-white pt-5 pb-4 dark:bg-black">
+                <Dialog.Panel className="relative flex w-full max-w-xs flex-1 flex-col bg-white pt-5 pb-4 dark:bg-[#171717]">
                   <Transition.Child
                     as={Fragment}
                     enter="ease-in-out duration-300"
@@ -154,8 +154,8 @@ export default function BotLayout({
                           className={classNames(
                             location.pathname ===
                               item.href.replace(":id", params.id!)
-                              ? "bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white"
-                              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white dark:hover:bg-gray-800",
+                              ? "bg-gray-100 text-gray-900 dark:bg-[#262626] dark:text-white"
+                              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white dark:hover:bg-[#262626]",
                             "group flex items-center px-2 py-2 text-base font-medium rounded-md"
                           )}
                         >
@@ -184,7 +184,7 @@ export default function BotLayout({
         </Transition.Root>
 
         <div className="hidden md:fixed md:inset-y-0 md:flex md:flex-col">
-          <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5 dark:bg-black dark:border-gray-800">
+          <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5 dark:bg-[#171717] dark:border-gray-600">
             <div className="mt-14 flex flex-grow flex-col">
               <nav className="flex-1 space-y-1 px-2 pb-4">
                 {navigation.map((item) => (
@@ -196,8 +196,8 @@ export default function BotLayout({
                       className={classNames(
                         location.pathname ===
                           item.href.replace(":id", params.id!)
-                          ? "bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white"
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white dark:hover:bg-gray-800",
+                          ? "bg-gray-100 text-gray-900 dark:bg-[#262626] dark:text-white"
+                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white dark:hover:bg-[#262626]",
                         "group  flex items-center px-2 py-2 text-sm font-medium rounded-md"
                       )}
                     >
@@ -221,10 +221,10 @@ export default function BotLayout({
         </div>
 
         <div className="flex flex-col">
-          <div className="sticky top-0 z-[999] flex h-14  bg-white border-b border-gray-200 dark:bg-black dark:border-gray-800">
+          <div className="sticky top-0 z-[999] flex h-14  bg-white border-b border-gray-200 dark:bg-[#171717] dark:border-gray-600">
           <button
               type="button"
-              className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden dark:border-gray-800 dark:text-gray-200"
+              className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden dark:border-gray-600 dark:text-gray-200"
               onClick={() => setSidebarOpen(true)}
             >
               <span className="sr-only">Open sidebar</span>

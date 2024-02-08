@@ -111,7 +111,7 @@ export default function SettingsRoot() {
                   onFinish={updateProfile}
                 >
                   <div className="sm:overflow-hidden ">
-                    <div className="space-y-6 border-t border rounded-t-md  bg-white px-4 py-5 sm:p-6 dark:bg-black dark:border-gray-800">
+                    <div className="space-y-6 border-t border rounded-t-md  bg-white px-4 py-5 sm:p-6 dark:bg-[#141414] dark:border-gray-600">
                       <Form.Item
                         label="Username"
                         name="username"
@@ -141,7 +141,7 @@ export default function SettingsRoot() {
                         />
                       </Form.Item>
                     </div>
-                    <div className="bg-gray-50 border-x border-b rounded-b-md rounded-x-md px-4 py-3 text-right sm:px-6 dark:bg-[#141414] dark:border-gray-800">
+                    <div className="bg-gray-50 border-x border-b rounded-b-md rounded-x-md px-4 py-3 text-right sm:px-6 dark:bg-[#141414] dark:border-gray-600">
                       <button
                         disabled={isLoading}
                         type="submit"
@@ -168,7 +168,7 @@ export default function SettingsRoot() {
               <div className="mt-5 md:col-span-2 md:mt-0">
                 <Form layout="vertical" onFinish={updatePassowrd}>
                   <div className="overflow-hidden sm:rounded-md">
-                    <div className="bg-white border-t border rounded-t-md  px-4 py-5 sm:p-6 dark:bg-black dark:border-gray-800">
+                    <div className="bg-white border-t border rounded-t-md  px-4 py-5 sm:p-6 dark:bg-[#141414] dark:border-gray-600">
                       <Form.Item
                         label="Current Password"
                         name="oldPassword"
@@ -194,7 +194,7 @@ export default function SettingsRoot() {
                         <Input.Password size="large" />
                       </Form.Item>
                     </div>
-                    <div className="bg-gray-50 border-x border-b rounded-b-md rounded-x-md  px-4 py-3 text-right sm:px-6 dark:bg-[#141414] dark:border-gray-800">
+                    <div className="bg-gray-50 border-x border-b rounded-b-md rounded-x-md  px-4 py-3 text-right sm:px-6 dark:bg-[#141414] dark:border-gray-600">
                       <button
                         disabled={isPasswordLoading}
                         type="submit"
