@@ -262,6 +262,15 @@ const LLMS: {
     local_model: false,
     config: "{}",
   },
+  {
+    model_id: "gpt-3.5-turbo-0125-dbase",
+    name: "GPT-3.5 Turbo 0125 (OpenAI)",
+    model_type: "chat",
+    stream_available: true,
+    model_provider: "OpenAI",
+    local_model: false,
+    config: "{}",
+  },
 ];
 
 const EMBEDDING_MODELS: {
