@@ -10,7 +10,9 @@ export const ConversationInfo = ({ data }: { data: ConversationsByType }) => {
         <span className="text-md font-thin text-gray-500 dark:text-gray-200">
           {data?.metdata?.user_agent
             ? getOSAndBrowser(data?.metdata?.user_agent)
-            : `Anonymous`}
+            : 
+            data?.metdata?.info || 'Anonymous'
+            }
         </span>
       </nav>
       <div className="flex-grow overflow-y-auto ">

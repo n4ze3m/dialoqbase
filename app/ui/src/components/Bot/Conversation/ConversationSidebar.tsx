@@ -5,6 +5,7 @@ import { getOSAndBrowser } from "../../../utils/useragent";
 import { UserIcon } from "@heroicons/react/24/outline";
 import relativeTime from "dayjs/plugin/relativeTime";
 import dayjs from "dayjs";
+import { useSearchParams } from "react-router-dom";
 dayjs.extend(relativeTime);
 
 export const ConversationSidebar = ({
@@ -21,6 +22,7 @@ export const ConversationSidebar = ({
   defaultChannel: string;
 }) => {
   const [hideMenu] = React.useState(false);
+  const [_, setSearchParams] = useSearchParams();
   return (
     <div
       id="menu"
@@ -33,15 +35,20 @@ export const ConversationSidebar = ({
           <nav className="flex h-full flex-1 flex-col space-y-3 px-2 pt-2 overflow-x-hidden">
             <div className="flex-grow overflow-y-auto  border-b border-white/20 ">
               <div className="flex flex-col gap-2">
-                <h2 className="text-lg font-semibold dark:text-white">Conversations</h2>
+                <h2 className="text-lg font-semibold dark:text-white">
+                  Conversations
+                </h2>
                 <Select
                   options={[
                     { label: "Website", value: "website" },
                     { label: "Telegram", value: "telegram" },
                     { label: "Discord", value: "discord" },
-                    // { label: "WhatsApp", value: "whatsapp" },
+                    { label: "WhatsApp", value: "whatsapp" },
                   ]}
-                  onChange={(value) => onChannelChange(value)}
+                  onChange={(value) => {
+                    onChannelChange(value);
+                    setSearchParams({ channel: value });
+                  }}
                   defaultValue={defaultChannel}
                   style={{ width: "100%" }}
                 />
@@ -68,7 +75,7 @@ export const ConversationSidebar = ({
                         <h3 className="text-xs font-thin dark:text-gray-200">
                           {item?.metdata?.user_agent
                             ? getOSAndBrowser(item?.metdata?.user_agent)
-                            : `Anonymous`}
+                            : item?.metdata?.info || "Anonymous"}
                         </h3>
                         <span className="text-xs font-thin">
                           {item?.created_at &&

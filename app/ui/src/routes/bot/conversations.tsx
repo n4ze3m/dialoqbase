@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import api from "../../services/api";
 import React from "react";
 import { SkeletonLoading } from "../../components/Common/SkeletonLoading";
@@ -14,6 +14,7 @@ export default function BotConversationsRoot() {
     conversation_id?: string;
   }>();
   const navigate = useNavigate();
+  const [searchParam] = useSearchParams();
   const [type, setType] = React.useState<string>(param.type || "website");
   const { data, status } = useQuery(
     ["getBotConversations", param.id, param.type, type],
@@ -25,8 +26,15 @@ export default function BotConversationsRoot() {
     },
     {
       enabled: !!param.id,
+      keepPreviousData: true,
     }
   );
+
+  React.useEffect(() => {
+    if (searchParam.get("channel") && searchParam.get("channel") !== type) {
+      setType(searchParam.get("channel") || "website");
+    }
+  }, [searchParam.get("channel")]);
 
   React.useEffect(() => {
     if (status === "error") {

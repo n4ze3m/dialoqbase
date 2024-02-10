@@ -137,6 +137,7 @@ export const whatsappBotHandler = async (
         from: from,
         human: message,
         bot: response,
+        bot_id: bot_id,
       },
     });
 
