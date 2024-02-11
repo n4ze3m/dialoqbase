@@ -4,13 +4,13 @@ export const apiKeyValidaton = (modelType: string) => {
     case "jina":
     case "ollama":
     case "local":
+    case "replicate":
+    case "supabase":
       return true;
     case "jina-api":
       return process.env.JINA_API_KEY
         ? process.env.JINA_API_KEY.length > 0
         : false;
-    case "supabase":
-      return true;
     case "google-bison":
     case "google-gecko":
     case "google":
@@ -72,6 +72,8 @@ export const apiKeyValidatonMessage = (modelType: string) => {
       return "Please add FIREWORKS_API_KEY to your .env file";
     case "jina-api":
       return "Please add JINA_API_KEY to your .env file";
+    // case "replicate":
+    //   return "Please add REPLICATE_API_TOKEN to your .env file";
     default:
       return "Unable to validate API key";
   }

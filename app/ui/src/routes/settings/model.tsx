@@ -435,7 +435,11 @@ export default function SettingsModelRoot() {
                 form={fetchUrlForm}
                 layout="vertical"
                 onFinish={(value) => {
-                  fetchModel(value);
+                  if (apiType === "replicate") {
+                    saveModel(value);
+                  } else {
+                    fetchModel(value);
+                  }
                 }}
                 initialValues={{
                   api_type: "openai",
@@ -502,6 +506,51 @@ export default function SettingsModelRoot() {
                   </Form.Item>
                 )}
 
+                {apiType === "replicate" && (
+                  <>
+                    <Form.Item
+                      name="api_key"
+                      label="Replicate API Key"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please your Replicate API Key",
+                        },
+                      ]}
+                    >
+                      <Input.Password
+                        size="large"
+                        type="text"
+                        placeholder="Enter API Key"
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      name="model_id"
+                      label="Model"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter a replicate model id",
+                        },
+                      ]}
+                    >
+                      <Input
+                        size="large"
+                        placeholder="mistralai/mixtral-8x7b-instruct-v0.1"
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      name="stream_available"
+                      label="Is Streaming Available?"
+                      valuePropName="checked"
+                    >
+                      <Switch />
+                    </Form.Item>
+                  </>
+                )}
+
                 <Form.Item name={"api_type"} label="API Type">
                   <Select
                     size="large"
@@ -515,6 +564,10 @@ export default function SettingsModelRoot() {
                         label: "Ollama",
                         value: "ollama",
                       },
+                      {
+                        label: "Replicate",
+                        value: "replicate",
+                      },
                     ]}
                   />
                 </Form.Item>
@@ -524,7 +577,13 @@ export default function SettingsModelRoot() {
                   disabled={isSaveModel}
                   className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
-                  {!isSaveModel ? "Fetch Model" : "Fetching Model..."}
+                  {apiType === "replicate"
+                    ? !isSaveLocalModel
+                      ? "Save Model"
+                      : "Saving Model..."
+                    : !isSaveModel
+                    ? "Fetch Models"
+                    : "Fetching Models..."}
                 </button>
               </Form>
             )}
