@@ -135,7 +135,7 @@ export const SettingsCard: React.FC<BotSettings> = ({
           layout="vertical"
           className="space-y-6 mb-6 "
         >
-          <div className="px-4 py-5 bg-white  border sm:rounded-lg sm:p-6 dark:bg-[#0a0a0a] dark:border-[#232222]">
+          <div className="px-4 py-5 bg-white  border sm:rounded-lg sm:p-6 dark:bg-[#262626] dark:border-gray-700">
             <div className="md:grid md:grid-cols-3 md:gap-6">
               <div className="md:col-span-1">
                 <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">
@@ -253,7 +253,7 @@ export const SettingsCard: React.FC<BotSettings> = ({
                         qaPrompt: HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT,
                       });
                     }}
-                    className="flex items-center rounded-md py-[0.4375rem] pl-2 pr-2 lg:pr-3 bg-white border text-xs dark:bg-[#0a0a0a] dark:border-[#232222]"
+                    className="flex items-center rounded-md py-[0.4375rem] pl-2 pr-2 lg:pr-3 bg-white border text-xs dark:bg-[#0a0a0a] dark:border-gray-700"
                   >
                     PROMPT WITH CONTEXT
                   </button>
@@ -264,7 +264,7 @@ export const SettingsCard: React.FC<BotSettings> = ({
                         qaPrompt: HELPFUL_ASSISTANT_WITHOUT_CONTEXT_PROMPT,
                       });
                     }}
-                    className="flex items-center rounded-md py-[0.4375rem] pl-2 pr-2 lg:pr-3 bg-white border text-xs dark:bg-[#0a0a0a] dark:border-[#232222]"
+                    className="flex items-center rounded-md py-[0.4375rem] pl-2 pr-2 lg:pr-3 bg-white border text-xs dark:bg-[#0a0a0a] dark:border-gray-700"
                   >
                     PROMPT WITHOUT CONTEXT
                   </button>
@@ -325,7 +325,7 @@ export const SettingsCard: React.FC<BotSettings> = ({
           </div>
         </Form>
 
-        <div className="bg-white border sm:rounded-lg dark:bg-[#0a0a0a] dark:border-[#232222]">
+        <div className="bg-white border sm:rounded-lg dark:bg-[#262626] dark:border-gray-700">
           <div className="px-4 py-5 sm:p-6">
             <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">
               Delete your bot

@@ -6,6 +6,7 @@ import { DialoqbaseFireworksModel } from "../models/fireworks";
 import { OpenAI } from "langchain/llms/openai";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { ChatOllama } from "langchain/chat_models/ollama";
+import { Replicate } from "langchain/llms/replicate";
 
 export const chatModelProvider = (
   provider: string,
@@ -86,6 +87,13 @@ export const chatModelProvider = (
       return new ChatOllama({
         baseUrl: otherFields.baseURL,
         model: modelName,
+      });
+    case "replicate":
+      return new Replicate({
+        model: modelName,
+        temperature: temperature,
+        apiKey: otherFields.apiKey,
+        ...otherFields,
       });
     default:
       console.log("using default");

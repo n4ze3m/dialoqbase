@@ -49,11 +49,11 @@ export const saveModelFromInputedUrlSchema: FastifySchema = {
       url: { type: "string" },
       model_id: { type: "string" },
       name: { type: "string" },
-      stream_available: { type: "boolean" },
+      stream_available: { type: "boolean", default: false },
       api_key: { type: "string" },
       api_type: { type: "string" },
     },
-    required: ["url", "model_id", "name", "stream_available", "api_type"],
+    required: ["model_id", "stream_available", "api_type"],
   },
 };
 

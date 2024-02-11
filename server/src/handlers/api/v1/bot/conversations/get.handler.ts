@@ -10,6 +10,12 @@ import {
   BotDiscordHistory,
 } from "@prisma/client";
 
+interface BotWhatsappHistoryWithName extends BotWhatsappHistory {
+  metadata?: {
+    info?: string;
+  };
+}
+
 const getAllMessagesHelper = (
   webHistory:
     | botWebHistory[]
@@ -166,9 +172,6 @@ export const getChatIntergationHistoryByTypeHandler = async (
           identifier: process_tg.identifier,
         },
       });
-      console.log(telegramHistory);
-
-      // group by chat_id
       const telegramHistoryGroupByChatId: Record<string, BotTelegramHistory[]> =
         telegramHistory
           .filter((item) => item.new_chat_id)
@@ -270,28 +273,36 @@ export const getChatIntergationHistoryByTypeHandler = async (
 
       const whatsappHistory = await prisma.botWhatsappHistory.findMany({
         where: {
-          identifier: process_whatsapp.identifier,
+          bot_id: id,
         },
       });
 
       // group by chat_id
-      const whatsappHistoryGroupByChatId: Record<string, BotWhatsappHistory[]> =
-        whatsappHistory
-          .filter((item) => item.chat_id)
-          .reduce((acc, cur) => {
-            if (cur && cur.chat_id) {
-              if (!acc[cur.chat_id]) {
-                acc[cur.chat_id] = [];
-              }
-              acc[cur.chat_id].push(cur);
+      const whatsappHistoryGroupByChatId: Record<
+        string,
+        BotWhatsappHistoryWithName[]
+      > = whatsappHistory
+        .filter((item) => item.from)
+        .reduce((acc, cur) => {
+          if (cur && cur.from) {
+            if (!acc[cur.from]) {
+              acc[cur.from] = [];
             }
-            return acc;
-          }, {} as Record<string, BotWhatsappHistory[]>);
+            acc[cur.from].push({
+              ...cur,
+              metadata: {
+                info: cur.from,
+              },
+            });
+          }
+          return acc;
+        }, {} as Record<string, BotWhatsappHistoryWithName[]>);
 
       const whatsappResult = Object.keys(whatsappHistoryGroupByChatId).map(
         (key) => {
           return {
             chat_id: key,
+            metdata: whatsappHistoryGroupByChatId[key][0].metadata,
             human: whatsappHistoryGroupByChatId[key][0].human,
             bot: whatsappHistoryGroupByChatId[key][0].bot,
             all_messages: getAllMessagesHelper(

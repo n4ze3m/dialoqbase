@@ -6,11 +6,13 @@ import { PlaygroundMessage } from "../Playground/Message";
 export const ConversationInfo = ({ data }: { data: ConversationsByType }) => {
   return (
     <div className="grow  flex flex-col md:translate-x-0 transition-transform duration-300 ease-in-out">
-      <nav className="flex flex-col flex-1 p-3 overflow-y-auto bg-white border-b dark:bg-black dark:border-gray-800">
+      <nav className="flex flex-col flex-1 p-3 overflow-y-auto bg-white border-b dark:bg-[#171717] dark:border-gray-600">
         <span className="text-md font-thin text-gray-500 dark:text-gray-200">
           {data?.metdata?.user_agent
             ? getOSAndBrowser(data?.metdata?.user_agent)
-            : `Anonymous`}
+            : 
+            data?.metdata?.info || 'Anonymous'
+            }
         </span>
       </nav>
       <div className="flex-grow overflow-y-auto ">

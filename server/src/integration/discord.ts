@@ -74,7 +74,6 @@ export default class DiscordBot {
       let slashCommands = command.replace(/[^a-zA-Z0-9]/g, "");
 
       bot.on("ready", async () => {
-        console.log(`Logged in as ${bot.user?.tag}!`);
         const clientId = bot.user?.id;
         if (clientId) {
           await this.setCommand(
@@ -87,7 +86,6 @@ export default class DiscordBot {
       });
 
       bot.on("interactionCreate", async (interaction) => {
-        console.log(interaction);
         if (!interaction.isCommand()) return;
 
         if (interaction.commandName === slashCommands) {
@@ -188,7 +186,6 @@ export default class DiscordBot {
 
       bot.login(token);
     } catch (error) {
-      console.log("[DiscordBot] Error", error);
     }
   }
 

@@ -3,6 +3,7 @@ export type ConversationsByType = {
   metdata: {
     user_agent?: string;
     ip?: string;
+    info?:string;
   };
   human: string | null;
   bot: string | null;

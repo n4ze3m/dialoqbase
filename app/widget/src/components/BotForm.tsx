@@ -32,7 +32,7 @@ export default function BotForm({}: { botStyle: BotStyle }) {
             })}
             className="flex-grow  flex items-center"
           >
-            <div className="flex items-cente rounded-full border  bg-gray-100 w-full dark:bg-black dark:border-gray-800">
+            <div className="flex items-cente rounded-full border  bg-gray-100 w-full dark:bg-[#171717] dark:border-gray-600">
               <textarea
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey && !isSending) {

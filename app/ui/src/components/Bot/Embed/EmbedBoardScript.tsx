@@ -18,7 +18,7 @@ export function EmbedBoardScript({
   const widgetIcon = Form.useWatch("data-widget-icon", from);
   //content={`<script src="${hostUrl}/chat.min.js" data-chat-url="${hostUrl}/bot/${public_id}" data-btn-position="bottom-right" defer></script>`}
   return (
-    <div className="px-4 py-6 sm:p-6 lg:pb-8 mb-3 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-[#0a0a0a] dark:border-[#232222]">
+    <div className="px-4 py-6 sm:p-6 lg:pb-8 mb-3 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-[#262626] dark:border-gray-700">
       <h2 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">
         Script
       </h2>
@@ -115,7 +115,7 @@ export function EmbedBoardScript({
               } "${
                 widgetIcon ? `data-widget-icon="${widgetIcon}"` : ""
               } defer> </script>`}
-              className="border border-gray-300 dark:border-[#232222] dark:text-white dark:hover:bg-[#333030] dark:focus:ring-gray-900 rounded-md dark:bg-[#232222]"
+              className="border border-gray-300 dark:border-gray-700 dark:text-white dark:hover:bg-[#333030] dark:focus:ring-gray-900 rounded-md dark:bg-[#171717]"
             />
           </span>
         </div>
@@ -130,7 +130,7 @@ export function EmbedBoardScript({
             <span className="ml-3">
               <CopyBtn
                 value={content}
-                className="border border-gray-300 dark:border-[#232222] dark:text-white dark:hover:bg-[#232222] dark:focus:ring-gray-900 rounded-md"
+                className="border border-gray-300 dark:border-gray-700 dark:text-white dark:hover:bg-[#232222] dark:focus:ring-gray-900 rounded-md"
               />
             </span>
           </div>

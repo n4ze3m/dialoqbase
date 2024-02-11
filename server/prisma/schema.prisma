@@ -163,6 +163,7 @@ model BotWhatsappHistory {
   chat_id    String?
   from       String?
   identifier String?
+  bot_id     String?
   human      String?
   bot        String?
 }

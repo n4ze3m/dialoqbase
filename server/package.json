@@ -69,6 +69,7 @@
     "pdf-parse": "^1.1.1",
     "pdfjs-dist": "^3.7.107",
     "pubsub-js": "^1.9.4",
+    "replicate": "^0.26.0",
     "sitemapper": "^3.2.6",
     "ts-node": "^10.9.1",
     "unique-names-generator": "^4.7.1",

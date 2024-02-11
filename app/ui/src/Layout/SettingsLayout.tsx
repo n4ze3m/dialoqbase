@@ -24,8 +24,8 @@ const LinkComponent = (item: {
         to={item.href}
         className={classNames(
           item.current === item.href
-            ? "bg-gray-100 text-indigo-600 dark:bg-gray-900 dark:text-white"
-            : "text-gray-700 hover:text-indigo-600 hover:bg-gray-100 dark:text-gray-200 dark:hover:text-white dark:hover:bg-gray-800",
+            ? "bg-gray-100 text-indigo-600 dark:bg-[#262626] dark:text-white"
+            : "text-gray-700 hover:text-indigo-600 hover:bg-gray-100 dark:text-gray-200 dark:hover:text-white dark:hover:bg-[#262626]",
           "group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold"
         )}
       >
@@ -51,7 +51,7 @@ export const SettingsLayout = ({ children }: { children: React.ReactNode }) => {
     <>
       <div className="mx-auto max-w-7xl lg:flex lg:gap-x-16 lg:px-8">
         {adminInfo?.is_admin && (
-          <aside className="flex lg:rounded-md bg-white lg:h-52 lg:p-4 lg:mt-20 overflow-x-auto lg:border border-b  py-4 lg:block lg:w-64 lg:flex-none  dark:bg-black dark:border-gray-800">
+          <aside className="flex lg:rounded-md bg-white lg:h-52 lg:p-4 lg:mt-20 overflow-x-auto lg:border border-b  py-4 lg:block lg:w-64 lg:flex-none  dark:bg-[#171717] dark:border-gray-600">
             <nav className="flex-none  px-4 sm:px-6 lg:px-0">
               <ul
                 role="list"

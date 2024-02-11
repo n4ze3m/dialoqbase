@@ -29,7 +29,7 @@ export default function DashboardLayout({
       <div className="min-h-full">
         <Disclosure
           as="nav"
-          className="border-b border-gray-200 bg-white dark:bg-black dark:border-gray-800"
+          className="border-b border-gray-200 bg-white dark:bg-[#171717] dark:border-gray-600"
         >
           {() => (
             <>

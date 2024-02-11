@@ -5,6 +5,7 @@ import { getOSAndBrowser } from "../../../utils/useragent";
 import { UserIcon } from "@heroicons/react/24/outline";
 import relativeTime from "dayjs/plugin/relativeTime";
 import dayjs from "dayjs";
+import { useSearchParams } from "react-router-dom";
 dayjs.extend(relativeTime);
 
 export const ConversationSidebar = ({
@@ -21,27 +22,33 @@ export const ConversationSidebar = ({
   defaultChannel: string;
 }) => {
   const [hideMenu] = React.useState(false);
+  const [_, setSearchParams] = useSearchParams();
   return (
     <div
       id="menu"
       className={`bg-white z-[999] border fixed md:inset-y-0 md:flex md:w-[350px] md:flex-col transition-transform  max-md:w-3/4  ${
         hideMenu ? "translate-x-[-100%]" : "translate-x-[0%]"
-      } dark:bg-black dark:border-gray-800`}
+      } dark:bg-[#171717] dark:border-gray-600`}
     >
       <div className="flex mt-16 h-full min-h-0 flex-col">
         <div className="flex h-full w-full flex-1 items-start">
           <nav className="flex h-full flex-1 flex-col space-y-3 px-2 pt-2 overflow-x-hidden">
             <div className="flex-grow overflow-y-auto  border-b border-white/20 ">
               <div className="flex flex-col gap-2">
-                <h2 className="text-lg font-semibold dark:text-white">Conversations</h2>
+                <h2 className="text-lg font-semibold dark:text-white">
+                  Conversations
+                </h2>
                 <Select
                   options={[
                     { label: "Website", value: "website" },
                     { label: "Telegram", value: "telegram" },
                     { label: "Discord", value: "discord" },
-                    // { label: "WhatsApp", value: "whatsapp" },
+                    { label: "WhatsApp", value: "whatsapp" },
                   ]}
-                  onChange={(value) => onChannelChange(value)}
+                  onChange={(value) => {
+                    onChannelChange(value);
+                    setSearchParams({ channel: value });
+                  }}
                   defaultValue={defaultChannel}
                   style={{ width: "100%" }}
                 />
@@ -62,13 +69,13 @@ export const ConversationSidebar = ({
                         defaultIndex === index
                           ? "bg-gray-100 dark:bg-[#232222]"
                           : "dark:hover:bg-[#232222]"
-                      } dark:border-gray-800 dark:hover:bg-[#232222]`}
+                      } dark:border-gray-600 dark:hover:bg-[#232222]`}
                     >
                       <div className="flex text-gray-500 justify-between">
                         <h3 className="text-xs font-thin dark:text-gray-200">
                           {item?.metdata?.user_agent
                             ? getOSAndBrowser(item?.metdata?.user_agent)
-                            : `Anonymous`}
+                            : item?.metdata?.info || "Anonymous"}
                         </h3>
                         <span className="text-xs font-thin">
                           {item?.created_at &&

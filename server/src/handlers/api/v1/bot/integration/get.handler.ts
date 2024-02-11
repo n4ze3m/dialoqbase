@@ -249,7 +249,6 @@ export async function getChannelsByProvider(
         provider: provider.channel,
       },
     });
-    console.log(integration);
     if (integration) {
       switch (provider.channel) {
         case "telegram":

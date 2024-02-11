@@ -28,7 +28,6 @@ export const whatsappIntergationHandler = async (
     return reply.status(200).send(request.query["hub.challenge"]);
   }
 
-  console.log(JSON.stringify(request.body, null, 2));
   return reply.status(200).send({
     message: "Integration created",
   });
@@ -90,14 +89,11 @@ export const whatsappIntergationHandlerPost = async (
     }
 
     if (event && data) {
-      // console.log("publishing to", req.params.id, { event, data });
       PubSub.publish(req.params.id, data);
     }
 
-    // console.log(JSON.stringify(req.body, null, 2));
     return reply.status(200).send();
   } catch (error) {
-    console.log(error);
     return reply.status(200).send();
   }
 };
