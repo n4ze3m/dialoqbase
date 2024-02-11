@@ -111,7 +111,6 @@ export const createBotHandler = async (
   const name = nameFromRequest || shortName;
 
   const isStreamingAvilable = modelInfo.stream_available;
-  console.log("isStreamingAvilable", isStreamingAvilable);
 
   if (content && type) {
     const bot = await prisma.bot.create({
@@ -147,7 +146,6 @@ export const createBotHandler = async (
       id: bot.id,
     };
   } else {
-    console.log("isStreamingAvilable", isStreamingAvilable);
     const bot = await prisma.bot.create({
       data: {
         name,

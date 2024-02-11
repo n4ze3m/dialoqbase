@@ -307,7 +307,6 @@ export const chatRequestStreamHandler = async (
 
     if (bot.bot_protect) {
       if (!request.session.get("is_bot_allowed")) {
-        console.log("not allowed");
 
         reply.raw.setHeader("Content-Type", "text/event-stream");
 

@@ -22,7 +22,7 @@ const _getModelFromUrl = async (url: string, apiKey?: string) => {
     });
     return response.data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return null;
   }
 };
@@ -70,7 +70,7 @@ export const getAllModelsHandler = async (
       embedding: allModels.filter((model) => model.model_type === "embedding"),
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return reply.status(500).send({
       message: "Internal Server Error",
     });
@@ -118,7 +118,7 @@ export const fetchModelFromInputedUrlHandler = async (
       };
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return reply.status(500).send({
       message: "Internal Server Error",
     });
@@ -174,7 +174,7 @@ export const saveModelFromInputedUrlHandler = async (
       message: "success",
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return reply.status(500).send({
       message: "Internal Server Error",
     });
@@ -224,7 +224,7 @@ export const hideModelHandler = async (
       message: "success",
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return reply.status(500).send({
       message: "Internal Server Error",
     });
@@ -277,7 +277,7 @@ export const deleteModelHandler = async (
       message: "success",
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return reply.status(500).send({
       message: "Internal Server Error",
     });
@@ -339,7 +339,7 @@ export const saveEmbedddingModelFromInputedUrlHandler = async (
       message: "success",
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return reply.status(500).send({
       message: "Internal Server Error",
     });

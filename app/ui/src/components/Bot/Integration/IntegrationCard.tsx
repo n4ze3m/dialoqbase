@@ -27,13 +27,7 @@ export const IntegrationCard: React.FC<Prosp> = ({
 
   return !href ? (
     <div className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer dark:bg-[#262626] dark:border-gray-600  dark:hover:bg-[#242424]  hover:bg-gray-50">
-      <button
-        // onClick={() => {
-        //   setSelectedIntegration(integration);
-        //   setOpen(true);
-        // }}
-        onClick={onClick}
-      >
+      <button onClick={onClick}>
         <div className="mb-4">
           <div className="flex items-center justify-between">
             <img className="h-12 w-auto" src={logo} alt={name} />

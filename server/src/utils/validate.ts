@@ -1,5 +1,4 @@
 export const apiKeyValidaton = (modelType: string) => {
-  console.log("apiKeyValidaton", modelType);
   switch (modelType.toLocaleLowerCase()) {
     case "transformer":
     case "jina":

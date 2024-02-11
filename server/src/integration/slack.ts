@@ -39,7 +39,6 @@ export default class SlackBot {
         
     app.message(/^q\?/,  async ({ message, say }) => {
         try {
-            console.log("hey", message)
           say("Hello Human!");
         } catch (error) {
             console.log("err")

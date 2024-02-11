@@ -172,9 +172,6 @@ export const getChatIntergationHistoryByTypeHandler = async (
           identifier: process_tg.identifier,
         },
       });
-      console.log(telegramHistory);
-
-      // group by chat_id
       const telegramHistoryGroupByChatId: Record<string, BotTelegramHistory[]> =
         telegramHistory
           .filter((item) => item.new_chat_id)

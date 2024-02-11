@@ -17,77 +17,54 @@ export default class WhatsappBot {
 
   static subscribeToPhoneNumber(phoneNumberId: string) {
     PubSub.subscribe(phoneNumberId, async (id, data: Message) => {
-      console.log("incoming message for phone number: ", data);
+      if (process.env.NODE_ENV === "development") {
+        console.log("incoming message for phone number: ", data);
+      }
       const { text, identifer, from, id: hash } = data;
       const accessToken = this.getAccessToken(id);
       if (!accessToken) {
-        console.log("no access token found for: ", id);
         return;
       }
-
-      console.log("sending message to whatsapp: ", hash);
-
-      // if text match
 
       if (text === "/clear") {
-        const isOk = await clearHistoryWhatsapp(
-          id,
-          from,
-        );
+        const isOk = await clearHistoryWhatsapp(id, from);
 
         if (isOk) {
-          await sendWhatsappMessage(
-            identifer,
-            accessToken,
-            {
-              to: from,
-              text: {
-                body: "Chat history cleared",
-              },
-              type: "text",
-              messaging_product: "whatsapp",
-              recipient_type: "individual",
-            },
-          );
-        } else {
-          await sendWhatsappMessage(
-            identifer,
-            accessToken,
-            {
-              to: from,
-              text: {
-                body: "Opps! Something went wrong",
-              },
-              type: "text",
-              messaging_product: "whatsapp",
-              recipient_type: "individual",
-            },
-          );
-        }
-        return;
-      }
-
-      const generateMessage = await whatsappBotHandler(
-        id,
-        hash,
-        from,
-        text,
-      );
-
-      if (generateMessage) {
-        await sendWhatsappMessage(
-          identifer,
-          accessToken,
-          {
+          await sendWhatsappMessage(identifer, accessToken, {
             to: from,
             text: {
-              body: generateMessage,
+              body: "Chat history cleared",
             },
             type: "text",
             messaging_product: "whatsapp",
             recipient_type: "individual",
+          });
+        } else {
+          await sendWhatsappMessage(identifer, accessToken, {
+            to: from,
+            text: {
+              body: "Opps! Something went wrong",
+            },
+            type: "text",
+            messaging_product: "whatsapp",
+            recipient_type: "individual",
+          });
+        }
+        return;
+      }
+
+      const generateMessage = await whatsappBotHandler(id, hash, from, text);
+
+      if (generateMessage) {
+        await sendWhatsappMessage(identifer, accessToken, {
+          to: from,
+          text: {
+            body: generateMessage,
           },
-        );
+          type: "text",
+          messaging_product: "whatsapp",
+          recipient_type: "individual",
+        });
       } else {
         console.log("no message generated");
       }
