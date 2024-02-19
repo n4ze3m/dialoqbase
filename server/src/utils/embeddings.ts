@@ -80,6 +80,15 @@ export const embeddings = (
           },
         },
       });
+    case "fireworks":
+      return new OpenAIEmbeddings({
+        modelName,
+        openAIApiKey: process.env.FIREWORKS_API_KEY!,
+        configuration: {
+          baseURL: "https://api.fireworks.ai/inference/v1",
+          apiKey: process.env.FIREWORKS_API_KEY!,
+        },
+      });
     default:
       console.log("Using Default Embeddings");
       return new OpenAIEmbeddings();
@@ -96,4 +105,5 @@ export const supportedEmbeddings = [
   "supabase",
   "jina",
   "google",
+  "fireworks",
 ];
