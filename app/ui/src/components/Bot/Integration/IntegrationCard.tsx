@@ -33,7 +33,7 @@ export const IntegrationCard: React.FC<Prosp> = ({
             <img className="h-12 w-auto" src={logo} alt={name} />
             <div className="ml-2 flex flex-shrink-0">
               <p
-                className={`inline-flex rounded-md px-2 text-sm  leading-5 border border-transparent uppercase tracking-widest dark:bg-[#171717] dark:text-[#fff] dark:border-gray-600  dark:hover:text-[#fff] 
+                className={`inline-flex rounded-md px-2 text-sm  leading-5 border border-transparent uppercase tracking-widest dark:bg-[#1e1e1e] dark:text-[#fff] dark:border-gray-600  dark:hover:text-[#fff] 
               `}
                 style={{
                   backgroundColor: mode !== "dark" ? color : undefined,

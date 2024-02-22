@@ -241,6 +241,7 @@ export default function SettingsModelRoot() {
                   {modelType === "llm" && (
                     <Table
                       // pagination={false}
+                      bordered
                       dataSource={data.data}
                       columns={[
                         {
@@ -334,6 +335,7 @@ export default function SettingsModelRoot() {
                   )}
                   {modelType === "embedding" && (
                     <Table
+                    bordered
                       // pagination={false}
                       dataSource={data.embedding}
                       columns={[

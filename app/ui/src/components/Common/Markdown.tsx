@@ -30,7 +30,7 @@ export default function Markdown({ message }: { message: string }) {
   return (
     <React.Fragment>
       <ReactMarkdown
-        className="prose break-words dark:prose-invert text-sm prose-p:leading-relaxed prose-pre:p-0 dark:prose-dark"
+        className="prose break-words dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 dark:prose-dark"
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeMathjax]}
         components={{
@@ -90,9 +90,9 @@ export default function Markdown({ message }: { message: string }) {
                     lineHeight: "1.5rem",
                   }}
                   language={(match && match[1]) || ""}
-                  codeTagProps={{
-                    className: "text-sm",
-                  }}
+                  // codeTagProps={{
+                  //   className: "text-sm",
+                  // }}
                 />
               </div>
             ) : (
@@ -106,7 +106,7 @@ export default function Markdown({ message }: { message: string }) {
               <a
                 target="_blank"
                 rel="noreferrer"
-                className="text-blue-500 text-sm hover:underline"
+                className="text-blue-500  hover:underline"
                 {...props}
               >
                 {props.children}
