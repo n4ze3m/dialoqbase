@@ -7,6 +7,20 @@ type Props = {
   setOpenAddModel: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+const providers: Record<any, string> = {
+  fireworks: "https://api.fireworks.ai/inference/v1",
+  openrouter: "https://openrouter.ai/api/v1",
+  together: "https://api.together.xyz",
+};
+
+const providerName: Record<any, string> = {
+  fireworks: "Fireworks AI",
+  openrouter: "OpenRouter",
+  together: "Together",
+};
+
+const thirdPartyProviders = Object.keys(providers);
+
 export const LLMForm: React.FC<Props> = ({ setOpenAddModel }) => {
   const [fetchUrlForm] = Form.useForm();
   const [form] = Form.useForm();
@@ -26,6 +40,10 @@ export const LLMForm: React.FC<Props> = ({ setOpenAddModel }) => {
     api_type?: string;
     ollama_url?: string;
   }) => {
+    if (thirdPartyProviders.includes(apiType)) {
+      body.url = providers[apiType];
+      body.api_type = "openai";
+    }
     const response = await api.post("/admin/models/fetch", body);
     return response.data as {
       data: {
@@ -52,14 +70,20 @@ export const LLMForm: React.FC<Props> = ({ setOpenAddModel }) => {
   );
 
   const saveLocalModel = async (values: any) => {
-    const response = await api.post("/admin/models", {
+    let payload = {
       ...values,
       url:
         fetchUrlForm.getFieldValue("url") ||
         fetchUrlForm.getFieldValue("ollama_url"),
       api_key: fetchUrlForm.getFieldValue("api_key"),
       api_type: fetchUrlForm.getFieldValue("api_type"),
-    });
+    };
+
+    if (thirdPartyProviders.includes(fetchUrlForm.getFieldValue("api_type"))) {
+      payload.url = providers[fetchUrlForm.getFieldValue("api_type")];
+      payload.api_type = "openai";
+    }
+    const response = await api.post("/admin/models", payload);
     return response.data;
   };
 
@@ -106,20 +130,6 @@ export const LLMForm: React.FC<Props> = ({ setOpenAddModel }) => {
           {apiType === "openai" && (
             <>
               <Form.Item
-                help={
-                  <p className="text-sm mb-6 text-gray-500">
-                    {
-                      "We support models that are OpenAI API compatible, such as "
-                    }
-                    <a
-                      href="https://github.com/go-skynet/LocalAI"
-                      className="text-indigo-600"
-                    >
-                      LocalAI
-                    </a>
-                    .
-                  </p>
-                }
                 name="url"
                 label="URL"
                 rules={[
@@ -208,6 +218,27 @@ export const LLMForm: React.FC<Props> = ({ setOpenAddModel }) => {
             </>
           )}
 
+          {thirdPartyProviders.includes(apiType) && (
+            <>
+              <Form.Item
+                name="api_key"
+                label={`${providerName[apiType]} API Key`}
+                rules={[
+                  {
+                    required: true,
+                    message: `Please your ${providerName[apiType]} API Key`,
+                  },
+                ]}
+              >
+                <Input.Password
+                  size="large"
+                  type="text"
+                  placeholder="Enter API Key"
+                />
+              </Form.Item>
+            </>
+          )}
+
           <Form.Item name={"api_type"} label="API Type">
             <Select
               size="large"
@@ -218,12 +249,24 @@ export const LLMForm: React.FC<Props> = ({ setOpenAddModel }) => {
                   value: "openai",
                 },
                 {
+                  label: "Fireworks AI",
+                  value: "fireworks",
+                },
+                {
                   label: "Ollama",
                   value: "ollama",
                 },
                 {
                   label: "Replicate",
                   value: "replicate",
+                },
+                {
+                  label: "Together",
+                  value: "together",
+                },
+                {
+                  label: "OpenRouter",
+                  value: "openrouter",
                 },
               ]}
             />
