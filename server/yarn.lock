@@ -759,22 +759,46 @@
   resolved "https://registry.yarnpkg.com/@msgpackr-extract/msgpackr-extract-win32-x64/-/msgpackr-extract-win32-x64-3.0.2.tgz#0f164b726869f71da3c594171df5ebc1c4b0a407"
   integrity sha512-O+6Gs8UeDbyFpbSh2CPEz/UOrrdWPTBYNblZK5CxxLisYt4kGX3Sc+czffFonyjiGSq3jWLwJS/CCJc7tBr4sQ==
 
-"@prisma/client@5":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-5.0.0.tgz#9f0cd4164f4ffddb28bb1811c27eb7fa1e01a087"
-  integrity sha512-XlO5ELNAQ7rV4cXIDJUNBEgdLwX3pjtt9Q/RHqDpGf43szpNJx2hJnggfFs7TKNx0cOFsl6KJCSfqr5duEU/bQ==
+"@prisma/client@^5.9.1":
+  version "5.9.1"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-5.9.1.tgz#d92bd2f7f006e0316cb4fda9d73f235965cf2c64"
+  integrity sha512-caSOnG4kxcSkhqC/2ShV7rEoWwd3XrftokxJqOCMVvia4NYV/TPtJlS9C2os3Igxw/Qyxumj9GBQzcStzECvtQ==
+
+"@prisma/debug@5.9.1":
+  version "5.9.1"
+  resolved "https://registry.yarnpkg.com/@prisma/debug/-/debug-5.9.1.tgz#906274e73d3267f88b69459199fa3c51cd9511a3"
+  integrity sha512-yAHFSFCg8KVoL0oRUno3m60GAjsUKYUDkQ+9BA2X2JfVR3kRVSJFc/GpQ2fSORi4pSHZR9orfM4UC9OVXIFFTA==
+
+"@prisma/engines-version@5.9.0-32.23fdc5965b1e05fc54e5f26ed3de66776b93de64":
+  version "5.9.0-32.23fdc5965b1e05fc54e5f26ed3de66776b93de64"
+  resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-5.9.0-32.23fdc5965b1e05fc54e5f26ed3de66776b93de64.tgz#54d2164f28d23e09d41cf9eb0bddbbe7f3aaa660"
+  integrity sha512-HFl7275yF0FWbdcNvcSRbbu9JCBSLMcurYwvWc8WGDnpu7APxQo2ONtZrUggU3WxLxUJ2uBX+0GOFIcJeVeOOQ==
+
+"@prisma/engines@5.9.1":
+  version "5.9.1"
+  resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-5.9.1.tgz#767539afc6f193a182d0495b30b027f61f279073"
+  integrity sha512-gkdXmjxQ5jktxWNdDA5aZZ6R8rH74JkoKq6LD5mACSvxd2vbqWeWIOV0Py5wFC8vofOYShbt6XUeCIUmrOzOnQ==
   dependencies:
-    "@prisma/engines-version" "4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584"
+    "@prisma/debug" "5.9.1"
+    "@prisma/engines-version" "5.9.0-32.23fdc5965b1e05fc54e5f26ed3de66776b93de64"
+    "@prisma/fetch-engine" "5.9.1"
+    "@prisma/get-platform" "5.9.1"
 
-"@prisma/engines-version@4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584":
-  version "4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584"
-  resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584.tgz#b36eda5620872d3fac810c302a7e46cf41daa033"
-  integrity sha512-HHiUF6NixsldsP3JROq07TYBLEjXFKr6PdH8H4gK/XAoTmIplOJBCgrIUMrsRAnEuGyRoRLXKXWUb943+PFoKQ==
+"@prisma/fetch-engine@5.9.1":
+  version "5.9.1"
+  resolved "https://registry.yarnpkg.com/@prisma/fetch-engine/-/fetch-engine-5.9.1.tgz#5d3b2c9af54a242e37b3f9561b59ab72f8e92818"
+  integrity sha512-l0goQOMcNVOJs1kAcwqpKq3ylvkD9F04Ioe1oJoCqmz05mw22bNAKKGWuDd3zTUoUZr97va0c/UfLNru+PDmNA==
+  dependencies:
+    "@prisma/debug" "5.9.1"
+    "@prisma/engines-version" "5.9.0-32.23fdc5965b1e05fc54e5f26ed3de66776b93de64"
+    "@prisma/get-platform" "5.9.1"
 
-"@prisma/engines@5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-5.0.0.tgz#5249650eabe77c458c90f2be97d8210353c2e22e"
-  integrity sha512-kyT/8fd0OpWmhAU5YnY7eP31brW1q1YrTGoblWrhQJDiN/1K+Z8S1kylcmtjqx5wsUGcP1HBWutayA/jtyt+sg==
+"@prisma/get-platform@5.9.1":
+  version "5.9.1"
+  resolved "https://registry.yarnpkg.com/@prisma/get-platform/-/get-platform-5.9.1.tgz#a66bb46ab4d30db786c84150ef074ab0aad4549e"
+  integrity sha512-6OQsNxTyhvG+T2Ksr8FPFpuPeL4r9u0JF0OZHUBI/Uy9SS43sPyAIutt4ZEAyqWQt104ERh70EZedkHZKsnNbg==
+  dependencies:
+    "@prisma/debug" "5.9.1"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -5150,12 +5174,12 @@ prebuild-install@^7.1.1:
     tar-fs "^2.0.0"
     tunnel-agent "^0.6.0"
 
-prisma@5:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/prisma/-/prisma-5.0.0.tgz#f6571c46dc2478172cb7bc1bb62d74026a2c2630"
-  integrity sha512-KYWk83Fhi1FH59jSpavAYTt2eoMVW9YKgu8ci0kuUnt6Dup5Qy47pcB4/TLmiPAbhGrxxSz7gsSnJcCmkyPANA==
+prisma@^5.9.1:
+  version "5.9.1"
+  resolved "https://registry.yarnpkg.com/prisma/-/prisma-5.9.1.tgz#baa3dd635fbf71504980978f10f55ea11068f6aa"
+  integrity sha512-Hy/8KJZz0ELtkw4FnG9MS9rNWlXcJhf98Z2QMqi0QiVMoS8PzsBkpla0/Y5hTlob8F3HeECYphBjqmBxrluUrQ==
   dependencies:
-    "@prisma/engines" "5.0.0"
+    "@prisma/engines" "5.9.1"
 
 process-nextick-args@~2.0.0:
   version "2.0.1"

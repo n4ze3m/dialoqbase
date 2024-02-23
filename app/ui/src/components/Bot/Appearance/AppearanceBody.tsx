@@ -30,7 +30,7 @@ export const AppearanceBody = (props: Props) => {
         <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
           <div className="grid grid-cols-1 gap-4 lg:col-span-2">
             <section aria-labelledby="section-1-title">
-              <div className="overflow-hidden rounded-lg bg-white border dark:bg-[#262626] dark:border-gray-700">
+              <div className="overflow-hidden rounded-lg bg-white border dark:bg-[#1e1e1e] dark:border-gray-600">
                 <div className="p-6">
                   <AppearanceForm initialData={props} form={form} />
                 </div>

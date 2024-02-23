@@ -26,14 +26,14 @@ export const IntegrationCard: React.FC<Prosp> = ({
   const { mode } = useDarkMode();
 
   return !href ? (
-    <div className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer dark:bg-[#262626] dark:border-gray-600  dark:hover:bg-[#242424]  hover:bg-gray-50">
+    <div className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer dark:bg-[#1e1e1e] dark:border-gray-600  dark:hover:bg-[#242424]  hover:bg-gray-50">
       <button onClick={onClick}>
         <div className="mb-4">
           <div className="flex items-center justify-between">
             <img className="h-12 w-auto" src={logo} alt={name} />
             <div className="ml-2 flex flex-shrink-0">
               <p
-                className={`inline-flex rounded-md px-2 text-sm  leading-5 border border-transparent uppercase tracking-widest dark:bg-[#171717] dark:text-[#fff] dark:border-gray-600  dark:hover:text-[#fff] 
+                className={`inline-flex rounded-md px-2 text-sm  leading-5 border border-transparent uppercase tracking-widest dark:bg-[#1e1e1e] dark:text-[#fff] dark:border-gray-600  dark:hover:text-[#fff] 
               `}
                 style={{
                   backgroundColor: mode !== "dark" ? color : undefined,
@@ -66,7 +66,7 @@ export const IntegrationCard: React.FC<Prosp> = ({
   ) : (
     <Link
       to={href}
-      className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer dark:bg-[#262626] dark:border-gray-600  dark:hover:bg-[#242424]  hover:bg-gray-50"
+      className="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 rounded-lg overflow-hidden border hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer dark:bg-[#1e1e1e] dark:border-gray-600  dark:hover:bg-[#242424]  hover:bg-gray-50"
     >
       <div>
         <div className="mb-4">

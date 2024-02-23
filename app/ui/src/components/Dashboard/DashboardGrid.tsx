@@ -32,7 +32,7 @@ export const DashboardGrid = () => {
           {data.map((bot: any) => (
             <Link
               to={`/bot/${bot.id}`}
-              className="flex rounded-md hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer border border-gray-200 bg-white dark:bg-[#262626] dark:border-gray-600 dark:hover:bg-[#232323]  hover:bg-gray-50"
+              className="flex rounded-md hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer border border-gray-200 bg-white dark:bg-[#1e1e1e] dark:border-gray-600 dark:hover:bg-[#232323]  hover:bg-gray-50"
               key={bot.id}
             >
               <div className="w-full truncate ">

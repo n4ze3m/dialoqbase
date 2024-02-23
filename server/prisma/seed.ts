@@ -341,6 +341,12 @@ const EMBEDDING_MODELS: {
     name: "text-embedding-3-large (OpenAI)",
     model_type: "embedding",
     model_provider: "OpenAI",
+  },
+  {
+    model_provider: "Fireworks",
+    model_type: "embedding",
+    model_id: "dialoqbase_eb_nomic-ai/nomic-embed-text-v1.5",
+    name: "nomic-ai/nomic-embed-text-v1.5 (Fireworks)",
   }
 ];
 

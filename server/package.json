@@ -39,7 +39,7 @@
     "@grammyjs/files": "^1.0.4",
     "@huggingface/inference": "1",
     "@langchain/google-genai": "^0.0.2",
-    "@prisma/client": "5",
+    "@prisma/client": "^5.9.1",
     "@slack/bolt": "^3.13.2",
     "@supabase/supabase-js": "^2.24.0",
     "@types/html-to-text": "^9.0.4",
@@ -82,7 +82,7 @@
     "@types/pubsub-js": "^1.8.3",
     "@types/tap": "^15.0.5",
     "fastify-tsconfig": "^1.0.1",
-    "prisma": "5",
+    "prisma": "^5.9.1",
     "tap": "^16.1.0",
     "typescript": "^4.5.4"
   },

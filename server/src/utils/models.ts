@@ -65,7 +65,7 @@ export const chatModelProvider = (
       return new ChatOpenAI({
         modelName: modelName,
         temperature: temperature,
-        openAIApiKey: otherFields.apiKey || process.env.OPENAI_API_KEY,
+        openAIApiKey: otherFields.apiKey || process.env.OPENAI_API_KEY ,
         ...otherFields,
         configuration: {
           baseURL: otherFields.baseURL,
