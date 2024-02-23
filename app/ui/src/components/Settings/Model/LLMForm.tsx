@@ -309,7 +309,11 @@ export const LLMForm: React.FC<Props> = ({ setOpenAddModel }) => {
             name="name"
             label="Model Name"
           >
-            <Input size="large" placeholder="Enter a model name" />
+            <Input
+              size="large"
+              placeholder="Enter a model name"
+              autoComplete="off"
+            />
           </Form.Item>
 
           <Form.Item
