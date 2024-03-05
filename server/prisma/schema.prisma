@@ -195,3 +195,12 @@ model DialoqbaseModels {
   deleted          Boolean  @default(false)
   createdAt        DateTime @default(now())
 }
+
+model BotApiHistory {
+  id         Int       @id @default(autoincrement())
+  api_key    String
+  bot_id     String?
+  human      String?
+  bot        String?
+  createdAt  DateTime? @default(now())
+}

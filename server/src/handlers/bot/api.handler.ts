@@ -172,6 +172,16 @@ export const chatRequestAPIHandler = async (
       });
       const documents = await documentPromise;
 
+
+      await prisma.botApiHistory.create({
+        data: {
+          api_key: request.headers["x-api-key"],
+          bot_id: bot.id,
+          human: message,
+          bot: response,
+        }
+      })
+
       reply.sse({
         event: "result",
         id: "",
@@ -358,6 +368,15 @@ export const chatRequestAPIHandler = async (
       });
 
       const documents = await documentPromise;
+
+      await prisma.botApiHistory.create({
+        data: {
+          api_key: request.headers["x-api-key"],
+          bot_id: bot.id,
+          human: message,
+          bot: botResponse,
+        }
+      })
 
       return {
         bot: {
