@@ -14,12 +14,14 @@ import {
   updateBotByIdHandler,
   getCreateBotConfigHandler,
   getBotByIdSettingsHandler,
+  createCopyHandler
 } from "../../../../handlers/api/v1/bot/bot";
 import {
   addNewSourceByIdSchema,
   createBotSchema,
   getBotByIdSchema,
   updateBotByIdSchema,
+  createCopyBotSchema
 } from "../../../../schema/api/v1/bot/bot";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
@@ -193,6 +195,17 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       onRequest: [fastify.authenticate],
     },
     getBotByIdSettingsHandler
+  );
+
+
+  // create copy bot
+  fastify.post(
+    "/:bot_id/copy",
+    {
+      schema: createCopyBotSchema,
+      onRequest: [fastify.authenticate],
+    },
+    createCopyHandler
   );
 };
 

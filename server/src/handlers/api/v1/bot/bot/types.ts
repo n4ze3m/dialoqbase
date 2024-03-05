@@ -69,3 +69,10 @@ export interface UpdateBotById {
     bot_model_api_key: string
   };
 }
+
+
+export interface GetBotById {
+  Params: {
+    bot_id: string;
+  };
+}

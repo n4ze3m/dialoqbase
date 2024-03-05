@@ -55,6 +55,10 @@ export const SettingsCard: React.FC<BotSettings> = ({
     return response.data;
   };
 
+  const onCopy = async () => {
+    const response = await api.post(`/bot/${params.id}/copy`);
+    return response.data;
+  };
   const { mutate: deleteBot, isLoading: isDeleting } = useMutation(onDelete, {
     onSuccess: () => {
       client.invalidateQueries(["getAllBots"]);
@@ -63,6 +67,29 @@ export const SettingsCard: React.FC<BotSettings> = ({
 
       notification.success({
         message: "Bot deleted successfully",
+      });
+    },
+    onError: (error: any) => {
+      if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.message || "Something went wrong";
+        notification.error({
+          message,
+        });
+        return;
+      }
+
+      notification.error({
+        message: "Something went wrong",
+      });
+    },
+  });
+
+  const { mutate: copyBot, isLoading: isCopying } = useMutation(onCopy, {
+    onSuccess: (data) => {
+      client.invalidateQueries(["getAllBots"]);
+      navigate(`/bot/${data.id}`);
+      notification.success({
+        message: "Bot copied successfully",
       });
     },
     onError: (error: any) => {
@@ -113,7 +140,7 @@ export const SettingsCard: React.FC<BotSettings> = ({
         </div>
       </div>
       {/* centerize the div */}
-      <div className="mt-6 space-y-3">
+      <div className="mt-6 space-y-4">
         <Form
           initialValues={{
             name: data.name,
@@ -324,6 +351,37 @@ export const SettingsCard: React.FC<BotSettings> = ({
             </div>
           </div>
         </Form>
+
+        <div className="bg-white border sm:rounded-lg dark:bg-[#1e1e1e] dark:border-gray-700">
+          <div className="px-4 py-5 sm:p-6">
+            <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white">
+              Make a copy of your bot
+            </h3>
+            <div className="mt-2 max-w-xl text-sm text-gray-500 dark:text-gray-400">
+              <p>
+                This action will create a new bot with the same settings as this
+                bot, except for the Integration settings that need to be
+                reconfigured{" "}
+              </p>
+            </div>
+            <div className="mt-5">
+              <button
+                type="button"
+                onClick={() => {
+                  const confirm = window.confirm(
+                    "Are you sure you want to make a copy of this bot?"
+                  );
+                  if (confirm) {
+                    copyBot();
+                  }
+                }}
+                className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
+              >
+                {isCopying ? "Copying..." : "Make a copy"}
+              </button>
+            </div>
+          </div>
+        </div>
 
         <div className="bg-white border sm:rounded-lg dark:bg-[#1e1e1e] dark:border-gray-700">
           <div className="px-4 py-5 sm:p-6">

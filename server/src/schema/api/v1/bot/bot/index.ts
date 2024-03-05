@@ -163,3 +163,24 @@ export const updateBotByIdSchema: FastifySchema = {
     },
   },
 };
+
+
+export const createCopyBotSchema: FastifySchema = {
+  tags: ["Bot"],
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
+  params: {
+    type: "object",
+    required: ["bot_id"],
+    properties: {
+      bot_id: {
+        type: "string",
+      },
+    },
+  },
+};
