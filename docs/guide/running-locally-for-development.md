@@ -95,4 +95,4 @@ Set the `DATABASE_URL` environment variable to the URL of your PostgreSQL databa
     - If you don't have `pnpm` installed, you can install it globally with `npm install -g pnpm` 
     - If you don't have `yarn` installed, you can install Yarn globally with `npm install -g yarn`
 
-Now you should be able to access the frontend at `localhost:5173` and the backend API at `localhost:3000`. As you make code changes, the servers will reload and reflect the updates. But if you make changes to the widget, you will need to run the asset copy command again to update the widget assets in the backend.
+Now you should be able to access the frontend at `localhost:5123` and the backend API at `localhost:3000`. As you make code changes, the servers will reload and reflect the updates. But if you make changes to the widget, you will need to run the asset copy command again to update the widget assets in the backend.
