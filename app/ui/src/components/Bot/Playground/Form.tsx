@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useMessage } from "../../../hooks/useMessage";
 import { useForm } from "@mantine/form";
-import React from "react";
+import React, { useState } from "react";
 import { useStoreMessage } from "../../../store";
 import { useSpeechRecognition } from "../../../hooks/useSpeechRecognition";
 import { Tooltip } from "antd";
@@ -19,6 +19,7 @@ export const PlaygroundgForm = () => {
 
   const client = useQueryClient();
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+  const [typing, setTyping] = useState<boolean>(false);
 
   const {
     defaultSpeechToTextLanguage,
@@ -69,8 +70,6 @@ export const PlaygroundgForm = () => {
     form.setFieldValue("message", transcript);
   }, [transcript]);
 
-
-
   const { mutateAsync: sendMessage, isLoading: isSending } = useMutation(
     onSubmit,
     {
@@ -101,7 +100,12 @@ export const PlaygroundgForm = () => {
               <textarea
                 ref={textareaRef}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey && !isSending) {
+                  if (
+                    !typing &&
+                    e.key === "Enter" &&
+                    !e.shiftKey &&
+                    !isSending
+                  ) {
                     e.preventDefault();
                     form.onSubmit(async (value) => {
                       if (value.message.trim().length === 0) {
@@ -118,6 +122,8 @@ export const PlaygroundgForm = () => {
                 style={{ minHeight: "60px" }}
                 tabIndex={0}
                 placeholder="Type a message..."
+                onCompositionStart={() => setTyping(true)}
+                onCompositionEnd={() => setTyping(false)}
                 {...form.getInputProps("message")}
               />
               <div className="flex mt-4 justify-end gap-3">

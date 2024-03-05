@@ -2,9 +2,11 @@ import { useMutation } from "@tanstack/react-query";
 import { useMessage } from "../hooks/useMessage";
 import { useForm } from "@mantine/form";
 import { BotStyle } from "../utils/types";
+import { useState } from "react";
 
 export default function BotForm({}: { botStyle: BotStyle }) {
   const { onSubmit } = useMessage();
+  const [typing, setTyping] = useState<boolean>(false);
 
   const form = useForm({
     initialValues: {
@@ -34,8 +36,15 @@ export default function BotForm({}: { botStyle: BotStyle }) {
           >
             <div className="flex items-cente rounded-full border  bg-gray-100 w-full dark:bg-[#171717] dark:border-gray-600">
               <textarea
+                onCompositionStart={() => setTyping(true)}
+                onCompositionEnd={() => setTyping(false)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey && !isSending) {
+                  if (
+                    !typing &&
+                    e.key === "Enter" &&
+                    !e.shiftKey &&
+                    !isSending
+                  ) {
                     e.preventDefault();
                     form.onSubmit(async (value) => {
                       form.reset();
