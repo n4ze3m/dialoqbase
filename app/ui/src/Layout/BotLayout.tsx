@@ -183,42 +183,7 @@ export default function BotLayout({
           </Dialog>
         </Transition.Root>
 
-        <div className="hidden md:fixed md:inset-y-0 md:flex md:flex-col">
-          <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5 dark:bg-[#171717] dark:border-gray-600">
-            <div className="mt-14 flex flex-grow flex-col">
-              <nav className="flex-1 space-y-1 px-2 pb-4">
-                {navigation.map((item) => (
-                  <Tooltip placement="right" key={item.name} title={item.name}>
-                    <Link
-                      to={{
-                        pathname: item.href.replace(":id", params.id!),
-                      }}
-                      className={classNames(
-                        location.pathname ===
-                          item.href.replace(":id", params.id!)
-                          ? "bg-gray-100 text-gray-900 dark:bg-[#262626] dark:text-white"
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white dark:hover:bg-[#262626]",
-                        "group  flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                      )}
-                    >
-                      <item.icon
-                        className={classNames(
-                          location.pathname ===
-                            item.href.replace(":id", params.id!)
-                            ? "text-gray-500 dark:text-white"
-                            : "text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-white",
-                          "flex-shrink-0 h-6 w-6"
-                        )}
-                        aria-hidden="true"
-                      />
-                      {/* {item.name} */}
-                    </Link>
-                  </Tooltip>
-                ))}
-              </nav>
-            </div>
-          </div>
-        </div>
+    
 
         <div className="flex flex-col">
           <div className="sticky top-0 z-[999] flex h-14  bg-white border-b border-gray-200 dark:bg-[#171717] dark:border-gray-600">
@@ -254,6 +219,43 @@ export default function BotLayout({
                   <div className="h-96 rounded-lg border-4 border-dashed border-gray-200" />
                 </div> */}
           </main>
+        </div>
+
+        <div className="hidden md:fixed md:inset-y-0 md:flex md:flex-col ">
+          <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5 dark:bg-[#171717] dark:border-gray-600">
+            <div className="mt-14 flex flex-grow flex-col">
+              <nav className="flex-1 space-y-1 px-2 pb-4">
+                {navigation.map((item) => (
+                  <Tooltip placement="right" key={item.name} title={item.name}>
+                    <Link
+                      to={{
+                        pathname: item.href.replace(":id", params.id!),
+                      }}
+                      className={classNames(
+                        location.pathname ===
+                          item.href.replace(":id", params.id!)
+                          ? "bg-gray-100 text-gray-900 dark:bg-[#262626] dark:text-white"
+                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white dark:hover:bg-[#262626]",
+                        "group  flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                      )}
+                    >
+                      <item.icon
+                        className={classNames(
+                          location.pathname ===
+                            item.href.replace(":id", params.id!)
+                            ? "text-gray-500 dark:text-white"
+                            : "text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-white",
+                          "flex-shrink-0 h-6 w-6"
+                        )}
+                        aria-hidden="true"
+                      />
+                      {/* {item.name} */}
+                    </Link>
+                  </Tooltip>
+                ))}
+              </nav>
+            </div>
+          </div>
         </div>
       </div>
     </>

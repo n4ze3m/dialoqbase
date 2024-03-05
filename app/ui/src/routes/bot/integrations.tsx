@@ -52,7 +52,7 @@ export default function BotIntegrationRoot() {
   }, [status]);
 
   return (
-    <div className="mx-auto my-3 w-full max-w-7xl">
+    <div className="mx-auto my-3  w-full max-w-7xl">
       {status === "loading" && <SkeletonLoading className="mt-6" />}
       {status === "success" && <IntegrationGrid data={data.data} />}
     </div>
