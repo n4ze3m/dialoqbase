@@ -177,6 +177,13 @@ Interested in contributing? Check out the [contributing guide](CONTRIBUTION.md).
 
 ## Sponsors 💖
 
+
+Dialoqbase nothing without the support of our wonderful sponsors. If you are interested in becoming a sponsor,
+
+
+
+### Special Sponsor
+
 <p>
   <a href="https://flogesoft.com/?utm_source=dialoqbase&utm_medium=sponsor&utm_campaign=dialoqbase">
     <img src="https://flogesoft.com/images/floges_sponsored.svg" width="150"
@@ -184,6 +191,12 @@ Interested in contributing? Check out the [contributing guide](CONTRIBUTION.md).
      />
   </a>
 </p>
+
+### Wonderful Sponsors
+
+
+<!-- sponsors --><!-- sponsors -->
+
 
 ## License 📝
 
