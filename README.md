@@ -178,7 +178,7 @@ Interested in contributing? Check out the [contributing guide](CONTRIBUTION.md).
 ## Sponsors 💖
 
 
-Dialoqbase nothing without the support of our wonderful sponsors. If you are interested in becoming a sponsor,
+Dialoqbase nothing without the support of our wonderful sponsors. If you are interested in becoming a sponsor, please visit the [sponsorship page](https://github.com/sponsors/n4ze3m).
 
 
 
