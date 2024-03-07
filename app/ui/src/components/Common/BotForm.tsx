@@ -26,6 +26,8 @@ import { YoutubeIcon } from "../Icons/YoutubeIcon";
 import { ApiIcon } from "../Icons/ApiIcon";
 import { SitemapIcon } from "../Icons/SitemapIcon";
 import { useCreateConfig } from "../../hooks/useCreateConfig";
+import { useQuery } from "@tanstack/react-query";
+import api from "../../services/api";
 
 type Props = {
   createBot: (values: any) => void;
@@ -47,6 +49,9 @@ export const BotForm = ({
   showEmbeddingAndModels,
 }: Props) => {
   const { data: botConfig, status: botConfigStatus } = useCreateConfig();
+
+  const youtubeMode = Form.useWatch(["options", "youtube_mode"], form);
+  const url = Form.useWatch(["content"], form);
 
   const [availableSources] = React.useState([
     {
@@ -331,21 +336,36 @@ export const BotForm = ({
               },
             ]}
           >
-            <Input type="url" placeholder="Enter the youtube URL" />
+            <Input
+              type="url"
+              size="large"
+              placeholder="Enter the youtube URL"
+            />
           </Form.Item>
 
-          <p className="text-sm text-gray-500">
-            If you find any issues, please report them on{" "}
-            <a
-              href="https://github.com/n4ze3m/dialoqbase/issues/new?title=Github%20issue&labels=bug"
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
-            >
-              GitHub
-            </a>
-            .
-          </p>
+          <Form.Item
+            name={["options", "youtube_mode"]}
+            label="Youtube mode"
+            rules={[
+              {
+                required: true,
+                message: "Please select a youtube mode",
+              },
+            ]}
+          >
+            <Select
+              options={[
+                {
+                  label: "Transcribe using Whisper",
+                  value: "whisper",
+                },
+                {
+                  label: "Youtube Transcript",
+                  value: "transcript",
+                },
+              ]}
+            />
+          </Form.Item>
         </>
       ),
     },
@@ -426,6 +446,31 @@ export const BotForm = ({
   const [selectedSource, _setSelectedSource] = React.useState<any>(
     showEmbeddingAndModels ? null : availableSources[0]
   );
+  const { data: transcripts, isLoading: isFetchingTranscript } = useQuery({
+    queryKey: [
+      "fetchYoutubeTranscript",
+      url,
+      youtubeMode,
+      selectedSource?.value,
+    ],
+    queryFn: async () => {
+      if (Boolean(url) && youtubeMode === "transcript") {
+        const res = await api.get("/yt/transcript?url=" + url);
+        return res.data["data"] as {
+          name: {
+            simpleText: string;
+          };
+          languageCode: string;
+        }[];
+      }
+
+      return [];
+    },
+    enabled:
+      Boolean(url) &&
+      youtubeMode === "transcript" &&
+      selectedSource?.value === "youtube",
+  });
 
   return (
     <>
@@ -446,6 +491,7 @@ export const BotForm = ({
               method: "get",
               headers: "{}",
               body: "{}",
+              youtube_mode: "whisper",
             },
           }}
         >
@@ -532,6 +578,45 @@ export const BotForm = ({
               </Col>
             </Row>
           )}
+
+          {selectedSource &&
+            selectedSource.value === "youtube" &&
+            youtubeMode === "transcript" && (
+              <>
+                <Form.Item
+                  name={["options", "language_code"]}
+                  label="Select language"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select a language",
+                    },
+                  ]}
+                >
+                  <Select
+                    loading={isFetchingTranscript}
+                    placeholder="Select language"
+                    options={transcripts?.map((transcript) => ({
+                      label: transcript.name.simpleText,
+                      value: transcript.languageCode,
+                    }))}
+                  />
+                </Form.Item>
+
+                <p className="text-sm text-gray-500">
+                  If you find any issues, please report them on{" "}
+                  <a
+                    href="https://github.com/n4ze3m/dialoqbase/issues/new?title=Github%20issue&labels=bug"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-medium text-indigo-600 hover:text-indigo-500"
+                  >
+                    GitHub
+                  </a>
+                  .
+                </p>
+              </>
+            )}
 
           <Form.Item hidden={!showEmbeddingAndModels} noStyle>
             <Divider />
