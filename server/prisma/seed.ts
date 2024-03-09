@@ -248,7 +248,7 @@ const LLMS: {
       model_id: "gemini-pro",
       name: "Gemini Pro (Google)",
       model_type: "chat",
-      stream_available: false,
+      stream_available: true,
       model_provider: "Google",
       local_model: false,
       config: "{}",
@@ -469,10 +469,23 @@ const replaceOldEmbeddings = async () => {
 
 }
 
+
+const updateGeminiStreamingToTrue = async () => {
+  await prisma.dialoqbaseModels.update({
+    where: {
+      model_id: "gemini-pro",
+    },
+    data: {
+      stream_available: true,
+    },
+  });
+}
+
 const main = async () => {
   await newModels();
   await removeTensorflowSupport();
   await replaceOldEmbeddings();
+  await updateGeminiStreamingToTrue()
 };
 
 main()

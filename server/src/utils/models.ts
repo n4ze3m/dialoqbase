@@ -82,11 +82,13 @@ export const chatModelProvider = (
         modelName: modelName,
         maxOutputTokens: 2048,
         apiKey: process.env.GOOGLE_API_KEY,
+        ...otherFields,
       });
     case "ollama":
       return new ChatOllama({
         baseUrl: otherFields.baseURL,
         model: modelName,
+        ...otherFields,
       });
     case "replicate":
       return new Replicate({
