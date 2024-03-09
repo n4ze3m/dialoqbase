@@ -22,6 +22,9 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "@fastify/autoload": "^5.0.0",
     "@fastify/cookie": "^9.1.0",
@@ -38,7 +41,11 @@
     "@google-ai/generativelanguage": "^2.0.0",
     "@grammyjs/files": "^1.0.4",
     "@huggingface/inference": "1",
-    "@langchain/google-genai": "^0.0.2",
+    "@langchain/anthropic": "^0.1.4",
+    "@langchain/cohere": "^0.0.5",
+    "@langchain/community": "^0.0.35",
+    "@langchain/google-genai": "^0.0.10",
+    "@langchain/openai": "^0.0.18",
     "@prisma/client": "^5.9.1",
     "@slack/bolt": "^3.13.2",
     "@supabase/supabase-js": "^2.24.0",
@@ -64,7 +71,7 @@
     "html-to-text": "^9.0.5",
     "ignore": "^5.2.4",
     "ioredis": "^5.3.2",
-    "langchain": "^0.0.206",
+    "langchain": "^0.1.25",
     "mammoth": "^1.6.0",
     "pdf-parse": "^1.1.1",
     "pdfjs-dist": "^3.7.107",
@@ -86,6 +93,9 @@
     "prisma": "^5.9.1",
     "tap": "^16.1.0",
     "typescript": "^4.5.4"
+  },
+  "resolutions": {
+    "@langchain/core": "0.1.43"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"

@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { embeddings } from "../../utils/embeddings";
 import { DialoqbaseVectorStore } from "../../utils/store";
 import { chatModelProvider } from "../../utils/models";
-import { BaseRetriever } from "langchain/schema/retriever";
+import { BaseRetriever } from "@langchain/core/retrievers";
 import { DialoqbaseHybridRetrival } from "../../utils/hybrid";
 import { createChain } from "../../chain";
 const prisma = new PrismaClient();
