@@ -248,7 +248,7 @@ const LLMS: {
       model_id: "gemini-pro",
       name: "Gemini Pro (Google)",
       model_type: "chat",
-      stream_available: false,
+      stream_available: true,
       model_provider: "Google",
       local_model: false,
       config: "{}",
@@ -271,24 +271,24 @@ const LLMS: {
       local_model: false,
       config: "{}",
     },
-    // {
-    //   name: "Claude 3 Opus 20240229 (Anthropic)",
-    //   model_id: "claude-3-opus-20240229-dbase",
-    //   model_type: "chat",
-    //   model_provider: "Anthropic",
-    //   stream_available: true,
-    //   local_model: false,
-    //   config: "{}",
-    // },
-    // {
-    //   name: "Claude 3 Sonnet 20240229 (Anthropic)",
-    //   model_id: "claude-3-sonnet-20240229-dbase",
-    //   model_type: "chat",
-    //   model_provider: "Anthropic",
-    //   stream_available: true,
-    //   local_model: false,
-    //   config: "{}",
-    // },
+    {
+      name: "Claude 3 Opus 20240229 (Anthropic)",
+      model_id: "claude-3-opus-20240229-dbase",
+      model_type: "chat",
+      model_provider: "Anthropic",
+      stream_available: true,
+      local_model: false,
+      config: "{}",
+    },
+    {
+      name: "Claude 3 Sonnet 20240229 (Anthropic)",
+      model_id: "claude-3-sonnet-20240229-dbase",
+      model_type: "chat",
+      model_provider: "Anthropic",
+      stream_available: true,
+      local_model: false,
+      config: "{}",
+    },
   ];
 
 const EMBEDDING_MODELS: {
@@ -469,10 +469,23 @@ const replaceOldEmbeddings = async () => {
 
 }
 
+
+const updateGeminiStreamingToTrue = async () => {
+  await prisma.dialoqbaseModels.update({
+    where: {
+      model_id: "gemini-pro",
+    },
+    data: {
+      stream_available: true,
+    },
+  });
+}
+
 const main = async () => {
   await newModels();
   await removeTensorflowSupport();
   await replaceOldEmbeddings();
+  await updateGeminiStreamingToTrue()
 };
 
 main()

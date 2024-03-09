@@ -1,4 +1,4 @@
-import { Embeddings, EmbeddingsParams } from "langchain/embeddings/base";
+import { Embeddings, EmbeddingsParams } from "@langchain/core/embeddings";
 import {
   piplelineTransformer,
   //@ts-ignore

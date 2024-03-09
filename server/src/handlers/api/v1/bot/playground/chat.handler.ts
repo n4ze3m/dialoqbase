@@ -4,7 +4,7 @@ import { DialoqbaseVectorStore } from "../../../../../utils/store";
 import { embeddings } from "../../../../../utils/embeddings";
 import { chatModelProvider } from "../../../../../utils/models";
 import { DialoqbaseHybridRetrival } from "../../../../../utils/hybrid";
-import { BaseRetriever } from "langchain/schema/retriever";
+import { BaseRetriever } from "@langchain/core/retrievers";
 import { Document } from "langchain/document";
 import {
   createChain,

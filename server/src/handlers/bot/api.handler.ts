@@ -5,7 +5,7 @@ import { embeddings } from "../../utils/embeddings";
 import { chatModelProvider } from "../../utils/models";
 import { nextTick } from "./post.handler";
 import { Document } from "langchain/document";
-import { BaseRetriever } from "langchain/schema/retriever";
+import { BaseRetriever } from "@langchain/core/retrievers";
 import { DialoqbaseHybridRetrival } from "../../utils/hybrid";
 import { createChain, groupMessagesByConversation } from "../../chain";
 

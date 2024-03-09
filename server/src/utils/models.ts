@@ -1,12 +1,12 @@
-import { ChatAnthropic } from "langchain/chat_models/anthropic";
-import { ChatOpenAI } from "langchain/chat_models/openai";
-import { ChatGooglePaLM } from "langchain/chat_models/googlepalm";
-import { HuggingFaceInference } from "langchain/llms/hf";
+import { ChatAnthropic } from "@langchain/anthropic";
+import { ChatOpenAI } from "@langchain/openai";
+import { ChatGooglePaLM } from "@langchain/community/chat_models/googlepalm";
+import { HuggingFaceInference } from "@langchain/community/llms/hf";
 import { DialoqbaseFireworksModel } from "../models/fireworks";
-import { OpenAI } from "langchain/llms/openai";
+import { OpenAI } from "@langchain/openai";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
-import { ChatOllama } from "langchain/chat_models/ollama";
-import { Replicate } from "langchain/llms/replicate";
+import { ChatOllama } from "@langchain/community/chat_models/ollama";
+import { Replicate } from "@langchain/community/llms/replicate";
 
 export const chatModelProvider = (
   provider: string,
@@ -82,11 +82,13 @@ export const chatModelProvider = (
         modelName: modelName,
         maxOutputTokens: 2048,
         apiKey: process.env.GOOGLE_API_KEY,
+        ...otherFields,
       });
     case "ollama":
       return new ChatOllama({
         baseUrl: otherFields.baseURL,
         model: modelName,
+        ...otherFields,
       });
     case "replicate":
       return new Replicate({

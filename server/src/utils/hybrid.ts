@@ -1,7 +1,7 @@
 import { Document } from "langchain/document";
 import { PrismaClient } from "@prisma/client";
 import { Embeddings } from "langchain/embeddings/base";
-import { BaseRetriever, BaseRetrieverInput } from "langchain/schema/retriever";
+import { BaseRetriever, BaseRetrieverInput } from "@langchain/core/retrievers";
 import { CallbackManagerForRetrieverRun, Callbacks } from "langchain/callbacks";
 const prisma = new PrismaClient();
 export interface DialoqbaseLibArgs extends BaseRetrieverInput {

@@ -4,7 +4,7 @@ import { DialoqbaseVectorStore } from "../../utils/store";
 import { chatModelProvider } from "../../utils/models";
 import { DialoqbaseHybridRetrival } from "../../utils/hybrid";
 import { Document } from "langchain/document";
-import { BaseRetriever } from "langchain/schema/retriever";
+import { BaseRetriever } from "@langchain/core/retrievers";
 import { createChain } from "../../chain";
 const prisma = new PrismaClient();
 
