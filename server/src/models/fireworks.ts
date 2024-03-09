@@ -1,12 +1,11 @@
-import { BaseChatModel, BaseChatModelParams } from "langchain/chat_models/base";
-import { CallbackManagerForLLMRun } from "langchain/callbacks";
+import { BaseChatModel, BaseChatModelParams } from "@langchain/core/language_models/chat_models";
+import { CallbackManagerForLLMRun } from "@langchain/core/callbacks/manager";
 import {
   AIMessage,
   BaseMessage,
-  ChatGeneration,
-  //   ChatMessage,
-  ChatResult,
-} from "langchain/schema";
+} from "@langchain/core/messages";
+
+import { ChatGeneration, ChatResult } from "@langchain/core/outputs";
 
 declare interface DialoqbaseFireworksModelInput {
   temperature?: number;
@@ -61,8 +60,7 @@ function messageToFireworkRole(message: BaseMessage): string {
 }
 export class DialoqbaseFireworksModel
   extends BaseChatModel
-  implements DialoqbaseFireworksModelInput
-{
+  implements DialoqbaseFireworksModelInput {
   temperature: number | undefined;
 
   top_p?: number | undefined;
@@ -118,117 +116,117 @@ export class DialoqbaseFireworksModel
 
     let data = this.streaming
       ? await new Promise<any>((resolve, reject) => {
-          let response: any;
-          let rejected = false;
-          let resolved = false;
+        let response: any;
+        let rejected = false;
+        let resolved = false;
 
-          this.completionWithRetry(
-            {
-              ...params,
-              messages: this.is_chat
-                ? messagesMapped.map(({ role, content }) => ({
-                    role,
-                    content: content.toString(),
-                  }))
-                : undefined,
-              prompt: !this.is_chat ? prompt : undefined,
-            },
-            options?.signal,
-            (event) => {
-              // console.log(event.data);
-              if (event.data === "[DONE]") {
-                if (resolved || rejected) {
-                  return;
-                }
-                resolved = true;
-                resolve(response);
-                return;
-              }
-              try {
-                const data = JSON.parse(event.data);
-                if (data?.error_code) {
-                  if (rejected) {
-                    return;
-                  }
-                  rejected = true;
-                  reject(data);
-                  return;
-                }
-                const message = data as {
-                  id: string;
-                  object: string;
-                  created: number;
-                  model: string;
-                  choices: {
-                    index: number;
-                    delta?: {
-                      content?: string;
-                      role?: string;
-                    };
-                    text?: string;
-                    finish_reason: string;
-                  }[];
-                };
-
-                if (!response) {
-                  if (message.choices.length > 0) {
-                    response = {
-                      id: message.id,
-                      object: message.object,
-                      created: message.created,
-                      result:
-                        message.choices[0]?.delta?.content ||
-                        message?.choices[0]?.text ||
-                        "",
-                    };
-                  }
-                } else {
-                  if (message.choices.length > 0) {
-                    response.created = message.created;
-                    response.result +=
-                      message.choices[0]?.delta?.content ||
-                      message?.choices[0]?.text ||
-                      "";
-                  }
-                }
-                void runManager?.handleLLMNewToken(
-                  message.choices[0]?.delta?.content ||
-                    message?.choices[0]?.text ||
-                    ""
-                );
-              } catch (e) {
-                console.error(e);
-
-                if (rejected) {
-                  return;
-                }
-                rejected = true;
-                reject(e);
-
-                return;
-              }
-            }
-          ).catch((e) => {
-            if (rejected) {
-              return;
-            }
-            rejected = true;
-            reject(e);
-          });
-        })
-      : await this.completionWithRetry(
+        this.completionWithRetry(
           {
             ...params,
             messages: this.is_chat
               ? messagesMapped.map(({ role, content }) => ({
-                  role,
-                  content: content.toString(),
-                }))
+                role,
+                content: content.toString(),
+              }))
               : undefined,
             prompt: !this.is_chat ? prompt : undefined,
           },
-          options?.signal
-        );
+          options?.signal,
+          (event) => {
+            // console.log(event.data);
+            if (event.data === "[DONE]") {
+              if (resolved || rejected) {
+                return;
+              }
+              resolved = true;
+              resolve(response);
+              return;
+            }
+            try {
+              const data = JSON.parse(event.data);
+              if (data?.error_code) {
+                if (rejected) {
+                  return;
+                }
+                rejected = true;
+                reject(data);
+                return;
+              }
+              const message = data as {
+                id: string;
+                object: string;
+                created: number;
+                model: string;
+                choices: {
+                  index: number;
+                  delta?: {
+                    content?: string;
+                    role?: string;
+                  };
+                  text?: string;
+                  finish_reason: string;
+                }[];
+              };
+
+              if (!response) {
+                if (message.choices.length > 0) {
+                  response = {
+                    id: message.id,
+                    object: message.object,
+                    created: message.created,
+                    result:
+                      message.choices[0]?.delta?.content ||
+                      message?.choices[0]?.text ||
+                      "",
+                  };
+                }
+              } else {
+                if (message.choices.length > 0) {
+                  response.created = message.created;
+                  response.result +=
+                    message.choices[0]?.delta?.content ||
+                    message?.choices[0]?.text ||
+                    "";
+                }
+              }
+              void runManager?.handleLLMNewToken(
+                message.choices[0]?.delta?.content ||
+                message?.choices[0]?.text ||
+                ""
+              );
+            } catch (e) {
+              console.error(e);
+
+              if (rejected) {
+                return;
+              }
+              rejected = true;
+              reject(e);
+
+              return;
+            }
+          }
+        ).catch((e) => {
+          if (rejected) {
+            return;
+          }
+          rejected = true;
+          reject(e);
+        });
+      })
+      : await this.completionWithRetry(
+        {
+          ...params,
+          messages: this.is_chat
+            ? messagesMapped.map(({ role, content }) => ({
+              role,
+              content: content.toString(),
+            }))
+            : undefined,
+          prompt: !this.is_chat ? prompt : undefined,
+        },
+        options?.signal
+      );
     // console.log(data);
     const text =
       data?.result ??
