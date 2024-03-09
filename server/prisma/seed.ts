@@ -271,24 +271,24 @@ const LLMS: {
       local_model: false,
       config: "{}",
     },
-    // {
-    //   name: "Claude 3 Opus 20240229 (Anthropic)",
-    //   model_id: "claude-3-opus-20240229-dbase",
-    //   model_type: "chat",
-    //   model_provider: "Anthropic",
-    //   stream_available: true,
-    //   local_model: false,
-    //   config: "{}",
-    // },
-    // {
-    //   name: "Claude 3 Sonnet 20240229 (Anthropic)",
-    //   model_id: "claude-3-sonnet-20240229-dbase",
-    //   model_type: "chat",
-    //   model_provider: "Anthropic",
-    //   stream_available: true,
-    //   local_model: false,
-    //   config: "{}",
-    // },
+    {
+      name: "Claude 3 Opus 20240229 (Anthropic)",
+      model_id: "claude-3-opus-20240229-dbase",
+      model_type: "chat",
+      model_provider: "Anthropic",
+      stream_available: true,
+      local_model: false,
+      config: "{}",
+    },
+    {
+      name: "Claude 3 Sonnet 20240229 (Anthropic)",
+      model_id: "claude-3-sonnet-20240229-dbase",
+      model_type: "chat",
+      model_provider: "Anthropic",
+      stream_available: true,
+      local_model: false,
+      config: "{}",
+    },
   ];
 
 const EMBEDDING_MODELS: {
