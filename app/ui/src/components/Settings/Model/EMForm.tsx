@@ -124,7 +124,7 @@ export const EMForm: React.FC<Props> = ({ setOpenAddEmbeddingModel }) => {
         {embeddingType === "openai" && (
           <Form
             onFinish={(value) => {
-              fetchLocalModels(value);
+              saveEmbeddingModel(value);
             }}
             form={embeddingForm}
             layout="vertical"
