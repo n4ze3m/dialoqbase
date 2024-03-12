@@ -194,10 +194,11 @@ Dialoqbase nothing without the support of our wonderful sponsors. If you are int
 
 ### Wonderful Sponsors
 
+<a href="https://github.com/mjtechguy" target="_blank"><img src="https://avatars.githubusercontent.com/u/29070994?s=64&v=4"></a>
+<a href="https://github.com/senavi888" target="_blank"><img src="https://avatars.githubusercontent.com/u/161348858?s=64&v=4"></a>
 
-<!-- sponsors --><!-- sponsors -->
 
-
+And many more wonderful supporters from [Ko-fi](https://ko-fi.com/n4ze3m).
 ## License 📝
 
 [MIT](LICENSE)
