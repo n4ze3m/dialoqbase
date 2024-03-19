@@ -30,6 +30,19 @@ export interface AddNewSourceById {
   };
 }
 
+export interface AddNewSourceBulkById {
+  Params: {
+    id: string;
+  };
+  Body: {
+    type: string;
+    content: string;
+    maxDepth?: number;
+    maxLinks?: number;
+    options?: any;
+  }[];
+}
+
 export interface AddNewPDFById {
   Params: {
     id: string;
@@ -74,5 +87,17 @@ export interface UpdateBotById {
 export interface GetBotById {
   Params: {
     bot_id: string;
+  };
+}
+
+
+export interface CreateBotAPIRequest {
+  Body: {
+    name?: string;
+    embedding: string;
+    model: string;
+    system_prompt?: string;
+    question_generator_prompt?: string;
+    temperature?: number;
   };
 }

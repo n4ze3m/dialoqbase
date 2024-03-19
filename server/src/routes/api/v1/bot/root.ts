@@ -14,14 +14,18 @@ import {
   updateBotByIdHandler,
   getCreateBotConfigHandler,
   getBotByIdSettingsHandler,
-  createCopyHandler
+  createCopyHandler,
+  createBotAPIHandler,
+  addNewSourceByIdBulkHandler
 } from "../../../../handlers/api/v1/bot/bot";
 import {
   addNewSourceByIdSchema,
   createBotSchema,
   getBotByIdSchema,
   updateBotByIdSchema,
-  createCopyBotSchema
+  createCopyBotSchema,
+  createBotAPISchema,
+  addNewSourceByBulkIdSchema
 } from "../../../../schema/api/v1/bot/bot";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
@@ -206,6 +210,26 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       onRequest: [fastify.authenticate],
     },
     createCopyHandler
+  );
+
+  // for sdk
+  fastify.post(
+    "/api",
+    {
+      schema: createBotAPISchema,
+      onRequest: [fastify.authenticate],
+    },
+    createBotAPIHandler
+  );
+
+  // add new source by bulk id
+  fastify.post(
+    "/:id/source/bulk",
+    {
+      schema: addNewSourceByBulkIdSchema,
+      onRequest: [fastify.authenticate],
+    },
+    addNewSourceByIdBulkHandler
   );
 };
 

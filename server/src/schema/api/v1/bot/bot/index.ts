@@ -184,3 +184,83 @@ export const createCopyBotSchema: FastifySchema = {
     },
   },
 };
+
+
+export const createBotAPISchema: FastifySchema = {
+  tags: ["Bot"],
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
+  body: {
+    type: "object",
+    properties: {
+      name: {
+        type: "string",
+      },
+      embedding: {
+        type: "string",
+      },
+      model: {
+        type: "string",
+      },
+      question_generator_prompt: {
+        type: "string",
+      },
+      system_prompt: {
+        type: "string",
+      },
+      temperature: {
+        type: "number",
+      },
+    },
+  },
+};
+
+export const addNewSourceByBulkIdSchema: FastifySchema = {
+  tags: ["Bot"],
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
+  params: {
+    type: "object",
+    required: ["id"],
+    properties: {
+      id: {
+        type: "string",
+      },
+    },
+  },
+  body: {
+    type: "array",
+    items: {
+      type: "object",
+      properties: {
+        content: {
+          type: "string",
+        },
+        type: {
+          type: "string",
+          enum: SUPPORTED_SOURCE_TYPES,
+        },
+        maxDepth: {
+          type: "number",
+        },
+        maxLinks: {
+          type: "number",
+        },
+
+        options: {
+          type: "object",
+        },
+      },
+    },
+  },
+};
