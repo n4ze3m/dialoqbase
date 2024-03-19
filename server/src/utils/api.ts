@@ -1,4 +1,4 @@
-import { randomBytes } from "crypto";
+import { randomBytes, randomUUID } from "crypto";
 
 export const generateAPIKey = (length = 32) => {
   const charset =
@@ -14,3 +14,10 @@ export const generateAPIKey = (length = 32) => {
   result = `${prefix}${result}`;
   return result;
 };
+
+
+export const generateDialoqbaseAPIKey = () => {
+  const randomUUIDString = randomUUID().replace(/-/g, "");
+  const prefix = "db_";
+  return `${prefix}${randomUUIDString}`;
+}
