@@ -145,11 +145,10 @@ export const getCreateBotConfigHandler = async (
     .filter((model) => model.model_type === "embedding")
     .map((model) => {
       return {
-        label: `${model.name || model.model_id} ${
-          model.model_id === "dialoqbase_eb_dialoqbase-ollama"
+        label: `${model.name || model.model_id} ${model.model_id === "dialoqbase_eb_dialoqbase-ollama"
             ? "(Deprecated)"
             : ""
-        }`,
+          }`,
         value: model.model_id,
         disabled: model.model_id === "dialoqbase_eb_dialoqbase-ollama",
       };
@@ -196,11 +195,10 @@ export const getBotByIdSettingsHandler = async (
     .filter((model) => model.model_type === "embedding")
     .map((model) => {
       return {
-        label: `${model.name || model.model_id} ${
-          model.model_id === "dialoqbase_eb_dialoqbase-ollama"
+        label: `${model.name || model.model_id} ${model.model_id === "dialoqbase_eb_dialoqbase-ollama"
             ? "(Deprecated)"
             : ""
-        }`,
+          }`,
         value: model.model_id,
         disabled: model.model_id === "dialoqbase_eb_dialoqbase-ollama",
       };
@@ -215,5 +213,38 @@ export const getBotByIdSettingsHandler = async (
     data: bot,
     chatModel,
     embeddingModel,
+  };
+};
+
+
+export const isBotReadyHandler = async (
+  request: FastifyRequest<GetBotRequestById>,
+  reply: FastifyReply
+) => {
+  const prisma = request.server.prisma;
+  const id = request.params.id;
+
+  const bot = await prisma.bot.findFirst({
+    where: {
+      id,
+      user_id: request.user.user_id,
+    },
+  });
+
+  if (!bot) {
+    return reply.status(404).send({
+      message: "Bot not found",
+    });
+  }
+
+  const source = await prisma.botSource.count({
+    where: {
+      botId: id,
+      isPending: true,
+    },
+  });
+
+  return {
+    is_ready: source === 0,
   };
 };

@@ -169,7 +169,7 @@ export const addNewSourceByIdBulkHandler = async (
 
         if (isOk.length > 0) {
             return reply.status(400).send({
-                message: isOk,
+                message: isOk.join(", ")
             });
         }
 
@@ -197,7 +197,8 @@ export const addNewSourceByIdBulkHandler = async (
         await request.server.queue.add(queueSource);
 
         return {
-            id: bot.id,
+            success: true,
+            source_ids: queueSource.map((source) => source.id),
         };
     } catch (error) {
         console.log(error);
