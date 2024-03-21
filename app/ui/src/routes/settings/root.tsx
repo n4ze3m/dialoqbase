@@ -7,6 +7,7 @@ import axios from "axios";
 import { SettingsLayout } from "../../Layout/SettingsLayout";
 import { SkeletonLoading } from "../../components/Common/SkeletonLoading";
 import { useNavigate } from "react-router-dom";
+import { UserApiKey } from "../../components/Settings/Profile/ApiKey";
 
 export default function SettingsRoot() {
   const [form] = Form.useForm();
@@ -208,6 +209,8 @@ export default function SettingsRoot() {
               </div>
             </dl>
           </div>
+
+          <UserApiKey />
         </>
       )}
       {status === "loading" && <SkeletonLoading />}

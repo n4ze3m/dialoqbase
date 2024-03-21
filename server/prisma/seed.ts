@@ -315,6 +315,15 @@ const LLMS: {
       stream_available: true,
       local_model: false,
       config: "{}",
+    },
+    {
+      model_id: "claude-3-haiku-20240307-dbase",
+      name: "Claude 3 Haiku 20240307 (Anthropic)",
+      model_type: "chat",
+      stream_available: true,
+      model_provider: "Anthropic",
+      local_model: false,
+      config: "{}",
     }
   ];
 

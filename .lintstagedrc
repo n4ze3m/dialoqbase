@@ -1,0 +1,3 @@
+{
+    "app/ui/*.tsx" : "eslint --fix"
+}

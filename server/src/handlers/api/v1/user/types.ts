@@ -26,3 +26,16 @@ export interface RegisterUserRequestBody {
     password: string;
   };
 }
+
+
+export interface CreateNewApiKey {
+  Body: {
+    name: string
+  }
+}
+
+export interface DeleteApiKey {
+  Params: {
+    id: number
+  }
+}

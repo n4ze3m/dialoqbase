@@ -1,7 +1,6 @@
 import fp from "fastify-plugin";
 import fastifyJwt, { FastifyJWTOptions } from "@fastify/jwt";
 import { FastifyReply, FastifyRequest } from "fastify";
-
 declare module "@fastify/jwt" {
   interface FastifyJWT {
     user: {
@@ -11,6 +10,7 @@ declare module "@fastify/jwt" {
     };
   }
 }
+
 
 export default fp<FastifyJWTOptions>(async (fastify, opts) => {
   fastify.register(fastifyJwt, {
@@ -24,23 +24,47 @@ export default fp<FastifyJWTOptions>(async (fastify, opts) => {
     "authenticate",
     async function (request: FastifyRequest, reply: FastifyReply) {
       try {
-        await request.jwtVerify();
-        const { user_id } = request.user;
+        const token = request.headers.authorization;
+        if (token && token.startsWith("db_")) {
+          const apiKey = await fastify.prisma.userApiKey.findFirst({
+            where: {
+              api_key: token,
+            },
+            include: {
+              User: true,
+            }
+          });
 
-        const user = await fastify.prisma.user.findUnique({
-          where: {
-            user_id,
-          },
-        });
+          if (!apiKey) {
+            return reply.status(401).send({
+              message: "Unauthorized",
+            });
+          }
+          request.user = {
+            user_id: apiKey.User.user_id,
+            username: apiKey.User.username,
+            is_admin: apiKey.User.isAdministrator,
+          };
+        } else {
 
-        if (!user) {
-          throw new Error("User not found");
+          await request.jwtVerify();
+          const { user_id } = request.user;
+
+          const user = await fastify.prisma.user.findUnique({
+            where: {
+              user_id,
+            },
+          });
+
+          if (!user) {
+            throw new Error("User not found");
+          }
+          request.user = {
+            user_id: user.user_id,
+            username: user.username,
+            is_admin: user.isAdministrator,
+          };
         }
-        request.user = {
-          user_id: user.user_id,
-          username: user.username,
-          is_admin: user.isAdministrator,
-        };
       } catch (err) {
         reply.send(err);
       }

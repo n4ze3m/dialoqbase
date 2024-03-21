@@ -70,14 +70,15 @@ model BotDocument {
 }
 
 model User {
-  user_id         Int      @id @default(autoincrement())
-  username        String   @unique
+  user_id         Int          @id @default(autoincrement())
+  username        String       @unique
   password        String
-  email           String?  @unique
-  isFirstLogin    Boolean  @default(true)
-  isAdministrator Boolean  @default(false)
-  createdAt       DateTime @default(now())
+  email           String?      @unique
+  isFirstLogin    Boolean      @default(true)
+  isAdministrator Boolean      @default(false)
+  createdAt       DateTime     @default(now())
   bots            Bot[]
+  apiKeys      UserApiKey[]
 }
 
 model DialoqbaseSettings {
@@ -197,10 +198,19 @@ model DialoqbaseModels {
 }
 
 model BotApiHistory {
-  id         Int       @id @default(autoincrement())
-  api_key    String
-  bot_id     String?
-  human      String?
-  bot        String?
-  createdAt  DateTime? @default(now())
+  id        Int       @id @default(autoincrement())
+  api_key   String
+  bot_id    String?
+  human     String?
+  bot       String?
+  createdAt DateTime? @default(now())
+}
+
+model UserApiKey {
+  id        Int      @id @default(autoincrement())
+  name      String
+  api_key   String
+  user_id   Int
+  User      User     @relation(fields: [user_id], references: [user_id])
+  createdAt DateTime @default(now())
 }

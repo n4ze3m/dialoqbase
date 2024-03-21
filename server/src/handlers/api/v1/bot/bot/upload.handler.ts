@@ -222,3 +222,73 @@ export const addNewSourceFileByIdHandler = async (
     id: bot.id,
   };
 };
+
+export const addNewSourceFileByIdBulkHandler = async (
+  request: FastifyRequest<AddNewPDFById>,
+  reply: FastifyReply
+) => {
+  try {
+    const prisma = request.server.prisma;
+    const id = request.params.id;
+
+    const bot = await prisma.bot.findFirst({
+      where: {
+        id,
+        user_id: request.user.user_id,
+      },
+      include: {
+        source: true,
+      },
+    });
+
+    if (!bot) {
+      return reply.status(404).send({
+        message: "Bot not found",
+      });
+    }
+
+    const files = request.files();
+    const queueSource: any[] = [];
+
+    for await (const file of files) {
+      const type = fileTypeFinder(file.mimetype);
+      if (type === "none") {
+        return reply.status(400).send({
+          message: "File type not supported or invalid file type",
+        });
+      }
+      const fileName = `${randomUUID()}-${file.filename}`;
+      const path = `./uploads/${fileName}`;
+      await fs.promises.mkdir("./uploads", { recursive: true });
+      await pump(file.file, fs.createWriteStream(path));
+
+
+      const botSource = await prisma.botSource.create({
+        data: {
+          content: file.filename,
+          type,
+          location: path,
+          botId: id,
+        },
+      });
+
+      queueSource.push({
+        ...botSource,
+        embedding: bot.embedding,
+      });
+
+    }
+
+    await request.server.queue.add(queueSource);
+
+    return {
+      source_ids: queueSource.map((source) => source.id),
+      success: true,
+    };
+  } catch (err) {
+    console.log(err);
+    return reply.status(500).send({
+      message: "Upload failed due to internal server error",
+    });
+  }
+};

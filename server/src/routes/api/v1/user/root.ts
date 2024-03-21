@@ -6,6 +6,9 @@ import {
   updatePasswordHandler,
   updateProfileHandler,
   userLoginHandler,
+  createNewApiKey,
+  deleteApiKey,
+  getAllApiKeyByUser
 } from "../../../../handlers/api/v1/user";
 import {
   isRegisterationAllowedSchema,
@@ -14,6 +17,12 @@ import {
   userLoginSchema,
   userRegisterSchema,
 } from "../../../../schema/api/v1/user";
+
+import {
+  createNewApiKeySchema,
+  deleteApiKeySchema,
+  getAllApiKeyByUserSchema
+} from "../../../../schema/api/v1/user/api";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   fastify.post(
@@ -97,6 +106,35 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     },
     meHandler
   );
+
+
+  fastify.post(
+    "/api-key",
+    {
+      onRequest: [fastify.authenticate],
+      schema: createNewApiKeySchema,
+    },
+    createNewApiKey
+  );
+
+  fastify.get(
+    "/api-key",
+    {
+      onRequest: [fastify.authenticate],
+      schema: getAllApiKeyByUserSchema,
+    },
+    getAllApiKeyByUser
+  );
+
+  fastify.delete(
+    "/api-key/:id",
+    {
+      onRequest: [fastify.authenticate],
+      schema: deleteApiKeySchema,
+    },
+    deleteApiKey
+  );
+
 };
 
 export default root;

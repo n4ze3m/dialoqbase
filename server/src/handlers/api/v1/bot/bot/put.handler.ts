@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { UpdateBotById } from "./types";
+import { UpdateBotById, UpdateBotAPIById } from "./types";
 import {
   apiKeyValidaton,
   apiKeyValidatonMessage,
@@ -63,6 +63,91 @@ export const updateBotByIdHandler = async (
       ...request.body,
       provider: modelInfo.model_provider || "",
     },
+  });
+
+  return {
+    id: bot.id,
+  };
+};
+
+export const updateBotAPIByIdHandler = async (
+  request: FastifyRequest<UpdateBotAPIById>,
+  reply: FastifyReply
+) => {
+  const prisma = request.server.prisma;
+  const id = request.params.id;
+
+  const bot = await prisma.bot.findFirst({
+    where: {
+      id,
+      user_id: request.user.user_id,
+    },
+  });
+
+  if (!bot) {
+    return reply.status(404).send({
+      message: "Bot not found",
+    });
+  }
+
+  let updateBody: Record<string, any> = {
+    ...request.body,
+    qaPrompt: request.body?.system_prompt,
+    questionGeneratorPrompt: request.body?.question_generator_prompt,
+    system_prompt: undefined,
+    question_generator_prompt: undefined,
+  }
+
+
+  if (updateBody.model) {
+    const modelInfo = await prisma.dialoqbaseModels.findFirst({
+      where: {
+        hide: false,
+        deleted: false,
+        OR: [
+          {
+            model_id: updateBody.model
+          },
+          {
+            model_id: `${updateBody.model}-dbase`
+          }
+        ],
+      },
+    });
+
+
+    if (!modelInfo) {
+      return reply.status(400).send({
+        message: "Model not found",
+      });
+    }
+
+    const isAPIKeyAddedForProvider = apiKeyValidaton(
+      `${modelInfo.model_provider}`.toLocaleLowerCase()
+    );
+
+    if (!isAPIKeyAddedForProvider) {
+      return reply.status(400).send({
+        message: apiKeyValidatonMessage(modelInfo.model_provider || ""),
+      });
+    }
+
+    if (!modelInfo.stream_available && request.body.streaming) {
+      return reply.status(400).send({
+        message: "Streaming is not supported for this model",
+      });
+    }
+    updateBody = {
+      ...updateBody,
+      provider: modelInfo.model_provider || "",
+    }
+
+  }
+  await prisma.bot.update({
+    where: {
+      id: bot.id,
+    },
+    data: updateBody,
   });
 
   return {

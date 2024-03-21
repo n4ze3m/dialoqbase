@@ -14,14 +14,23 @@ import {
   updateBotByIdHandler,
   getCreateBotConfigHandler,
   getBotByIdSettingsHandler,
-  createCopyHandler
+  createCopyHandler,
+  createBotAPIHandler,
+  addNewSourceByIdBulkHandler,
+  addNewSourceFileByIdBulkHandler,
+  chatRequestAPIHandler,
+  isBotReadyHandler,
+  updateBotAPIByIdHandler
 } from "../../../../handlers/api/v1/bot/bot";
 import {
   addNewSourceByIdSchema,
   createBotSchema,
   getBotByIdSchema,
   updateBotByIdSchema,
-  createCopyBotSchema
+  createCopyBotSchema,
+  createBotAPISchema,
+  addNewSourceByBulkIdSchema,
+  updateBotAPISchema
 } from "../../../../schema/api/v1/bot/bot";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
@@ -135,14 +144,13 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     getAllBotsHandler
   );
 
-  // upload pdf
   fastify.post(
     "/upload",
     {
       onRequest: [fastify.authenticate],
       schema: {
         tags: ["Bot"],
-        summary: "API to upload pdf",
+        summary: "API to upload files",
         headers: {
           type: "object",
           properties: {
@@ -162,7 +170,7 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       onRequest: [fastify.authenticate],
       schema: {
         tags: ["Bot"],
-        summary: "API to upload pdf",
+        summary: "API to upload files",
         headers: {
           type: "object",
           properties: {
@@ -206,6 +214,113 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       onRequest: [fastify.authenticate],
     },
     createCopyHandler
+  );
+
+  // for sdk
+  fastify.post(
+    "/api",
+    {
+      schema: createBotAPISchema,
+      onRequest: [fastify.authenticate],
+    },
+    createBotAPIHandler
+  );
+
+  // add new source by bulk id
+  fastify.post(
+    "/:id/source/bulk",
+    {
+      schema: addNewSourceByBulkIdSchema,
+      onRequest: [fastify.authenticate],
+    },
+    addNewSourceByIdBulkHandler
+  );
+
+  // add new source for bulk
+  fastify.post(
+    "/:id/source/upload/bulk",
+    {
+      onRequest: [fastify.authenticate],
+      schema: {
+        tags: ["Bot"],
+        summary: "API to upload files as source",
+        headers: {
+          type: "object",
+          properties: {
+            Authorization: { type: "string" },
+          },
+          required: ["Authorization"],
+        },
+      },
+    },
+    addNewSourceFileByIdBulkHandler
+  );
+
+  // for api
+  fastify.post(
+    "/:id/chat",
+    {
+      schema: {
+        tags: ["Bot"],
+        summary: "API to send message to bot",
+        headers: {
+          type: "object",
+          required: ["Authorization"],
+          properties: {
+            Authorization: { type: "string" },
+          },
+        },
+        params: {
+          type: "object",
+          required: ["id"],
+          properties: {
+            id: {
+              type: "string",
+            },
+          },
+        },
+
+        body: {
+          type: "object",
+          required: ["message"],
+          properties: {
+            message: {
+              type: "string",
+            },
+            history: {
+              type: "array",
+              default: [],
+            },
+            history_id: {
+              type: "string",
+            },
+            stream: {
+              type: "boolean",
+            },
+          },
+        },
+      },
+      onRequest: [fastify.authenticate],
+    },
+    chatRequestAPIHandler
+  )
+
+  fastify.get(
+    "/:id/is-ready",
+    {
+      schema: getBotByIdSchema,
+      onRequest: [fastify.authenticate],
+    },
+    isBotReadyHandler
+  );
+
+  fastify.put(
+    "/:id/update",
+    {
+      schema: updateBotAPISchema,
+      onRequest: [fastify.authenticate],
+    },
+    updateBotAPIByIdHandler
   );
 };
 
