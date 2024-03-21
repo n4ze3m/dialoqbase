@@ -43,7 +43,7 @@ export default defineConfig({
 
     socialLinks: [
       { icon: "github", link: "https://github.com/n4ze3m/dialoqbase" },
-      { icon: "x", link: "https://twitter.com/dialoqbase" },
+      { icon: "twitter", link: "https://twitter.com/dialoqbase" },
       { icon: "discord", link: "https://discord.com/invite/SPE3npH7Wu" },
     ],
     footer: {
