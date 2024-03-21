@@ -317,7 +317,7 @@ const LLMS: {
       config: "{}",
     },
     {
-      model_id: "claude-3-haiku-20240307",
+      model_id: "claude-3-haiku-20240307-dbase",
       name: "Claude 3 Haiku 20240307 (Anthropic)",
       model_type: "chat",
       stream_available: true,
