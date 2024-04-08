@@ -242,3 +242,31 @@ export const textToSpeech = async (text: string, voiceId: string) => {
 
   return response.data;
 };
+
+export const textToSpeechOpenAI = async (
+  input: string,
+  voice: string,
+  model: string
+) => {
+  const apiKey = process.env.OPENAI_API_KEY;
+  const response = await axios.post(
+    "https://api.openai.com/v1/audio/speech",
+    {
+      input: input,
+      voice: voice,
+      model: model,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+      responseType: "arraybuffer",
+    }
+  );
+
+  return response.data;
+};
+
+export const isOpenAIAPIKeyPresent = () => {
+  return !!process.env.OPENAI_API_KEY;
+}

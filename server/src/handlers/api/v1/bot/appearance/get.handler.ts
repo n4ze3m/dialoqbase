@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { GetBotAppearanceById } from "./types";
-import { getElevenLabTTS, getOpenAITTS } from "../../../../../utils/elevenlabs";
+import { getElevenLabTTS, getOpenAITTS } from "../../../../../utils/voice";
 
 export const getBotAppearanceByIdHandler = async (
   request: FastifyRequest<GetBotAppearanceById>,

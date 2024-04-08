@@ -7,7 +7,7 @@ import { notification } from "antd";
 
 export type BotResponse = {
   bot: {
-    id: string;
+    chat_id: string;
     text: string;
     sourceDocuments: any[];
   };
@@ -70,7 +70,7 @@ export const useMessage = () => {
       });
       const data = response.data as BotResponse;
       newMessage[newMessage.length - 1].message = data.bot.text;
-      newMessage[newMessage.length - 1].id = data.bot.id;
+      newMessage[newMessage.length - 1].id = data.bot.chat_id;
       newMessage[newMessage.length - 1].sources = data.bot.sourceDocuments;
       localStorage.setItem("DS_MESSAGE", JSON.stringify(newMessage));
       localStorage.setItem("DS_HISTORY", JSON.stringify(data.history));
@@ -160,10 +160,11 @@ export const useMessage = () => {
             count++;
           } else if (type === "result") {
             const responseData = JSON.parse(message) as BotResponse;
+            console.log(responseData);
             newMessage[appendingIndex].message = responseData.bot.text;
             newMessage[appendingIndex].sources =
               responseData.bot.sourceDocuments;
-            newMessage[appendingIndex].id = responseData.bot.id;
+            newMessage[appendingIndex].id = responseData.bot.chat_id;
             localStorage.setItem("DS_MESSAGE", JSON.stringify(newMessage));
             localStorage.setItem(
               "DS_HISTORY",

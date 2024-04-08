@@ -13,5 +13,6 @@ export type BotStyle = {
       text_color?: string;
     };
     first_message: string;
+    tts: boolean;
   };
 };
