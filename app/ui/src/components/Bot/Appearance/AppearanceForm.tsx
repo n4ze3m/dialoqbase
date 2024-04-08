@@ -1,4 +1,12 @@
-import { Divider, Form, FormInstance, Input, notification } from "antd";
+import {
+  Divider,
+  Form,
+  FormInstance,
+  Input,
+  Select,
+  Switch,
+  notification,
+} from "antd";
 import { AppearanceType } from "./types";
 import { DbColorPicker } from "../../Common/DbColorPicker";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -16,7 +24,8 @@ export const AppearanceForm = ({
 }) => {
   const botBubbleStyle = Form.useWatch("chat_bot_bubble_style", form);
   const humanBubbleStyle = Form.useWatch("chat_human_bubble_style", form);
-
+  const isTTS = Form.useWatch("tts", form);
+  const ttsProvider = Form.useWatch("tts_provider", form);
   const params = useParams<{ id: string }>();
 
   const onFinish = async (values: any) => {
@@ -217,6 +226,69 @@ export const AppearanceForm = ({
           </Form.Item>
         </div>
       </Form.Item>
+
+      <Divider orientation="left">Text to Speech (TTS) Settings</Divider>
+
+      <Form.Item label="Enable TTS" name="tts" valuePropName="checked">
+        <Switch />
+      </Form.Item>
+
+      {isTTS && (
+        <>
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: "Please select a voice provider!",
+              },
+            ]}
+            label="TTS Provider"
+            name="tts_provider"
+          >
+            <Select
+              placeholder="Select a TTS provider"
+              options={[
+                {
+                  label: "Eleven Labs",
+                  value: "eleven_labs",
+                },
+                {
+                  label: "OpenAI",
+                  value: "openai",
+                },
+              ]}
+            />
+          </Form.Item>
+          {ttsProvider === "openai" && (
+            <Form.Item
+              name="tts_model"
+              label="TTS Model"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select a TTS model!",
+                },
+              ]}
+            >
+              <Select
+                placeholder="Select a TTS model"
+                options={initialData.tts_data.openai.models}
+              />
+            </Form.Item>
+          )}
+
+          <Form.Item name="tts_voice" label="TTS Voice">
+            <Select
+              placeholder="Select a TTS voice"
+              options={
+                ttsProvider === "eleven_labs"
+                  ? initialData.tts_data.eleven_labs.voices
+                  : initialData.tts_data.openai.voices
+              }
+            />
+          </Form.Item>
+        </>
+      )}
 
       <div className="mt-3 text-right">
         <button

@@ -78,7 +78,7 @@ model User {
   isAdministrator Boolean      @default(false)
   createdAt       DateTime     @default(now())
   bots            Bot[]
-  apiKeys      UserApiKey[]
+  apiKeys         UserApiKey[]
 }
 
 model DialoqbaseSettings {
@@ -138,6 +138,10 @@ model BotAppearance {
   background_color        String?
   chat_bot_bubble_style   Json?   @db.Json
   chat_human_bubble_style Json?   @db.Json
+  tts                     Boolean @default(false)
+  tts_voice               String?
+  tts_provider            String?
+  tts_model               String?
   Bot                     Bot     @relation(fields: [bot_id], references: [id], onDelete: Cascade)
 }
 

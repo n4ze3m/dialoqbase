@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 export type Message = {
+  id: string;
   isBot: boolean;
   message: string;
   sources: any[];
@@ -18,6 +19,9 @@ type State = {
   setHistory: (history: History) => void;
   streaming: boolean;
   setStreaming: (streaming: boolean) => void;
+  
+  processing: boolean;
+  setProcessing: (processing: boolean) => void;
 };
 
 export const useStoreMessage = create<State>((set) => ({
@@ -27,6 +31,8 @@ export const useStoreMessage = create<State>((set) => ({
   setHistory: (history) => set({ history }),
   streaming: true,
   setStreaming: (streaming) => set({ streaming }),
+  processing: false,
+  setProcessing: (processing) => set({ processing }),
 }));
 
 type ReferenceState = {

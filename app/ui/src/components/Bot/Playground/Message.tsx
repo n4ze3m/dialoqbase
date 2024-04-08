@@ -108,12 +108,12 @@ export const PlaygroundMessage = (props: Props) => {
                       cancel();
                     }
                   }}
-                  className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                  className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                 >
                   {!isWebSpeaking ? (
-                    <PlayIcon className="w-3 h-3 text-gray-400 group-hover:text-gray-500" />
+                    <PlayIcon className="w-4 h-4 text-gray-400 group-hover:text-gray-500" />
                   ) : (
-                    <StopIcon className="w-3 h-3 text-red-400 group-hover:text-red-500" />
+                    <StopIcon className="w-4 h-4 text-red-400 group-hover:text-red-500" />
                   )}
                 </button>
               )}
@@ -131,13 +131,13 @@ export const PlaygroundMessage = (props: Props) => {
                         cancelElevenLabs();
                       }
                     }}
-                    className="flex items-center justify-center w-6 h-6 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                    className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                   >
                     {!isElevenLabsLoading ? (
                       !isElevenLabsPlaying ? (
-                        <PlayIcon className="w-3 h-3 text-gray-400 group-hover:text-gray-500" />
+                        <PlayIcon className="w-4 h-4 text-gray-400 group-hover:text-gray-500" />
                       ) : (
-                        <StopIcon className="w-3 h-3 text-red-400 group-hover:text-red-500" />
+                        <StopIcon className="w-4 h-4 text-red-400 group-hover:text-red-500" />
                       )
                     ) : (
                       <svg

@@ -1,3 +1,4 @@
+import { PlayIcon } from "@heroicons/react/24/outline";
 import { FormInstance, Form } from "antd";
 
 export const AppearancePreview = ({ form }: { form: FormInstance }) => {
@@ -5,6 +6,9 @@ export const AppearancePreview = ({ form }: { form: FormInstance }) => {
   const humanBubbleStyle = Form.useWatch("chat_human_bubble_style", form);
   const botName = Form.useWatch("bot_name", form);
   const firstMessage = Form.useWatch("first_message", form);
+
+  const isTTS = Form.useWatch("tts", form);
+
   return (
     <div
       style={{
@@ -75,6 +79,13 @@ export const AppearancePreview = ({ form }: { form: FormInstance }) => {
               }}
             >
               <p className="text-sm">{firstMessage}</p>
+              {isTTS && (
+                <div className=" mt-3">
+                  <button className="flex bg-white shadow-md items-center border justify-center w-6 h-6 rounded-full transition-colors duration-200">
+                    <PlayIcon className="w-3 h-3" />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 

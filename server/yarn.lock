@@ -688,13 +688,13 @@
     zod "^3.22.4"
     zod-to-json-schema "^3.22.4"
 
-"@langchain/cohere@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@langchain/cohere/-/cohere-0.0.5.tgz#f52b182ccd607cee9d7493ab132b0a827571fab3"
-  integrity sha512-4q6dHZ6XCk5NIrLBzxedNGwlmj7cROVvAtSnCaDsLKVKX2cgTUxjiSKAtzjX39RqHwCsdt919ZRdL/X15AQK/w==
+"@langchain/cohere@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@langchain/cohere/-/cohere-0.0.6.tgz#d1663df071cca1348c69ff5a9c52dedbb35a8a85"
+  integrity sha512-WBFAWt8K7bbAbAJG/neMqalJ1DvXxPCtB0n9Gq7rTUFzB5CmjCNpKxdGvkv22t7hAkPnCbFTQWEtiHo3uWOyRg==
   dependencies:
     "@langchain/core" "~0.1"
-    cohere-ai "^7.6.2"
+    cohere-ai "^7.8.0"
 
 "@langchain/community@^0.0.35", "@langchain/community@~0.0.33":
   version "0.0.35"
@@ -2111,10 +2111,10 @@ cohere-ai@^6.2.1:
   resolved "https://registry.yarnpkg.com/cohere-ai/-/cohere-ai-6.2.1.tgz#f483d5d1fb019698ac7de24ef84f79621fe172bc"
   integrity sha512-um6QaNPrsTZWIf7SIefr3C1Ed2M7HubkcaRZERBLsrvawN1O+ClrGcoEcvdYVBwxQcKwoPr+D3PrDXCfoFQNjQ==
 
-cohere-ai@^7.6.2:
-  version "7.7.7"
-  resolved "https://registry.yarnpkg.com/cohere-ai/-/cohere-ai-7.7.7.tgz#2cd577a90f66f51950666c141b8257050eee34cd"
-  integrity sha512-eLL/5lkAxFvqwV200bsBsS5ZnPHZZKur0WR3dXD5K47QT7C9r0OFv/ykJw/rCuoSsyyK3eoHm+znIi3W3QCwiQ==
+cohere-ai@^7.8.0:
+  version "7.9.1"
+  resolved "https://registry.yarnpkg.com/cohere-ai/-/cohere-ai-7.9.1.tgz#f81fcd7b95a01f6a47fad70a9f4f47a6e8c82669"
+  integrity sha512-shMz0Bs3p6/Nw5Yi+6Wc9tZ7DCGTtEnf1eAcuesnlyeKoFuZ7+bzeiHkt5E8SvTgAHxN1GCP3UkIoW85QhHKTA==
   dependencies:
     form-data "4.0.0"
     js-base64 "3.7.2"
