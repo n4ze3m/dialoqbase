@@ -155,6 +155,74 @@ export const getElevenLab = async () => {
     voices: voices,
   };
 };
+export const getElevenLabTTS = async () => {
+  let voices: Voice[] = [];
+  const is11LabAPIVPresent = isElevenLabAPIKeyPresent();
+  let is11LabAPIVValid = false;
+  if (is11LabAPIVPresent) {
+    is11LabAPIVValid = await isElevenLabAPIValid();
+    if (is11LabAPIVValid) {
+      voices = await getVoices();
+    }
+  }
+
+  return {
+    models: [],
+    voices: voices.map((e) => {
+      return {
+        label: e.name,
+        value: e.voice_id,
+      };
+    }),
+  };
+};
+export const getOpenAITTS = async () => {
+  if (!process.env.OPENAI_API_KEY) {
+    return {
+      models: [],
+      voices: [],
+    };
+  }
+
+  return {
+    models: [
+      {
+        label: "tts-1",
+        value: "tts-1",
+      },
+      {
+        label: "tts-1-hd",
+        value: "tts-1-hd",
+      },
+    ],
+    voices: [
+      {
+        label: "alloy",
+        value: "alloy",
+      },
+      {
+        label: "echo",
+        value: "echo",
+      },
+      {
+        label: "fable",
+        value: "fable",
+      },
+      {
+        label: "onyx",
+        value: "onyx",
+      },
+      {
+        label: "nova",
+        value: "nova",
+      },
+      {
+        label: "shimmer",
+        value: "shimmer",
+      },
+    ],
+  };
+};
 
 export const textToSpeech = async (text: string, voiceId: string) => {
   const apiKey = process.env.ELEVENLABS_API_KEY;
@@ -169,8 +237,36 @@ export const textToSpeech = async (text: string, voiceId: string) => {
         "xi-api-key": apiKey,
       },
       responseType: "arraybuffer",
-    },
+    }
   );
 
   return response.data;
 };
+
+export const textToSpeechOpenAI = async (
+  input: string,
+  voice: string,
+  model: string
+) => {
+  const apiKey = process.env.OPENAI_API_KEY;
+  const response = await axios.post(
+    "https://api.openai.com/v1/audio/speech",
+    {
+      input: input,
+      voice: voice,
+      model: model,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+      responseType: "arraybuffer",
+    }
+  );
+
+  return response.data;
+};
+
+export const isOpenAIAPIKeyPresent = () => {
+  return !!process.env.OPENAI_API_KEY;
+}

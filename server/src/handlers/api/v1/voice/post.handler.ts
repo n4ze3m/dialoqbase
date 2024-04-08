@@ -4,7 +4,7 @@ import {
   isElevenLabAPIKeyPresent,
   isElevenLabAPIValid,
   textToSpeech,
-} from "../../../../utils/elevenlabs";
+} from "../../../../utils/voice";
 
 export const voiceTTSHandler = async (
   request: FastifyRequest<ElevenLabTypes>,

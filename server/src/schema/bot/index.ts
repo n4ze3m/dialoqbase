@@ -40,6 +40,29 @@ export const chatStyleSchema: FastifySchema = {
   },
 };
 
+export const chatTTSSchema: FastifySchema = {
+  tags: ["Widget"],
+  summary: "API to get TTS of message",
+  params: {
+    type: "object",
+    required: ["id"],
+    properties: {
+      id: {
+        type: "string",
+      },
+    },
+  },
+  body: {
+    type: "object",
+    required: ["id"],
+    properties: {
+      id: {
+        type: "string",
+      },
+    },
+  },
+};
+
 export const chatRequestStreamSchema: FastifySchema = {
   tags: ["Widget"],
   summary: "API to get stream of message from bot",

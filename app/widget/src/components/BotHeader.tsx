@@ -26,6 +26,7 @@ export default function BotHeader({
                setMessages([
                  {
                    message: botStyle?.data?.first_message,
+                   id: "first-message",
                    isBot: true,
                    sources: [],
                  },

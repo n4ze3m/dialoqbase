@@ -1,9 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { GetBotAppearanceById } from "./types";
+import { getElevenLabTTS, getOpenAITTS } from "../../../../../utils/voice";
 
 export const getBotAppearanceByIdHandler = async (
   request: FastifyRequest<GetBotAppearanceById>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const prisma = request.server.prisma;
   const bot_id = request.params.id;
@@ -22,6 +23,9 @@ export const getBotAppearanceByIdHandler = async (
     });
   }
 
+  const elevenLab = await getElevenLabTTS();
+  const openai = await getOpenAITTS();
+
   const botAppearance = await prisma.botAppearance.findFirst({
     where: {
       bot_id: bot_id,
@@ -32,6 +36,10 @@ export const getBotAppearanceByIdHandler = async (
     return {
       public_id: isBotExist.publicId,
       data: botAppearance,
+      tts_data: {
+        eleven_labs: elevenLab,
+        openai: openai,
+      },
     };
   }
 
@@ -49,6 +57,13 @@ export const getBotAppearanceByIdHandler = async (
         text_color: "#ffffff",
       },
       first_message: "Hi, I'm here to help. What can I do for you today?",
+      tts: false,
+      tts_voice: null,
+      tts_provider: null,
+    },
+    tts_data: {
+      eleven_labs: elevenLab,
+      openai: openai,
     },
   };
 };

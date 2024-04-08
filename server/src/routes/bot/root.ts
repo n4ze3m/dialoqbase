@@ -4,12 +4,14 @@ import {
   chatRequestStreamHandler,
   getChatStyleByIdHandler,
   chatRequestAPIHandler,
+  chatTTSHandler,
 } from "../../handlers/bot";
 import {
   chatRequestSchema,
   chatRequestStreamSchema,
   chatStyleSchema,
   chatAPIRequestSchema,
+  chatTTSSchema,
 } from "../../schema/bot";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
@@ -37,7 +39,13 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     },
     getChatStyleByIdHandler
   );
-
+  fastify.post(
+    "/:id/tts",
+    {
+      schema: chatTTSSchema,
+    },
+    chatTTSHandler
+  );
   fastify.post(
     "/:id/api",
     {

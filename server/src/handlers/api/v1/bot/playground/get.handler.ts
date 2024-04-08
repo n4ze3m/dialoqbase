@@ -5,7 +5,7 @@ import {
 } from "./types";
 import {
   getElevenLab,
-} from "../../../../../utils/elevenlabs";
+} from "../../../../../utils/voice";
 
 export async function getPlaygroundHistoryByBotId(
   request: FastifyRequest<GetPlaygroundBotById>,

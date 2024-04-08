@@ -17,7 +17,6 @@ export default function BotAppearanceRoot() {
     },
     {
       enabled: !!param.id,
-      refetchInterval: 1000,
     }
   );
 

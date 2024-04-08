@@ -47,3 +47,12 @@ export interface ChatAPIRequest {
   };
 }
 
+export interface ChatTTSRequest {
+  Params: {
+    id: string;
+  };
+
+  Body: {
+    id: string;
+  };
+}

@@ -50,7 +50,12 @@ function App() {
       } else {
         setMessages([
           ...messages,
-          { isBot: true, message: botStyle.data.first_message, sources: [] },
+          {
+            isBot: true,
+            message: botStyle.data.first_message,
+            sources: [],
+            id: "first-message",
+          },
         ]);
       }
     }
