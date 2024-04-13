@@ -1,7 +1,7 @@
 import fp from "fastify-plugin";
 import { FastifyPluginAsync } from "fastify";
 
-import * as Queue from "bull";
+import Queue from "bull";
 import { join } from "path";
 
 declare module "fastify" {

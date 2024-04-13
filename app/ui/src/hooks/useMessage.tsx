@@ -170,7 +170,6 @@ export const useMessage = () => {
           setHistory(responseData.history);
           setMessages(newMessage);
           setIsProcessing(false);
-          reader.releaseLock();
           break;
         }
       }

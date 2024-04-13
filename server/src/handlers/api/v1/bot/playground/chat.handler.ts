@@ -510,7 +510,6 @@ export const chatRequestStreamHandler = async (
         }),
       },
     });
-
     reply.sse({
       event: "result",
       id: "",

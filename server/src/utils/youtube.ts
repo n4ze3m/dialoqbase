@@ -1,4 +1,4 @@
-import * as ytdl from "ytdl-core";
+import ytdl from "ytdl-core";
 
 export function isYouTubeUrl(url: string): boolean {
   const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;

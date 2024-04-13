@@ -18,7 +18,7 @@ interface SearchEmbeddingsResponse {
 export class DialoqbaseVectorStore extends VectorStore {
   botId: string;
   sourceId: string | null;
-  embeddings: Embeddings;
+  declare embeddings: Embeddings;
 
   constructor(embeddings: Embeddings, args: DialoqbaseLibArgs) {
     super(embeddings, args);
