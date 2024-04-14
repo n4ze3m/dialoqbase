@@ -25,11 +25,10 @@ Want to check more demo videos? Follow me on [Twitter](https://twitter.com/n4ze3
 
 ## Quick Deployments 🚀
 
-### Railway with Supabase
+### Railway (One-click deployment)
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/TXdjD7?referralCode=olbszX)
 
-for more details - [watch demo](https://twitter.com/n4ze3m/status/1668208861663354882)
 
 ## Installation 🛠️
 
