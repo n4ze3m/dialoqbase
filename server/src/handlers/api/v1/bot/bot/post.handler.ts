@@ -133,7 +133,7 @@ export const createBotHandler = async (
       },
     });
 
-    await request.server.queue.add([
+    await request.server.queue.add("process", [
       {
         ...botSource,
         embedding,
@@ -211,7 +211,7 @@ export const addNewSourceByIdHandler = async (
     });
   }
 
-  await request.server.queue.add([
+  await request.server.queue.add('process',[
     {
       ...botSource,
       embedding: bot.embedding,
@@ -275,7 +275,7 @@ export const refreshSourceByIdHandler = async (
       sourceId: source_id,
     },
   });
-  await request.server.queue.add([
+  await request.server.queue.add('process',[
     {
       ...botSource,
       embedding: bot.embedding,

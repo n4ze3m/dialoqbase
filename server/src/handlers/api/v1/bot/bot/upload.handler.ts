@@ -138,7 +138,7 @@ export const createBotFileHandler = async (
         },
       });
 
-      await request.server.queue.add([
+      await request.server.queue.add("process", [
         {
           ...botSource,
           embedding: bot.embedding,
@@ -210,7 +210,7 @@ export const addNewSourceFileByIdHandler = async (
       });
     }
 
-    await request.server.queue.add([
+    await request.server.queue.add("process", [
       {
         ...botSource,
         embedding: bot.embedding,
@@ -262,7 +262,6 @@ export const addNewSourceFileByIdBulkHandler = async (
       await fs.promises.mkdir("./uploads", { recursive: true });
       await pump(file.file, fs.createWriteStream(path));
 
-
       const botSource = await prisma.botSource.create({
         data: {
           content: file.filename,
@@ -276,10 +275,9 @@ export const addNewSourceFileByIdBulkHandler = async (
         ...botSource,
         embedding: bot.embedding,
       });
-
     }
 
-    await request.server.queue.add(queueSource);
+    await request.server.queue.add("process", queueSource);
 
     return {
       source_ids: queueSource.map((source) => source.id),

@@ -1,4 +1,3 @@
-import { DoneCallback, Job } from "bull";
 import { PrismaClient } from "@prisma/client";
 import { QSource } from "./type";
 import { pdfQueueController } from "./controllers/pdf.controller";
@@ -14,10 +13,11 @@ import { videoQueueController } from "./controllers/video.controller";
 import { youtubeQueueController } from "./controllers/youtube.controller";
 import { restQueueController } from "./controllers/rest.controller";
 import { sitemapQueueController } from "./controllers/sitemap.controller";
+import { SandboxedJob } from "bullmq";
 
 const prisma = new PrismaClient();
 
-export default async function queueHandler(job: Job, done: DoneCallback) {
+export default async function queueHandler(job: SandboxedJob) {
   const data = job.data as QSource[];
   await prisma.$connect();
   console.log("Processing queue");
@@ -88,7 +88,6 @@ export default async function queueHandler(job: Job, done: DoneCallback) {
           },
         });
 
-        done();
         await prisma.$disconnect();
       } catch (e) {
         console.log(e);
@@ -102,10 +101,11 @@ export default async function queueHandler(job: Job, done: DoneCallback) {
           },
         });
         await prisma.$disconnect();
-        done();
       }
     }
   } catch (e) {
     console.log(e);
   }
+
+  return Promise.resolve();
 }

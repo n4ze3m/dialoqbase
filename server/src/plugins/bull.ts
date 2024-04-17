@@ -1,12 +1,9 @@
 import fp from "fastify-plugin";
 import { FastifyPluginAsync } from "fastify";
-
-import Queue from "bull";
-import { join } from "path";
-
+import { Queue } from "bullmq";
 declare module "fastify" {
   interface FastifyInstance {
-    queue: Queue.Queue<any>;
+    queue: Queue<any>;
   }
 }
 
@@ -15,12 +12,19 @@ const bullPlugin: FastifyPluginAsync = fp(async (server, options) => {
   if (!redis_url) {
     throw new Error("Redis url is not defined");
   }
-  const queue = new Queue("vector", redis_url, {});
+  const username = redis_url.split(":")[1].replace("//", "");
+  const password = redis_url.split(":")[2].split("@")[0];
+  const host = redis_url.split("@")[1].split(":")[0];
+  const port = parseInt(redis_url.split(":")[3]);
 
-  await queue.isReady();
-  const path = join(__dirname, "../queue/index.js");
-  const concurrency = parseInt(process.env.DB_QUEUE_CONCURRENCY || "1");
-  queue.process(concurrency, path);
+  const queue = new Queue("vector", {
+    connection: {
+      host,
+      port,
+      password,
+      username,
+    },
+  });
 
   server.decorate("queue", queue);
 
