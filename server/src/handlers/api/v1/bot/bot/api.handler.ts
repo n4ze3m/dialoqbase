@@ -200,9 +200,21 @@ export const addNewSourceByIdBulkHandler = async (
         maxDepth: source.maxDepth,
         maxLinks: source.maxLinks,
         options: source.options,
+        id: botSource.id,
       });
     }
-    await request.server.queue.add('process', queueSource);
+
+    await request.server.queue.addBulk(
+      queueSource.map((source) => ({
+        data: [source],
+        name: "process",
+        opts: {
+          jobId: source.id,
+          removeOnComplete: true,
+          removeOnFail: true,
+        },
+      }))
+    );
 
     return {
       success: true,

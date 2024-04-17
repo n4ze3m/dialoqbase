@@ -79,9 +79,12 @@ export const DsTable = ({
           message: "Data source deleted successfully",
         });
       },
-      onError: () => {
+      onError: (err: any) => {
         notification.error({
-          message: "Error while deleting data source",
+          message:
+            err?.response?.data?.message ||
+            err?.response?.data?.error ||
+            "Error while deleting data source",
         });
       },
     }
@@ -96,9 +99,12 @@ export const DsTable = ({
           message: "Data source updated successfully",
         });
       },
-      onError: () => {
+      onError: (err: any) => {
         notification.error({
-          message: "Error while updating data source",
+          message:
+            err?.response?.data?.message ||
+            err?.response?.data?.error ||
+            "Error while deleting data source",
         });
       },
     }
@@ -109,7 +115,8 @@ export const DsTable = ({
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-            Data Sources</h1>
+            Data Sources
+          </h1>
           <p className="mt-2 text-sm text-gray-700 dark:text-gray-400">
             List of data sources that are currently being used by your bot.
           </p>
