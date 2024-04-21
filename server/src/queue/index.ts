@@ -14,6 +14,7 @@ import { youtubeQueueController } from "./controllers/youtube.controller";
 import { restQueueController } from "./controllers/rest.controller";
 import { sitemapQueueController } from "./controllers/sitemap.controller";
 import { SandboxedJob } from "bullmq";
+import { getRagSettings } from "../utils/rag-settings";
 
 const prisma = new PrismaClient();
 
@@ -22,8 +23,9 @@ export default async function queueHandler(job: SandboxedJob) {
   await prisma.$connect();
   console.log("Processing queue");
   try {
-    for (const source of data) {
+    for (const sourceData of data) {
       try {
+        let source = sourceData;
         await prisma.botSource.update({
           where: {
             id: source.id,
@@ -32,6 +34,9 @@ export default async function queueHandler(job: SandboxedJob) {
             status: "PROCESSING",
           },
         });
+        const { chunkOverlap, chunkSize } = await getRagSettings(prisma);
+        source.chunkOverlap = chunkOverlap;
+        source.chunkSize = chunkSize;
         switch (source.type.toLowerCase()) {
           case "website":
             await websiteQueueController(source, prisma);
@@ -93,7 +98,7 @@ export default async function queueHandler(job: SandboxedJob) {
         console.log(e);
         await prisma.botSource.update({
           where: {
-            id: source.id,
+            id: sourceData.id,
           },
           data: {
             status: "FAILED",

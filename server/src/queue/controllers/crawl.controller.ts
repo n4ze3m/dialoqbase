@@ -4,19 +4,10 @@ import { crawl } from "../../utils/crawl";
 import { websiteQueueController } from "./website.controller";
 const prisma = new PrismaClient();
 
-export const crawlQueueController = async (
-  source: QSource,
-) => {
+export const crawlQueueController = async (source: QSource) => {
   let maxDepth = source.maxDepth || 1;
   let maxLinks = source.maxLinks || 1;
-  const links = Array.from(
-    await crawl(
-      source.content!,
-      maxDepth,
-      0,
-      maxLinks,
-    ),
-  );
+  const links = Array.from(await crawl(source.content!, maxDepth, 0, maxLinks));
 
   for (const link of links) {
     const newSource = await prisma.botSource.create({
@@ -29,10 +20,15 @@ export const crawlQueueController = async (
       },
     });
 
-    await websiteQueueController({
-      ...newSource,
-      embedding: source.embedding,
-    }, prisma);
+    await websiteQueueController(
+      {
+        ...newSource,
+        embedding: source.embedding,
+        chunkOverlap: source.chunkOverlap,
+        chunkSize: source.chunkSize,
+      },
+      prisma
+    );
 
     await prisma.botSource.update({
       where: {

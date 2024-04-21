@@ -17,8 +17,8 @@ export const DocxQueueController = async (
   const docs = await loader.load();
 
   const textSplitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 1000,
-    chunkOverlap: 200,
+    chunkSize: source.chunkSize,
+    chunkOverlap: source.chunkOverlap,
   });
   const chunks = await textSplitter.splitDocuments(docs);
 
