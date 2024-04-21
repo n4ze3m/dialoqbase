@@ -110,7 +110,7 @@ export default function SettingsModelRoot() {
               </p>
 
               <dl className="mt-6 space-y-6 divide-y divide-gray-100   text-sm leading-6 ">
-                <div className="mt-5 md:col-span-2 md:mt-0">
+                <div className="mt-5 md:col-span-2 md:mt-0 ">
                   <div className="my-3 justify-end flex">
                     <Radio.Group
                       value={modelType}
@@ -122,44 +122,85 @@ export default function SettingsModelRoot() {
                       </Radio.Button>
                     </Radio.Group>
                   </div>
-                  {modelType === "llm" && (
-                    <Table
-                      // pagination={false}
-                      bordered
-                      dataSource={data.data}
-                      columns={[
-                        {
-                          dataIndex: "name",
-                          key: "name",
-                          title: "Model Name",
-                          render: (text) => text || "Untitled Model",
-                        },
-                        {
-                          dataIndex: "model_id",
-                          title: "Model ID",
-                          key: "model_id",
-                          className: "text-gray-500",
-                        },
-                        {
-                          dataIndex: "model_provider",
-                          title: "Provider",
-                          key: "model_provider",
-                        },
-                        {
-                          dataIndex: "stream_available",
-                          title: "Stream",
-                          key: "stream_available",
-                          render: (value) => (
-                            <Tag color={value ? "green" : "red"}>
-                              {value ? "Available" : "Unavailable"}
-                            </Tag>
-                          ),
-                        },
-                        {
-                          title: "Action",
-                          render: (record) =>
-                            record.local_model ? (
-                              <div className="flex flex-row gap-2">
+                  <div className="sm:overflow-x-none overflow-x-auto">
+                    {modelType === "llm" && (
+                      <Table
+                        // pagination={false}
+                        bordered
+                        dataSource={data.data}
+                        columns={[
+                          {
+                            dataIndex: "name",
+                            key: "name",
+                            title: "Model Name",
+                            render: (text) => text || "Untitled Model",
+                          },
+                          {
+                            dataIndex: "model_id",
+                            title: "Model ID",
+                            key: "model_id",
+                            render: (text: string) =>
+                              text
+                                .replace("-dbase", "")
+                                .replace(/_dialoqbase_[0-9]+$/, ""),
+                            className: "text-gray-500",
+                          },
+                          {
+                            dataIndex: "model_provider",
+                            title: "Provider",
+                            key: "model_provider",
+                          },
+                          {
+                            dataIndex: "stream_available",
+                            title: "Stream",
+                            key: "stream_available",
+                            render: (value) => (
+                              <Tag color={value ? "green" : "red"}>
+                                {value ? "Available" : "Unavailable"}
+                              </Tag>
+                            ),
+                          },
+                          {
+                            title: "Action",
+                            render: (record) =>
+                              record.local_model ? (
+                                <div className="flex flex-row gap-2">
+                                  <Tooltip title="Hide Model from Users">
+                                    <button
+                                      type="button"
+                                      disabled={isHide}
+                                      onClick={() => {
+                                        hide(record.id);
+                                      }}
+                                      className="text-gray-400 hover:text-gray-500"
+                                    >
+                                      {record.hide ? (
+                                        <EyeSlashIcon className="h-5 w-5" />
+                                      ) : (
+                                        <EyeIcon className="h-5 w-5" />
+                                      )}
+                                    </button>
+                                  </Tooltip>
+                                  <Tooltip title="Delete Model">
+                                    <button
+                                      type="button"
+                                      disabled={isDelete}
+                                      onClick={() => {
+                                        const confirm = window.confirm(
+                                          "Are you sure you want to delete this model?"
+                                        );
+
+                                        if (confirm) {
+                                          del(record.id);
+                                        }
+                                      }}
+                                      className="text-red-400 hover:text-red-500"
+                                    >
+                                      <TrashIcon className="h-5 w-5" />
+                                    </button>
+                                  </Tooltip>
+                                </div>
+                              ) : (
                                 <Tooltip title="Hide Model from Users">
                                   <button
                                     type="button"
@@ -176,76 +217,79 @@ export default function SettingsModelRoot() {
                                     )}
                                   </button>
                                 </Tooltip>
-                                <Tooltip title="Delete Model">
-                                  <button
-                                    type="button"
-                                    disabled={isDelete}
-                                    onClick={() => {
-                                      const confirm = window.confirm(
-                                        "Are you sure you want to delete this model?"
-                                      );
+                              ),
+                          },
+                        ]}
+                      />
+                    )}
+                    {modelType === "embedding" && (
+                      <Table
+                        bordered
+                        // pagination={false}
+                        dataSource={data.embedding}
+                        columns={[
+                          {
+                            dataIndex: "name",
+                            key: "name",
+                            title: "Model Name",
+                            render: (text) => text || "Untitled Model",
+                          },
+                          {
+                            dataIndex: "model_id",
+                            title: "Model ID",
+                            key: "model_id",
+                            className: "text-gray-500",
+                            render: (text) =>
+                              text
+                                .replace("dialoqbase_eb_", "")
+                                .replace(/_dialoqbase_[0-9]+$/, ""),
+                          },
+                          {
+                            dataIndex: "model_provider",
+                            title: "Provider",
+                            key: "model_provider",
+                          },
+                          {
+                            title: "Action",
+                            render: (record) =>
+                              record.local_model ? (
+                                <div className="flex flex-row gap-2">
+                                  <Tooltip title="Hide Model from Users">
+                                    <button
+                                      type="button"
+                                      disabled={isHide}
+                                      onClick={() => {
+                                        hide(record.id);
+                                      }}
+                                      className="text-gray-400 hover:text-gray-500"
+                                    >
+                                      {record.hide ? (
+                                        <EyeSlashIcon className="h-5 w-5" />
+                                      ) : (
+                                        <EyeIcon className="h-5 w-5" />
+                                      )}
+                                    </button>
+                                  </Tooltip>
+                                  <Tooltip title="Delete Model">
+                                    <button
+                                      type="button"
+                                      disabled={isDelete}
+                                      onClick={() => {
+                                        const confirm = window.confirm(
+                                          "Are you sure you want to delete this model?"
+                                        );
 
-                                      if (confirm) {
-                                        del(record.id);
-                                      }
-                                    }}
-                                    className="text-red-400 hover:text-red-500"
-                                  >
-                                    <TrashIcon className="h-5 w-5" />
-                                  </button>
-                                </Tooltip>
-                              </div>
-                            ) : (
-                              <Tooltip title="Hide Model from Users">
-                                <button
-                                  type="button"
-                                  disabled={isHide}
-                                  onClick={() => {
-                                    hide(record.id);
-                                  }}
-                                  className="text-gray-400 hover:text-gray-500"
-                                >
-                                  {record.hide ? (
-                                    <EyeSlashIcon className="h-5 w-5" />
-                                  ) : (
-                                    <EyeIcon className="h-5 w-5" />
-                                  )}
-                                </button>
-                              </Tooltip>
-                            ),
-                        },
-                      ]}
-                    />
-                  )}
-                  {modelType === "embedding" && (
-                    <Table
-                      bordered
-                      // pagination={false}
-                      dataSource={data.embedding}
-                      columns={[
-                        {
-                          dataIndex: "name",
-                          key: "name",
-                          title: "Model Name",
-                          render: (text) => text || "Untitled Model",
-                        },
-                        {
-                          dataIndex: "model_id",
-                          title: "Model ID",
-                          key: "model_id",
-                          className: "text-gray-500",
-                          render: (text) => text.replace("dialoqbase_eb_", ""),
-                        },
-                        {
-                          dataIndex: "model_provider",
-                          title: "Provider",
-                          key: "model_provider",
-                        },
-                        {
-                          title: "Action",
-                          render: (record) =>
-                            record.local_model ? (
-                              <div className="flex flex-row gap-2">
+                                        if (confirm) {
+                                          del(record.id);
+                                        }
+                                      }}
+                                      className="text-red-400 hover:text-red-500"
+                                    >
+                                      <TrashIcon className="h-5 w-5" />
+                                    </button>
+                                  </Tooltip>
+                                </div>
+                              ) : (
                                 <Tooltip title="Hide Model from Users">
                                   <button
                                     type="button"
@@ -262,47 +306,12 @@ export default function SettingsModelRoot() {
                                     )}
                                   </button>
                                 </Tooltip>
-                                <Tooltip title="Delete Model">
-                                  <button
-                                    type="button"
-                                    disabled={isDelete}
-                                    onClick={() => {
-                                      const confirm = window.confirm(
-                                        "Are you sure you want to delete this model?"
-                                      );
-
-                                      if (confirm) {
-                                        del(record.id);
-                                      }
-                                    }}
-                                    className="text-red-400 hover:text-red-500"
-                                  >
-                                    <TrashIcon className="h-5 w-5" />
-                                  </button>
-                                </Tooltip>
-                              </div>
-                            ) : (
-                              <Tooltip title="Hide Model from Users">
-                                <button
-                                  type="button"
-                                  disabled={isHide}
-                                  onClick={() => {
-                                    hide(record.id);
-                                  }}
-                                  className="text-gray-400 hover:text-gray-500"
-                                >
-                                  {record.hide ? (
-                                    <EyeSlashIcon className="h-5 w-5" />
-                                  ) : (
-                                    <EyeIcon className="h-5 w-5" />
-                                  )}
-                                </button>
-                              </Tooltip>
-                            ),
-                        },
-                      ]}
-                    />
-                  )}
+                              ),
+                          },
+                        ]}
+                      />
+                    )}
+                  </div>
                 </div>
               </dl>
             </div>
