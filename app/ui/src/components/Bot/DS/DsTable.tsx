@@ -132,9 +132,9 @@ export const DsTable = ({
         </div>
       </div>
       <div className="mt-8 flex flex-col">
-        <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-            <div className="overflow-hidden bg-white ring-1 ring-black ring-opacity-5 md:rounded-lg dark:bg-[#262626]">
+        <div className="-my-2 -mx-4 overflow-x-auto  sm:-mx-6 lg:-mx-8">
+          <div className="inline-block min-w-full p-2 align-middle md:px-6 lg:px-8">
+            <div className="overflow-hidden bg-white ring-1 ring-black ring-opacity-5 rounded-lg dark:bg-[#262626]">
               {data.length === 0 && (
                 <Empty description="No data sources found." className="m-8" />
               )}
@@ -170,7 +170,7 @@ export const DsTable = ({
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200 bg-white dark:bg-[#1e1e1e] dark:divide-gray-800">
+                  <tbody className="divide-y  divide-gray-200 bg-white dark:bg-[#1e1e1e] dark:divide-gray-800">
                     {data.map((source) => (
                       <tr key={source.id}>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
