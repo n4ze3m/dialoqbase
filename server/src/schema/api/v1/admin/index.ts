@@ -15,6 +15,11 @@ export const dialoqbaseSettingsSchema: FastifySchema = {
       noOfBotsPerUser: { type: "number" },
       allowUserToCreateBots: { type: "boolean" },
       allowUserToRegister: { type: "boolean" },
+      defaultChunkSize: { type: "number" },
+      defaultChunkOverlap: { type: "number" },
+      defaultChatModel: { type: "string" },
+      defaultEmbeddingModel: { type: "string" },
+      dynamicallyFetchOllamaModels: { type: "boolean" },
     },
   },
 };
@@ -35,6 +40,9 @@ export const updateDialoqbaseSettingsSchema: FastifySchema = {
       noOfBotsPerUser: { type: "number" },
       allowUserToCreateBots: { type: "boolean" },
       allowUserToRegister: { type: "boolean" },
+      dynamicallyFetchOllamaModels: { type: "boolean" },
+      defaultChatModel: { type: "string" },
+      defaultEmbeddingModel: { type: "string" },
     },
     required: [
       "noOfBotsPerUser",
@@ -126,6 +134,34 @@ export const registerUserByAdminSchema: FastifySchema = {
       password: { type: "string" },
     },
     required: ["username", "email", "password"],
+  },
+  response: {
+    200: {
+      type: "object",
+      properties: {
+        message: { type: "string" },
+      },
+    },
+  },
+};
+
+export const updateDialoqbaseRAGSettings: FastifySchema = {
+  tags: ["Admin"],
+  summary: "API to update dialoqbase RAG settings",
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
+  body: {
+    type: "object",
+    properties: {
+      defaultChunkSize: { type: "number" },
+      defaultChunkOverlap: { type: "number" },
+    },
+    required: ["defaultChunkSize", "defaultChunkOverlap"],
   },
   response: {
     200: {
