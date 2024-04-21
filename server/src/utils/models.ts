@@ -16,6 +16,7 @@ export const chatModelProvider = (
   otherFields?: any
 ) => {
   modelName = modelName.replace("-dbase", "");
+  modelName = modelName.replace(/_dialoqbase_[0-9]+$/, "");
 
   switch (provider.toLowerCase()) {
     case "openai":
