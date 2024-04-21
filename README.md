@@ -196,6 +196,7 @@ Dialoqbase nothing without the support of our wonderful sponsors. If you are int
 <a href="https://github.com/mjtechguy" target="_blank"><img src="https://avatars.githubusercontent.com/u/29070994?s=64&v=4"></a>
 <a href="https://github.com/senavi888" target="_blank"><img src="https://avatars.githubusercontent.com/u/161348858?s=64&v=4"></a>
 <a href="https://github.com/hkjang" target="_blank"><img src="https://avatars.githubusercontent.com/u/3069493?s=64&v=4"></a>
+<a href="https://github.com/FarazPatankar" target="_blank"><img src="https://avatars.githubusercontent.com/u/10681116?s=64&v=4"></a>
 
 And many more wonderful supporters from [Ko-fi](https://ko-fi.com/n4ze3m).
 ## License 📝
