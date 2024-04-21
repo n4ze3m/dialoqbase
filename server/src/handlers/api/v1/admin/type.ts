@@ -26,7 +26,7 @@ export type FetchModelFromInputedUrlRequest = {
   Body: {
     url?: string;
     api_key?: string;
-    api_type: "openai" | "ollama",
+    api_type: "openai" | "ollama";
     ollama_url?: string;
   };
 };
@@ -47,8 +47,6 @@ export type ToogleModelRequest = {
   };
 };
 
-
-
 export interface SaveEmbeddingModelRequest {
   Body: {
     url?: string;
@@ -56,5 +54,12 @@ export interface SaveEmbeddingModelRequest {
     api_type: "openai" | "ollama" | "transformer";
     model_id: string;
     model_name: string;
-  }
+  };
 }
+
+export type UpdateDialoqbaseRAGSettingsRequest = {
+  Body: {
+    defaultChunkSize: number;
+    defaultChunkOverlap: number;
+  };
+};
