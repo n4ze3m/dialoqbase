@@ -480,7 +480,7 @@ export const BotForm = ({
           onFinish={createBot}
           form={form}
           className="space-y-6"
-          initialValues={{
+          initialValues={{ 
             embedding: "dialoqbase_eb_text-embedding-ada-002",
             model: "gpt-3.5-turbo-dbase",
             maxDepth: 2,
