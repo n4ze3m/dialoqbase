@@ -138,12 +138,20 @@ export const createBotFileHandler = async (
         },
       });
 
-      await request.server.queue.add([
+      await request.server.queue.add(
+        "process",
+        [
+          {
+            ...botSource,
+            embedding: bot.embedding,
+          },
+        ],
         {
-          ...botSource,
-          embedding: bot.embedding,
-        },
-      ]);
+          jobId: botSource.id,
+          removeOnComplete: true,
+          removeOnFail: true,
+        }
+      );
     }
 
     return reply.status(200).send({
@@ -210,12 +218,20 @@ export const addNewSourceFileByIdHandler = async (
       });
     }
 
-    await request.server.queue.add([
+    await request.server.queue.add(
+      "process",
+      [
+        {
+          ...botSource,
+          embedding: bot.embedding,
+        },
+      ],
       {
-        ...botSource,
-        embedding: bot.embedding,
-      },
-    ]);
+        jobId: botSource.id,
+        removeOnComplete: true,
+        removeOnFail: true,
+      }
+    );
   }
 
   return {
@@ -262,7 +278,6 @@ export const addNewSourceFileByIdBulkHandler = async (
       await fs.promises.mkdir("./uploads", { recursive: true });
       await pump(file.file, fs.createWriteStream(path));
 
-
       const botSource = await prisma.botSource.create({
         data: {
           content: file.filename,
@@ -275,11 +290,21 @@ export const addNewSourceFileByIdBulkHandler = async (
       queueSource.push({
         ...botSource,
         embedding: bot.embedding,
+        id: botSource.id,
       });
-
     }
 
-    await request.server.queue.add(queueSource);
+    await request.server.queue.addBulk(
+      queueSource.map((source) => ({
+        data: [source],
+        name: "process",
+        opts: {
+          jobId: source.id,
+          removeOnComplete: true,
+          removeOnFail: true,
+        },
+      }))
+    );
 
     return {
       source_ids: queueSource.map((source) => source.id),

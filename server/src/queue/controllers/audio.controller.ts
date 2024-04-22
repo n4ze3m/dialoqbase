@@ -1,4 +1,3 @@
-// import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { QSource } from "../type";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { DialoqbaseVectorStore } from "../../utils/store";
@@ -21,8 +20,8 @@ export const audioQueueController = async (
   const docs = await loader.load();
 
   const textSplitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 1000,
-    chunkOverlap: 200,
+    chunkSize: source.chunkSize,
+    chunkOverlap: source.chunkOverlap,
   });
   const chunks = await textSplitter.splitDocuments(docs);
 

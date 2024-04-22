@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 
 import { GetBotRequestById } from "./types";
+import { getSettings } from "../../../../../utils/common";
 
 export const getBotByIdEmbeddingsHandler = async (
   request: FastifyRequest<GetBotRequestById>,
@@ -153,10 +154,14 @@ export const getCreateBotConfigHandler = async (
         disabled: model.model_id === "dialoqbase_eb_dialoqbase-ollama",
       };
     });
+  
+  const settings = await getSettings(prisma);
 
   return {
     chatModel,
     embeddingModel,
+    defaultChatModel: settings?.defaultChatModel,
+    defaultEmbeddingModel: settings?.defaultEmbeddingModel,
   };
 };
 

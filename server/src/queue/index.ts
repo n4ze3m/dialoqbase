@@ -1,4 +1,3 @@
-import { DoneCallback, Job } from "bull";
 import { PrismaClient } from "@prisma/client";
 import { QSource } from "./type";
 import { pdfQueueController } from "./controllers/pdf.controller";
@@ -14,16 +13,19 @@ import { videoQueueController } from "./controllers/video.controller";
 import { youtubeQueueController } from "./controllers/youtube.controller";
 import { restQueueController } from "./controllers/rest.controller";
 import { sitemapQueueController } from "./controllers/sitemap.controller";
+import { SandboxedJob } from "bullmq";
+import { getRagSettings } from "../utils/rag-settings";
 
 const prisma = new PrismaClient();
 
-export default async function queueHandler(job: Job, done: DoneCallback) {
+export default async function queueHandler(job: SandboxedJob) {
   const data = job.data as QSource[];
   await prisma.$connect();
   console.log("Processing queue");
   try {
-    for (const source of data) {
+    for (const sourceData of data) {
       try {
+        let source = sourceData;
         await prisma.botSource.update({
           where: {
             id: source.id,
@@ -32,6 +34,9 @@ export default async function queueHandler(job: Job, done: DoneCallback) {
             status: "PROCESSING",
           },
         });
+        const { chunkOverlap, chunkSize } = await getRagSettings(prisma);
+        source.chunkOverlap = chunkOverlap;
+        source.chunkSize = chunkSize;
         switch (source.type.toLowerCase()) {
           case "website":
             await websiteQueueController(source, prisma);
@@ -88,13 +93,12 @@ export default async function queueHandler(job: Job, done: DoneCallback) {
           },
         });
 
-        done();
         await prisma.$disconnect();
       } catch (e) {
         console.log(e);
         await prisma.botSource.update({
           where: {
-            id: source.id,
+            id: sourceData.id,
           },
           data: {
             status: "FAILED",
@@ -102,10 +106,11 @@ export default async function queueHandler(job: Job, done: DoneCallback) {
           },
         });
         await prisma.$disconnect();
-        done();
       }
     }
   } catch (e) {
     console.log(e);
   }
+
+  return Promise.resolve();
 }

@@ -245,10 +245,11 @@ export const saveModelFromInputedUrlHandler = async (
         });
       }
 
+      let newModelId = model_id.trim() + `_custom_${new Date().getTime()}`;
       await prisma.dialoqbaseModels.create({
         data: {
           name: isModelExist.name,
-          model_id: model_id,
+          model_id: newModelId,
           stream_available: stream_available,
           local_model: true,
           model_provider: "replicate",
@@ -263,25 +264,12 @@ export const saveModelFromInputedUrlHandler = async (
         message: "success",
       };
     }
-
-    const modelExist = await prisma.dialoqbaseModels.findFirst({
-      where: {
-        model_id: model_id,
-        hide: false,
-        deleted: false,
-      },
-    });
-
-    if (modelExist) {
-      return reply.status(400).send({
-        message: "Model already exist",
-      });
-    }
+    let newModelId = model_id.trim() + `_dialoqbase_${new Date().getTime()}`;
 
     await prisma.dialoqbaseModels.create({
       data: {
         name: name,
-        model_id: model_id,
+        model_id: newModelId,
         stream_available: stream_available,
         local_model: true,
         model_provider: api_type === "openai" ? "local" : "ollama",
@@ -443,10 +431,14 @@ export const saveEmbedddingModelFromInputedUrlHandler = async (
       transformer: "transformer",
     };
 
+    let newModelId =
+      `dialoqbase_eb_${model_id}`.trim() +
+      `_dialoqbase_${new Date().getTime()}`;
+
     await prisma.dialoqbaseModels.create({
       data: {
         name: model_name,
-        model_id: `dialoqbase_eb_${model_id}`.trim(),
+        model_id: newModelId,
         local_model: true,
         model_type: "embedding",
         model_provider: model_provider[api_type],

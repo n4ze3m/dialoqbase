@@ -481,8 +481,10 @@ export const BotForm = ({
           form={form}
           className="space-y-6"
           initialValues={{
-            embedding: "dialoqbase_eb_text-embedding-ada-002",
-            model: "gpt-3.5-turbo-dbase",
+            embedding:
+              botConfig?.defaultEmbeddingModel ||
+              "dialoqbase_eb_text-embedding-ada-002",
+            model: botConfig?.defaultChatModel || "gpt-3.5-turbo-dbase",
             maxDepth: 2,
             maxLinks: 10,
             options: {
@@ -646,7 +648,7 @@ export const BotForm = ({
                   .toLowerCase()
                   .localeCompare((optionB?.label ?? "").toLowerCase())
               }
-              placeholder="Select a chat model"
+              placeholder="Select a Chat Model"
               options={botConfig.chatModel}
             />
           </Form.Item>
@@ -675,6 +677,7 @@ export const BotForm = ({
                   .localeCompare((optionB?.label ?? "").toLowerCase())
               }
               options={botConfig.embeddingModel}
+              placeholder="Select an Embedding Model"
             />
           </Form.Item>
 

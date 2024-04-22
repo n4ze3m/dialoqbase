@@ -5,7 +5,7 @@ import TelegramBot from "../../../../../integration/telegram";
 
 export const deleteSourceByIdHandler = async (
   request: FastifyRequest<GetSourceByIds>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const prisma = request.server.prisma;
   const bot_id = request.params.id;
@@ -38,9 +38,16 @@ export const deleteSourceByIdHandler = async (
   }
 
   if (botSource.isPending) {
-    return reply.status(400).send({
-      message: "Source is in progress",
-    });
+    const job = await request.server.queue.getJob(botSource.id);
+    if (job) {
+      const isActive = await job.isActive();
+      if (isActive) {
+        return reply.status(400).send({
+          message: "Source is  being processed, cannot delete it now",
+        });
+      }
+      await job.remove();
+    }
   }
 
   await prisma.botDocument.deleteMany({
@@ -63,7 +70,7 @@ export const deleteSourceByIdHandler = async (
 
 export const deleteBotByIdHandler = async (
   request: FastifyRequest<GetBotRequestById>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const prisma = request.server.prisma;
   const id = request.params.id;
@@ -130,7 +137,7 @@ export const deleteBotByIdHandler = async (
   await prisma.botPlayground.deleteMany({
     where: {
       botId: bot.id,
-    }
+    },
   });
 
   await prisma.bot.delete({

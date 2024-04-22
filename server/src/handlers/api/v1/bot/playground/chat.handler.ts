@@ -6,10 +6,7 @@ import { chatModelProvider } from "../../../../../utils/models";
 import { DialoqbaseHybridRetrival } from "../../../../../utils/hybrid";
 import { BaseRetriever } from "@langchain/core/retrievers";
 import { Document } from "langchain/document";
-import {
-  createChain,
-  groupMessagesByConversation,
-} from "../../../../../chain";
+import { createChain, groupMessagesByConversation } from "../../../../../chain";
 
 export const chatRequestHandler = async (
   request: FastifyRequest<ChatRequestBody>,
@@ -447,6 +444,17 @@ export const chatRequestStreamHandler = async (
       // close the model
     });
 
+    let historyId = history_id;
+    if (!historyId) {
+      const newHistory = await prisma.botPlayground.create({
+        data: {
+          botId: bot.id,
+          title: message,
+        },
+      });
+      historyId = newHistory.id;
+    }
+
     const chain = createChain({
       llm: streamedModel,
       question_llm: nonStreamingModel,
@@ -476,18 +484,7 @@ export const chatRequestStreamHandler = async (
       response += token;
     }
 
-    let historyId = history_id;
     const documents = await documentPromise;
-
-    if (!historyId) {
-      const newHistory = await prisma.botPlayground.create({
-        data: {
-          botId: bot.id,
-          title: message,
-        },
-      });
-      historyId = newHistory.id;
-    }
 
     await prisma.botPlaygroundMessage.create({
       data: {
@@ -510,7 +507,6 @@ export const chatRequestStreamHandler = async (
         }),
       },
     });
-
     reply.sse({
       event: "result",
       id: "",

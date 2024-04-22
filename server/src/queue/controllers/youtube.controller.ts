@@ -11,15 +11,12 @@ export const youtubeQueueController = async (
   source: QSource,
   prisma: PrismaClient
 ) => {
-  const {
-    language_code,
-    youtube_mode
-  } = source.options as {
+  const { language_code, youtube_mode } = source.options as {
     language_code: string;
     youtube_mode: "whisper" | "transcript";
-  }
+  };
   if (youtube_mode === "transcript") {
-    console.log("Using Youtube Transcript Mode")
+    console.log("Using Youtube Transcript Mode");
     const loader = new DialoqbaseYoutubeTranscript({
       url: source.content!,
       language_code,
@@ -27,8 +24,8 @@ export const youtubeQueueController = async (
     const docs = await loader.load();
 
     const textSplitter = new RecursiveCharacterTextSplitter({
-      chunkSize: 1000,
-      chunkOverlap: 200,
+      chunkSize: source.chunkSize,
+      chunkOverlap: source.chunkOverlap,
     });
     const chunks = await textSplitter.splitDocuments(docs);
 
@@ -56,9 +53,8 @@ export const youtubeQueueController = async (
         sourceId: source.id,
       }
     );
-  }
-  else {
-    console.log("Using Youtube Whisper Mode")
+  } else {
+    console.log("Using Youtube Whisper Mode");
     const loader = new DialoqbaseYoutube({
       url: source.content!,
     });

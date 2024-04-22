@@ -10,6 +10,8 @@ import fastifySession from "@fastify/session";
 import { getSessionSecret, isCookieSecure } from "./utils/session";
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
+import { pathToFileURL } from "url";
+import { Worker } from "bullmq";
 declare module "fastify" {
   interface Session {
     is_bot_allowed: boolean;
@@ -81,6 +83,34 @@ const app: FastifyPluginAsync<AppOptions> = async (
     routes: [], // array of routes, **`global`** will be ignored, wildcard routes not supported
   });
 };
+
+const redis_url = process.env.DB_REDIS_URL || process.env.REDIS_URL;
+if (!redis_url) {
+  throw new Error("Redis url is not defined");
+}
+const username = redis_url.split(":")[1].replace("//", "");
+const password = redis_url.split(":")[2].split("@")[0];
+const host = redis_url.split("@")[1].split(":")[0];
+const port = parseInt(redis_url.split(":")[3]);
+const path = join(__dirname, "./queue/index.js");
+const workerUrl = pathToFileURL(path);
+const concurrency = parseInt(process.env.DB_QUEUE_CONCURRENCY || "1");
+const workerThreads = process.env.DB_QUEUE_THREADS || "false";
+const worker = new Worker("vector", workerUrl, {
+  connection: {
+    host,
+    port,
+    password,
+    username,
+  },
+  concurrency,
+  useWorkerThreads: workerThreads === "true",
+});
+
+process.on("SIGINT", async () => {
+  await worker.close();
+  process.exit();
+});
 
 export default app;
 export { app, options };

@@ -133,15 +133,23 @@ export const createBotHandler = async (
       },
     });
 
-    await request.server.queue.add([
+    await request.server.queue.add(
+      "process",
+      [
+        {
+          ...botSource,
+          embedding,
+          maxDepth: request.body.maxDepth,
+          maxLinks: request.body.maxLinks,
+          options: request.body.options,
+        },
+      ],
       {
-        ...botSource,
-        embedding,
-        maxDepth: request.body.maxDepth,
-        maxLinks: request.body.maxLinks,
-        options: request.body.options,
-      },
-    ]);
+        jobId: botSource.id,
+        removeOnComplete: true,
+        removeOnFail: true,
+      }
+    );
     return {
       id: bot.id,
     };
@@ -211,15 +219,21 @@ export const addNewSourceByIdHandler = async (
     });
   }
 
-  await request.server.queue.add([
+  await request.server.queue.add(
+    "process",
+    [
+      {
+        ...botSource,
+        embedding: bot.embedding,
+        maxDepth: request.body.maxDepth,
+        maxLinks: request.body.maxLinks,
+        options: request.body.options,
+      },
+    ],
     {
-      ...botSource,
-      embedding: bot.embedding,
-      maxDepth: request.body.maxDepth,
-      maxLinks: request.body.maxLinks,
-      options: request.body.options,
-    },
-  ]);
+      jobId: botSource.id,
+    }
+  );
   return {
     id: bot.id,
   };
@@ -258,6 +272,16 @@ export const refreshSourceByIdHandler = async (
       message: "Source not found",
     });
   }
+  // check if the source is already in pending state
+
+  const isInJob = await request.server.queue.getJob(botSource.id);
+  if (isInJob) {
+    if (isInJob.isWaiting() || isInJob.isActive()) {
+      return reply.status(400).send({
+        message: "Source is already in pending state",
+      });
+    }
+  }
 
   await prisma.botSource.update({
     where: {
@@ -275,13 +299,20 @@ export const refreshSourceByIdHandler = async (
       sourceId: source_id,
     },
   });
-  await request.server.queue.add([
+  await request.server.queue.add(
+    "process",
+    [
+      {
+        ...botSource,
+        embedding: bot.embedding,
+      },
+    ],
     {
-      ...botSource,
-      embedding: bot.embedding,
-    },
-  ]);
-
+      jobId: botSource.id,
+      removeOnComplete: true,
+      removeOnFail: true,
+    }
+  );
   return {
     id: bot.id,
   };

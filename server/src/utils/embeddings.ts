@@ -12,6 +12,7 @@ export const embeddings = (
   otherFields: any
 ) => {
   modelName = modelName.replace("dialoqbase_eb_", "");
+  modelName = modelName.replace(/_dialoqbase_[0-9]+$/, "");
   switch (provider.toLocaleLowerCase()) {
     case "openai":
       return new OpenAIEmbeddings({

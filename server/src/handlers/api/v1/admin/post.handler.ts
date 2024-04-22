@@ -3,6 +3,7 @@ import {
   RegisterUserbyAdminRequestBody,
   ResetUserPasswordByAdminRequest,
   UpdateDialoqbaseSettingsRequest,
+  UpdateDialoqbaseRAGSettingsRequest
 } from "./type";
 import { getSettings } from "../../../../utils/common";
 import * as bcrypt from "bcryptjs";
@@ -136,3 +137,29 @@ export const registerUserByAdminHandler = async (
     });
   }
 };
+
+
+export const updateDialoqbaseRAGSettingsHandler = async (
+  request: FastifyRequest<UpdateDialoqbaseRAGSettingsRequest>,
+  reply: FastifyReply,
+) => {
+  const prisma = request.server.prisma;
+  const user = request.user;
+
+  if (!user.is_admin) {
+    return reply.status(403).send({
+      message: "Forbidden",
+    });
+  }
+
+  await prisma.dialoqbaseSettings.update({
+    where: {
+      id: 1,
+    },
+    data: request.body,
+  });
+
+  return {
+    message: "RAG settings updated successfully",
+  };
+}

@@ -13,9 +13,6 @@ export const websiteQueueController = async (
   source: QSource,
   prisma: PrismaClient
 ) => {
-  // check if url is html or pdf or other
-  // if html, use cheerio
-
   const response = await axios.get(source.content!);
 
   const type = response.headers["content-type"];
@@ -35,8 +32,8 @@ export const websiteQueueController = async (
     const docs = await loader.load();
 
     const textSplitter = new RecursiveCharacterTextSplitter({
-      chunkSize: 1000,
-      chunkOverlap: 200,
+      chunkSize: source.chunkSize,
+      chunkOverlap: source.chunkOverlap,
     });
     const chunks = await textSplitter.splitDocuments(docs);
 

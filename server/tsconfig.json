@@ -5,6 +5,7 @@
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "checkJs": false,
+    "strict": false
   },
   "include": ["src/**/*.ts"],
   "exclude": [

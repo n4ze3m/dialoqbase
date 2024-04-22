@@ -16,6 +16,8 @@ export const useCreateConfig = () => {
           label: string;
           value: string;
         }[];
+        defaultChatModel?: string;
+        defaultEmbeddingModel?: string;
       };
     }
   );

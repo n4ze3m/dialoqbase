@@ -82,11 +82,19 @@ model User {
 }
 
 model DialoqbaseSettings {
-  id                    Int     @id @default(autoincrement())
-  noOfBotsPerUser       Int     @default(10)
-  allowUserToCreateBots Boolean @default(true)
-  allowUserToRegister   Boolean @default(false)
-  numberOfDocuments     Int     @default(10)
+  id                           Int      @id @default(autoincrement())
+  noOfBotsPerUser              Int      @default(10)
+  allowUserToCreateBots        Boolean  @default(true)
+  allowUserToRegister          Boolean  @default(false)
+  numberOfDocuments            Int      @default(10)
+  legacyMode                   Boolean  @default(false)
+  hidePlayground               Boolean  @default(false)
+  defaultChunkSize             Int?     @default(1000)
+  defaultChunkOverlap          Int?     @default(200)
+  dynamicallyFetchOllamaModels Boolean? @default(false)
+  hideDefaultModels            Boolean? @default(false)
+  defaultChatModel             String   @default("gpt-3.5-turbo-dbase")
+  defaultEmbeddingModel        String   @default("dialoqbase_eb_text-embedding-ada-002")
 }
 
 model BotIntegration {
@@ -216,5 +224,13 @@ model UserApiKey {
   api_key   String
   user_id   Int
   User      User     @relation(fields: [user_id], references: [user_id])
+  createdAt DateTime @default(now())
+}
+
+model DbSettings {
+  id        Int      @id @default(autoincrement())
+  key       String
+  value     String
+  family    String
   createdAt DateTime @default(now())
 }

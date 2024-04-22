@@ -10,7 +10,8 @@ import {
   saveModelFromInputedUrlHandler,
   deleteModelHandler,
   hideModelHandler,
-  saveEmbedddingModelFromInputedUrlHandler
+  saveEmbedddingModelFromInputedUrlHandler,
+  updateDialoqbaseRAGSettingsHandler
 } from "../../../../handlers/api/v1/admin";
 import {
   dialoqbaseSettingsSchema,
@@ -18,6 +19,7 @@ import {
   getAllUsersSchema,
   registerUserByAdminSchema,
   resetUserPasswordByAdminSchema,
+  updateDialoqbaseRAGSettings
 } from "../../../../schema/api/v1/admin";
 
 import {
@@ -25,7 +27,7 @@ import {
   getAllModelsSchema,
   saveModelFromInputedUrlSchema,
   toogleModelSchema,
-  saveEmbeddingModelSchema
+  saveEmbeddingModelSchema,
 } from "../../../../schema/api/v1/admin/model";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
@@ -45,6 +47,15 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       onRequest: [fastify.authenticate],
     },
     updateDialoqbaseSettingsHandler
+  );
+
+  fastify.post(
+    "/rag-settings",
+    {
+      schema: updateDialoqbaseRAGSettings,
+      onRequest: [fastify.authenticate],
+    },
+    updateDialoqbaseRAGSettingsHandler
   );
 
   fastify.get(
