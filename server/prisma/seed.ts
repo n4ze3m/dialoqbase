@@ -346,7 +346,7 @@ const LLMS: {
     model_type: "chat",
     stream_available: true,
     model_provider: "Groq",
-  }
+  },
 ];
 
 const EMBEDDING_MODELS: {
@@ -433,7 +433,9 @@ const newModels = async () => {
       where: {
         model_id: model.model_id,
       },
-      update: {},
+      update: {
+        name: model.name,
+      },
       create: model,
     });
   }
@@ -443,7 +445,9 @@ const newModels = async () => {
       where: {
         model_id: model.model_id,
       },
-      update: {},
+      update: {
+        name: model.name,
+      },
       create: model,
     });
   }
