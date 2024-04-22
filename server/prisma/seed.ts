@@ -325,6 +325,28 @@ const LLMS: {
     local_model: false,
     config: "{}",
   },
+  {
+    model_id: "accounts/fireworks/models/llama-v3-70b-instruct-dbase",
+    name: "Llama v3 70B Instruct (Fireworks)",
+    model_type: "chat",
+    stream_available: true,
+    model_provider: "Fireworks",
+    local_model: false,
+  },
+  {
+    model_id: "llama3-8b-8192-dbase",
+    name: "LLaMA3-8b (Groq)",
+    model_type: "chat",
+    stream_available: true,
+    model_provider: "Groq",
+  },
+  {
+    model_id: "llama3-70b-8192",
+    name: "LLaMA3-70b (Groq)",
+    model_type: "chat",
+    stream_available: true,
+    model_provider: "Groq",
+  }
 ];
 
 const EMBEDDING_MODELS: {
