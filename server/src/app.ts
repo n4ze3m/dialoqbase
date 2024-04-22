@@ -12,6 +12,7 @@ import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import { pathToFileURL } from "url";
 import { Worker } from "bullmq";
+import { parseRedisUrl } from "./utils/redis";
 declare module "fastify" {
   interface Session {
     is_bot_allowed: boolean;
@@ -88,10 +89,8 @@ const redis_url = process.env.DB_REDIS_URL || process.env.REDIS_URL;
 if (!redis_url) {
   throw new Error("Redis url is not defined");
 }
-const username = redis_url.split(":")[1].replace("//", "");
-const password = redis_url.split(":")[2].split("@")[0];
-const host = redis_url.split("@")[1].split(":")[0];
-const port = parseInt(redis_url.split(":")[3]);
+
+const { host, port, password } = parseRedisUrl(redis_url);
 const path = join(__dirname, "./queue/index.js");
 const workerUrl = pathToFileURL(path);
 const concurrency = parseInt(process.env.DB_QUEUE_CONCURRENCY || "1");
@@ -101,7 +100,7 @@ const worker = new Worker("vector", workerUrl, {
     host,
     port,
     password,
-    username,
+    username: process?.env?.DB_REDIS_USERNAME,
   },
   concurrency,
   useWorkerThreads: workerThreads === "true",
