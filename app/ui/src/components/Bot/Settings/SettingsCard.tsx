@@ -1,4 +1,12 @@
-import { Form, Input, notification, Select, Slider, Switch } from "antd";
+import {
+  Form,
+  Input,
+  InputNumber,
+  notification,
+  Select,
+  Slider,
+  Switch,
+} from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../services/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -155,6 +163,7 @@ export const SettingsCard: React.FC<BotSettings> = ({
             bot_protect: data.bot_protect,
             use_rag: data.use_rag,
             bot_model_api_key: data.bot_model_api_key,
+            noOfDocumentsToRetrieve: data.noOfDocumentsToRetrieve,
           }}
           form={form}
           requiredMark={false}
@@ -257,6 +266,24 @@ export const SettingsCard: React.FC<BotSettings> = ({
                     disabled
                     placeholder="Select an embedding method"
                     options={embeddingModel}
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  name="noOfDocumentsToRetrieve"
+                  label="Number of documents to retrieve"
+                  rules={[
+                    {
+                      required: true,
+                      message:
+                        "Please input a number of documents to retrieve!",
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    min={0}
+                    style={{ width: "100%" }}
+                    placeholder="Enter number of documents to retrieve"
                   />
                 </Form.Item>
 

@@ -159,6 +159,9 @@ export const updateBotByIdSchema: FastifySchema = {
       bot_model_api_key: {
         type: "string",
       },
+      noOfDocumentsToRetrieve: {
+        type: "number",
+      }
     },
   },
 };
