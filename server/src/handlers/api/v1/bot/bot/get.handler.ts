@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 
 import { GetBotRequestById } from "./types";
 import { getSettings } from "../../../../../utils/common";
+import { getAllOllamaModels } from "../../../../../utils/ollama";
 
 export const getBotByIdEmbeddingsHandler = async (
   request: FastifyRequest<GetBotRequestById>,
@@ -125,10 +126,18 @@ export const getCreateBotConfigHandler = async (
   reply: FastifyReply
 ) => {
   const prisma = request.server.prisma;
+  const settings = await getSettings(prisma);
+
+  const not_to_hide_providers = settings?.hideDefaultModels
+    ? ["Local", "local", "ollama", "transformer", "Transformer"]
+    : undefined;
   const models = await prisma.dialoqbaseModels.findMany({
     where: {
       hide: false,
       deleted: false,
+      model_provider: {
+        in: not_to_hide_providers,
+      },
     },
   });
 
@@ -146,16 +155,30 @@ export const getCreateBotConfigHandler = async (
     .filter((model) => model.model_type === "embedding")
     .map((model) => {
       return {
-        label: `${model.name || model.model_id} ${model.model_id === "dialoqbase_eb_dialoqbase-ollama"
+        label: `${model.name || model.model_id} ${
+          model.model_id === "dialoqbase_eb_dialoqbase-ollama"
             ? "(Deprecated)"
             : ""
-          }`,
+        }`,
         value: model.model_id,
         disabled: model.model_id === "dialoqbase_eb_dialoqbase-ollama",
       };
     });
-  
-  const settings = await getSettings(prisma);
+
+  if (settings?.dynamicallyFetchOllamaModels) {
+    const ollamaModels = await getAllOllamaModels(settings.ollamaURL);
+    chatModel.push(
+      ...ollamaModels?.filter((model) => {
+        return (
+          !model?.details?.families?.includes("bert") &&
+          !model?.details?.families?.includes("nomic-bert")
+        );
+      })
+    );
+    embeddingModel.push(
+      ...ollamaModels.map((model) => ({ ...model, disabled: false }))
+    );
+  }
 
   return {
     chatModel,
@@ -200,10 +223,11 @@ export const getBotByIdSettingsHandler = async (
     .filter((model) => model.model_type === "embedding")
     .map((model) => {
       return {
-        label: `${model.name || model.model_id} ${model.model_id === "dialoqbase_eb_dialoqbase-ollama"
+        label: `${model.name || model.model_id} ${
+          model.model_id === "dialoqbase_eb_dialoqbase-ollama"
             ? "(Deprecated)"
             : ""
-          }`,
+        }`,
         value: model.model_id,
         disabled: model.model_id === "dialoqbase_eb_dialoqbase-ollama",
       };
@@ -220,7 +244,6 @@ export const getBotByIdSettingsHandler = async (
     embeddingModel,
   };
 };
-
 
 export const isBotReadyHandler = async (
   request: FastifyRequest<GetBotRequestById>,

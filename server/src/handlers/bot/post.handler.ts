@@ -7,6 +7,7 @@ import { BaseRetriever } from "@langchain/core/retrievers";
 import { DialoqbaseHybridRetrival } from "../../utils/hybrid";
 import { Document } from "langchain/document";
 import { createChain, groupMessagesByConversation } from "../../chain";
+import { getModelInfo } from "../../utils/get-model-info";
 
 export const chatRequestHandler = async (
   request: FastifyRequest<ChatRequestBody>,
@@ -69,12 +70,10 @@ export const chatRequestHandler = async (
     const temperature = bot.temperature;
 
     const sanitizedQuestion = message.trim().replaceAll("\n", " ");
-    const embeddingInfo = await prisma.dialoqbaseModels.findFirst({
-      where: {
-        model_id: bot.embedding,
-        hide: false,
-        deleted: false,
-      },
+    const embeddingInfo = await getModelInfo({
+      model: bot.embedding,
+      prisma,
+      type: "embedding",
     });
 
     if (!embeddingInfo) {
@@ -139,13 +138,11 @@ export const chatRequestHandler = async (
       });
     }
 
-    const modelinfo = await prisma.dialoqbaseModels.findFirst({
-      where: {
-        model_id: bot.model,
-        hide: false,
-        deleted: false,
-      },
-    });
+    const modelinfo = await getModelInfo({
+      model: bot.model,
+      prisma,
+      type: "chat",
+    })
 
     if (!modelinfo) {
       return {
@@ -341,13 +338,11 @@ export const chatRequestStreamHandler = async (
     const temperature = bot.temperature;
 
     const sanitizedQuestion = message.trim().replaceAll("\n", " ");
-    const embeddingInfo = await prisma.dialoqbaseModels.findFirst({
-      where: {
-        model_id: bot.embedding,
-        hide: false,
-        deleted: false,
-      },
-    });
+    const embeddingInfo = await getModelInfo({
+      model: bot.embedding,
+      prisma,
+      type: "embedding",
+    })
 
     if (!embeddingInfo) {
       return {
@@ -416,13 +411,11 @@ export const chatRequestStreamHandler = async (
       console.log("closed");
     });
 
-    const modelinfo = await prisma.dialoqbaseModels.findFirst({
-      where: {
-        model_id: bot.model,
-        hide: false,
-        deleted: false,
-      },
-    });
+    const modelinfo = await getModelInfo({
+      model: bot.model,
+      prisma,
+      type: "chat",
+    })
 
     if (!modelinfo) {
       reply.raw.setHeader("Content-Type", "text/event-stream");

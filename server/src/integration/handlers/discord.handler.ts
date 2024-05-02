@@ -6,6 +6,7 @@ import { DialoqbaseHybridRetrival } from "../../utils/hybrid";
 import { Document } from "langchain/document";
 import { BaseRetriever } from "@langchain/core/retrievers";
 import { createChain } from "../../chain";
+import { getModelInfo } from "../../utils/get-model-info";
 const prisma = new PrismaClient();
 
 export const discordBotHandler = async (
@@ -51,14 +52,11 @@ export const discordBotHandler = async (
     const temperature = bot.temperature;
 
     const sanitizedQuestion = message.trim().replaceAll("\n", " ");
-    const embeddingInfo = await prisma.dialoqbaseModels.findFirst({
-      where: {
-        model_id: bot.embedding,
-        hide: false,
-        deleted: false,
-      },
-    });
-
+    const embeddingInfo = await getModelInfo({
+      model: bot.embedding,
+      prisma,
+      type: "embedding",
+    })
     if (!embeddingInfo) {
       return {
         text: "Opps! Model not found",
@@ -108,12 +106,10 @@ export const discordBotHandler = async (
       });
     }
 
-    const modelinfo = await prisma.dialoqbaseModels.findFirst({
-      where: {
-        model_id: bot.model,
-        hide: false,
-        deleted: false,
-      },
+    const modelinfo = await getModelInfo({
+      model: bot.model,
+      prisma,
+      type: "chat",
     });
 
     if (!modelinfo) {

@@ -4,6 +4,7 @@ import {
   apiKeyValidaton,
   apiKeyValidatonMessage,
 } from "../../../../../utils/validate";
+import { getModelInfo } from "../../../../../utils/get-model-info";
 
 export const updateBotByIdHandler = async (
   request: FastifyRequest<UpdateBotById>,
@@ -25,12 +26,9 @@ export const updateBotByIdHandler = async (
     });
   }
 
-  const modelInfo = await prisma.dialoqbaseModels.findFirst({
-    where: {
-      model_id: request.body.model,
-      hide: false,
-      deleted: false,
-    },
+  const modelInfo = await getModelInfo({
+    model: request.body.model,
+    prisma,
   });
 
   if (!modelInfo) {
@@ -96,25 +94,14 @@ export const updateBotAPIByIdHandler = async (
     questionGeneratorPrompt: request.body?.question_generator_prompt,
     system_prompt: undefined,
     question_generator_prompt: undefined,
-  }
-
+  };
 
   if (updateBody.model) {
-    const modelInfo = await prisma.dialoqbaseModels.findFirst({
-      where: {
-        hide: false,
-        deleted: false,
-        OR: [
-          {
-            model_id: updateBody.model
-          },
-          {
-            model_id: `${updateBody.model}-dbase`
-          }
-        ],
-      },
+    const modelInfo = await getModelInfo({
+      model: updateBody.model,
+      prisma,
+      type: "chat",
     });
-
 
     if (!modelInfo) {
       return reply.status(400).send({
@@ -140,8 +127,7 @@ export const updateBotAPIByIdHandler = async (
     updateBody = {
       ...updateBody,
       provider: modelInfo.model_provider || "",
-    }
-
+    };
   }
   await prisma.bot.update({
     where: {

@@ -3,6 +3,7 @@ import { DialoqbaseVectorStore } from "../../utils/store";
 import { embeddings } from "../../utils/embeddings";
 import { DialoqbaseRestApi } from "../../loader/rest";
 import { PrismaClient } from "@prisma/client";
+import { getModelInfo } from "../../utils/get-model-info";
 
 export const restQueueController = async (
   source: QSource,
@@ -18,13 +19,11 @@ export const restQueueController = async (
   });
   const docs = await loader.load();
 
-  const embeddingInfo = await prisma.dialoqbaseModels.findFirst({
-    where: {
-      model_id: source.embedding,
-      hide: false,
-      deleted: false,
-    },
-  });
+  const embeddingInfo = await getModelInfo({
+    model: source.embedding,
+    prisma,
+    type: "embedding",
+  })
 
   if (!embeddingInfo) {
     throw new Error("Embedding not found. Please verify the embedding id");

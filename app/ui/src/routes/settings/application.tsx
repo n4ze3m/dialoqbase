@@ -1,4 +1,4 @@
-import { Form, InputNumber, Switch, notification, Select } from "antd";
+import { Form, InputNumber, Switch, notification, Select, Input } from "antd";
 import React from "react";
 import api from "../../services/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -25,6 +25,9 @@ export default function SettingsApplicationRoot() {
       defaultChunkOverlap: number;
       defaultChatModel: string;
       defaultEmbeddingModel: string;
+      hideDefaultModels: boolean;
+      dynamicallyFetchOllamaModels: boolean;
+      ollamaURL: string;
     };
   });
 
@@ -63,6 +66,22 @@ export default function SettingsApplicationRoot() {
     }
   );
 
+  const { mutateAsync: updateModelSettings, isLoading: isModelLoading } =
+    useMutation(onUpdateApplicatoon, {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries(["fetchBotCreateConfig"]);
+        notification.success({
+          message: "Success",
+          description: data.message,
+        });
+      },
+      onError: (error: any) => {
+        notification.error({
+          message: "Error",
+          description: error?.response?.data?.message || "Something went wrong",
+        });
+      },
+    });
   const { mutateAsync: updateRagSettings, isLoading: isRagLoading } =
     useMutation(onRagApplicationUpdate, {
       onSuccess: (data) => {
@@ -135,6 +154,33 @@ export default function SettingsApplicationRoot() {
                   >
                     <Switch />
                   </Form.Item>
+                </div>
+                <div className="bg-gray-50 border-x border-b rounded-b-md rounded-x-md px-4 py-3 text-right sm:px-6 dark:bg-[#141414] dark:border-gray-600">
+                  <button
+                    disabled={isLoading}
+                    type="submit"
+                    className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white  hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  >
+                    {isLoading ? "Saving..." : "Save"}
+                  </button>
+                </div>
+              </div>
+            </Form>
+          </ApplicationCard>
+
+          <ApplicationCard
+            title="Models Settings"
+            description="Configure your models settings"
+          >
+            <Form
+              initialValues={{
+                ...data,
+              }}
+              layout="vertical"
+              onFinish={updateModelSettings}
+            >
+              <div className="sm:overflow-hidden ">
+                <div className="space-y-6 border-t border rounded-t-md  bg-white px-4 py-5 sm:p-6 dark:bg-[#171717] dark:border-gray-600">
                   <Form.Item
                     label="Default Chat Model"
                     name="defaultChatModel"
@@ -195,19 +241,49 @@ export default function SettingsApplicationRoot() {
                       loading={modeStatus === "loading"}
                     />
                   </Form.Item>
+                  <Form.Item
+                    label="Ollama URL"
+                    name="ollamaURL"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input ollama url!",
+                      },
+                    ]}
+                  >
+                    <Input size="large" placeholder="Enter ollama url" />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Hide Default Models"
+                    name="hideDefaultModels"
+                    valuePropName="checked"
+                    help="This will hide all the default models and only show the models that are locally added or from ollama."
+                  >
+                    <Switch />
+                  </Form.Item>
+                  <Form.Item
+                    label="Dynamically Fetch Ollama Models"
+                    name="dynamicallyFetchOllamaModels"
+                    valuePropName="checked"
+                    help="This will dynamically fetch the models from ollama. You don't need to manually add the models."
+                  >
+                    <Switch />
+                  </Form.Item>
                 </div>
                 <div className="bg-gray-50 border-x border-b rounded-b-md rounded-x-md px-4 py-3 text-right sm:px-6 dark:bg-[#141414] dark:border-gray-600">
                   <button
-                    disabled={isLoading}
+                    disabled={isModelLoading}
                     type="submit"
                     className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white  hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   >
-                    {isLoading ? "Saving..." : "Save"}
+                    {isModelLoading ? "Saving..." : "Save"}
                   </button>
                 </div>
               </div>
             </Form>
           </ApplicationCard>
+
           <ApplicationCard
             title="RAG Settings"
             description="Configure your RAG settings"

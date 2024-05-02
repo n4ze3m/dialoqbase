@@ -20,6 +20,8 @@ export const dialoqbaseSettingsSchema: FastifySchema = {
       defaultChatModel: { type: "string" },
       defaultEmbeddingModel: { type: "string" },
       dynamicallyFetchOllamaModels: { type: "boolean" },
+      hideDefaultModels: { type: "boolean" },
+      ollamaURL: { type: "string" },
     },
   },
 };
@@ -43,12 +45,9 @@ export const updateDialoqbaseSettingsSchema: FastifySchema = {
       dynamicallyFetchOllamaModels: { type: "boolean" },
       defaultChatModel: { type: "string" },
       defaultEmbeddingModel: { type: "string" },
+      hideDefaultModels: { type: "boolean" },
+      ollamaURL: { type: "string" },
     },
-    required: [
-      "noOfBotsPerUser",
-      "allowUserToCreateBots",
-      "allowUserToRegister",
-    ],
   },
   response: {
     200: {
