@@ -40,47 +40,53 @@ export class DialoqbaseHybridRetrival extends BaseRetriever {
   protected async similaritySearch(
     query: string,
     k: number,
-    _callbacks?: Callbacks,
+    _callbacks?: Callbacks
   ): Promise<SearchResult[]> {
     try {
+      const embeddedQuery = await this.embeddings.embedQuery(query);
 
-    const embeddedQuery = await this.embeddings.embedQuery(query);
+      const vector = `[${embeddedQuery.join(",")}]`;
+      const bot_id = this.botId;
 
-    const vector = `[${embeddedQuery.join(",")}]`;
-    const bot_id = this.botId;
-
-    const data = await prisma.$queryRaw`
+      const data = await prisma.$queryRaw`
      SELECT * FROM "similarity_search_v2"(query_embedding := ${vector}::vector, botId := ${bot_id}::text,match_count := ${k}::int)
     `;
 
-    const result: [Document, number, number][] = (
-      data as SearchEmbeddingsResponse[]
-    ).map((resp) => [
-      new Document({
-        metadata: resp.metadata,
-        pageContent: resp.content,
-      }),
-      resp.similarity * 10,
-      resp.id,
-    ]);
+      const result: [Document, number, number][] = (
+        data as SearchEmbeddingsResponse[]
+      ).map((resp) => [
+        new Document({
+          metadata: resp.metadata,
+          pageContent: resp.content,
+        }),
+        resp.similarity * 10,
+        resp.id,
+      ]);
 
-
-    return result;
-} catch (e) {
-    console.log(e)
-    return []
-}
+      return result;
+    } catch (e) {
+      console.log(e);
+      return [];
+    }
   }
 
   protected async keywordSearch(
     query: string,
-    k: number,
+    k: number
   ): Promise<SearchResult[]> {
     const query_text = query;
     const bot_id = this.botId;
 
+    const botInfo = await prisma.bot.findFirst({
+      where: {
+        id: bot_id,
+      },
+    });
+
+    const match_count = botInfo?.noOfDocumentsToRetrieve || k;
+
     const data = await prisma.$queryRaw`
-     SELECT * FROM "kw_match_documents"(query_text := ${query_text}::text, bot_id := ${bot_id}::text,match_count := ${k}::int)
+     SELECT * FROM "kw_match_documents"(query_text := ${query_text}::text, bot_id := ${bot_id}::text,match_count := ${match_count}::int)
     `;
 
     const result: [Document, number, number][] = (
@@ -104,12 +110,12 @@ export class DialoqbaseHybridRetrival extends BaseRetriever {
     query: string,
     similarityK: number,
     keywordK: number,
-    callbacks?: Callbacks,
+    callbacks?: Callbacks
   ): Promise<SearchResult[]> {
     const similarity_search = this.similaritySearch(
       query,
       similarityK,
-      callbacks,
+      callbacks
     );
 
     const keyword_search = this.keywordSearch(query, keywordK);
@@ -136,13 +142,13 @@ export class DialoqbaseHybridRetrival extends BaseRetriever {
 
   async _getRelevantDocuments(
     query: string,
-    runManager?: CallbackManagerForRetrieverRun,
+    runManager?: CallbackManagerForRetrieverRun
   ): Promise<Document[]> {
     const searchResults = await this.hybridSearch(
       query,
       this.similarityK,
       this.keywordK,
-      runManager?.getChild("hybrid_search"),
+      runManager?.getChild("hybrid_search")
     );
 
     return searchResults.map(([doc]) => doc);

@@ -16,6 +16,7 @@ import {
   HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT,
   HELPFUL_ASSISTANT_WITHOUT_CONTEXT_PROMPT,
 } from "../../../../../utils/prompts";
+import { getModelInfo } from "../../../../../utils/get-model-info";
 
 export const createBotHandler = async (
   request: FastifyRequest<CreateBotRequest>,
@@ -55,12 +56,10 @@ export const createBotHandler = async (
     });
   }
   // const providerName = modelProviderName(model);
-  const modelInfo = await prisma.dialoqbaseModels.findFirst({
-    where: {
-      model_id: model,
-      hide: false,
-      deleted: false,
-    },
+  const modelInfo = await getModelInfo({
+    model,
+    prisma,
+    type: "chat",
   });
 
   if (!modelInfo) {
@@ -69,12 +68,10 @@ export const createBotHandler = async (
     });
   }
 
-  const embeddingInfo = await prisma.dialoqbaseModels.findFirst({
-    where: {
-      model_id: embedding,
-      hide: false,
-      deleted: false,
-    },
+  const embeddingInfo = await getModelInfo({
+    model: embedding,
+    prisma,
+    type: "embedding",
   });
 
   if (!embeddingInfo) {

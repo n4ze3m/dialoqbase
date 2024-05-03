@@ -6,6 +6,7 @@ export type BotSettings = {
   public_id: string;
   temperature: number;
   embedding: string;
+  noOfDocumentsToRetrieve: number;
   qaPrompt: string;
   questionGeneratorPrompt: string;
   streaming: boolean;

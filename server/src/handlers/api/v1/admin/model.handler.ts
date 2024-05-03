@@ -9,6 +9,7 @@ import {
 } from "./type";
 import axios from "axios";
 import { removeTrailingSlash } from "../../../../utils/url";
+import { getSettings } from "../../../../utils/common";
 
 const _getModelFromUrl = async (url: string, apiKey?: string) => {
   try {
@@ -130,21 +131,29 @@ export const getAllModelsHandler = async (
   request: FastifyRequest,
   reply: FastifyReply
 ) => {
-  try {
-    const prisma = request.server.prisma;
-    const user = request.user;
+  const prisma = request.server.prisma;
+  const user = request.user;
 
-    if (!user.is_admin) {
-      return reply.status(403).send({
-        message: "Forbidden",
-      });
-    }
-    const allModels = await prisma.dialoqbaseModels.findMany({
-      where: {
-        deleted: false,
-      },
+  if (!user.is_admin) {
+    return reply.status(403).send({
+      message: "Forbidden",
     });
+  }
 
+  const settings = await getSettings(prisma);
+
+  const not_to_hide_providers = settings?.hideDefaultModels
+    ? [ "Local", "local", "ollama", "transformer", "Transformer"]
+    : undefined;
+  const allModels = await prisma.dialoqbaseModels.findMany({
+    where: {
+      deleted: false,
+      model_provider: {
+        in: not_to_hide_providers,
+      },
+    },
+  });
+  try {
     return {
       data: allModels.filter((model) => model.model_type !== "embedding"),
       embedding: allModels.filter((model) => model.model_type === "embedding"),
@@ -245,7 +254,7 @@ export const saveModelFromInputedUrlHandler = async (
         });
       }
 
-      let newModelId = model_id.trim() + `_custom_${new Date().getTime()}`;
+      let newModelId = model_id.trim() + `_dialoqbase_${new Date().getTime()}`;
       await prisma.dialoqbaseModels.create({
         data: {
           name: isModelExist.name,

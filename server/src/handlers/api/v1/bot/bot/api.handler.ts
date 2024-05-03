@@ -16,6 +16,7 @@ import {
   uniqueNamesGenerator,
 } from "unique-names-generator";
 import { validateDataSource } from "../../../../../utils/datasource-validation";
+import { getModelInfo } from "../../../../../utils/get-model-info";
 
 export const createBotAPIHandler = async (
   request: FastifyRequest<CreateBotAPIRequest>,
@@ -55,19 +56,11 @@ export const createBotAPIHandler = async (
       message: `Reach maximum limit of ${maxBotsAllowed} bots per user`,
     });
   }
-  const modelInfo = await prisma.dialoqbaseModels.findFirst({
-    where: {
-      hide: false,
-      deleted: false,
-      OR: [
-        {
-          model_id: model,
-        },
-        {
-          model_id: `${model}-dbase`,
-        },
-      ],
-    },
+
+  const modelInfo = await getModelInfo({
+    model,
+    prisma,
+    type: "chat",
   });
 
   if (!modelInfo) {
@@ -76,19 +69,10 @@ export const createBotAPIHandler = async (
     });
   }
 
-  const embeddingInfo = await prisma.dialoqbaseModels.findFirst({
-    where: {
-      OR: [
-        {
-          model_id: embedding,
-        },
-        {
-          model_id: `dialoqbase_eb_${embedding}`,
-        },
-      ],
-      hide: false,
-      deleted: false,
-    },
+  const embeddingInfo = await getModelInfo({
+    model: embedding,
+    prisma,
+    type: "embedding",
   });
 
   if (!embeddingInfo) {

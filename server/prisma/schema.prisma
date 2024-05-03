@@ -18,6 +18,7 @@ model Bot {
   description                 String?
   createdAt                   DateTime         @default(now())
   temperature                 Float            @default(0.7)
+  noOfDocumentsToRetrieve     Int?             @default(4)
   model                       String           @default("gpt-3.5-turbo")
   provider                    String           @default("openai")
   embedding                   String           @default("openai")
@@ -95,6 +96,7 @@ model DialoqbaseSettings {
   hideDefaultModels            Boolean? @default(false)
   defaultChatModel             String   @default("gpt-3.5-turbo-dbase")
   defaultEmbeddingModel        String   @default("dialoqbase_eb_text-embedding-ada-002")
+  ollamaURL                   String? @default("http://host.docker.internal:11434")
 }
 
 model BotIntegration {

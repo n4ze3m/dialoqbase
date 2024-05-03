@@ -5,6 +5,7 @@ import { embeddings } from "../../utils/embeddings";
 import { DialoqbaseAudioVideoLoader } from "../../loader/audio-video";
 import { convertMp3ToWave } from "../../utils/ffmpeg";
 import { PrismaClient } from "@prisma/client";
+import { getModelInfo } from "../../utils/get-model-info";
 
 export const audioQueueController = async (
   source: QSource,
@@ -25,13 +26,11 @@ export const audioQueueController = async (
   });
   const chunks = await textSplitter.splitDocuments(docs);
 
-  const embeddingInfo = await prisma.dialoqbaseModels.findFirst({
-    where: {
-      model_id: source.embedding,
-      hide: false,
-      deleted: false,
-    },
-  });
+  const embeddingInfo = await getModelInfo({
+    model: source.embedding,
+    prisma,
+    type: "embedding",
+  })
 
   if (!embeddingInfo) {
     throw new Error("Embedding not found. Please verify the embedding id");

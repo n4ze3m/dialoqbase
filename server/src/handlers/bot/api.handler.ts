@@ -8,6 +8,7 @@ import { Document } from "langchain/document";
 import { BaseRetriever } from "@langchain/core/retrievers";
 import { DialoqbaseHybridRetrival } from "../../utils/hybrid";
 import { createChain, groupMessagesByConversation } from "../../chain";
+import { getModelInfo } from "../../utils/get-model-info";
 
 export const chatRequestAPIHandler = async (
   request: FastifyRequest<ChatAPIRequest>,
@@ -40,12 +41,10 @@ export const chatRequestAPIHandler = async (
       const temperature = bot.temperature;
 
       const sanitizedQuestion = message.trim().replaceAll("\n", " ");
-      const embeddingInfo = await prisma.dialoqbaseModels.findFirst({
-        where: {
-          model_id: bot.embedding,
-          hide: false,
-          deleted: false,
-        },
+      const embeddingInfo = await getModelInfo({
+        prisma,
+        model: bot.embedding,
+        type: "embedding",
       });
 
       if (!embeddingInfo) {
@@ -64,12 +63,10 @@ export const chatRequestAPIHandler = async (
         console.log("closed");
       });
 
-      const modelinfo = await prisma.dialoqbaseModels.findFirst({
-        where: {
-          model_id: bot.model,
-          hide: false,
-          deleted: false,
-        },
+      const modelinfo = await getModelInfo({
+        prisma,
+        model: bot.model,
+        type: "chat",
       });
 
       if (!modelinfo) {
@@ -172,15 +169,14 @@ export const chatRequestAPIHandler = async (
       });
       const documents = await documentPromise;
 
-
       await prisma.botApiHistory.create({
         data: {
           api_key: request.headers["x-api-key"],
           bot_id: bot.id,
           human: message,
           bot: response,
-        }
-      })
+        },
+      });
 
       reply.sse({
         event: "result",
@@ -237,12 +233,10 @@ export const chatRequestAPIHandler = async (
       const temperature = bot.temperature;
 
       const sanitizedQuestion = message.trim().replaceAll("\n", " ");
-      const embeddingInfo = await prisma.dialoqbaseModels.findFirst({
-        where: {
-          model_id: bot.embedding,
-          hide: false,
-          deleted: false,
-        },
+      const embeddingInfo = await getModelInfo({
+        prisma,
+        model: bot.embedding,
+        type: "embedding",
       });
 
       if (!embeddingInfo) {
@@ -308,12 +302,10 @@ export const chatRequestAPIHandler = async (
         });
       }
 
-      const modelinfo = await prisma.dialoqbaseModels.findFirst({
-        where: {
-          model_id: bot.model,
-          hide: false,
-          deleted: false,
-        },
+      const modelinfo = await getModelInfo({
+        prisma,
+        model: bot.model,
+        type: "chat",
       });
 
       if (!modelinfo) {
@@ -375,8 +367,8 @@ export const chatRequestAPIHandler = async (
           bot_id: bot.id,
           human: message,
           bot: botResponse,
-        }
-      })
+        },
+      });
 
       return {
         bot: {

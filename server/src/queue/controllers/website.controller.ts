@@ -8,6 +8,7 @@ import { DialoqbasePDFLoader } from "../../loader/pdf";
 import { DialoqbaseWebLoader } from "../../loader/web";
 import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
 import { PrismaClient } from "@prisma/client";
+import { getModelInfo } from "../../utils/get-model-info";
 
 export const websiteQueueController = async (
   source: QSource,
@@ -37,13 +38,11 @@ export const websiteQueueController = async (
     });
     const chunks = await textSplitter.splitDocuments(docs);
 
-    const embeddingInfo = await prisma.dialoqbaseModels.findFirst({
-      where: {
-        model_id: source.embedding,
-        hide: false,
-        deleted: false,
-      },
-    });
+    const embeddingInfo = await getModelInfo({
+      model: source.embedding,
+      prisma,
+      type: "embedding",
+    })
 
     if (!embeddingInfo) {
       throw new Error("Embedding not found. Please verify the embedding id");
@@ -79,13 +78,11 @@ export const websiteQueueController = async (
     });
     const chunks = await textSplitter.splitDocuments(docs);
 
-    const embeddingInfo = await prisma.dialoqbaseModels.findFirst({
-      where: {
-        model_id: source.embedding,
-        hide: false,
-        deleted: false,
-      },
-    });
+    const embeddingInfo = await getModelInfo({
+      model: source.embedding,
+      prisma,
+      type: "embedding",
+    })
 
     if (!embeddingInfo) {
       throw new Error("Embedding not found. Please verify the embedding id");

@@ -19,6 +19,7 @@ const pump = util.promisify(pipeline);
 import { fileTypeFinder } from "../../../../../utils/fileType";
 import { getSettings } from "../../../../../utils/common";
 import { HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT } from "../../../../../utils/prompts";
+import { getModelInfo } from "../../../../../utils/get-model-info";
 
 export const createBotFileHandler = async (
   request: FastifyRequest<UploadPDF>,
@@ -52,12 +53,10 @@ export const createBotFileHandler = async (
       });
     }
 
-    const embeddingInfo = await prisma.dialoqbaseModels.findFirst({
-      where: {
-        model_id: embedding,
-        hide: false,
-        deleted: false,
-      },
+    const embeddingInfo = await getModelInfo({
+      model: embedding,
+      prisma,
+      type: "embedding",
     });
 
     if (!embeddingInfo) {
@@ -76,12 +75,10 @@ export const createBotFileHandler = async (
       });
     }
 
-    const modelInfo = await prisma.dialoqbaseModels.findFirst({
-      where: {
-        model_id: model,
-        hide: false,
-        deleted: false,
-      },
+    const modelInfo = await getModelInfo({
+      model,
+      prisma,
+      type: "chat",
     });
 
     if (!modelInfo) {

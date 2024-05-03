@@ -6,6 +6,7 @@ import { embeddings } from "../../utils/embeddings";
 import { DialoqbaseYoutube } from "../../loader/youtube";
 import { PrismaClient } from "@prisma/client";
 import { DialoqbaseYoutubeTranscript } from "../../loader/youtube-transcript";
+import { getModelInfo } from "../../utils/get-model-info";
 
 export const youtubeQueueController = async (
   source: QSource,
@@ -29,12 +30,10 @@ export const youtubeQueueController = async (
     });
     const chunks = await textSplitter.splitDocuments(docs);
 
-    const embeddingInfo = await prisma.dialoqbaseModels.findFirst({
-      where: {
-        model_id: source.embedding,
-        hide: false,
-        deleted: false,
-      },
+    const embeddingInfo = await getModelInfo({
+      model: source.embedding,
+      prisma,
+      type: "embedding",
     });
 
     if (!embeddingInfo) {
@@ -66,12 +65,10 @@ export const youtubeQueueController = async (
     });
     const chunks = await textSplitter.splitDocuments(docs);
 
-    const embeddingInfo = await prisma.dialoqbaseModels.findFirst({
-      where: {
-        model_id: source.embedding,
-        hide: false,
-        deleted: false,
-      },
+    const embeddingInfo = await getModelInfo({
+      model: source.embedding,
+      prisma,
+      type: "embedding",
     });
 
     if (!embeddingInfo) {
