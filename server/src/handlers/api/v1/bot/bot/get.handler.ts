@@ -164,7 +164,6 @@ export const getCreateBotConfigHandler = async (
         disabled: model.model_id === "dialoqbase_eb_dialoqbase-ollama",
       };
     });
-
   if (settings?.dynamicallyFetchOllamaModels) {
     const ollamaModels = await getAllOllamaModels(settings.ollamaURL);
     chatModel.push(
@@ -201,11 +200,23 @@ export const getBotByIdSettingsHandler = async (
       user_id: request.user.user_id,
     },
   });
+  if (!bot) {
+    return reply.status(404).send({
+      message: "Bot not found",
+    });
+  }
+  const settings = await getSettings(prisma);
 
+  const not_to_hide_providers = settings?.hideDefaultModels
+    ? ["Local", "local", "ollama", "transformer", "Transformer"]
+    : undefined;
   const models = await prisma.dialoqbaseModels.findMany({
     where: {
       hide: false,
       deleted: false,
+      model_provider: {
+        in: not_to_hide_providers,
+      },
     },
   });
 
@@ -232,11 +243,19 @@ export const getBotByIdSettingsHandler = async (
         disabled: model.model_id === "dialoqbase_eb_dialoqbase-ollama",
       };
     });
-
-  if (!bot) {
-    return reply.status(404).send({
-      message: "Bot not found",
-    });
+  if (settings?.dynamicallyFetchOllamaModels) {
+    const ollamaModels = await getAllOllamaModels(settings.ollamaURL);
+    chatModel.push(
+      ...ollamaModels?.filter((model) => {
+        return (
+          !model?.details?.families?.includes("bert") &&
+          !model?.details?.families?.includes("nomic-bert")
+        );
+      })
+    );
+    embeddingModel.push(
+      ...ollamaModels.map((model) => ({ ...model, disabled: false }))
+    );
   }
   return {
     data: bot,

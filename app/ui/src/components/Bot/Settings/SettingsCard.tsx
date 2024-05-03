@@ -261,9 +261,20 @@ export const SettingsCard: React.FC<BotSettings> = ({
                   />
                 </Form.Item>
 
-                <Form.Item label={"Embedding Method"} name="embedding">
+                <Form.Item
+                  label={"Embedding Method"}
+                  name="embedding"
+                  help={
+                    <>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        If you change the embedding method, make sure to
+                        re-fetch the data source or choose a model with the same
+                        dimensions
+                      </p>
+                    </>
+                  }
+                >
                   <Select
-                    disabled
                     placeholder="Select an embedding method"
                     options={embeddingModel}
                   />
