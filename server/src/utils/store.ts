@@ -94,8 +94,10 @@ export class DialoqbaseVectorStore extends VectorStore {
     k: number,
     filter?: this["FilterType"] | undefined
   ): Promise<[Document<Record<string, any>>, number][]> {
-    console.log(this.botId);
-    const vector = `[${query.join(",")}]`;
+    if (!query) {
+      return [];
+    }
+    const vector = `[${query?.join(",")}]`;
     const bot_id = this.botId;
 
     const botInfo = await prisma.bot.findFirst({
