@@ -164,7 +164,7 @@ need more ? create an issue...
 
 need more ? create an issue...
 
-This project is tested with [BrowserStack](https://www.browserstack.com/)
+This project is tested with BrowserStack.
 
 ## Contributors ✨
 
