@@ -37,7 +37,15 @@ export type SaveModelFromInputedUrlRequest = {
     name: string;
     stream_available: boolean;
     api_key?: string;
-    api_type: "openai" | "ollama" | "replicate";
+    api_type:
+      | "openai"
+      | "ollama"
+      | "replicate"
+      | "openai-api"
+      | "google"
+      | "anthropic"
+      | "groq"
+      ;
   };
 };
 
