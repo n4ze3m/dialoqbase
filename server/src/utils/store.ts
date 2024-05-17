@@ -108,10 +108,13 @@ export class DialoqbaseVectorStore extends VectorStore {
 
     const match_count = botInfo?.noOfDocumentsToRetrieve || k;
 
+    const semanticSearchSimilarityScore =
+      botInfo?.semanticSearchSimilarityScore || "none";
+
     const data = await prisma.$queryRaw`
      SELECT * FROM "similarity_search_v2"(query_embedding := ${vector}::vector, botId := ${bot_id}::text,match_count := ${match_count}::int)
     `;
-
+    
     const result: [Document, number][] = (
       data as SearchEmbeddingsResponse[]
     ).map((resp) => [
@@ -121,7 +124,16 @@ export class DialoqbaseVectorStore extends VectorStore {
       }),
       resp.similarity,
     ]);
-    return result;
+
+    if (semanticSearchSimilarityScore === "none") {
+      return result;
+    }
+
+    const valueInFloat = parseFloat(semanticSearchSimilarityScore);
+    const filteredResult = result.filter(
+      ([, similarity]) => similarity >= valueInFloat
+    );
+    return filteredResult;
   }
 
   _vectorstoreType(): string {
