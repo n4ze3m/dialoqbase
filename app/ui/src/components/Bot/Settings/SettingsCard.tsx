@@ -164,6 +164,8 @@ export const SettingsCard: React.FC<BotSettings> = ({
             use_rag: data.use_rag,
             bot_model_api_key: data.bot_model_api_key,
             noOfDocumentsToRetrieve: data.noOfDocumentsToRetrieve,
+            noOfChatHistoryInContext: data.noOfChatHistoryInContext,
+            semanticSearchSimilarityScore: data.semanticSearchSimilarityScore,
           }}
           form={form}
           requiredMark={false}
@@ -297,6 +299,52 @@ export const SettingsCard: React.FC<BotSettings> = ({
                     placeholder="Enter number of documents to retrieve"
                   />
                 </Form.Item>
+                {/* <Form.Item
+                  name="noOfChatHistoryInContext"
+                  label="Number of chat history in context"
+                  rules={[
+                    {
+                      required: true,
+                      message:
+                        "Please input a number of chat history in context!",
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    min={0}
+                    style={{ width: "100%" }}
+                    placeholder="Enter number of chat history in context"
+                  />
+                </Form.Item> */}
+                <Form.Item
+                  label={"Semantic Search Similarity Score"}
+                  name="semanticSearchSimilarityScore"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input a similarity score!",
+                    },
+                  ]}
+                >
+                  <Select
+                    placeholder="Select a similarity score"
+                    options={[
+                      { label: "Consider all documents", value: "none" },
+                      {
+                        label: "Similarity Score >= 0.2",
+                        value: "0.2",
+                      },
+                      {
+                        label: "Similarity Score >= 0.5",
+                        value: "0.5",
+                      },
+                      {
+                        label: "Similarity Score >= 0.7",
+                        value: "0.7",
+                      },
+                    ]}
+                  />
+                </Form.Item>
 
                 <Form.Item
                   label={"Question Answering Prompt (System Prompt)"}
@@ -310,6 +358,7 @@ export const SettingsCard: React.FC<BotSettings> = ({
                 >
                   <Input.TextArea size="large" rows={5} placeholder="" />
                 </Form.Item>
+
                 <div className="flex flex-row justify-start gap-4">
                   <button
                     type="button"

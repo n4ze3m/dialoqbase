@@ -5,7 +5,7 @@ export type BotSettings = {
   model: string;
   public_id: string;
   temperature: number;
-  embedding: string;
+  embedding: string; 
   noOfDocumentsToRetrieve: number;
   qaPrompt: string;
   questionGeneratorPrompt: string;
@@ -15,6 +15,8 @@ export type BotSettings = {
   bot_protect: boolean;
   use_rag: boolean;
   bot_model_api_key: string;
+  noOfChatHistoryInContext: number;
+  semanticSearchSimilarityScore: string
   },
   chatModel: {
     label: string;

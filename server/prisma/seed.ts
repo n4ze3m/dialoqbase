@@ -347,6 +347,14 @@ const LLMS: {
     stream_available: true,
     model_provider: "Groq",
   },
+  {
+    model_id: "gpt-4o-dbase",
+    name: "GPT-4o (OpenAI)",
+    model_type: "chat",
+    stream_available: true,
+    model_provider: "OpenAI",
+    config: "{}",
+  }
 ];
 
 const EMBEDDING_MODELS: {

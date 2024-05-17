@@ -11,16 +11,22 @@ const providers: Record<any, string> = {
   fireworks: "https://api.fireworks.ai/inference/v1",
   openrouter: "https://openrouter.ai/api/v1",
   together: "https://api.together.xyz",
+  replicate: "https://api.replicate.ai",
 };
 
 const providerName: Record<any, string> = {
   fireworks: "Fireworks AI",
   openrouter: "OpenRouter",
   together: "Together",
+  "openai-api": "OpenAI",
+  google: "Google",
+  anthropic: "Anthropic",
+  replicate: "Replicate",
 };
 
-const thirdPartyProviders = Object.keys(providers);
+const noFetchProviders = ["openai-api", "google", "anthropic", "replicate"];
 
+const thirdPartyProviders = Object.keys(providers);
 export const LLMForm: React.FC<Props> = ({ setOpenAddModel }) => {
   const [fetchUrlForm] = Form.useForm();
   const [form] = Form.useForm();
@@ -116,7 +122,7 @@ export const LLMForm: React.FC<Props> = ({ setOpenAddModel }) => {
           form={fetchUrlForm}
           layout="vertical"
           onFinish={(value) => {
-            if (apiType === "replicate") {
+            if (noFetchProviders.includes(apiType)) {
               saveModel(value);
             } else {
               fetchModel(value);
@@ -173,47 +179,35 @@ export const LLMForm: React.FC<Props> = ({ setOpenAddModel }) => {
             </Form.Item>
           )}
 
-          {apiType === "replicate" && (
+          {noFetchProviders.includes(apiType) && (
             <>
               <Form.Item
-                name="api_key"
-                label="Replicate API Key"
                 rules={[
                   {
                     required: true,
-                    message: "Please your Replicate API Key",
+                    message: "Please enter a model name",
                   },
                 ]}
-              >
-                <Input.Password
-                  size="large"
-                  type="text"
-                  placeholder="Enter API Key"
-                />
-              </Form.Item>
-
-              <Form.Item
-                name="model_id"
-                label="Model"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter a replicate model id",
-                  },
-                ]}
+                name="name"
+                label="Model Name"
               >
                 <Input
                   size="large"
-                  placeholder="mistralai/mixtral-8x7b-instruct-v0.1"
+                  placeholder="Enter a model name"
+                  autoComplete="off"
                 />
               </Form.Item>
-
               <Form.Item
-                name="stream_available"
-                label="Is Streaming Available?"
-                valuePropName="checked"
+                name="model_id"
+                label="Model ID"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter a model id",
+                  },
+                ]}
               >
-                <Switch />
+                <Input size="large" placeholder="Enter a model id" />
               </Form.Item>
             </>
           )}
@@ -226,7 +220,7 @@ export const LLMForm: React.FC<Props> = ({ setOpenAddModel }) => {
                 rules={[
                   {
                     required: true,
-                    message: `Please your ${providerName[apiType]} API Key`,
+                    message: `Please enter ${providerName[apiType]} API Key`,
                   },
                 ]}
               >
@@ -268,6 +262,18 @@ export const LLMForm: React.FC<Props> = ({ setOpenAddModel }) => {
                   label: "OpenRouter",
                   value: "openrouter",
                 },
+                {
+                  label: "OpenAI",
+                  value: "openai-api",
+                },
+                {
+                  label: "Google",
+                  value: "google",
+                },
+                {
+                  label: "Anthropic",
+                  value: "anthropic",
+                },
               ]}
             />
           </Form.Item>
@@ -277,7 +283,7 @@ export const LLMForm: React.FC<Props> = ({ setOpenAddModel }) => {
             disabled={isSaveModel}
             className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
-            {apiType === "replicate"
+            {noFetchProviders.includes(apiType)
               ? !isSaveLocalModel
                 ? "Save Model"
                 : "Saving Model..."

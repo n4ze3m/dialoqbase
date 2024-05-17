@@ -7,7 +7,6 @@ import { OpenAI } from "@langchain/openai";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { ChatOllama } from "@langchain/community/chat_models/ollama";
 import { Replicate } from "@langchain/community/llms/replicate";
-import { ChatGroq } from "@langchain/groq";
 
 export const chatModelProvider = (
   provider: string,
@@ -100,10 +99,14 @@ export const chatModelProvider = (
         ...otherFields,
       });
     case "groq":
-      return new ChatGroq({
-        model: modelName,
-        temperature: temperature,
+      return new ChatOpenAI({
+        modelName: modelName,
+        openAIApiKey: process.env.GROQ_API_KEY! || "",
         ...otherFields,
+        configuration: {
+          baseURL: "https://api.groq.com/openai/v1",
+          apiKey: process.env.GROQ_API_KEY! || "",
+        },
       });
     default:
       console.log("using default");
