@@ -9,7 +9,7 @@ export const crawlQueueController = async (source: QSource) => {
   let maxLinks = source.maxLinks || 1;
   const data = await crawl(source.content!, maxDepth, maxLinks);
   const links = Array.from(data?.links || []);
-  
+
   for (const link of links) {
     const newSource = await prisma.botSource.create({
       data: {

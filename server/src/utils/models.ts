@@ -33,7 +33,7 @@ export const chatModelProvider = (
         modelName: modelName,
         temperature: temperature,
         ...otherFields,
-      });
+      }) as any;
     case "google-bison":
       return new ChatGooglePaLM({
         temperature: temperature,

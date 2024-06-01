@@ -707,7 +707,7 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@langchain/anthropic@^0.1.4":
+"@langchain/anthropic@0.1.4":
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/@langchain/anthropic/-/anthropic-0.1.4.tgz#49c2e4625860baea0b9b5035c4c7e93a81bed704"
   integrity sha512-4i25R0dHx+8N7ofI0NGE02LKG9UkhRiAjFS5iNbRcByCSIoovAuTBvdEqpwbDnqn+NkORnP/Wyw3tqFeMtMgYA==
@@ -2997,9 +2997,9 @@ fast-uri@^2.0.0, fast-uri@^2.1.0:
   integrity sha512-eel5UKGn369gGEWOqBShmFJWfq/xSJvsgDzgLYC845GneayWvXBf0lJCBn5qTABfewy1ZDPoaR5OZCP+kssfuw==
 
 fast-xml-parser@^4.3.5:
-  version "4.3.5"
-  resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-4.3.5.tgz#e2f2a2ae8377e9c3dc321b151e58f420ca7e5ccc"
-  integrity sha512-sWvP1Pl8H03B8oFJpFR3HE31HUfwtX7Rlf9BNsvdpujD4n7WMhfmu8h9wOV2u+c1k0ZilTADhPqypzx2J690ZQ==
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-4.4.0.tgz#341cc98de71e9ba9e651a67f41f1752d1441a501"
+  integrity sha512-kLY3jFlwIYwBNDojclKsNAC12sfD6NwW74QB2CoNGPvtVxjliYehVunB3HYyNi+n4Tt1dAcgwYvmKF/Z18flqg==
   dependencies:
     strnum "^1.0.5"
 

@@ -41,7 +41,7 @@
     "@google-ai/generativelanguage": "^2.0.0",
     "@grammyjs/files": "^1.0.4",
     "@huggingface/inference": "1",
-    "@langchain/anthropic": "^0.1.4",
+    "@langchain/anthropic": "0.1.4",
     "@langchain/cohere": "^0.0.6",
     "@langchain/community": "^0.0.35",
     "@langchain/google-genai": "^0.0.16",
