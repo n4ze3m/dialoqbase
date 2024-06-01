@@ -1,85 +1,82 @@
 import axios from "axios";
 import { load } from "cheerio";
 
-const visitedLinks: Set<string> = new Set();
-
-export const crawl = async (
-  link: string,
-  maxDepth = 2,
-  currentDepth = 0,
-  maxLinks = 20,
-): Promise<Set<string>> => {
-  const parentUrl = new URL(link);
-
-  if (currentDepth > maxDepth || visitedLinks.size >= maxLinks) {
-    return new Set();
-  }
-
-  if (visitedLinks.has(link)) {
-    return new Set();
-  }
-
-  visitedLinks.add(link);
-
-  try {
-    const response = await axios.get(link, {
-      headers: {
-        Accept: "text/html",
-      },
-    });
-
-    const contentType = response.headers["content-type"];
-
-    if (!contentType.includes("text/html")) {
-      console.log(`Skipping ${link} (content type: ${contentType})`);
-      return new Set();
-    }
-
-    const $ = load(response.data);
-    const links = $("a");
-    const fetchedLinks: Set<string> = new Set();
-
-    for (let i = 0; i < links.length; i++) {
-      const href = $(links[i]).attr("href");
-
-      if (!href) {
-        continue;
-      }
-
-      let absolute: string;
-      if (href.startsWith("/")) {
-        absolute = new URL(href, parentUrl.origin).href;
-      } else if (!isWebUrl(href)) {
-        absolute = new URL(href, parentUrl.origin).href;
-      } else {
-        absolute = href;
-      }
-
-      if (new URL(absolute).host !== parentUrl.host) {
-        continue;
-      }
-
-      const childLinks = await crawl(
-        absolute,
-        maxDepth,
-        currentDepth + 1,
-        maxLinks,
-      );
-      childLinks.forEach((childLink) => fetchedLinks.add(childLink));
-    }
-    fetchedLinks.add(link);
-    return fetchedLinks;
-  } catch (error: any) {
-    console.log(`Error crawling ${link}: ${error?.message}`);
-    return new Set();
-  }
+type CrawlResult = {
+  links: Set<string>;
+  errors: Set<string>;
 };
 
-function isWebUrl(url: string): boolean {
-  try {
-    new URL(url);
-    return true;
-  } catch (error) {
-    return false;
+const visitedLinks: Set<string> = new Set();
+const errorLinks: Set<string> = new Set();
+const queuedLinks: Set<string> = new Set();
+
+export const crawl = async (
+  startUrl: string,
+  maxDepth = 2,
+  maxLinks = 20
+): Promise<CrawlResult> => {
+  const queue: { url: string; depth: number }[] = [{ url: startUrl, depth: 0 }];
+  const fetchedLinks: Set<string> = new Set();
+
+  while (queue.length > 0 && visitedLinks.size < maxLinks) {
+    const batch = queue.splice(0, Math.min(queue.length, maxLinks - visitedLinks.size));
+    
+    await Promise.all(
+      batch.map(async ({ url, depth }) => {
+        if (visitedLinks.has(url) || depth > maxDepth) {
+          return;
+        }
+
+        try {
+          const response = await axios.get(url, {
+            headers: { Accept: "text/html" },
+          });
+
+          const contentType = response.headers['content-type'];
+          if (!contentType || !contentType.includes("text/html")) {
+            return;
+          }
+
+          const $ = load(response.data);
+
+          visitedLinks.add(url);
+          fetchedLinks.add(url);
+
+          $("a").each((_, element) => {
+            const href = $(element).attr("href");
+            if (!href) {
+              return;
+            }
+
+            const absoluteUrl = normalizeUrl(new URL(href, url).href);
+            if (isSameDomain(absoluteUrl, startUrl) && !visitedLinks.has(absoluteUrl) && !queuedLinks.has(absoluteUrl)) {
+              queue.push({ url: absoluteUrl, depth: depth + 1 });
+              queuedLinks.add(absoluteUrl);
+            }
+          });
+        } catch (error: any) {
+          console.error(`Failed to fetch ${url}:`, error?.message || error);
+          errorLinks.add(url);
+        }
+      })
+    );
   }
-}
+
+  return { links: fetchedLinks, errors: errorLinks };
+};
+
+const isSameDomain = (url1: string, url2: string): boolean => {
+  const { hostname: host1 } = new URL(url1);
+  const { hostname: host2 } = new URL(url2);
+  return host1 === host2;
+};
+
+const normalizeUrl = (url: string): string => {
+  try {
+    const urlObj = new URL(url);
+    urlObj.hash = '';
+    return urlObj.href;
+  } catch (error) {
+    return url;
+  }
+};
