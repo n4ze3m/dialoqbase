@@ -33,7 +33,7 @@ export const chatModelProvider = (
         modelName: modelName,
         temperature: temperature,
         ...otherFields,
-      });
+      }) as any;
     case "google-bison":
       return new ChatGooglePaLM({
         temperature: temperature,
@@ -84,7 +84,7 @@ export const chatModelProvider = (
         maxOutputTokens: 2048,
         apiKey: process.env.GOOGLE_API_KEY,
         ...otherFields,
-      });
+      }) as any
     case "ollama":
       return new ChatOllama({
         baseUrl: otherFields.baseURL,

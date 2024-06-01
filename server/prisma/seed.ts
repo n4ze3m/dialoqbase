@@ -354,6 +354,22 @@ const LLMS: {
     stream_available: true,
     model_provider: "OpenAI",
     config: "{}",
+  },
+  {
+    model_id: "gemini-1.5-flash-dbase",
+    name: "Gemini 1.5 Flash (Google)",
+    model_type: "chat",
+    stream_available: true,
+    model_provider: "Google",
+    config: "{}",
+  },
+  {
+    model_id: "gemini-1.5-pro-dbase",
+    name: "Gemini 1.5 Pro (Google)",
+    model_type: "chat",
+    stream_available: true,
+    model_provider: "Google",
+    config: "{}",
   }
 ];
 

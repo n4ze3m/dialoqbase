@@ -1,4 +1,5 @@
 import { BaseLanguageModel } from "@langchain/core/language_models/base";
+import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { Document } from "@langchain/core/documents";
 import {
   ChatPromptTemplate,
@@ -14,6 +15,7 @@ import {
   RunnableMap,
   RunnableSequence,
 } from "@langchain/core/runnables";
+
 type RetrievalChainInput = {
   chat_history: string;
   question: string;
@@ -107,8 +109,8 @@ export const createChain = ({
   retriever,
   response_template,
 }: {
-  llm: BaseLanguageModel;
-  question_llm: BaseLanguageModel;
+  llm: BaseLanguageModel<any> | BaseChatModel<any> ;
+  question_llm: BaseLanguageModel<any> | BaseChatModel<any>;
   retriever: Runnable;
   question_template: string;
   response_template: string;

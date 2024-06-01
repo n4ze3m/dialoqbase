@@ -180,6 +180,9 @@ export default function App() {
       theme={{
         algorithm:
           mode === "dark" ? theme.darkAlgorithm : theme.defaultAlgorithm,
+        token: {
+          fontFamily: "Inter",
+        },
       }}
     >
       <StyleProvider hashPriority="high">
