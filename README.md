@@ -29,6 +29,10 @@ Want to check more demo videos? Follow me on [Twitter](https://twitter.com/n4ze3
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/TXdjD7?referralCode=olbszX)
 
+### RepoCloud (One-click deployment)
+
+[![Deploy on RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/?app_id=292)
+
 
 ## Installation 🛠️
 
