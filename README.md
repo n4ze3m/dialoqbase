@@ -113,7 +113,7 @@ Dialoqbase is a side project and is not ready for production. It is still in the
 | Loader |Status |
 | ----------- |  ------ |
 | Website | ✅ |
-| Plane text |  ✅ |
+| Plain text |  ✅ |
 | PDF |  ✅ |
 | Web crawler |  ✅ |
 | Microsoft Word documents |  ✅ |
