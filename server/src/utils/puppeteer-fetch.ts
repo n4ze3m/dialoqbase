@@ -30,7 +30,7 @@ let browser: Browser;
 
 
 const init = async () => {
-    if (!browser) {
+    if (!browser || !browser.connected) {
         browser = await puppeteer.launch({
             headless: true,
             args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -52,10 +52,10 @@ const puppeteerFetch = async (url: string, useReadability = false) => {
                   ${executor}
                   return executor();
                 }())
-              `) as { content?: string }
+              `) as { content?: string, title?: string };
             if (resultArticle?.content) {
                 await page.close();
-                return resultArticle.content;
+                return `<!DOCTYPE html><html><head><title>${resultArticle.title}</title></head><body>${resultArticle.content}</body></html>`
             }
             console.error(`[puppeteerFetch] Error fetching ${url}: Readability failed`);
         }
@@ -65,6 +65,16 @@ const puppeteerFetch = async (url: string, useReadability = false) => {
     } catch (error) {
         console.error(`[puppeteerFetch] Error fetching ${url}: ${error.message}`);
         return '';
+    }
+}
+
+export const closePuppeteer = async () => {
+    try {
+        if (browser.connected) {
+            await browser.close();
+        }
+    } catch (error) {
+        console.error(`[closePuppeteer] Error closing browser: ${error.message}`);
     }
 }
 

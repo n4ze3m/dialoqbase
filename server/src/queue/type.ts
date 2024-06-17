@@ -6,4 +6,6 @@ export interface QSource extends BotSource {
   maxLinks?: number;
   chunkSize: number;
   chunkOverlap: number;
+  usePuppeteerFetch?: boolean;
+  doNotClosePuppeteer?: boolean;
 }

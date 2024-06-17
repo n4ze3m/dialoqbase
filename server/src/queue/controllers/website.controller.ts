@@ -73,6 +73,8 @@ export const websiteQueueController = async (
     } else {
       const loader = new DialoqbaseWebLoader({
         url: source.content!,
+        usePuppeteerFetch: source.usePuppeteerFetch,
+        doNotClosePuppeteer: source.doNotClosePuppeteer,
       });
       docs = await loader.load();
     }

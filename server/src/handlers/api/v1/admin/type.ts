@@ -3,6 +3,7 @@ export type UpdateDialoqbaseSettingsRequest = {
     noOfBotsPerUser: number;
     allowUserToCreateBots: boolean;
     allowUserToRegister: boolean;
+    usePuppeteerFetch: boolean;
   };
 };
 

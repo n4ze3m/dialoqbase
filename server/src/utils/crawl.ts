@@ -1,5 +1,6 @@
 import axios from "axios";
-import { load } from "cheerio";
+import { CheerioAPI, load } from "cheerio";
+import puppeteerFetch from "./puppeteer-fetch";
 
 type CrawlResult = {
   links: Set<string>;
@@ -13,7 +14,8 @@ const queuedLinks: Set<string> = new Set();
 export const crawl = async (
   startUrl: string,
   maxDepth = 2,
-  maxLinks = 20
+  maxLinks = 20,
+  usePuppeteerFetch = false
 ): Promise<CrawlResult> => {
   const queue: { url: string; depth: number }[] = [{ url: startUrl, depth: 0 }];
   const fetchedLinks: Set<string> = new Set();
@@ -28,20 +30,27 @@ export const crawl = async (
         }
 
         try {
-          const response = await axios.get(url, {
-            headers: {
-              Accept: "text/html",
-              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
-            },
-          });
 
-          const contentType = response.headers['content-type'];
-          if (!contentType || !contentType.includes("text/html")) {
-            return;
+          let $: CheerioAPI;
+
+          if (usePuppeteerFetch) {
+            const response = await puppeteerFetch(url);
+            $ = load(response);
+          } else {
+            const response = await axios.get(url, {
+              headers: {
+                Accept: "text/html",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+              },
+            });
+
+            const contentType = response.headers['content-type'];
+            if (!contentType || !contentType.includes("text/html")) {
+              return;
+            }
+
+            $ = load(response.data);
           }
-
-          const $ = load(response.data);
-
           visitedLinks.add(url);
           fetchedLinks.add(url);
 

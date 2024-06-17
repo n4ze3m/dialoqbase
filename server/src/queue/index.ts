@@ -34,9 +34,10 @@ export default async function queueHandler(job: SandboxedJob) {
             status: "PROCESSING",
           },
         });
-        const { chunkOverlap, chunkSize } = await getRagSettings(prisma);
+        const { chunkOverlap, chunkSize , usePuppeteerFetch} = await getRagSettings(prisma);
         source.chunkOverlap = chunkOverlap;
         source.chunkSize = chunkSize;
+        source.usePuppeteerFetch = usePuppeteerFetch;
         switch (source.type.toLowerCase()) {
           case "website":
             await websiteQueueController(source, prisma);
