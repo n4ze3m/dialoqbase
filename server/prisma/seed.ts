@@ -567,7 +567,7 @@ const updateGeminiStreamingToTrue = async () => {
 const main = async () => {
   await newModels();
   await removeTensorflowSupport();
-  await replaceOldEmbeddings();
+  // await replaceOldEmbeddings();
   await updateGeminiStreamingToTrue();
 };
 

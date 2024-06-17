@@ -1,6 +1,7 @@
 import { BaseDocumentLoader } from "langchain/document_loaders/base";
 import { Document } from "langchain/document";
 import { websiteParser } from "../utils/website-parser";
+// import puppeteerFetch from "../utils/puppeteer-fetch";
 
 export interface WebLoaderParams {
   url: string;
@@ -8,8 +9,7 @@ export interface WebLoaderParams {
 
 export class DialoqbaseWebLoader
   extends BaseDocumentLoader
-  implements WebLoaderParams
-{
+  implements WebLoaderParams {
   url: string;
 
   constructor({ url }: WebLoaderParams) {
@@ -25,6 +25,7 @@ export class DialoqbaseWebLoader
   async load(): Promise<Document<Record<string, any>>[]> {
     const html = await this._fetchHTML();
     const text = websiteParser(html);
+    console.log(text)
     const metadata = { source: this.url };
     return [new Document({ pageContent: text, metadata })];
   }

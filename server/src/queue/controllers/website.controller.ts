@@ -14,11 +14,16 @@ export const websiteQueueController = async (
   source: QSource,
   prisma: PrismaClient
 ) => {
-  const response = await axios.get(source.content!);
 
-  const type = response.headers["content-type"];
+  let type = "text/html";
+  
+  try {
+    const response = await axios.get(source.content!);
+    type = response.headers["content-type"];
+  } catch (error) {
+    console.error(`[websiteQueueController] Error fetching ${source.content}`);
+  }
 
-  console.log("website type is", type);
 
   if (type.includes("application/pdf")) {
     const response = await axios.get(source.content!, {

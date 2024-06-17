@@ -32,12 +32,12 @@ RUN yarn config set network-timeout 1200000
 
 RUN apt update && apt -y install --no-install-recommends ca-certificates git git-lfs openssh-client curl jq cmake sqlite3 openssl psmisc python3
 
-RUN apt-get update && apt-get install gnupg wget -y && \
-  wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg && \
-  sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
-  apt-get update && \
-  apt-get install google-chrome-stable -y --no-install-recommends && \
-  rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install gnupg wget -y && \
+#   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg && \
+#   sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
+#   apt-get update && \
+#   apt-get install google-chrome-stable -y --no-install-recommends && \
+#   rm -rf /var/lib/apt/lists/*
 
 RUN apt -y install g++ make
 # RUN npm install -g node-gyp
@@ -59,6 +59,6 @@ RUN yarn install --production  --frozen-lockfile
 
 ENV NODE_ENV=production
 
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
+# ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 
 CMD ["yarn", "start"]
