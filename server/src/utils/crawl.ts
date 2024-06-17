@@ -20,7 +20,7 @@ export const crawl = async (
 
   while (queue.length > 0 && visitedLinks.size < maxLinks) {
     const batch = queue.splice(0, Math.min(queue.length, maxLinks - visitedLinks.size));
-    
+
     await Promise.all(
       batch.map(async ({ url, depth }) => {
         if (visitedLinks.has(url) || depth > maxDepth) {
@@ -29,7 +29,10 @@ export const crawl = async (
 
         try {
           const response = await axios.get(url, {
-            headers: { Accept: "text/html" },
+            headers: {
+              Accept: "text/html",
+              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+            },
           });
 
           const contentType = response.headers['content-type'];
