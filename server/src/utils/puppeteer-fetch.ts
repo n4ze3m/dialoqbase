@@ -2,7 +2,7 @@ import type { Browser } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 import puppeteerBlockResources from 'puppeteer-extra-plugin-block-resources';
 import puppeteerPageProxy from 'puppeteer-extra-plugin-page-proxy';
-import puppeteerStealth from 'puppeteer-extra-plugin-stealth'
+import puppeteerStealth from 'puppeteer-extra-plugin-stealth';
 import * as fs from 'fs';
 
 const readabilityJsStr = fs.readFileSync(
@@ -15,9 +15,8 @@ function executor() {
     return new Readability({}, document).parse();
 }
 
+// Use puppeteer plugins
 puppeteer.use(puppeteerStealth());
-
-
 puppeteer.use(puppeteerBlockResources({
     blockedTypes: new Set(['media']),
     interceptResolutionPriority: 1,
@@ -27,7 +26,6 @@ puppeteer.use(puppeteerPageProxy({
 }));
 
 let browser: Browser;
-
 
 const init = async () => {
     if (!browser || !browser.connected) {
@@ -39,45 +37,48 @@ const init = async () => {
     }
 }
 
-
 const puppeteerFetch = async (url: string, useReadability = false) => {
+    await init();
+    let page = null;
     try {
-        await init();
-        const page = await browser.newPage();
+        page = await browser.newPage();
         await page.goto(url, { waitUntil: 'networkidle2' });
+        
         if (useReadability) {
             const resultArticle = await page.evaluate(`
                 (function(){
-                  ${readabilityJsStr}
-                  ${executor}
-                  return executor();
+                    ${readabilityJsStr}
+                    ${executor}
+                    return executor();
                 }())
-              `) as { content?: string, title?: string };
+            `) as { content?: string, title?: string };
+
+            await page.close();
+
             if (resultArticle?.content) {
-                await page.close();
-                return `<!DOCTYPE html><html><head><title>${resultArticle.title}</title></head><body>${resultArticle.content}</body></html>`
+                return `<!DOCTYPE html><html><head><title>${resultArticle.title}</title></head><body>${resultArticle.content}</body></html>`;
             }
             console.error(`[puppeteerFetch] Error fetching ${url}: Readability failed`);
         }
+
         const html = await page.content();
         await page.close();
         return html;
     } catch (error) {
+        if (page) await page.close();
         console.error(`[puppeteerFetch] Error fetching ${url}: ${error.message}`);
         return '';
     }
 }
 
 export const closePuppeteer = async () => {
-    try {
-        if (browser.connected) {
+    if (browser && browser.connected) {
+        try {
             await browser.close();
+        } catch (error) {
+            console.error(`[closePuppeteer] Error closing browser: ${error.message}`);
         }
-    } catch (error) {
-        console.error(`[closePuppeteer] Error closing browser: ${error.message}`);
     }
 }
-
-
 
 export default puppeteerFetch;

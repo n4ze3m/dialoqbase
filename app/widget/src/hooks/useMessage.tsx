@@ -15,8 +15,6 @@ export type BotResponse = {
 };
 
 const parsesStreamingResponse = (text: string) => {
-  // event: chunk or result\ndata:  been or object\n\n
-  //   console.log(`text: ${text}`);
   const REGEX = /event: (.+)\ndata: (.+)/g;
   const matches = text.matchAll(REGEX);
   const result = [];
@@ -149,18 +147,20 @@ export const useMessage = () => {
           if (type === "chunk") {
             const jsonMessage = JSON.parse(message);
             if (count === 0) {
-              newMessage[appendingIndex].message = jsonMessage.message;
+              newMessage[appendingIndex].message = jsonMessage.message + "▋";
               setMessages(newMessage);
               localStorage.setItem("DS_MESSAGE", JSON.stringify(newMessage));
             } else {
-              newMessage[appendingIndex].message += jsonMessage.message;
+              newMessage[appendingIndex].message =
+                newMessage[appendingIndex].message.slice(0, -1) +
+                jsonMessage.message +
+                "▋";
               setMessages(newMessage);
               localStorage.setItem("DS_MESSAGE", JSON.stringify(newMessage));
             }
             count++;
           } else if (type === "result") {
             const responseData = JSON.parse(message) as BotResponse;
-            console.log(responseData);
             newMessage[appendingIndex].message = responseData.bot.text;
             newMessage[appendingIndex].sources =
               responseData.bot.sourceDocuments;
