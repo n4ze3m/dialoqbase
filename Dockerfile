@@ -24,7 +24,8 @@ WORKDIR /app
 # Set environment variables
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 ENV NODE_ENV=production
-
+# Install dependencies
+RUN apt update && apt install -y wget gnupg dirmngr unzip
 # Install dependencies and google chrome based on architecture
 RUN apt update && apt install -y wget gnupg dirmngr curl && \
     ARCH=$(dpkg --print-architecture) && \
