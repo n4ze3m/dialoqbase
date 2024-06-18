@@ -5,11 +5,13 @@ export const getRagSettings = async (prisma: PrismaClient) => {
     select: {
       defaultChunkSize: true,
       defaultChunkOverlap: true,
+      usePuppeteerFetch: true,
     },
   });
 
   return {
     chunkSize: data?.defaultChunkSize || 1000,
     chunkOverlap: data?.defaultChunkOverlap || 200,
+    usePuppeteerFetch: data?.usePuppeteerFetch
   };
 };

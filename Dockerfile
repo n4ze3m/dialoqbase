@@ -25,15 +25,28 @@ RUN pnpm install
 RUN pnpm build
 
 FROM node:18-slim
+
 WORKDIR /app
+
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+
+RUN apt-get update && apt-get install gnupg wget -y && \
+  wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg && \
+  sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
+  apt-get update && \
+  apt-get install google-chrome-stable -y --no-install-recommends && \
+  rm -rf /var/lib/apt/lists/*
 
 RUN yarn config set registry https://registry.npmjs.org/
 RUN yarn config set network-timeout 1200000
 
 RUN apt update && apt -y install --no-install-recommends ca-certificates git git-lfs openssh-client curl jq cmake sqlite3 openssl psmisc python3
+
+
 RUN apt -y install g++ make
-# RUN npm install -g node-gyp
+
 RUN apt-get clean autoclean && apt-get autoremove --yes && rm -rf /var/lib/{apt,dpkg,cache,log}/
+
 RUN npm --no-update-notifier --no-fund --global install pnpm
 # Copy API
 COPY --from=server /app/dist/ .

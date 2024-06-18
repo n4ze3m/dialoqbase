@@ -488,70 +488,70 @@ const removeTensorflowSupport = async () => {
   });
 };
 
-const replaceOldEmbeddings = async () => {
-  await prisma.bot.updateMany({
-    where: {
-      embedding: "openai",
-    },
-    data: {
-      embedding: "dialoqbase_eb_text-embedding-ada-002",
-    },
-  });
+// const replaceOldEmbeddings = async () => {
+//   await prisma.bot.updateMany({
+//     where: {
+//       embedding: "openai",
+//     },
+//     data: {
+//       embedding: "dialoqbase_eb_text-embedding-ada-002",
+//     },
+//   });
 
-  await prisma.bot.updateMany({
-    where: {
-      embedding: "cohere",
-    },
-    data: {
-      embedding: "dialoqbase_eb_small",
-    },
-  });
+//   await prisma.bot.updateMany({
+//     where: {
+//       embedding: "cohere",
+//     },
+//     data: {
+//       embedding: "dialoqbase_eb_small",
+//     },
+//   });
 
-  await prisma.bot.updateMany({
-    where: {
-      embedding: "transformer",
-    },
-    data: {
-      embedding: "dialoqbase_eb_Xenova/all-MiniLM-L6-v2",
-    },
-  });
+//   await prisma.bot.updateMany({
+//     where: {
+//       embedding: "transformer",
+//     },
+//     data: {
+//       embedding: "dialoqbase_eb_Xenova/all-MiniLM-L6-v2",
+//     },
+//   });
 
-  await prisma.bot.updateMany({
-    where: {
-      embedding: "google-gecko",
-    },
-    data: {
-      embedding: "dialoqbase_eb_models/embedding-gecko-001",
-    },
-  });
+//   await prisma.bot.updateMany({
+//     where: {
+//       embedding: "google-gecko",
+//     },
+//     data: {
+//       embedding: "dialoqbase_eb_models/embedding-gecko-001",
+//     },
+//   });
 
-  await prisma.bot.updateMany({
-    where: {
-      embedding: "jina-api",
-    },
-    data: {
-      embedding: "dialoqbase_eb_jina-embeddings-v2-base-en",
-    },
-  });
+//   await prisma.bot.updateMany({
+//     where: {
+//       embedding: "jina-api",
+//     },
+//     data: {
+//       embedding: "dialoqbase_eb_jina-embeddings-v2-base-en",
+//     },
+//   });
 
-  await prisma.bot.updateMany({
-    where: {
-      embedding: "jina",
-    },
-    data: {
-      embedding: "dialoqbase_eb_Xenova/jina-embeddings-v2-small-en",
-    },
-  });
+//   await prisma.bot.updateMany({
+//     where: {
+//       embedding: "jina",
+//     },
+//     data: {
+//       embedding: "dialoqbase_eb_Xenova/jina-embeddings-v2-small-en",
+//     },
+//   });
 
-  await prisma.bot.updateMany({
-    where: {
-      embedding: "google",
-    },
-    data: {
-      embedding: "dialoqbase_eb_embedding-001",
-    },
-  });
-};
+//   await prisma.bot.updateMany({
+//     where: {
+//       embedding: "google",
+//     },
+//     data: {
+//       embedding: "dialoqbase_eb_embedding-001",
+//     },
+//   });
+// };
 
 const updateGeminiStreamingToTrue = async () => {
   await prisma.dialoqbaseModels.update({
@@ -567,7 +567,7 @@ const updateGeminiStreamingToTrue = async () => {
 const main = async () => {
   await newModels();
   await removeTensorflowSupport();
-  await replaceOldEmbeddings();
+  // await replaceOldEmbeddings();
   await updateGeminiStreamingToTrue();
 };
 

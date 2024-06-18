@@ -2,12 +2,13 @@ import { PrismaClient } from "@prisma/client";
 import { QSource } from "../type";
 import { crawl } from "../../utils/crawl";
 import { websiteQueueController } from "./website.controller";
+import { closePuppeteer } from "../../utils/puppeteer-fetch";
 const prisma = new PrismaClient();
 
 export const crawlQueueController = async (source: QSource) => {
   let maxDepth = source.maxDepth || 1;
   let maxLinks = source.maxLinks || 1;
-  const data = await crawl(source.content!, maxDepth, maxLinks);
+  const data = await crawl(source.content!, maxDepth, maxLinks, source.usePuppeteerFetch);
   const links = Array.from(data?.links || []);
 
   for (const link of links) {
@@ -27,6 +28,8 @@ export const crawlQueueController = async (source: QSource) => {
         embedding: source.embedding,
         chunkOverlap: source.chunkOverlap,
         chunkSize: source.chunkSize,
+        usePuppeteerFetch: source.usePuppeteerFetch,
+        doNotClosePuppeteer: true,
       },
       prisma
     );
@@ -41,4 +44,6 @@ export const crawlQueueController = async (source: QSource) => {
       },
     });
   }
+
+  await closePuppeteer()
 };

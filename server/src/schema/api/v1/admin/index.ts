@@ -22,6 +22,7 @@ export const dialoqbaseSettingsSchema: FastifySchema = {
       dynamicallyFetchOllamaModels: { type: "boolean" },
       hideDefaultModels: { type: "boolean" },
       ollamaURL: { type: "string" },
+      usePuppeteerFetch: { type: "boolean" },
     },
   },
 };
@@ -47,6 +48,7 @@ export const updateDialoqbaseSettingsSchema: FastifySchema = {
       defaultEmbeddingModel: { type: "string" },
       hideDefaultModels: { type: "boolean" },
       ollamaURL: { type: "string" },
+      usePuppeteerFetch: { type: "boolean" },
     },
   },
   response: {

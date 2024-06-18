@@ -154,6 +154,13 @@ export default function SettingsApplicationRoot() {
                   >
                     <Switch />
                   </Form.Item>
+                  <Form.Item
+                    label="Enhanced Website loader"
+                    name="usePuppeteerFetch"
+                    valuePropName="checked"
+                  >
+                    <Switch />
+                  </Form.Item>
                 </div>
                 <div className="bg-gray-50 border-x border-b rounded-b-md rounded-x-md px-4 py-3 text-right sm:px-6 dark:bg-[#141414] dark:border-gray-600">
                   <button
