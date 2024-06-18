@@ -30,12 +30,23 @@ WORKDIR /app
 
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 
-RUN apt-get update && apt-get install gnupg wget -y && \
+RUN ARCH=$(dpkg --print-architecture) && \
+  if [ "$ARCH" = "amd64" ]; then \
   wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg && \
   sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
   apt-get update && \
-  apt-get install google-chrome-stable -y --no-install-recommends && \
+  apt-get install google-chrome-stable -y --no-install-recommends; \
+  elif [ "$ARCH" = "arm64" ]; then \
+  wget -q -O - 'https://playwright.azureedge.net/builds/chromium/1088/chromium-linux-arm64.zip' && \
+  unzip chromium-linux-arm64.zip && \
+  mv chrome-linux /usr/bin/chromium-browser && \
+  ln -s /usr/bin/chromium-browser /usr/bin/google-chrome && \
+  rm chromium-linux-arm64.zip; \
+  else \
+  echo "Unsupported architecture: $ARCH" && exit 1; \
+  fi && \
   rm -rf /var/lib/apt/lists/*
+
 
 RUN yarn config set registry https://registry.npmjs.org/
 RUN yarn config set network-timeout 1200000
