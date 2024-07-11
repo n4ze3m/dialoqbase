@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api";
 import React from "react";
 import { SkeletonLoading } from "../../components/Common/SkeletonLoading";
-import { SettingsCard } from "../../components/Bot/Settings/SettingsCard";
+import { SettingsBody } from "../../components/Bot/Settings/SettingsBody";
 import { BotSettings } from "../../@types/bot";
 
 export default function BotSettingsRoot() {
@@ -30,7 +30,7 @@ export default function BotSettingsRoot() {
   return (
     <div className="mx-auto my-3 w-full max-w-7xl">
       {status === "loading" && <SkeletonLoading />}
-      {status === "success" && <SettingsCard {...data} />}
+      {status === "success" && <SettingsBody {...data} />}
     </div>
   );
 }

@@ -18,7 +18,7 @@ import {
 } from "../../../utils/prompts";
 import { BotSettings } from "../../../@types/bot";
 
-export const SettingsCard: React.FC<BotSettings> = ({
+export const SettingsBody: React.FC<BotSettings> = ({
   data,
   chatModel,
   embeddingModel,
