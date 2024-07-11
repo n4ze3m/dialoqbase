@@ -16,9 +16,11 @@ export const githubQueueController = async (
   const loader = new DialoqbaseGithub({
     branch: options.branch,
     url: source.content!,
-    is_private: options.is_private,
+    isPrivate: options.is_private,
   });
   const docs = await loader.load();
+
+  console.log("github", docs.length)
 
   const textSplitter = new RecursiveCharacterTextSplitter({
     chunkSize: source.chunkSize,

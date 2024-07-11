@@ -1,22 +1,25 @@
 import { BaseDocumentLoader } from "langchain/document_loaders/base";
 import { Document } from "langchain/document";
-import { execSync } from "node:child_process";
+import { exec } from "node:child_process";
 import * as fs from "fs/promises";
+import * as path from "path";
 
 export interface GithubRepoLoaderParams {
   branch: string;
   url: string;
-  is_private: boolean;
+  isPrivate: boolean;
 }
 
-export class DialoqbaseGithub extends BaseDocumentLoader
-  implements GithubRepoLoaderParams {
+export class DialoqbaseGithub
+  extends BaseDocumentLoader
+  implements GithubRepoLoaderParams
+{
   branch: string;
   url: string;
-  is_private: boolean;
-  output_folder = "./uploads/";
-  ignore_folders = ["node_modules", ".git", ".github"];
-  ignore_files = [
+  isPrivate: boolean;
+  private readonly outputFolder = "./uploads/";
+  private readonly ignoreFolders = new Set(["node_modules", ".git", ".github"]);
+  private readonly ignoreFiles = new Set([
     ".gitignore",
     ".gitattributes",
     "package-lock.json",
@@ -30,108 +33,105 @@ export class DialoqbaseGithub extends BaseDocumentLoader
     ".env",
     ".env.local",
     ".eslintignore",
-  ];
+  ]);
 
-  constructor(
-    {
-      branch,
-      url,
-      is_private,
-    }: GithubRepoLoaderParams,
-  ) {
+  constructor({ branch, url, isPrivate }: GithubRepoLoaderParams) {
     super();
     this.branch = branch;
     this.url = url;
-    this.is_private = is_private;
+    this.isPrivate = isPrivate;
   }
+
   async load(): Promise<Document<Record<string, any>>[]> {
-    const path = await this._cloneRepo();
-    const data = await this._repoFilesData(
-      path,
+    const repoPath = await this.cloneRepo();
+    const filesData = await this.getRepoFilesData(repoPath);
+
+    return filesData.map(
+      ({ path, content }) =>
+        new Document({
+          pageContent: content,
+          metadata: { path },
+        })
+    );
+  }
+
+  private async cloneRepo(): Promise<string> {
+    const sanitizedUrl = this.url.replace(/^https?:\/\//, "");
+    const repoUrl = this.isPrivate
+      ? `https://${process.env.GITHUB_ACCESS_TOKEN}@${sanitizedUrl}`
+      : `https://${sanitizedUrl}`;
+    const outputPath = path.join(
+      this.outputFolder,
+      `${sanitizedUrl.replace("/", "-")}-${this.branch}`
     );
 
-    const docs = data.map((file) => {
-      const doc = new Document<Record<string, any>>({
-        pageContent: file.content,
-        metadata: {
-          path: file.path,
-        },
-      });
+    await this.deleteFolder(outputPath);
 
-      return doc;
-    });
+    const command = `git clone --single-branch --branch ${this.branch} ${repoUrl} ${outputPath}`;
+    await this.execCommand(command);
 
-    return docs;
+    return outputPath;
   }
 
-  private async is_folder(path: string) {
+  private async deleteFolder(folderPath: string): Promise<void> {
     try {
-      await fs.access(path);
-      return true;
+      await fs.access(folderPath);
+      await fs.rm(folderPath, { recursive: true });
     } catch (error) {
-      return false;
+      console.error(`Error: ${error.message}`);
     }
   }
 
-  private async deleteFolder(path: string) {
-    const is_folder = await this.is_folder(path);
-    if (!is_folder) {
-      return;
-    }
-    await fs.rm(path, { recursive: true });
+  private async execCommand(command: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      exec(command, (error, stdout, stderr) => {
+        if (error) {
+          console.error(`Error: ${error.message}`);
+          return reject(error);
+        }
+        if (stderr) {
+          console.error(`stderr: ${stderr}`);
+        }
+        resolve();
+      });
+    });
   }
 
-  private async _cloneRepo() {
-    const url = this.url.replace("https://", "").replace("http://", "");
-    const repo_url = this.is_private
-      ? `https://${process.env.GITHUB_ACCESS_TOKEN}@${url}`
-      : `https://${url}`;
-    const output = `${this.output_folder}${url.split("/")[1]}-${
-      url.split("/")[2]
-    }-${this.branch}`;
-    await this.deleteFolder(output);
-    const command =
-      `git clone --single-branch --branch ${this.branch} ${repo_url} ${output}`;
-    await Promise.resolve(execSync(command, { stdio: "inherit" }));
-    return output;
+  private async getRepoFilesData(
+    dir: string
+  ): Promise<{ path: string; content: string }[]> {
+    const files = await this.readFiles(dir);
+    return Promise.all(
+      files.map(async (file) => ({
+        path: file,
+        content: await fs.readFile(file, "utf-8"),
+      }))
+    );
   }
 
-  private async _readFiles(
+  private async readFiles(
     dir: string,
-    filelist: string[] = [],
+    fileList: string[] = []
   ): Promise<string[]> {
-    const files = await fs.readdir(dir);
-    for (const file of files) {
-      const filepath = `${dir}/${file}`;
-      const stat = await fs.stat(filepath);
-      if (this.ignore_folders.includes(file) || this.ignore_files.includes(file)) {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+
+      if (
+        this.ignoreFolders.has(entry.name) ||
+        this.ignoreFiles.has(entry.name)
+      ) {
         continue;
       }
-      if (stat.isDirectory()) {
-        filelist = await this._readFiles(filepath, filelist);
+
+      if (entry.isDirectory()) {
+        await this.readFiles(fullPath, fileList);
       } else {
-        filelist.push(filepath);
+        fileList.push(fullPath);
       }
     }
-    return filelist;
-  }
 
-  private async _readFile(path: string) {
-    const content = await fs.readFile(path, "utf-8");
-    return content;
-  }
-
-  private async _repoFilesData(dir: string) {
-    const files = await this._readFiles(dir);
-    const data = await Promise.all(
-      files.map(async (file) => {
-        const content = await this._readFile(file);
-        return {
-          path: file,
-          content,
-        };
-      }),
-    );
-    return data;
+    return fileList;
   }
 }

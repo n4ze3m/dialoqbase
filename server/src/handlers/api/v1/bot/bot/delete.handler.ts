@@ -50,18 +50,19 @@ export const deleteSourceByIdHandler = async (
     }
   }
 
-  await prisma.botDocument.deleteMany({
-    where: {
-      botId: bot.id,
-      sourceId: source_id,
-    },
-  });
-
-  await prisma.botSource.delete({
-    where: {
-      id: source_id,
-    },
-  });
+  await prisma.$transaction([
+    prisma.botDocument.deleteMany({
+      where: {
+        botId: bot.id,
+        sourceId: source_id,
+      },
+    }),
+    prisma.botSource.delete({
+      where: {
+        id: source_id,
+      },
+    }),
+  ]);
 
   return {
     id: bot.id,
@@ -100,23 +101,23 @@ export const deleteBotByIdHandler = async (
     }
   });
 
-  await prisma.botIntegration.deleteMany({
-    where: {
-      bot_id: bot.id,
-    },
-  });
-
-  await prisma.botDocument.deleteMany({
-    where: {
-      botId: bot.id,
-    },
-  });
-
-  await prisma.botSource.deleteMany({
-    where: {
-      botId: bot.id,
-    },
-  });
+  await prisma.$transaction([
+    prisma.botIntegration.deleteMany({
+      where: {
+        bot_id: bot.id,
+      },
+    }),
+    prisma.botDocument.deleteMany({
+      where: {
+        botId: bot.id,
+      },
+    }),
+    prisma.botSource.deleteMany({
+      where: {
+        botId: bot.id,
+      },
+    }),
+  ]);
 
   const botPlayground = await prisma.botPlayground.findMany({
     where: {
@@ -124,27 +125,25 @@ export const deleteBotByIdHandler = async (
     },
   });
 
-  if (botPlayground.length > 0) {
-    await prisma.botPlaygroundMessage.deleteMany({
+  await prisma.$transaction([
+    prisma.botPlaygroundMessage.deleteMany({
       where: {
         botPlaygroundId: {
           in: botPlayground.map((bp) => bp.id),
         },
       },
-    });
-  }
-
-  await prisma.botPlayground.deleteMany({
-    where: {
-      botId: bot.id,
-    },
-  });
-
-  await prisma.bot.delete({
-    where: {
-      id: bot.id,
-    },
-  });
+    }),
+    prisma.botPlayground.deleteMany({
+      where: {
+        botId: bot.id,
+      },
+    }),
+    prisma.bot.delete({
+      where: {
+        id: bot.id,
+      },
+    }),
+  ]);
 
   return {
     message: "Bot deleted",
