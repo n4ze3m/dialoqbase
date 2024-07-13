@@ -66,8 +66,8 @@ export const DashboardGrid = () => {
                 </div>
 
                 <div className="px-4 my-3 flex flex-wrap gap-2 text-gray-500 text-xs dark:text-gray-400">
-                  {bot.source.map((source: any) => (
-                    <span title={`${source.type} source`}>
+                  {bot.source.map((source: any, idx: number) => (
+                    <span title={`${source.type} source`} key={idx}>
                       {sources[source.type as keyof typeof sources]}
                     </span>
                   ))}

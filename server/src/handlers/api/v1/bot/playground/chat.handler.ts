@@ -76,7 +76,7 @@ export const chatRequestHandler = async (
     const botResponse = await chain.invoke({
       question: sanitizedQuestion,
       chat_history: groupMessagesByConversation(
-        history.map((message) => ({
+        history.slice(-bot.noOfChatHistoryInContext).map((message) => ({
           type: message.type,
           content: message.text,
         }))
@@ -193,7 +193,7 @@ export const chatRequestStreamHandler = async (
     const stream = await chain.stream({
       question: sanitizedQuestion,
       chat_history: groupMessagesByConversation(
-        history.map((message) => ({
+        history.slice(-bot.noOfChatHistoryInContext).map((message) => ({
           type: message.type,
           content: message.text,
         }))
