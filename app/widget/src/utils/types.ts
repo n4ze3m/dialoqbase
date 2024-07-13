@@ -4,6 +4,7 @@ export type BotStyle = {
     bot_name: string;
     streaming: boolean;
     show_reference: boolean;
+    is_protected: boolean;
     chat_bot_bubble_style?: {
       background_color?: string;
       text_color?: string;

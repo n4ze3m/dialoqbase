@@ -20,7 +20,8 @@ import {
   addNewSourceFileByIdBulkHandler,
   chatRequestAPIHandler,
   isBotReadyHandler,
-  updateBotAPIByIdHandler
+  updateBotAPIByIdHandler,
+  updateBotPasswordSettings
 } from "../../../../handlers/api/v1/bot/bot";
 import {
   addNewSourceByIdSchema,
@@ -30,7 +31,8 @@ import {
   createCopyBotSchema,
   createBotAPISchema,
   addNewSourceByBulkIdSchema,
-  updateBotAPISchema
+  updateBotAPISchema,
+  updateBotPasswordSettingsSchema
 } from "../../../../schema/api/v1/bot/bot";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
@@ -321,6 +323,15 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       onRequest: [fastify.authenticate],
     },
     updateBotAPIByIdHandler
+  );
+
+  fastify.put(
+    "/:id/password",
+    {
+      schema: updateBotPasswordSettingsSchema,
+      onRequest: [fastify.authenticate],
+    },
+    updateBotPasswordSettings
   );
 };
 

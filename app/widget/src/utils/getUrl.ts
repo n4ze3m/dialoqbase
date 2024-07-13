@@ -9,3 +9,10 @@ export const getUrl = () => {
   const urlWithoutQueryParams = url.split("?")[0];
   return urlWithoutQueryParams;
 };
+
+export const getBotPublicId = () => {
+  const url = getUrl();
+  const urlParts = url.split("/");
+  const botPublicId = urlParts[urlParts.length - 1];
+  return botPublicId.split("?")[0];
+};

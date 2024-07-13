@@ -2,11 +2,18 @@ import { useMutation } from "@tanstack/react-query";
 import { useMessage } from "../hooks/useMessage";
 import { useForm } from "@mantine/form";
 import { BotStyle } from "../utils/types";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function BotForm({}: { botStyle: BotStyle }) {
   const { onSubmit } = useMessage();
   const [typing, setTyping] = useState<boolean>(false);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (textAreaRef.current) {
+      textAreaRef.current.focus();
+    }
+  }, []);
 
   const form = useForm({
     initialValues: {
@@ -36,6 +43,7 @@ export default function BotForm({}: { botStyle: BotStyle }) {
           >
             <div className="flex items-cente rounded-full border  bg-gray-100 w-full dark:bg-[#171717] dark:border-gray-600">
               <textarea
+                ref={textAreaRef}
                 onCompositionStart={() => setTyping(true)}
                 onCompositionEnd={() => setTyping(false)}
                 onKeyDown={(e) => {

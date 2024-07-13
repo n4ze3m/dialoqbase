@@ -12,9 +12,13 @@ import BotChatBubble from "./components/BotChatBubble";
 import { BotStyle } from "./utils/types";
 import { Modal } from "antd";
 import { useStoreReference } from "./store";
+import { useAuth } from "./hooks/useAuth";
+import LoginPage from "./components/BotLogin";
 function App() {
   const { openReferences, setOpenReferences, referenceData } =
     useStoreReference();
+
+  const { isAuthenticated } = useAuth();
 
   const divRef = React.useRef<HTMLDivElement>(null);
   const { messages, setMessages, setStreaming, setHistory } = useMessage();
@@ -61,35 +65,49 @@ function App() {
     }
   }, [botStyle]);
 
+  if (status === "loading") {
+    return <Loader />;
+  }
+
+  if (status === "error") {
+    return (
+      <div className="text-red-500 font-bold text-center">
+        there was an error occured
+      </div>
+    );
+  }
+
+  if (botStyle?.data?.is_protected && !isAuthenticated) {
+    return (
+      <ModeSwitcher mode={params?.mode}>
+        <LoginPage params={params} botName={botStyle?.data?.bot_name} />
+      </ModeSwitcher>
+    );
+  }
+
   return (
     <div>
       <ModeSwitcher mode={params?.mode}>
-        {status === "loading" && <Loader />}
-
-        {status === "success" && (
-          <>
-            <div className="sticky top-0 z-10 ">
-              <BotHeader botStyle={botStyle} params={params} />
-            </div>
-            <div className="grow flex flex-col md:translate-x-0 transition-transform duration-300 ease-in-out">
-              <div className="grow px-4 sm:px-6 md:px-5 py-6">
-                {messages.map((message, index) => {
-                  return (
-                    <BotChatBubble
-                      key={index}
-                      message={message}
-                      botStyle={botStyle}
-                    />
-                  );
-                })}
-                <div ref={divRef} />
-              </div>
-            </div>
-            <div className="sticky bottom-0 bg-white">
-              <BotForm botStyle={botStyle} />
-            </div>
-          </>
-        )}
+        <div className="sticky top-0 z-10 ">
+          <BotHeader botStyle={botStyle} params={params} />
+        </div>
+        <div className="grow flex flex-col md:translate-x-0 transition-transform duration-300 ease-in-out">
+          <div className="grow px-4 sm:px-6 md:px-5 py-6">
+            {messages.map((message, index) => {
+              return (
+                <BotChatBubble
+                  key={index}
+                  message={message}
+                  botStyle={botStyle}
+                />
+              );
+            })}
+            <div ref={divRef} />
+          </div>
+        </div>
+        <div className="sticky bottom-0 bg-white">
+          <BotForm botStyle={botStyle} />
+        </div>
       </ModeSwitcher>
 
       <Modal

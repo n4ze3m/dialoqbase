@@ -14,8 +14,7 @@ export default function BotSettingsRoot() {
     ["getBotSettings", param.id],
     async () => {
       const response = await api.get(`/bot/${param.id}/settings`);
-      return response.data as BotSettings
-      
+      return response.data as BotSettings;
     },
     {
       refetchInterval: 1000,
@@ -28,9 +27,11 @@ export default function BotSettingsRoot() {
     }
   }, [status]);
   return (
-    <div className="mx-auto my-3 w-full max-w-7xl">
-      {status === "loading" && <SkeletonLoading />}
-      {status === "success" && <SettingsBody {...data} />}
+    <div className="flex-1 py-8 md:py-12 px-4 md:px-6">
+      <div className="max-w-6xl mx-auto grid gap-8">
+        {status === "loading" && <SkeletonLoading />}
+        {status === "success" && <SettingsBody {...data} />}
+      </div>
     </div>
   );
 }
