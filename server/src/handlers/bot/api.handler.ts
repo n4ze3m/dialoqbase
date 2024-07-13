@@ -3,13 +3,17 @@ import { ChatAPIRequest } from "./types";
 import { DialoqbaseVectorStore } from "../../utils/store";
 import { embeddings } from "../../utils/embeddings";
 import { chatModelProvider } from "../../utils/models";
-import { nextTick } from "./post.handler";
 import { Document } from "langchain/document";
 import { BaseRetriever } from "@langchain/core/retrievers";
 import { DialoqbaseHybridRetrival } from "../../utils/hybrid";
 import { createChain, groupMessagesByConversation } from "../../chain";
 import { getModelInfo } from "../../utils/get-model-info";
+import { nextTick } from "../../utils/nextTick";
 
+/**
+ * Handles the chat request API endpoint for a bot.
+ * This function is responsible for processing the chat request, retrieving relevant information from the database, and generating a response using the configured chat model.
+ */
 export const chatRequestAPIHandler = async (
   request: FastifyRequest<ChatAPIRequest>,
   reply: FastifyReply
