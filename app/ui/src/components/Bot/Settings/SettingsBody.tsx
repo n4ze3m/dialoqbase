@@ -299,9 +299,9 @@ export const SettingsBody: React.FC<BotSettings> = ({
                     placeholder="Enter number of documents to retrieve"
                   />
                 </Form.Item>
-                {/* <Form.Item
+                <Form.Item
                   name="noOfChatHistoryInContext"
-                  label="Number of chat history in context"
+                  label="Number of chat histories in context"
                   rules={[
                     {
                       required: true,
@@ -315,7 +315,7 @@ export const SettingsBody: React.FC<BotSettings> = ({
                     style={{ width: "100%" }}
                     placeholder="Enter number of chat history in context"
                   />
-                </Form.Item> */}
+                </Form.Item>
                 <Form.Item
                   label={"Semantic Search Similarity Score"}
                   name="semanticSearchSimilarityScore"
