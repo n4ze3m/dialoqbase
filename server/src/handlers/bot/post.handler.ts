@@ -8,6 +8,7 @@ import { DialoqbaseHybridRetrival } from "../../utils/hybrid";
 import { Document } from "langchain/document";
 import { createChain, groupMessagesByConversation } from "../../chain";
 import { getModelInfo } from "../../utils/get-model-info";
+import { nextTick } from "../../utils/nextTick";
 
 export const chatRequestHandler = async (
   request: FastifyRequest<ChatRequestBody>,
@@ -142,7 +143,7 @@ export const chatRequestHandler = async (
       model: bot.model,
       prisma,
       type: "chat",
-    })
+    });
 
     if (!modelinfo) {
       return {
@@ -254,10 +255,6 @@ export const chatRequestHandler = async (
   }
 };
 
-export function nextTick() {
-  return new Promise((resolve) => setTimeout(resolve, 0));
-}
-
 export const chatRequestStreamHandler = async (
   request: FastifyRequest<ChatRequestBody>,
   reply: FastifyReply
@@ -342,7 +339,7 @@ export const chatRequestStreamHandler = async (
       model: bot.embedding,
       prisma,
       type: "embedding",
-    })
+    });
 
     if (!embeddingInfo) {
       return {
@@ -415,7 +412,7 @@ export const chatRequestStreamHandler = async (
       model: bot.model,
       prisma,
       type: "chat",
-    })
+    });
 
     if (!modelinfo) {
       reply.raw.setHeader("Content-Type", "text/event-stream");
