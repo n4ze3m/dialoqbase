@@ -129,7 +129,7 @@ export interface ChatAPIRequest {
   };
   Body: {
     message: string;
-    stream: string;
+    stream: boolean;
     history_id?: string;
     history: {
       role: string;
