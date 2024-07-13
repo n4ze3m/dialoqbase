@@ -565,6 +565,10 @@ const updateGeminiStreamingToTrue = async () => {
 };
 
 const main = async () => {
+  if(process.env.NO_SEED === "true") {
+    console.log("Skipping seed script");
+    return;
+  }
   await newModels();
   await removeTensorflowSupport();
   // await replaceOldEmbeddings();
