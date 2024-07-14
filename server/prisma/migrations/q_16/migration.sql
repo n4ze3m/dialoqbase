@@ -50,4 +50,3 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Execute the function to perform the update
-SELECT update_dialoqbase_models();
