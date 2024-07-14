@@ -7,6 +7,7 @@ import React from "react";
 import { useMessage } from "../../../hooks/useMessage";
 import { Empty, Skeleton } from "antd";
 import { useStoreMessage } from "../../../store";
+import { motion } from "framer-motion";
 
 export const PlaygroundHistoryList = () => {
   const params = useParams<{ id: string; history_id?: string }>();
@@ -72,9 +73,16 @@ export const PlaygroundHistoryList = () => {
               </div>
             )}
             <div className="flex flex-col gap-2 overflow-hidden text-gray-100 text-sm dark:text-gray-400">
-              {data.history.map((item, index) => {
-                return <PlaygroundHistoryCard key={index} item={item} />;
-              })}
+              {data.history.map((item, index) => (
+                <motion.div
+                  key={item.id || index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <PlaygroundHistoryCard item={item} />
+                </motion.div>
+              ))}
             </div>
           </div>
         )}

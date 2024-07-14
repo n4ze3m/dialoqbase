@@ -1,7 +1,7 @@
 {
   "name": "app",
   "private": true,
-  "version": "1.8.6",
+  "version": "1.9.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -23,6 +23,7 @@
     "d3": "^7.8.5",
     "dayjs": "^1.11.10",
     "eventsource-parser": "^1.0.0",
+    "framer-motion": "^11.3.2",
     "js-cookie": "^3.0.5",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",

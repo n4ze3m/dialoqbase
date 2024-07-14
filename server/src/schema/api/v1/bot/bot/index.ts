@@ -161,11 +161,10 @@ export const updateBotByIdSchema: FastifySchema = {
       },
       noOfDocumentsToRetrieve: {
         type: "number",
-      }
+      },
     },
   },
 };
-
 
 export const createCopyBotSchema: FastifySchema = {
   tags: ["Bot"],
@@ -186,7 +185,6 @@ export const createCopyBotSchema: FastifySchema = {
     },
   },
 };
-
 
 export const createBotAPISchema: FastifySchema = {
   tags: ["Bot"],
@@ -267,7 +265,6 @@ export const addNewSourceByBulkIdSchema: FastifySchema = {
   },
 };
 
-
 export const updateBotAPISchema: FastifySchema = {
   tags: ["Bot"],
   headers: {
@@ -305,6 +302,37 @@ export const updateBotAPISchema: FastifySchema = {
         type: "boolean",
       },
       bot_model_api_key: {
+        type: "string",
+      },
+    },
+  },
+};
+
+export const updateBotPasswordSettingsSchema: FastifySchema = {
+  tags: ["Bot"],
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
+  params: {
+    type: "object",
+    required: ["id"],
+    properties: {
+      id: {
+        type: "string",
+      },
+    },
+  },
+  body: {
+    type: "object",
+    properties: {
+      publicBotPwdProtected: {
+        type: "boolean",
+      },
+      publicBotPwd: {
         type: "string",
       },
     },

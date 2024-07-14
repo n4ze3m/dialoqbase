@@ -1,77 +1,46 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { ChatRequestBody } from "./types";
-import { DialoqbaseVectorStore } from "../../../../../utils/store";
 import { embeddings } from "../../../../../utils/embeddings";
-import { chatModelProvider } from "../../../../../utils/models";
-import { DialoqbaseHybridRetrival } from "../../../../../utils/hybrid";
-import { BaseRetriever } from "@langchain/core/retrievers";
-import { Document } from "langchain/document";
 import { createChain, groupMessagesByConversation } from "../../../../../chain";
 import { getModelInfo } from "../../../../../utils/get-model-info";
+import { nextTick } from "../../../../../utils/nextTick";
+import {
+  createChatModel,
+  createRetriever,
+  getBotConfig,
+  handleErrorResponse,
+  saveChatHistory,
+} from "./chat.service";
 
 export const chatRequestHandler = async (
   request: FastifyRequest<ChatRequestBody>,
   reply: FastifyReply
 ) => {
-  const bot_id = request.params.id;
-
+  const { id: bot_id } = request.params;
   const { message, history, history_id } = request.body;
+
   try {
     const prisma = request.server.prisma;
-
     const bot = await prisma.bot.findFirst({
-      where: {
-        id: bot_id,
-        user_id: request.user.user_id,
-      },
+      where: { id: bot_id, user_id: request.user.user_id },
     });
 
     if (!bot) {
-      return {
-        bot: {
-          text: "You are in the wrong place, buddy.",
-          sourceDocuments: [],
-        },
-        history: [
-          ...history,
-          {
-            type: "human",
-            text: message,
-          },
-          {
-            type: "ai",
-            text: "You are in the wrong place, buddy.",
-          },
-        ],
-      };
+      return handleErrorResponse(
+        history,
+        message,
+        "You are in the wrong place, buddy."
+      );
     }
 
-    const temperature = bot.temperature;
-
-    const sanitizedQuestion = message.trim().replaceAll("\n", " ");
     const embeddingInfo = await getModelInfo({
       model: bot.embedding,
       prisma,
       type: "all",
     });
+
     if (!embeddingInfo) {
-      return {
-        bot: {
-          text: "Unable to find Embedding",
-          sourceDocuments: [],
-        },
-        history: [
-          ...history,
-          {
-            type: "human",
-            text: message,
-          },
-          {
-            type: "ai",
-            text: "Unable to find Embedding",
-          },
-        ],
-      };
+      return handleErrorResponse(history, message, "Unable to find Embedding");
     }
 
     const embeddingModel = embeddings(
@@ -79,42 +48,8 @@ export const chatRequestHandler = async (
       embeddingInfo.model_id,
       embeddingInfo?.config
     );
-    let retriever: BaseRetriever;
-    let resolveWithDocuments: (value: Document[]) => void;
-    const documentPromise = new Promise<Document[]>((resolve) => {
-      resolveWithDocuments = resolve;
-    });
-    if (bot.use_hybrid_search) {
-      retriever = new DialoqbaseHybridRetrival(embeddingModel, {
-        botId: bot.id,
-        sourceId: null,
-        callbacks: [
-          {
-            handleRetrieverEnd(documents) {
-              resolveWithDocuments(documents);
-            },
-          },
-        ],
-      });
-    } else {
-      const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
-        embeddingModel,
-        {
-          botId: bot.id,
-          sourceId: null,
-        }
-      );
 
-      retriever = vectorstore.asRetriever({
-        callbacks: [
-          {
-            handleRetrieverEnd(documents) {
-              resolveWithDocuments(documents);
-            },
-          },
-        ],
-      });
-    }
+    const retriever = await createRetriever(bot, embeddingModel);
 
     const modelinfo = await getModelInfo({
       model: bot.model,
@@ -123,37 +58,11 @@ export const chatRequestHandler = async (
     });
 
     if (!modelinfo) {
-      return {
-        bot: {
-          text: "Unable to find model",
-          sourceDocuments: [],
-        },
-        history: [
-          ...history,
-          {
-            type: "human",
-            text: message,
-          },
-          {
-            type: "ai",
-            text: "Unable to find model",
-          },
-        ],
-      };
+      return handleErrorResponse(history, message, "Unable to find model");
     }
 
-    const botConfig: any = (modelinfo.config as {}) || {};
-    if (bot.provider.toLowerCase() === "openai") {
-      if (bot.bot_model_api_key && bot.bot_model_api_key.trim() !== "") {
-        botConfig.configuration = {
-          apiKey: bot.bot_model_api_key,
-        };
-      }
-    }
-
-    const model = chatModelProvider(bot.provider, bot.model, temperature, {
-      ...botConfig,
-    });
+    const botConfig = getBotConfig(bot, modelinfo);
+    const model = createChatModel(bot, bot.temperature, botConfig);
 
     const chain = createChain({
       llm: model,
@@ -163,134 +72,67 @@ export const chatRequestHandler = async (
       retriever,
     });
 
+    const sanitizedQuestion = message.trim().replaceAll("\n", " ");
     const botResponse = await chain.invoke({
       question: sanitizedQuestion,
       chat_history: groupMessagesByConversation(
-        history.map((message) => ({
+        history.slice(-bot.noOfChatHistoryInContext).map((message) => ({
           type: message.type,
           content: message.text,
         }))
       ),
     });
 
-    const documents = await documentPromise;
-    let hh = history_id;
-
-    if (!hh) {
-      const newHistory = await prisma.botPlayground.create({
-        data: {
-          botId: bot.id,
-          title: message,
-        },
-      });
-      hh = newHistory.id;
-    }
-
-    await prisma.botPlaygroundMessage.create({
-      data: {
-        type: "human",
-        message: message,
-        botPlaygroundId: hh,
-      },
-    });
-
-    await prisma.botPlaygroundMessage.create({
-      data: {
-        type: "ai",
-        message: botResponse,
-        botPlaygroundId: hh,
-        isBot: true,
-        sources: documents.map((doc) => {
-          return {
-            ...doc,
-          };
-        }),
-      },
-    });
+    const documents = await retriever.getRelevantDocuments(sanitizedQuestion);
+    const historyId = await saveChatHistory(
+      prisma,
+      bot.id,
+      message,
+      botResponse,
+      history_id,
+      documents
+    );
 
     return {
-      bot: {
-        text: botResponse,
-        sourceDocuments: documents,
-      },
+      bot: { text: botResponse, sourceDocuments: documents },
       history: [
         ...history,
-        {
-          type: "human",
-          text: message,
-        },
-        {
-          type: "ai",
-          text: botResponse,
-        },
+        { type: "human", text: message },
+        { type: "ai", text: botResponse },
       ],
+      history_id: historyId,
     };
   } catch (e) {
-    console.log(e);
-    return {
-      bot: {
-        text: "There was an error processing your request.",
-        sourceDocuments: [],
-      },
-      history: [
-        ...history,
-        {
-          type: "human",
-          text: message,
-        },
-        {
-          type: "ai",
-          text: "There was an error processing your request.",
-        },
-      ],
-    };
+    console.error(e);
+    return handleErrorResponse(
+      history,
+      message,
+      "There was an error processing your request."
+    );
   }
 };
-
-function nextTick() {
-  return new Promise((resolve) => setTimeout(resolve, 0));
-}
 
 export const chatRequestStreamHandler = async (
   request: FastifyRequest<ChatRequestBody>,
   reply: FastifyReply
 ) => {
-  const bot_id = request.params.id;
-
+  const { id: bot_id } = request.params;
   const { message, history, history_id } = request.body;
+
   try {
     const prisma = request.server.prisma;
-
     const bot = await prisma.bot.findFirst({
-      where: {
-        id: bot_id,
-        user_id: request.user.user_id,
-      },
+      where: { id: bot_id, user_id: request.user.user_id },
     });
 
     if (!bot) {
-      return {
-        bot: {
-          text: "You are in the wrong place, buddy.",
-          sourceDocuments: [],
-        },
-        history: [
-          ...history,
-          {
-            type: "human",
-            text: message,
-          },
-          {
-            type: "ai",
-            text: "You are in the wrong place, buddy.",
-          },
-        ],
-      };
+      return handleErrorResponse(
+        history,
+        message,
+        "You are in the wrong place, buddy."
+      );
     }
 
-    const temperature = bot.temperature;
-
-    const sanitizedQuestion = message.trim().replaceAll("\n", " ");
     const embeddingInfo = await getModelInfo({
       model: bot.embedding,
       prisma,
@@ -298,32 +140,11 @@ export const chatRequestStreamHandler = async (
     });
 
     if (!embeddingInfo) {
-      reply.raw.setHeader("Content-Type", "text/event-stream");
-
-      reply.sse({
-        event: "result",
-        id: "",
-        data: JSON.stringify({
-          bot: {
-            text: "There was an error processing your request.",
-            sourceDocuments: [],
-          },
-          history: [
-            ...history,
-            {
-              type: "human",
-              text: message,
-            },
-            {
-              type: "ai",
-              text: "There was an error processing your request.",
-            },
-          ],
-        }),
-      });
-      await nextTick();
-
-      return reply.raw.end();
+      return handleErrorResponse(
+        history,
+        message,
+        "There was an error processing your request."
+      );
     }
 
     const embeddingModel = embeddings(
@@ -332,120 +153,32 @@ export const chatRequestStreamHandler = async (
       embeddingInfo?.config
     );
 
-    let retriever: BaseRetriever;
-    let resolveWithDocuments: (value: Document[]) => void;
-    const documentPromise = new Promise<Document[]>((resolve) => {
-      resolveWithDocuments = resolve;
-    });
-    if (bot.use_hybrid_search) {
-      retriever = new DialoqbaseHybridRetrival(embeddingModel, {
-        botId: bot.id,
-        sourceId: null,
-        callbacks: [
-          {
-            handleRetrieverEnd(documents) {
-              resolveWithDocuments(documents);
-            },
-          },
-        ],
-      });
-    } else {
-      const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
-        embeddingModel,
-        {
-          botId: bot.id,
-          sourceId: null,
-        }
-      );
-
-      retriever = vectorstore.asRetriever({
-        callbacks: [
-          {
-            handleRetrieverEnd(documents) {
-              resolveWithDocuments(documents);
-            },
-          },
-        ],
-      });
-    }
+    const retriever = await createRetriever(bot, embeddingModel);
 
     const modelinfo = await getModelInfo({
       model: bot.model,
       prisma,
       type: "chat",
     });
+
     if (!modelinfo) {
-      reply.raw.setHeader("Content-Type", "text/event-stream");
-
-      reply.sse({
-        event: "result",
-        id: "",
-        data: JSON.stringify({
-          bot: {
-            text: "There was an error processing your request.",
-            sourceDocuments: [],
-          },
-          history: [
-            ...history,
-            {
-              type: "human",
-              text: message,
-            },
-            {
-              type: "ai",
-              text: "There was an error processing your request.",
-            },
-          ],
-        }),
-      });
-      await nextTick();
-
-      return reply.raw.end();
+      return handleErrorResponse(
+        history,
+        message,
+        "There was an error processing your request."
+      );
     }
 
-    const botConfig: any = (modelinfo.config as {}) || {};
-    if (bot.provider.toLowerCase() === "openai") {
-      if (bot.bot_model_api_key && bot.bot_model_api_key.trim() !== "") {
-        botConfig.configuration = {
-          apiKey: bot.bot_model_api_key,
-        };
-      }
-    }
-
-    let response: string = "";
-    const streamedModel = chatModelProvider(
-      bot.provider,
-      bot.model,
-      temperature,
-      {
-        streaming: true,
-        ...botConfig,
-      }
+    const botConfig = getBotConfig(bot, modelinfo);
+    const streamedModel = createChatModel(
+      bot,
+      bot.temperature,
+      botConfig,
+      true
     );
+    const nonStreamingModel = createChatModel(bot, bot.temperature, botConfig);
 
-    const nonStreamingModel = chatModelProvider(
-      bot.provider,
-      bot.model,
-      temperature,
-      {
-        ...botConfig,
-      }
-    );
-
-    reply.raw.on("close", () => {
-      // close the model
-    });
-
-    let historyId = history_id;
-    if (!historyId) {
-      const newHistory = await prisma.botPlayground.create({
-        data: {
-          botId: bot.id,
-          title: message,
-        },
-      });
-      historyId = newHistory.id;
-    }
+    reply.raw.setHeader("Content-Type", "text/event-stream");
 
     const chain = createChain({
       llm: streamedModel,
@@ -455,10 +188,12 @@ export const chatRequestStreamHandler = async (
       retriever,
     });
 
-    let stream = await chain.stream({
+    const sanitizedQuestion = message.trim().replaceAll("\n", " ");
+    let response = "";
+    const stream = await chain.stream({
       question: sanitizedQuestion,
       chat_history: groupMessagesByConversation(
-        history.map((message) => ({
+        history.slice(-bot.noOfChatHistoryInContext).map((message) => ({
           type: message.type,
           content: message.text,
         }))
@@ -469,87 +204,43 @@ export const chatRequestStreamHandler = async (
       reply.sse({
         id: "",
         event: "chunk",
-        data: JSON.stringify({
-          message: token || "",
-        }),
+        data: JSON.stringify({ message: token || "" }),
       });
       response += token;
     }
 
-    const documents = await documentPromise;
+    const documents = await retriever.getRelevantDocuments(sanitizedQuestion);
+    const historyId = await saveChatHistory(
+      prisma,
+      bot.id,
+      message,
+      response,
+      history_id,
+      documents
+    );
 
-    await prisma.botPlaygroundMessage.create({
-      data: {
-        type: "human",
-        message: message,
-        botPlaygroundId: historyId,
-      },
-    });
-
-    await prisma.botPlaygroundMessage.create({
-      data: {
-        type: "ai",
-        message: response,
-        botPlaygroundId: historyId,
-        isBot: true,
-        sources: documents.map((doc) => {
-          return {
-            ...doc,
-          };
-        }),
-      },
-    });
     reply.sse({
       event: "result",
       id: "",
       data: JSON.stringify({
-        bot: {
-          text: response,
-          sourceDocuments: documents,
-        },
+        bot: { text: response, sourceDocuments: documents },
         history: [
           ...history,
-          {
-            type: "human",
-            text: message,
-          },
-          {
-            type: "ai",
-            text: response,
-          },
+          { type: "human", text: message },
+          { type: "ai", text: response },
         ],
         history_id: historyId,
       }),
     });
+
     await nextTick();
     return reply.raw.end();
   } catch (e) {
-    console.log(e);
-    reply.raw.setHeader("Content-Type", "text/event-stream");
-
-    reply.sse({
-      event: "result",
-      id: "",
-      data: JSON.stringify({
-        bot: {
-          text: "There was an error processing your request.",
-          sourceDocuments: [],
-        },
-        history: [
-          ...history,
-          {
-            type: "human",
-            text: message,
-          },
-          {
-            type: "ai",
-            text: "There was an error processing your request.",
-          },
-        ],
-      }),
-    });
-    await nextTick();
-
-    return reply.raw.end();
+    console.error(e);
+    return handleErrorResponse(
+      history,
+      message,
+      "There was an error processing your request."
+    );
   }
 };

@@ -21,6 +21,7 @@ export const getChatStyleByIdHandler = async (
         bot_name: "ACME Inc. Bot",
         streaming: false,
         show_reference: false,
+        is_protected: false,
         chat_bot_bubble_style: {
           background_color: "#C3CDDB",
           text_color: "#000000",
@@ -57,6 +58,7 @@ export const getChatStyleByIdHandler = async (
       bot_name: "ACME Inc. Bot",
       streaming: isBotExist.streaming,
       show_reference: isBotExist.showRef,
+      is_protected: isBotExist.publicBotPwdProtected,
       chat_bot_bubble_style: {
         background_color: "#C3CDDB",
         text_color: "#000000",

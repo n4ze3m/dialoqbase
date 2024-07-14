@@ -10,6 +10,9 @@ export interface ChatRequestBody {
       text: string;
     }[];
   };
+  Headers: {
+    Authorization: string;
+  }
 }
 
 export interface ChatRequestQuery {
@@ -54,5 +57,15 @@ export interface ChatTTSRequest {
 
   Body: {
     id: string;
+  };
+}
+
+export interface ChatLoginRequest {
+  Params: {
+    id: string;
+  };
+  Body: {
+    user_id: string;
+    password: string;
   };
 }

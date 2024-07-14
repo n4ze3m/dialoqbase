@@ -17,8 +17,9 @@ import {
   HELPFUL_ASSISTANT_WITHOUT_CONTEXT_PROMPT,
 } from "../../../utils/prompts";
 import { BotSettings } from "../../../@types/bot";
+import { SettingsPwdP } from "./SettingPwdP";
 
-export const SettingsCard: React.FC<BotSettings> = ({
+export const SettingsBody: React.FC<BotSettings> = ({
   data,
   chatModel,
   embeddingModel,
@@ -147,7 +148,6 @@ export const SettingsCard: React.FC<BotSettings> = ({
           </p>
         </div>
       </div>
-      {/* centerize the div */}
       <div className="mt-6 space-y-4">
         <Form
           initialValues={{
@@ -299,9 +299,9 @@ export const SettingsCard: React.FC<BotSettings> = ({
                     placeholder="Enter number of documents to retrieve"
                   />
                 </Form.Item>
-                {/* <Form.Item
+                <Form.Item
                   name="noOfChatHistoryInContext"
-                  label="Number of chat history in context"
+                  label="Number of chat histories in context"
                   rules={[
                     {
                       required: true,
@@ -315,7 +315,7 @@ export const SettingsCard: React.FC<BotSettings> = ({
                     style={{ width: "100%" }}
                     placeholder="Enter number of chat history in context"
                   />
-                </Form.Item> */}
+                </Form.Item>
                 <Form.Item
                   label={"Semantic Search Similarity Score"}
                   name="semanticSearchSimilarityScore"
@@ -438,6 +438,13 @@ export const SettingsCard: React.FC<BotSettings> = ({
             </div>
           </div>
         </Form>
+
+        <div className="bg-white border sm:rounded-lg dark:bg-[#1e1e1e] dark:border-gray-700">
+          <SettingsPwdP
+            publicBotPwd={data.publicBotPwd}
+            publicBotPwdProtected={data.publicBotPwdProtected}
+          />
+        </div>
 
         <div className="bg-white border sm:rounded-lg dark:bg-[#1e1e1e] dark:border-gray-700">
           <div className="px-4 py-5 sm:p-6">

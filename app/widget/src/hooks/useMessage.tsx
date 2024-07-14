@@ -4,6 +4,7 @@ import { History, useStoreMessage } from "../store";
 import useChatId from "./useChatId";
 import { generateUUID } from "../utils/uuid";
 import { notification } from "antd";
+import { useAuth } from "./useAuth";
 
 export type BotResponse = {
   bot: {
@@ -32,6 +33,7 @@ const parsesStreamingResponse = (text: string) => {
 
 export const useMessage = () => {
   const { chatId, resetChatId } = useChatId();
+  const { token } = useAuth();
   const {
     history,
     messages,
@@ -61,11 +63,19 @@ export const useMessage = () => {
         },
       ];
       setMessages(newMessage);
-      const response = await axios.post(getUrl(), {
-        message,
-        history,
-        history_id: chatId,
-      });
+      const response = await axios.post(
+        getUrl(),
+        {
+          message,
+          history,
+          history_id: chatId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const data = response.data as BotResponse;
       newMessage[newMessage.length - 1].message = data.bot.text;
       newMessage[newMessage.length - 1].id = data.bot.chat_id;
@@ -110,6 +120,7 @@ export const useMessage = () => {
         }),
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 

@@ -8,6 +8,8 @@ import { DialoqbaseHybridRetrival } from "../../utils/hybrid";
 import { Document } from "langchain/document";
 import { createChain, groupMessagesByConversation } from "../../chain";
 import { getModelInfo } from "../../utils/get-model-info";
+import { nextTick } from "../../utils/nextTick";
+import { jwtBotVerify } from "../../utils/jwt";
 
 export const chatRequestHandler = async (
   request: FastifyRequest<ChatRequestBody>,
@@ -61,6 +63,72 @@ export const chatRequestHandler = async (
             {
               type: "ai",
               text: "You are not allowed to chat with this bot.",
+            },
+          ],
+        };
+      }
+    }
+
+    if (bot.publicBotPwdProtected) {
+      const authorizationHeader = request.headers.authorization;
+      if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
+        return {
+          bot: {
+            text: "Invalid authorization header.",
+            sourceDocuments: [],
+          },
+          history: [
+            ...history,
+            {
+              type: "human",
+              text: message,
+            },
+            {
+              type: "ai",
+              text: "Invalid authorization header.",
+            },
+          ],
+        };
+      }
+      const token = authorizationHeader.split(" ")[1];
+
+      const verify = await jwtBotVerify(token);
+
+      if (!verify) {
+        return {
+          bot: {
+            text: "Invalid authorization token.",
+            sourceDocuments: [],
+          },
+          history: [
+            ...history,
+            {
+              type: "human",
+              text: message,
+            },
+            {
+              type: "ai",
+              text: "Invalid authorization token.",
+            },
+          ],
+        };
+      }
+
+      if (verify.botId !== bot.publicId) {
+        return {
+          bot: {
+            text: "Invalid authorization token.",
+            sourceDocuments: [],
+          },
+          history: [
+            ...history,
+            {
+              type: "human",
+              text: message,
+            },
+            {
+              type: "ai",
+              text: "Invalid authorization token.",
             },
           ],
         };
@@ -142,7 +210,7 @@ export const chatRequestHandler = async (
       model: bot.model,
       prisma,
       type: "chat",
-    })
+    });
 
     if (!modelinfo) {
       return {
@@ -254,10 +322,6 @@ export const chatRequestHandler = async (
   }
 };
 
-export function nextTick() {
-  return new Promise((resolve) => setTimeout(resolve, 0));
-}
-
 export const chatRequestStreamHandler = async (
   request: FastifyRequest<ChatRequestBody>,
   reply: FastifyReply
@@ -335,6 +399,99 @@ export const chatRequestStreamHandler = async (
       }
     }
 
+    if (bot.publicBotPwdProtected) {
+      const authorizationHeader = request.headers.authorization;
+      if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
+        reply.raw.setHeader("Content-Type", "text/event-stream");
+
+        reply.sse({
+          event: "result",
+          id: "",
+          data: JSON.stringify({
+            bot: {
+              text: "Invalid authorization header.",
+              sourceDocuments: [],
+            },
+            history: [
+              ...history,
+              {
+                type: "human",
+                text: message,
+              },
+              {
+                type: "ai",
+                text: "Invalid authorization header.",
+              },
+            ],
+          }),
+        });
+        await nextTick();
+
+        return reply.raw.end();
+      }
+      const token = authorizationHeader.split(" ")[1];
+
+      const verify = await jwtBotVerify(token);
+
+      if (!verify) {
+        reply.raw.setHeader("Content-Type", "text/event-stream");
+
+        reply.sse({
+          event: "result",
+          id: "",
+          data: JSON.stringify({
+            bot: {
+              text: "Invalid authorization token.",
+              sourceDocuments: [],
+            },
+            history: [
+              ...history,
+              {
+                type: "human",
+                text: message,
+              },
+              {
+                type: "ai",
+                text: "Invalid authorization token.",
+              },
+            ],
+          }),
+        });
+        await nextTick();
+
+        return reply.raw.end();
+      }
+
+      if (verify.botId !== bot.publicId) {
+        reply.raw.setHeader("Content-Type", "text/event-stream");
+
+        reply.sse({
+          event: "result",
+          id: "",
+          data: JSON.stringify({
+            bot: {
+              text: "Invalid authorization token.",
+              sourceDocuments: [],
+            },
+            history: [
+              ...history,
+              {
+                type: "human",
+                text: message,
+              },
+              {
+                type: "ai",
+                text: "Invalid authorization token.",
+              },
+            ],
+          }),
+        });
+        await nextTick();
+
+        return reply.raw.end();
+      }
+    }
+
     const temperature = bot.temperature;
 
     const sanitizedQuestion = message.trim().replaceAll("\n", " ");
@@ -342,7 +499,7 @@ export const chatRequestStreamHandler = async (
       model: bot.embedding,
       prisma,
       type: "embedding",
-    })
+    });
 
     if (!embeddingInfo) {
       return {
@@ -415,7 +572,7 @@ export const chatRequestStreamHandler = async (
       model: bot.model,
       prisma,
       type: "chat",
-    })
+    });
 
     if (!modelinfo) {
       reply.raw.setHeader("Content-Type", "text/event-stream");

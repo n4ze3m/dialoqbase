@@ -128,3 +128,29 @@ export const chatAPIRequestSchema: FastifySchema = {
     },
   },
 };
+
+export const chatLoginSchema: FastifySchema = {
+  tags: ["Widget"],
+  summary: "API to login bot",
+  params: {
+    type: "object",
+    required: ["id"],
+    properties: {
+      id: {
+        type: "string",
+      },
+    },
+  },
+  body: {
+    type: "object",
+    required: ["password", "user_id"],
+    properties: {
+      password: {
+        type: "string",
+      },
+      user_id: {
+        type: "string",
+      },
+    },
+  },
+};

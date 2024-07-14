@@ -8,367 +8,190 @@ import { DialoqbaseVectorStore } from "../../../../../utils/store";
 import { chatModelProvider } from "../../../../../utils/models";
 import { createChain, groupMessagesByConversation } from "../../../../../chain";
 import { getModelInfo } from "../../../../../utils/get-model-info";
-function nextTick() {
-  return new Promise((resolve) => setTimeout(resolve, 0));
+import { nextTick } from "../../../../../utils/nextTick";
+
+
+async function getBotAndEmbedding(request: FastifyRequest<ChatAPIRequest>) {
+  const bot_id = request.params.id;
+  const user_id = request.user.user_id;
+  const prisma = request.server.prisma;
+
+  const bot = await prisma.bot.findFirst({
+    where: { id: bot_id, user_id },
+  });
+
+  if (!bot) {
+    throw new Error("Bot not found");
+  }
+
+  const embeddingInfo = await getModelInfo({
+    model: bot.embedding,
+    prisma,
+    type: "embedding",
+  });
+
+  if (!embeddingInfo) {
+    throw new Error("Embedding not found");
+  }
+
+  const embeddingModel = embeddings(
+    embeddingInfo.model_provider!.toLowerCase(),
+    embeddingInfo.model_id,
+    embeddingInfo?.config
+  );
+
+  return { bot, embeddingModel };
 }
-export const chatRequestAPIHandler = async (
+
+async function getRetriever(bot, embeddingModel) {
+  let resolveWithDocuments: (value: Document[]) => void;
+  const documentPromise = new Promise<Document[]>((resolve) => {
+    resolveWithDocuments = resolve;
+  });
+
+  const callbacks = [
+    {
+      handleRetrieverEnd(documents) {
+        resolveWithDocuments(documents);
+      },
+    },
+  ];
+
+  let retriever: BaseRetriever;
+  if (bot.use_hybrid_search) {
+    retriever = new DialoqbaseHybridRetrival(embeddingModel, {
+      botId: bot.id,
+      sourceId: null,
+      callbacks,
+    });
+  } else {
+    const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
+      embeddingModel,
+      { botId: bot.id, sourceId: null }
+    );
+    retriever = vectorstore.asRetriever({ callbacks });
+  }
+
+  return { retriever, documentPromise };
+}
+
+async function getModel(bot, prisma) {
+  const modelinfo = await getModelInfo({
+    model: bot.model,
+    prisma,
+    type: "chat",
+  });
+
+  if (!modelinfo) {
+    throw new Error("Model not found");
+  }
+
+  const botConfig: any = (modelinfo.config as {}) || {};
+  if (
+    bot.provider.toLowerCase() === "openai" &&
+    bot.bot_model_api_key?.trim()
+  ) {
+    botConfig.configuration = { apiKey: bot.bot_model_api_key };
+  }
+
+  return chatModelProvider(bot.provider, bot.model, bot.temperature, botConfig);
+}
+
+async function handleChatRequest(
   request: FastifyRequest<ChatAPIRequest>,
-  reply: FastifyReply
-) => {
-  const { message, history, stream } = request.body;
-  if (stream) {
-    try {
-      const bot_id = request.params.id;
-      const prisma = request.server.prisma;
-      const user_id = request.user.user_id;
+  reply: FastifyReply,
+  isStreaming: boolean
+) {
+  try {
+    const { message, history } = request.body;
+    const { bot, embeddingModel } = await getBotAndEmbedding(request);
+    const { retriever, documentPromise } = await getRetriever(
+      bot,
+      embeddingModel
+    );
+    const model = await getModel(bot, request.server.prisma);
 
-      const bot = await prisma.bot.findFirst({
-        where: {
-          id: bot_id,
-          user_id,
-        },
-      });
+    const sanitizedQuestion = message.trim().replaceAll("\n", " ");
+    const chatHistory = groupMessagesByConversation(
+      history.slice(-bot.noOfChatHistoryInContext).map((message) => ({
+        type: message.role,
+        content: message.text,
+      }))
+    );
 
-      if (!bot) {
-        return reply.status(404).send({
-          message: "Bot not found",
-        });
-      }
+    const chain = createChain({
+      llm: isStreaming ? model.withStreaming() : model,
+      question_llm: model,
+      question_template: bot.questionGeneratorPrompt,
+      response_template: bot.qaPrompt,
+      retriever,
+    });
 
-      const temperature = bot.temperature;
-
-      const sanitizedQuestion = message.trim().replaceAll("\n", " ");
-      const embeddingInfo = await getModelInfo({
-        model: bot.embedding,
-        prisma,
-        type: "embedding",
-      });
-
-      if (!embeddingInfo) {
-        return reply.status(404).send({
-          message: "Embedding not found",
-        });
-      }
-
-      const embeddingModel = embeddings(
-        embeddingInfo.model_provider!.toLowerCase(),
-        embeddingInfo.model_id,
-        embeddingInfo?.config
-      );
-
-      reply.raw.on("close", () => {
-        console.log("closed");
-      });
-
-      const modelinfo = await getModelInfo({
-        model: bot.model,
-        prisma,
-        type: "chat",
-      });
-
-      if (!modelinfo) {
-        return reply.status(404).send({
-          message: "Model not found",
-        });
-      }
-
-      const botConfig = (modelinfo.config as {}) || {};
-      let retriever: BaseRetriever;
-      let resolveWithDocuments: (value: Document[]) => void;
-      const documentPromise = new Promise<Document[]>((resolve) => {
-        resolveWithDocuments = resolve;
-      });
-      if (bot.use_hybrid_search) {
-        retriever = new DialoqbaseHybridRetrival(embeddingModel, {
-          botId: bot.id,
-          sourceId: null,
-          callbacks: [
-            {
-              handleRetrieverEnd(documents) {
-                resolveWithDocuments(documents);
-              },
-            },
-          ],
-        });
-      } else {
-        const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
-          embeddingModel,
-          {
-            botId: bot.id,
-            sourceId: null,
-          }
-        );
-
-        retriever = vectorstore.asRetriever({
-          callbacks: [
-            {
-              handleRetrieverEnd(documents) {
-                resolveWithDocuments(documents);
-              },
-            },
-          ],
-        });
-      }
-
-      let response: string = "";
-      const streamedModel = chatModelProvider(
-        bot.provider,
-        bot.model,
-        temperature,
-        {
-          streaming: true,
-          ...botConfig,
-        }
-      );
-
-      const nonStreamingModel = chatModelProvider(
-        bot.provider,
-        bot.model,
-        temperature,
-        {
-          ...botConfig,
-        }
-      );
-
-      reply.raw.on("close", () => {
-        // close the model
-      });
-
-      const chain = createChain({
-        llm: streamedModel,
-        question_llm: nonStreamingModel,
-        question_template: bot.questionGeneratorPrompt,
-        response_template: bot.qaPrompt,
-        retriever,
-      });
-
-      let stream = await chain.stream({
+    let response = "";
+    if (isStreaming) {
+      const stream = await chain.stream({
         question: sanitizedQuestion,
-        chat_history: groupMessagesByConversation(
-          history.map((message) => ({
-            type: message.role,
-            content: message.text,
-          }))
-        ),
+        chat_history: chatHistory,
       });
-
       for await (const token of stream) {
         reply.sse({
           id: "",
           event: "chunk",
           data: JSON.stringify({
-            bot: {
-              text: token || "",
-              sourceDocuments: [],
-            },
+            bot: { text: token || "", sourceDocuments: [] },
             history: [
               ...history,
-              {
-                type: "human",
-                text: message,
-              },
-              {
-                type: "ai",
-                text: token || "",
-              },
+              { type: "human", text: message },
+              { type: "ai", text: token || "" },
             ],
           }),
         });
         response += token;
       }
-
-      const documents = await documentPromise;
-
-      await prisma.botApiHistory.create({
-        data: {
-          api_key: request.headers.authorization || "",
-          bot_id: bot.id,
-          human: message,
-          bot: response,
-        },
+    } else {
+      response = await chain.invoke({
+        question: sanitizedQuestion,
+        chat_history: chatHistory,
       });
+    }
 
-      reply.sse({
-        event: "result",
-        id: "",
-        data: JSON.stringify({
-          bot: {
-            text: response,
-            sourceDocuments: documents,
-          },
-          history: [
-            ...history,
-            {
-              type: "human",
-              text: message,
-            },
-            {
-              type: "ai",
-              text: response,
-            },
-          ],
-        }),
-      });
+    const documents = await documentPromise;
+
+    await request.server.prisma.botApiHistory.create({
+      data: {
+        api_key: request.headers.authorization || "",
+        bot_id: bot.id,
+        human: message,
+        bot: response,
+      },
+    });
+
+    const result = {
+      bot: { text: response, sourceDocuments: documents },
+      history: [
+        ...history,
+        { type: "human", text: message },
+        { type: "ai", text: response },
+      ],
+    };
+
+    if (isStreaming) {
+      reply.sse({ event: "result", id: "", data: JSON.stringify(result) });
       await nextTick();
       return reply.raw.end();
-    } catch (e) {
-      return reply.status(500).send({
-        message: "Internal Server Error",
-      });
+    } else {
+      return result;
     }
-  } else {
-    try {
-      const bot_id = request.params.id;
-      const user_id = request.user.user_id;
-
-      const prisma = request.server.prisma;
-
-      const bot = await prisma.bot.findFirst({
-        where: {
-          id: bot_id,
-          user_id,
-        },
-      });
-
-      if (!bot) {
-        return reply.status(404).send({
-          message: "Bot not found",
-        });
-      }
-
-      const temperature = bot.temperature;
-
-      const sanitizedQuestion = message.trim().replaceAll("\n", " ");
-      const embeddingInfo = await getModelInfo({
-        model: bot.embedding,
-        prisma,
-        type: "embedding",
-      });
-
-      if (!embeddingInfo) {
-        return reply.status(404).send({
-          message: "Embedding not found",
-        });
-      }
-
-      const embeddingModel = embeddings(
-        embeddingInfo.model_provider!.toLowerCase(),
-        embeddingInfo.model_id,
-        embeddingInfo?.config
-      );
-
-      let retriever: BaseRetriever;
-      let resolveWithDocuments: (value: Document[]) => void;
-      const documentPromise = new Promise<Document[]>((resolve) => {
-        resolveWithDocuments = resolve;
-      });
-      if (bot.use_hybrid_search) {
-        retriever = new DialoqbaseHybridRetrival(embeddingModel, {
-          botId: bot.id,
-          sourceId: null,
-          callbacks: [
-            {
-              handleRetrieverEnd(documents) {
-                resolveWithDocuments(documents);
-              },
-            },
-          ],
-        });
-      } else {
-        const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
-          embeddingModel,
-          {
-            botId: bot.id,
-            sourceId: null,
-          }
-        );
-
-        retriever = vectorstore.asRetriever({
-          callbacks: [
-            {
-              handleRetrieverEnd(documents) {
-                resolveWithDocuments(documents);
-              },
-            },
-          ],
-        });
-      }
-
-      const modelinfo = await getModelInfo({
-        model: bot.model,
-        prisma,
-        type: "chat",
-      });
-
-      if (!modelinfo) {
-        return reply.status(404).send({
-          message: "Model not found",
-        });
-      }
-
-      const botConfig: any = (modelinfo.config as {}) || {};
-      if (bot.provider.toLowerCase() === "openai") {
-        if (bot.bot_model_api_key && bot.bot_model_api_key.trim() !== "") {
-          botConfig.configuration = {
-            apiKey: bot.bot_model_api_key,
-          };
-        }
-      }
-
-      const model = chatModelProvider(bot.provider, bot.model, temperature, {
-        ...botConfig,
-      });
-
-      const chain = createChain({
-        llm: model,
-        question_llm: model,
-        question_template: bot.questionGeneratorPrompt,
-        response_template: bot.qaPrompt,
-        retriever,
-      });
-
-      const botResponse = await chain.invoke({
-        question: sanitizedQuestion,
-        chat_history: groupMessagesByConversation(
-          history.map((message) => ({
-            type: message.role,
-            content: message.text,
-          }))
-        ),
-      });
-
-      const documents = await documentPromise;
-
-      await prisma.botApiHistory.create({
-        data: {
-          api_key: request.headers.authorization || "",
-          bot_id: bot.id,
-          human: message,
-          bot: botResponse,
-        },
-      });
-
-      return {
-        bot: {
-          text: botResponse,
-          sourceDocuments: documents,
-        },
-        history: [
-          ...history,
-          {
-            type: "human",
-            text: message,
-          },
-          {
-            type: "ai",
-            text: botResponse,
-          },
-        ],
-      };
-    } catch (e) {
-      return reply.status(500).send({
-        message: "Internal Server Error",
-      });
-    }
+  } catch (e) {
+    console.error(e);
+    return reply.status(500).send({ message: "Internal Server Error" });
   }
+}
+
+export const chatRequestAPIHandler = async (
+  request: FastifyRequest<ChatAPIRequest>,
+  reply: FastifyReply
+) => {
+  const { stream } = request.body;
+  return handleChatRequest(request, reply, stream);
 };

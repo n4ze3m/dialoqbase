@@ -19,7 +19,10 @@ model Bot {
   createdAt                     DateTime         @default(now())
   temperature                   Float            @default(0.7)
   noOfDocumentsToRetrieve       Int?             @default(4)
-  noOfChatHistoryInContext      Int?             @default(15)
+  noOfChatHistoryInContext      Int?             @default(0)
+  publicBotPwdProtected         Boolean          @default(false)
+  publicBotPwd                  String?
+  publicBotPwdHash              String?
   semanticSearchSimilarityScore String?          @default("none")
   model                         String           @default("gpt-3.5-turbo")
   provider                      String           @default("openai")

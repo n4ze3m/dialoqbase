@@ -5,6 +5,7 @@ import {
   getChatStyleByIdHandler,
   chatRequestAPIHandler,
   chatTTSHandler,
+  botLoginHandler,
 } from "../../handlers/bot";
 import {
   chatRequestSchema,
@@ -12,6 +13,7 @@ import {
   chatStyleSchema,
   chatAPIRequestSchema,
   chatTTSSchema,
+  chatLoginSchema,
 } from "../../schema/bot";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
@@ -52,6 +54,14 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
       schema: chatAPIRequestSchema,
     },
     chatRequestAPIHandler
+  );
+
+  fastify.post(
+    "/:id/login",
+    {
+      schema: chatLoginSchema,
+    },
+    botLoginHandler
   );
 
   fastify.get(

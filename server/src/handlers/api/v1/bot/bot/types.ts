@@ -50,7 +50,6 @@ export interface AddNewPDFById {
 }
 
 export interface UploadPDF {
-
   Querystring: {
     embedding: string;
     model: string;
@@ -79,17 +78,15 @@ export interface UpdateBotById {
     use_hybrid_search?: boolean;
     bot_protect?: boolean;
     use_rag?: boolean;
-    bot_model_api_key?: string
+    bot_model_api_key?: string;
   };
 }
-
 
 export interface GetBotById {
   Params: {
     bot_id: string;
   };
 }
-
 
 export interface CreateBotAPIRequest {
   Body: {
@@ -117,11 +114,9 @@ export interface UpdateBotAPIById {
     use_hybrid_search?: boolean;
     bot_protect?: boolean;
     use_rag?: boolean;
-    bot_model_api_key?: string
+    bot_model_api_key?: string;
   };
 }
-
-
 
 export interface ChatAPIRequest {
   Params: {
@@ -129,11 +124,21 @@ export interface ChatAPIRequest {
   };
   Body: {
     message: string;
-    stream: string;
+    stream: boolean;
     history_id?: string;
     history: {
       role: string;
       text: string;
     }[];
+  };
+}
+
+export interface UpdateBotPasswordSettings {
+  Params: {
+    id: string;
+  };
+  Body: {
+    publicBotPwdProtected: boolean;
+    publicBotPwd?: string;
   };
 }
