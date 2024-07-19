@@ -19,6 +19,7 @@ export type RegisterUserbyAdminRequestBody = {
     username: string;
     email: string;
     password: string;
+    return_id?: boolean;
   };
 };
 

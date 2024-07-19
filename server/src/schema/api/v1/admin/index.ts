@@ -133,6 +133,7 @@ export const registerUserByAdminSchema: FastifySchema = {
       username: { type: "string" },
       email: { type: "string" },
       password: { type: "string" },
+      return_id: { type: "boolean" },
     },
     required: ["username", "email", "password"],
   },
@@ -141,6 +142,8 @@ export const registerUserByAdminSchema: FastifySchema = {
       type: "object",
       properties: {
         message: { type: "string" },
+        user_id: { type: "string" },
+        api_key: { type: "string" },
       },
     },
   },

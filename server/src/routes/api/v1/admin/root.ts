@@ -71,7 +71,7 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     "/register-user",
     {
       schema: registerUserByAdminSchema,
-      onRequest: [fastify.authenticate],
+      onRequest: [fastify.authenticateAdmin],
     },
     registerUserByAdminHandler
   );
@@ -80,7 +80,7 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     "/reset-user-password",
     {
       schema: resetUserPasswordByAdminSchema,
-      onRequest: [fastify.authenticate],
+      onRequest: [fastify.authenticateAdmin],
     },
     resetUserPasswordByAdminHandler
   );

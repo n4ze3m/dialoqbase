@@ -65,12 +65,36 @@ export default fp<FastifyJWTOptions>(async (fastify, opts) => {
       reply.send(err);
     }
   }
+
+  async function authenticateAdmin(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      await authenticate(request, reply)
+      
+      if (!request.user || !request.user.is_admin) {
+        return reply.status(403).send({
+          message: "Forbidden: Admin access required",
+        })
+      }
+    } catch (err) {
+      reply.send(err)
+    }
+  }
+
+  fastify.decorate("authenticateAdmin", authenticateAdmin)
+
+
   fastify.decorate("authenticate", authenticate);
+
 });
 
 declare module "fastify" {
   export interface FastifyInstance {
     authenticate(
+      request: FastifyRequest,
+      reply: FastifyReply
+    ): Promise<undefined>;
+
+    authenticateAdmin(
       request: FastifyRequest,
       reply: FastifyReply
     ): Promise<undefined>;
