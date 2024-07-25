@@ -166,6 +166,8 @@ export const SettingsBody: React.FC<BotSettings> = ({
             noOfDocumentsToRetrieve: data.noOfDocumentsToRetrieve,
             noOfChatHistoryInContext: data.noOfChatHistoryInContext,
             semanticSearchSimilarityScore: data.semanticSearchSimilarityScore,
+            autoResetSession: data.autoResetSession,
+            inactivityTimeout: data.inactivityTimeout,
           }}
           form={form}
           requiredMark={false}
@@ -423,6 +425,32 @@ export const SettingsBody: React.FC<BotSettings> = ({
                   <Input.Password
                     size="large"
                     placeholder="Enter your API key here"
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  name="autoResetSession"
+                  label="Auto Reset Chat Session"
+                  tooltip="This will reset the chat session after a certain period of inactivity. Useful for platforms like Telegram, WhatsApp, etc."
+                >
+                  <Switch />
+                </Form.Item>
+
+                <Form.Item
+                  name="inactivityTimeout"
+                  label="Inactivity Timeout"
+                  help="Enter the time in seconds after which the chat session will be reset."
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input an inactivity timeout!",
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    min={0}
+                    style={{ width: "100%" }}
+                    placeholder="Enter inactivity timeout"
                   />
                 </Form.Item>
               </div>
