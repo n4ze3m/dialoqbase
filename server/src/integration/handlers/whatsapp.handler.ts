@@ -6,6 +6,7 @@ import { BaseRetriever } from "@langchain/core/retrievers";
 import { DialoqbaseHybridRetrival } from "../../utils/hybrid";
 import { createChain } from "../../chain";
 import { getModelInfo } from "../../utils/get-model-info";
+import { differenceInSeconds } from "date-fns";
 const prisma = new PrismaClient();
 
 export const whatsappBotHandler = async (
@@ -52,6 +53,20 @@ export const whatsappBotHandler = async (
       human: message.human,
       ai: message.bot,
     }));
+
+    const lastMessageTimestamp = chat_history[chat_history.length - 1]?.createdAt || new Date().toISOString();
+
+    const inactivityPeriod = differenceInSeconds(
+      new Date(),
+      lastMessageTimestamp
+    );
+
+    if (bot.autoResetSession) {
+      if (inactivityPeriod > bot.inactivityTimeout) {
+        history = [];
+      }
+    }
+
 
     const temperature = bot.temperature;
 
