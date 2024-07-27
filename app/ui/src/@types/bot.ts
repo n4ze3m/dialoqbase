@@ -19,6 +19,8 @@ export type BotSettings = {
     bot_model_api_key: string;
     noOfChatHistoryInContext: number;
     semanticSearchSimilarityScore: string;
+    inactivityTimeout: number;
+    autoResetSession: boolean;
   };
   chatModel: {
     label: string;

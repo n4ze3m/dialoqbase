@@ -7,6 +7,7 @@ import { Document } from "langchain/document";
 import { BaseRetriever } from "@langchain/core/retrievers";
 import { createChain } from "../../chain";
 import { getModelInfo } from "../../utils/get-model-info";
+import { differenceInSeconds } from "date-fns";
 const prisma = new PrismaClient();
 
 export const discordBotHandler = async (
@@ -47,6 +48,18 @@ export const discordBotHandler = async (
 
     if (history.length > 20) {
       history.splice(0, history.length - 20);
+    }
+    const lastMessageTimestamp = chat_history[chat_history.length - 1]?.createdAt || new Date().toISOString();
+
+    const inactivityPeriod = differenceInSeconds(
+      new Date(),
+      lastMessageTimestamp
+    );
+
+    if (bot.autoResetSession) {
+      if (inactivityPeriod > bot.inactivityTimeout) {
+        history = [];
+      }
     }
 
     const temperature = bot.temperature;

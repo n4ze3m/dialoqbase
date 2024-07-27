@@ -3,14 +3,15 @@ import {
   RegisterUserbyAdminRequestBody,
   ResetUserPasswordByAdminRequest,
   UpdateDialoqbaseSettingsRequest,
-  UpdateDialoqbaseRAGSettingsRequest
+  UpdateDialoqbaseRAGSettingsRequest,
 } from "./type";
 import { getSettings } from "../../../../utils/common";
 import * as bcrypt from "bcryptjs";
+import { generateDialoqbaseAPIKey } from "../../../../utils/api";
 
 export const updateDialoqbaseSettingsHandler = async (
   request: FastifyRequest<UpdateDialoqbaseSettingsRequest>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const primsa = request.server.prisma;
   const user = request.user;
@@ -42,7 +43,7 @@ export const updateDialoqbaseSettingsHandler = async (
 
 export const resetUserPasswordByAdminHandler = async (
   request: FastifyRequest<ResetUserPasswordByAdminRequest>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const prisma = request.server.prisma;
   const user = request.user;
@@ -83,7 +84,7 @@ export const resetUserPasswordByAdminHandler = async (
 
 export const registerUserByAdminHandler = async (
   request: FastifyRequest<RegisterUserbyAdminRequestBody>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   try {
     const prisma = request.server.prisma;
@@ -121,13 +122,32 @@ export const registerUserByAdminHandler = async (
 
     const hashedPassword = await bcrypt.hash(request.body.password, 12);
 
-    await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         username: request.body.username,
         email: request.body.email,
         password: hashedPassword,
       },
     });
+
+    if (request.body.return_id) {
+      const apiKey = generateDialoqbaseAPIKey();
+
+      await prisma.userApiKey.create({
+        data: {
+          user_id: newUser.user_id,
+          name: "Default",
+          api_key: apiKey,
+        },
+      });
+
+      return {
+        user_id: newUser.user_id,
+        api_key: apiKey,
+        message: "User registered successfully",
+      };
+    }
+
     return reply.status(200).send({
       message: "User registered successfully",
     });
@@ -138,10 +158,9 @@ export const registerUserByAdminHandler = async (
   }
 };
 
-
 export const updateDialoqbaseRAGSettingsHandler = async (
   request: FastifyRequest<UpdateDialoqbaseRAGSettingsRequest>,
-  reply: FastifyReply,
+  reply: FastifyReply
 ) => {
   const prisma = request.server.prisma;
   const user = request.user;
@@ -162,4 +181,4 @@ export const updateDialoqbaseRAGSettingsHandler = async (
   return {
     message: "RAG settings updated successfully",
   };
-}
+};
