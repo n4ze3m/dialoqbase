@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 
-import { GetBotRequestById } from "./types";
+import { GetBotRequestById, GetDatasourceByBotId } from "./types";
 import { getSettings } from "../../../../../utils/common";
 import { getAllOllamaModels } from "../../../../../utils/ollama";
 
@@ -37,17 +37,19 @@ export const getBotByIdEmbeddingsHandler = async (
   };
 };
 
-export const getBotByIdAllSourcesHandler = async (
-  request: FastifyRequest<GetBotRequestById>,
+export const getDatasourceByBotId = async (
+  request: FastifyRequest<GetDatasourceByBotId>,
   reply: FastifyReply
 ) => {
   const prisma = request.server.prisma;
   const id = request.params.id;
+  const { limit, page } = request.query;
+  const skip = (page - 1) * limit;
 
   const bot = await prisma.bot.findFirst({
     where: {
       id,
-      user_id: request.user.user_id,
+      user_id: request.user?.is_admin ? undefined : request.user?.user_id
     },
   });
 
@@ -64,10 +66,27 @@ export const getBotByIdAllSourcesHandler = async (
         notIn: ["crawl", "sitemap"],
       },
     },
+    orderBy: {
+      createdAt: 'desc'
+    },
+    skip,
+    take: limit,
+  });
+
+  const totalCount = await prisma.botSource.count({
+    where: {
+      botId: id,
+      type: {
+        notIn: ["crawl", "sitemap"],
+      },
+    },
   });
 
   return {
     data: sources,
+    total: totalCount,
+    next: page * limit < totalCount ? page + 1 : null,
+    prev: page > 1 ? page - 1 : null
   };
 };
 
@@ -156,8 +175,8 @@ export const getCreateBotConfigHandler = async (
     .map((model) => {
       return {
         label: `${model.name || model.model_id} ${model.model_id === "dialoqbase_eb_dialoqbase-ollama"
-            ? "(Deprecated)"
-            : ""
+          ? "(Deprecated)"
+          : ""
           }`,
         value: model.model_id,
         disabled: model.model_id === "dialoqbase_eb_dialoqbase-ollama",
@@ -235,8 +254,8 @@ export const getBotByIdSettingsHandler = async (
     .map((model) => {
       return {
         label: `${model.name || model.model_id} ${model.model_id === "dialoqbase_eb_dialoqbase-ollama"
-            ? "(Deprecated)"
-            : ""
+          ? "(Deprecated)"
+          : ""
           }`,
         value: model.model_id,
         disabled: model.model_id === "dialoqbase_eb_dialoqbase-ollama",

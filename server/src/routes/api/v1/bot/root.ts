@@ -7,7 +7,7 @@ import {
   deleteBotByIdHandler,
   deleteSourceByIdHandler,
   getAllBotsHandler,
-  getBotByIdAllSourcesHandler,
+  getDatasourceByBotId,
   getBotByIdEmbeddingsHandler,
   getBotByIdHandler,
   refreshSourceByIdHandler,
@@ -32,7 +32,8 @@ import {
   createBotAPISchema,
   addNewSourceByBulkIdSchema,
   updateBotAPISchema,
-  updateBotPasswordSettingsSchema
+  updateBotPasswordSettingsSchema,
+  getDatasourceByBotIdSchema
 } from "../../../../schema/api/v1/bot/bot";
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
@@ -58,10 +59,10 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   fastify.get(
     "/:id/source",
     {
-      schema: getBotByIdSchema,
+      schema: getDatasourceByBotIdSchema,
       onRequest: [fastify.authenticate],
     },
-    getBotByIdAllSourcesHandler
+    getDatasourceByBotId
   );
 
   // get details for settings

@@ -62,6 +62,34 @@ export const getBotByIdSchema: FastifySchema = {
   },
 };
 
+export const getDatasourceByBotIdSchema: FastifySchema = {
+  tags: ["Bot"],
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
+  params: {
+    type: "object",
+    required: ["id"],
+    properties: {
+      id: {
+        type: "string",
+      },
+    },
+  },
+  querystring: {
+    type: "object",
+    properties: {
+      page: { type: "number" , default: 1},
+      limit: { type: "number" , default: 10},
+    },
+  }
+};
+
+
 export const addNewSourceByIdSchema: FastifySchema = {
   tags: ["Bot"],
   headers: {
