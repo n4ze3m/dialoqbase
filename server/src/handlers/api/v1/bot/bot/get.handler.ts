@@ -155,11 +155,10 @@ export const getCreateBotConfigHandler = async (
     .filter((model) => model.model_type === "embedding")
     .map((model) => {
       return {
-        label: `${model.name || model.model_id} ${
-          model.model_id === "dialoqbase_eb_dialoqbase-ollama"
+        label: `${model.name || model.model_id} ${model.model_id === "dialoqbase_eb_dialoqbase-ollama"
             ? "(Deprecated)"
             : ""
-        }`,
+          }`,
         value: model.model_id,
         disabled: model.model_id === "dialoqbase_eb_dialoqbase-ollama",
       };
@@ -184,6 +183,7 @@ export const getCreateBotConfigHandler = async (
     embeddingModel,
     defaultChatModel: settings?.defaultChatModel,
     defaultEmbeddingModel: settings?.defaultEmbeddingModel,
+    fileUploadSizeLimit: settings?.fileUploadSizeLimit
   };
 };
 
@@ -234,11 +234,10 @@ export const getBotByIdSettingsHandler = async (
     .filter((model) => model.model_type === "embedding")
     .map((model) => {
       return {
-        label: `${model.name || model.model_id} ${
-          model.model_id === "dialoqbase_eb_dialoqbase-ollama"
+        label: `${model.name || model.model_id} ${model.model_id === "dialoqbase_eb_dialoqbase-ollama"
             ? "(Deprecated)"
             : ""
-        }`,
+          }`,
         value: model.model_id,
         disabled: model.model_id === "dialoqbase_eb_dialoqbase-ollama",
       };

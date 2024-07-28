@@ -7,7 +7,6 @@ import {
   InputNumber,
   Row,
   Select,
-  Skeleton,
   Switch,
   Upload,
   message,
@@ -25,9 +24,9 @@ import { GithubIcon } from "../Icons/GithubIcon";
 import { YoutubeIcon } from "../Icons/YoutubeIcon";
 import { ApiIcon } from "../Icons/ApiIcon";
 import { SitemapIcon } from "../Icons/SitemapIcon";
-import { useCreateConfig } from "../../hooks/useCreateConfig";
 import { useQuery } from "@tanstack/react-query";
 import api from "../../services/api";
+import { BotConfig } from "../../@types/bot";
 
 type Props = {
   createBot: (values: any) => void;
@@ -36,6 +35,7 @@ type Props = {
   form: FormInstance<any>;
   showEmbeddingAndModels: boolean;
   newSelectedSource?: any;
+  botConfig: BotConfig
 };
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -47,12 +47,10 @@ export const BotForm = ({
   setSelectedSource,
   form,
   showEmbeddingAndModels,
+  botConfig
 }: Props) => {
-  const { data: botConfig, status: botConfigStatus } = useCreateConfig();
-
   const youtubeMode = Form.useWatch(["options", "youtube_mode"], form);
   const url = Form.useWatch(["content"], form);
-
   const [availableSources] = React.useState([
     {
       id: 1,
@@ -121,7 +119,7 @@ export const BotForm = ({
             <Upload.Dragger
               accept={`.pdf,.docx,.csv,.txt,.mp3,.mp4`}
               multiple={true}
-              maxCount={10}
+              maxCount={botConfig?.fileUploadSizeLimit}
               beforeUpload={(file) => {
                 const allowedTypes = [
                   "application/pdf",
@@ -474,229 +472,222 @@ export const BotForm = ({
 
   return (
     <>
-      {botConfigStatus === "success" && (
-        <Form
-          layout="vertical"
-          onFinish={createBot}
-          form={form}
-          className="space-y-6"
-          initialValues={{
-            embedding:
-              botConfig?.defaultEmbeddingModel ||
-              "dialoqbase_eb_text-embedding-ada-002",
-            model: botConfig?.defaultChatModel || "gpt-3.5-turbo-dbase",
-            maxDepth: 2,
-            maxLinks: 10,
-            options: {
-              branch: "main",
-              is_private: false,
-              method: "get",
-              headers: "{}",
-              body: "{}",
-              youtube_mode: "whisper",
-            },
+      <Form
+        layout="vertical"
+        onFinish={createBot}
+        form={form}
+        className="space-y-6"
+        initialValues={{
+          embedding:
+            botConfig?.defaultEmbeddingModel ||
+            "dialoqbase_eb_text-embedding-ada-002",
+          model: botConfig?.defaultChatModel || "gpt-3.5-turbo-dbase",
+          maxDepth: 2,
+          maxLinks: 10,
+          options: {
+            branch: "main",
+            is_private: false,
+            method: "get",
+            headers: "{}",
+            body: "{}",
+            youtube_mode: "whisper",
+          },
+        }}
+      >
+        <RadioGroup
+          value={selectedSource}
+          onChange={(e: any) => {
+            _setSelectedSource(e);
+            setSelectedSource(e);
           }}
         >
-          <RadioGroup
-            value={selectedSource}
-            onChange={(e: any) => {
-              _setSelectedSource(e);
-              setSelectedSource(e);
-            }}
-          >
-            <RadioGroup.Label className="text-base font-medium text-gray-800 dark:text-gray-200">
-              Select a data source
-            </RadioGroup.Label>
+          <RadioGroup.Label className="text-base font-medium text-gray-800 dark:text-gray-200">
+            Select a data source
+          </RadioGroup.Label>
 
-            <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
-              {availableSources.map((source) => (
-                <RadioGroup.Option
-                  key={source.id}
-                  value={source}
-                  className={({ checked, active }) =>
-                    classNames(
-                      checked
-                        ? "border-transparent"
-                        : "border-gray-300 dark:border-gray-700",
-                      active
-                        ? "border-indigo-500 ring-0 ring-indigo-500 dark:border-gray-700 dark:ring-gray-900"
-                        : "",
-                      "relative  items-center justify-center flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none dark:bg-[#141414]"
-                    )
-                  }
+          <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
+            {availableSources.map((source) => (
+              <RadioGroup.Option
+                key={source.id}
+                value={source}
+                className={({ checked, active }) =>
+                  classNames(
+                    checked
+                      ? "border-transparent"
+                      : "border-gray-300 dark:border-gray-700",
+                    active
+                      ? "border-indigo-500 ring-0 ring-indigo-500 dark:border-gray-700 dark:ring-gray-900"
+                      : "",
+                    "relative  items-center justify-center flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none dark:bg-[#141414]"
+                  )
+                }
+              >
+                {({ checked, active }) => (
+                  <>
+                    <span className="flex-shrink-0 flex items-center justify-centerrounded-lg">
+                      <RadioGroup.Label
+                        as="span"
+                        className="block text-sm font-medium text-gray-900 dark:text-gray-200"
+                      >
+                        <source.icon
+                          className="h-6 w-6 mr-3"
+                          aria-hidden="true"
+                        />
+                      </RadioGroup.Label>
+                      {source.title}
+                    </span>
+
+                    <span
+                      className={classNames(
+                        active ? "border" : "border-2",
+                        checked ? "border-indigo-500" : "border-transparent",
+                        "pointer-events-none absolute -inset-px rounded-lg"
+                      )}
+                      aria-hidden="true"
+                    />
+                  </>
+                )}
+              </RadioGroup.Option>
+            ))}
+          </div>
+        </RadioGroup>
+
+        {selectedSource && selectedSource.formComponent}
+
+        {selectedSource && selectedSource.value === "rest" && (
+          <Row gutter={24}>
+            <Col span={12}>
+              <Form.Item name={["options", "headers"]} label="Headers">
+                <Input.TextArea placeholder="Enter the headers" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name={["options", "body"]}
+                label="Body (JSON)"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter a valid JSON",
+                  },
+                ]}
+              >
+                <Input.TextArea placeholder="Enter the body" />
+              </Form.Item>
+            </Col>
+          </Row>
+        )}
+
+        {selectedSource &&
+          selectedSource.value === "youtube" &&
+          youtubeMode === "transcript" && (
+            <>
+              <Form.Item
+                name={["options", "language_code"]}
+                label="Select language"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select a language",
+                  },
+                ]}
+              >
+                <Select
+                  loading={isFetchingTranscript}
+                  placeholder="Select language"
+                  options={transcripts?.map((transcript) => ({
+                    label: transcript.name.simpleText,
+                    value: transcript.languageCode,
+                  }))}
+                />
+              </Form.Item>
+
+              <p className="text-sm text-gray-500">
+                If you find any issues, please report them on{" "}
+                <a
+                  href="https://github.com/n4ze3m/dialoqbase/issues/new?title=Github%20issue&labels=bug"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-medium text-indigo-600 hover:text-indigo-500"
                 >
-                  {({ checked, active }) => (
-                    <>
-                      <span className="flex-shrink-0 flex items-center justify-centerrounded-lg">
-                        <RadioGroup.Label
-                          as="span"
-                          className="block text-sm font-medium text-gray-900 dark:text-gray-200"
-                        >
-                          <source.icon
-                            className="h-6 w-6 mr-3"
-                            aria-hidden="true"
-                          />
-                        </RadioGroup.Label>
-                        {source.title}
-                      </span>
-
-                      <span
-                        className={classNames(
-                          active ? "border" : "border-2",
-                          checked ? "border-indigo-500" : "border-transparent",
-                          "pointer-events-none absolute -inset-px rounded-lg"
-                        )}
-                        aria-hidden="true"
-                      />
-                    </>
-                  )}
-                </RadioGroup.Option>
-              ))}
-            </div>
-          </RadioGroup>
-
-          {selectedSource && selectedSource.formComponent}
-
-          {selectedSource && selectedSource.value === "rest" && (
-            <Row gutter={24}>
-              <Col span={12}>
-                <Form.Item name={["options", "headers"]} label="Headers">
-                  <Input.TextArea placeholder="Enter the headers" />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name={["options", "body"]}
-                  label="Body (JSON)"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter a valid JSON",
-                    },
-                  ]}
-                >
-                  <Input.TextArea placeholder="Enter the body" />
-                </Form.Item>
-              </Col>
-            </Row>
+                  GitHub
+                </a>
+                .
+              </p>
+            </>
           )}
 
-          {selectedSource &&
-            selectedSource.value === "youtube" &&
-            youtubeMode === "transcript" && (
-              <>
-                <Form.Item
-                  name={["options", "language_code"]}
-                  label="Select language"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please select a language",
-                    },
-                  ]}
-                >
-                  <Select
-                    loading={isFetchingTranscript}
-                    placeholder="Select language"
-                    options={transcripts?.map((transcript) => ({
-                      label: transcript.name.simpleText,
-                      value: transcript.languageCode,
-                    }))}
-                  />
-                </Form.Item>
+        <Form.Item hidden={!showEmbeddingAndModels} noStyle>
+          <Divider />
+        </Form.Item>
 
-                <p className="text-sm text-gray-500">
-                  If you find any issues, please report them on{" "}
-                  <a
-                    href="https://github.com/n4ze3m/dialoqbase/issues/new?title=Github%20issue&labels=bug"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-medium text-indigo-600 hover:text-indigo-500"
-                  >
-                    GitHub
-                  </a>
-                  .
-                </p>
-              </>
-            )}
-
-          <Form.Item hidden={!showEmbeddingAndModels} noStyle>
-            <Divider />
-          </Form.Item>
-
-          <Form.Item
-            hidden={!showEmbeddingAndModels}
-            label={
-              <span className="font-medium text-gray-800 text-sm dark:text-gray-200">
-                Chat Model
-              </span>
+        <Form.Item
+          hidden={!showEmbeddingAndModels}
+          label={
+            <span className="font-medium text-gray-800 text-sm dark:text-gray-200">
+              Chat Model
+            </span>
+          }
+          name="model"
+        >
+          <Select
+            showSearch
+            filterOption={(input, option) =>
+              (option?.label?.toLowerCase() ?? "").includes(
+                input?.toLowerCase()
+              ) ||
+              (option?.value?.toLowerCase() ?? "").includes(
+                input?.toLowerCase()
+              )
             }
-            name="model"
-          >
-            <Select
-              showSearch
-              filterOption={(input, option) =>
-                (option?.label?.toLowerCase() ?? "").includes(
-                  input?.toLowerCase()
-                ) ||
-                (option?.value?.toLowerCase() ?? "").includes(
-                  input?.toLowerCase()
-                )
-              }
-              filterSort={(optionA, optionB) =>
-                (optionA?.label ?? "")
-                  .toLowerCase()
-                  .localeCompare((optionB?.label ?? "").toLowerCase())
-              }
-              placeholder="Select a Chat Model"
-              options={botConfig.chatModel}
-            />
-          </Form.Item>
-          <Form.Item
-            hidden={!showEmbeddingAndModels}
-            label={
-              <span className="font-medium text-gray-800 text-sm dark:text-gray-200">
-                Embedding model
-              </span>
+            filterSort={(optionA, optionB) =>
+              (optionA?.label ?? "")
+                .toLowerCase()
+                .localeCompare((optionB?.label ?? "").toLowerCase())
             }
-            name="embedding"
-          >
-            <Select
-              showSearch
-              filterOption={(input, option) =>
-                (option?.label?.toLowerCase() ?? "").includes(
-                  input?.toLowerCase()
-                ) ||
-                (option?.value?.toLowerCase() ?? "").includes(
-                  input?.toLowerCase()
-                )
-              }
-              filterSort={(optionA, optionB) =>
-                (optionA?.label ?? "")
-                  .toLowerCase()
-                  .localeCompare((optionB?.label ?? "").toLowerCase())
-              }
-              options={botConfig.embeddingModel}
-              placeholder="Select an Embedding Model"
-            />
-          </Form.Item>
+            placeholder="Select a Chat Model"
+            options={botConfig.chatModel}
+          />
+        </Form.Item>
+        <Form.Item
+          hidden={!showEmbeddingAndModels}
+          label={
+            <span className="font-medium text-gray-800 text-sm dark:text-gray-200">
+              Embedding model
+            </span>
+          }
+          name="embedding"
+        >
+          <Select
+            showSearch
+            filterOption={(input, option) =>
+              (option?.label?.toLowerCase() ?? "").includes(
+                input?.toLowerCase()
+              ) ||
+              (option?.value?.toLowerCase() ?? "").includes(
+                input?.toLowerCase()
+              )
+            }
+            filterSort={(optionA, optionB) =>
+              (optionA?.label ?? "")
+                .toLowerCase()
+                .localeCompare((optionB?.label ?? "").toLowerCase())
+            }
+            options={botConfig.embeddingModel}
+            placeholder="Select an Embedding Model"
+          />
+        </Form.Item>
 
-          <Form.Item>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
-              {isLoading ? "Creating..." : "Create"}
-            </button>
-          </Form.Item>
-        </Form>
-      )}
-      {botConfigStatus === "loading" && (
-        <div className="flex justify-center items-center">
-          <Skeleton active paragraph={{ rows: 5 }} />
-        </div>
-      )}
+        <Form.Item>
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          >
+            {isLoading ? "Creating..." : "Create"}
+          </button>
+        </Form.Item>
+      </Form>
     </>
   );
 };

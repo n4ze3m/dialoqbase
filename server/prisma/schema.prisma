@@ -95,6 +95,7 @@ model DialoqbaseSettings {
   allowUserToCreateBots        Boolean  @default(true)
   allowUserToRegister          Boolean  @default(false)
   numberOfDocuments            Int      @default(10)
+  fileUploadSizeLimit          Int?      @default(10)
   legacyMode                   Boolean  @default(false)
   hidePlayground               Boolean  @default(false)
   defaultChunkSize             Int?     @default(1000)

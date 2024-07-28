@@ -21,7 +21,6 @@ export const dialoqbaseSettingsHandler = async (
       message: "Settings not found",
     });
   }
-
   return settings;
 };
 

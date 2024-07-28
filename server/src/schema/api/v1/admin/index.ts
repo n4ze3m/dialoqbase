@@ -23,6 +23,7 @@ export const dialoqbaseSettingsSchema: FastifySchema = {
       hideDefaultModels: { type: "boolean" },
       ollamaURL: { type: "string" },
       usePuppeteerFetch: { type: "boolean" },
+      fileUploadSizeLimit: { type: "number" },
     },
   },
 };
@@ -49,6 +50,7 @@ export const updateDialoqbaseSettingsSchema: FastifySchema = {
       hideDefaultModels: { type: "boolean" },
       ollamaURL: { type: "string" },
       usePuppeteerFetch: { type: "boolean" },
+      fileUploadSizeLimit: { type: "number" },
     },
   },
   response: {

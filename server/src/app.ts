@@ -31,19 +31,12 @@ const app: FastifyPluginAsync<AppOptions> = async (
 
   void fastify.register(FastifySSEPlugin);
 
-  void fastify.register(fastifyMultipart, {
-    limits: {
-      files: 10,
-      fileSize: 100 * 1024 * 1024,
-    },
-  });
+  void fastify.register(fastifyMultipart);
 
   void fastify.register(swagger);
 
   void fastify.register(swaggerUi, {
     routePrefix: "/docs",
-    staticCSP: true,
-    transformStaticCSP: (header: string) => header,
     theme: {
       title: "Dialoqbase API Docs",
     },
