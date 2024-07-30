@@ -46,7 +46,7 @@ export default function BotDSRoot() {
     <div className="mx-auto my-3 w-full max-w-7xl">
       {status === "loading" && <SkeletonLoading />}
       {status === "success" && (
-        <div  className="px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-8">
           <DsTable data={botData.data} />
           {botData.total >= 10 && (
             <div className="my-3 flex items-center justify-end">

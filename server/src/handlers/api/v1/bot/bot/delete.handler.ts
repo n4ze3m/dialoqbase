@@ -14,7 +14,7 @@ export const deleteSourceByIdHandler = async (
   const bot = await prisma.bot.findFirst({
     where: {
       id: bot_id,
-      user_id: request.user.user_id,
+      user_id: request.user?.is_admin ? undefined : request.user?.user_id
     },
   });
 
@@ -79,7 +79,7 @@ export const deleteBotByIdHandler = async (
   const bot = await prisma.bot.findFirst({
     where: {
       id,
-      user_id: request.user.user_id,
+      user_id: request.user?.is_admin ? undefined : request.user?.user_id
     },
   });
 

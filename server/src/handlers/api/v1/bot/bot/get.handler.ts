@@ -14,7 +14,7 @@ export const getBotByIdEmbeddingsHandler = async (
   const bot = await prisma.bot.findFirst({
     where: {
       id,
-      user_id: request.user.user_id,
+      user_id: request.user?.is_admin ? undefined : request.user?.user_id
     },
   });
 
@@ -100,7 +100,7 @@ export const getBotByIdHandler = async (
   const bot = await prisma.bot.findFirst({
     where: {
       id,
-      user_id: request.user.user_id,
+      user_id: request.user?.is_admin ? undefined : request.user?.user_id
     },
   });
 
@@ -122,7 +122,7 @@ export const getAllBotsHandler = async (
 
   const bots = await prisma.bot.findMany({
     where: {
-      user_id: request.user.user_id,
+      user_id: request.user?.is_admin ? undefined : request.user?.user_id
     },
     orderBy: {
       createdAt: "desc",
@@ -216,7 +216,7 @@ export const getBotByIdSettingsHandler = async (
   const bot = await prisma.bot.findFirst({
     where: {
       id,
-      user_id: request.user.user_id,
+      user_id: request.user?.is_admin ? undefined : request.user?.user_id
     },
   });
   if (!bot) {
@@ -292,7 +292,7 @@ export const isBotReadyHandler = async (
   const bot = await prisma.bot.findFirst({
     where: {
       id,
-      user_id: request.user.user_id,
+      user_id: request.user?.is_admin ? undefined : request.user?.user_id
     },
   });
 
