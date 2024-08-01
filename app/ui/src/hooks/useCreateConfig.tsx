@@ -1,24 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../services/api";
+import { BotConfig } from "../@types/bot";
 
 export const useCreateConfig = () => {
   return useQuery(
     ["fetchBotCreateConfig"],
     async () => {
       const response = await api.get("/bot/config");
-      return response.data as {
-        chatModel: {
-          label: string;
-          value: string;
-          stream: string;
-        }[];
-        embeddingModel: {
-          label: string;
-          value: string;
-        }[];
-        defaultChatModel?: string;
-        defaultEmbeddingModel?: string;
-      };
+      return response.data as BotConfig;
     }
   );
 };

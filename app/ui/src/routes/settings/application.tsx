@@ -28,6 +28,7 @@ export default function SettingsApplicationRoot() {
       hideDefaultModels: boolean;
       dynamicallyFetchOllamaModels: boolean;
       ollamaURL: string;
+      fileUploadSizeLimit: number;
     };
   });
 
@@ -160,6 +161,21 @@ export default function SettingsApplicationRoot() {
                     valuePropName="checked"
                   >
                     <Switch />
+                  </Form.Item>
+                  <Form.Item
+                    label="Number of files per upload"
+                    name="fileUploadSizeLimit"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input the number of files per upload!",
+                      },
+                    ]}
+                    tooltip="Default is 10"
+                  >
+
+                    <InputNumber size="large" style={{ width: "100%" }} />
+
                   </Form.Item>
                 </div>
                 <div className="bg-gray-50 border-x border-b rounded-b-md rounded-x-md px-4 py-3 text-right sm:px-6 dark:bg-[#141414] dark:border-gray-600">

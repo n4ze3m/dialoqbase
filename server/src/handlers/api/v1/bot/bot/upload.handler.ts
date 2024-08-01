@@ -123,7 +123,10 @@ export const createBotFileHandler = async (
       const fileName = `${randomUUID()}-${file.filename}`;
       const path = `./uploads/${fileName}`;
       await fs.promises.mkdir("./uploads", { recursive: true });
-      await pump(file.file, fs.createWriteStream(path));
+      await pump(
+         file.file,
+        fs.createWriteStream(path) as any
+      );
       const type = fileTypeFinder(file.mimetype);
 
       const botSource = await prisma.botSource.create({
@@ -191,7 +194,7 @@ export const addNewSourceFileByIdHandler = async (
     const fileName = `${randomUUID()}-${file.filename}`;
     const path = `./uploads/${fileName}`;
     await fs.promises.mkdir("./uploads", { recursive: true });
-    await pump(file.file, fs.createWriteStream(path));
+    await pump(file.file, fs.createWriteStream(path) as any);
     const type = fileTypeFinder(file.mimetype);
 
     const botSource = await prisma.botSource.create({
@@ -273,7 +276,7 @@ export const addNewSourceFileByIdBulkHandler = async (
       const fileName = `${randomUUID()}-${file.filename}`;
       const path = `./uploads/${fileName}`;
       await fs.promises.mkdir("./uploads", { recursive: true });
-      await pump(file.file, fs.createWriteStream(path));
+      await pump(file.file, fs.createWriteStream(path) as any);
 
       const botSource = await prisma.botSource.create({
         data: {

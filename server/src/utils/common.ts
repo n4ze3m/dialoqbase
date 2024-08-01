@@ -14,6 +14,7 @@ export const getSettings = (prisma: PrismaClient) => {
         allowUserToCreateBots: true,
         allowUserToRegister: false,
         noOfBotsPerUser: 10,
+        fileUploadSizeLimit: 10
       },
     });
 

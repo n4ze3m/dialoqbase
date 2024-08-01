@@ -3,10 +3,13 @@ import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
 import { useMutation } from "@tanstack/react-query";
 import { BotForm } from "../../components/Common/BotForm";
-import { Form, notification } from "antd";
+import { Form, notification, Skeleton } from "antd";
 import axios from "axios";
+import { useCreateConfig } from "../../hooks/useCreateConfig";
 
 export default function NewRoot() {
+  const { data: botConfig, status: botConfigStatus } = useCreateConfig();
+
   const navigate = useNavigate();
   const [selectedSource, setSelectedSource] = useState<any>({
     id: 1,
@@ -71,13 +74,24 @@ export default function NewRoot() {
         </div>
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
           <div className="bg-white py-8 px-4 border sm:rounded-lg sm:px-10 dark:bg-[#171717] dark:border-gray-600">
-            <BotForm
-              showEmbeddingAndModels={true}
-              createBot={createBot}
-              isLoading={isLoading}
-              setSelectedSource={setSelectedSource}
-              form={form}
-            />
+            {botConfigStatus === "success" && (
+              <BotForm
+                botConfig={botConfig}
+                showEmbeddingAndModels={true}
+                createBot={createBot}
+                isLoading={isLoading}
+                setSelectedSource={setSelectedSource}
+                form={form}
+              />
+            )}
+            {botConfigStatus === "error" && (
+              <div>Something went wrong while fetching config</div>
+            )}
+            {botConfigStatus === "loading" && (
+              <div className="flex justify-center items-center">
+                <Skeleton active paragraph={{ rows: 5 }} />
+              </div>
+            )}
           </div>
         </div>
       </div>

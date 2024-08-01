@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Form, notification } from "antd";
+import { Form, notification, Skeleton } from "antd";
 import { useParams } from "react-router-dom";
 import api from "../../../services/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BotForm } from "../../Common/BotForm";
 import axios from "axios";
+import { useCreateConfig } from "../../../hooks/useCreateConfig";
 
 // @ts-ignore
 function classNames(...classes) {
@@ -12,6 +13,7 @@ function classNames(...classes) {
 }
 
 export const NewDsForm = ({ onClose }: { onClose: () => void }) => {
+  const { data: botConfig, status: botConfigStatus } = useCreateConfig();
   const [selectedSource, setSelectedSource] = useState<any>({
     id: 1,
     value: "Website",
@@ -72,9 +74,22 @@ export const NewDsForm = ({ onClose }: { onClose: () => void }) => {
     },
   });
 
+  if (botConfigStatus === "loading") {
+    return (
+      <div className="flex justify-center items-center">
+        <Skeleton active paragraph={{ rows: 5 }} />
+      </div>
+    );
+  }
+
+  if (botConfigStatus === "error") {
+    return <div>Something went wrong while fetching config</div>;
+  }
+
   return (
     <>
       <BotForm
+        botConfig={botConfig}
         showEmbeddingAndModels={false}
         form={form}
         createBot={createBot}

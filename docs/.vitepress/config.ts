@@ -127,8 +127,8 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
           text: "Adjusting Bots Creation Limit For Users",
         },
         {
-          link:"/application/setting-up-dialoqbase-queue-concurrency",
-          text:"Setting up Dialoqbase Queue Concurrency"
+          link: "/application/setting-up-dialoqbase-queue-concurrency",
+          text: "Setting up Dialoqbase Queue Concurrency"
         }
       ],
     },
@@ -175,8 +175,8 @@ function sidebarReference(): DefaultTheme.SidebarItem[] {
       text: "Reference",
       items: [
         {
-          text:"Getting Started",
-          link:"/getting-started"
+          text: "Getting Started",
+          link: "/getting-started"
         },
         {
           text: "Create Bot",
@@ -193,6 +193,15 @@ function sidebarReference(): DefaultTheme.SidebarItem[] {
         {
           text: "Chat with Bot",
           link: "/chat-with-bot",
+        }
+      ]
+    },
+    {
+      text: "Examples",
+      items: [
+        {
+          text: "Creating a Tiny AI App Using Dialoqbase API",
+          link: "/examples/creating-tiny-ai-app-using-dialoqbase-api"
         }
       ]
     }

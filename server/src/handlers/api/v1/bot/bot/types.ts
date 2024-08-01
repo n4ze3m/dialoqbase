@@ -142,3 +142,13 @@ export interface UpdateBotPasswordSettings {
     publicBotPwd?: string;
   };
 }
+
+export type GetDatasourceByBotId  = {
+  Params: {
+      id: string;
+  },
+  Querystring: {
+      limit: number;
+      page: number;
+  }
+}
