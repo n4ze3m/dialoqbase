@@ -15,6 +15,7 @@ import { restQueueController } from "./controllers/rest.controller";
 import { sitemapQueueController } from "./controllers/sitemap.controller";
 import { SandboxedJob } from "bullmq";
 import { getRagSettings } from "../utils/rag-settings";
+import { zipQueueController } from "./controllers/zip.controller";
 
 const prisma = new PrismaClient();
 
@@ -79,6 +80,9 @@ export default async function queueHandler(job: SandboxedJob) {
             break;
           case "sitemap":
             await sitemapQueueController(source);
+            break;
+          case  "zip":
+            await zipQueueController(source, prisma);
             break;
           default:
             break;

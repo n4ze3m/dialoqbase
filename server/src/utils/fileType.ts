@@ -16,6 +16,10 @@ export const fileTypeFinder = (mimeType: string) => {
       return "mp3";
     case "video/mpeg":
       return "mp4";
+    case "application/zip":
+      return "zip";
+    case "application/x-zip-compressed":
+      return "zip";
     default:
       return "none";
   }

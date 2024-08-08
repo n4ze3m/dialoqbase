@@ -131,6 +131,7 @@ export const BotForm = ({
                   "video/mp4",
                   "video/mpeg",
                   "application/zip",
+                  "application/x-zip-compressed",
                 ]
                   .map((type) => type.toLowerCase())
                   .join(", ");
