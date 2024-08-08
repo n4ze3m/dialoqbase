@@ -31,7 +31,11 @@ const app: FastifyPluginAsync<AppOptions> = async (
 
   void fastify.register(FastifySSEPlugin);
 
-  void fastify.register(fastifyMultipart);
+  void fastify.register(fastifyMultipart, {
+    limits: {
+      fileSize: 1 * 1024 * 1024 * 1024,
+    }
+  });
 
   void fastify.register(swagger);
 
