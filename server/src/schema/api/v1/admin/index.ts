@@ -24,6 +24,7 @@ export const dialoqbaseSettingsSchema: FastifySchema = {
       ollamaURL: { type: "string" },
       usePuppeteerFetch: { type: "boolean" },
       fileUploadSizeLimit: { type: "number" },
+      refetchDatasource: { type: "boolean" },
     },
   },
 };
@@ -51,6 +52,7 @@ export const updateDialoqbaseSettingsSchema: FastifySchema = {
       ollamaURL: { type: "string" },
       usePuppeteerFetch: { type: "boolean" },
       fileUploadSizeLimit: { type: "number" },
+      refetchDatasource: { type: "boolean" },
     },
   },
   response: {

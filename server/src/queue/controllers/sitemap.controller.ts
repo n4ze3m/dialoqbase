@@ -33,34 +33,43 @@ export const sitemapQueueController = async (source: QSource) => {
   const links = data.sites;
 
   for (const link of links) {
-    const newSource = await prisma.botSource.create({
-      data: {
+    const existingSource = await prisma.botSource.findFirst({
+      where: {
         botId: source.botId,
         content: link,
-        isPending: true,
-        status: "PENDING",
-        type: "website",
       },
     });
 
-    await websiteQueueController(
-      {
-        ...newSource,
-        embedding: source.embedding,
-        chunkSize: source.chunkSize,
-        chunkOverlap: source.chunkOverlap,
-      },
-      prisma
-    );
+    if (!existingSource) {
+      const newSource = await prisma.botSource.create({
+        data: {
+          botId: source.botId,
+          content: link,
+          isPending: true,
+          status: "PENDING",
+          type: "website",
+        },
+      });
 
-    await prisma.botSource.update({
-      where: {
-        id: newSource.id,
-      },
-      data: {
-        status: "FINISHED",
-        isPending: false,
-      },
-    });
+      await websiteQueueController(
+        {
+          ...newSource,
+          embedding: source.embedding,
+          chunkSize: source.chunkSize,
+          chunkOverlap: source.chunkOverlap,
+        },
+        prisma
+      );
+
+      await prisma.botSource.update({
+        where: {
+          id: newSource.id,
+        },
+        data: {
+          status: "FINISHED",
+          isPending: false,
+        },
+      });
+    }
   }
 };

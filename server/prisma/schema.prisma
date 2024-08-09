@@ -44,6 +44,7 @@ model Bot {
   bot_api_key                   String?
   bot_model_api_key             String?
   options                       Json?            @default("{}") @db.Json
+  autoSyncDataSources           Boolean?          @default(false)
   BotAppearance                 BotAppearance[]
   document                      BotDocument[]
   BotIntegration                BotIntegration[]
@@ -106,6 +107,7 @@ model DialoqbaseSettings {
   defaultEmbeddingModel        String   @default("dialoqbase_eb_text-embedding-ada-002")
   ollamaURL                    String?  @default("http://host.docker.internal:11434")
   usePuppeteerFetch            Boolean? @default(false)
+  refetchDatasource            Boolean  @default(false)
 }
 
 model BotIntegration {

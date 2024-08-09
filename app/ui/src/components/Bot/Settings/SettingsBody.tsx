@@ -168,6 +168,7 @@ export const SettingsBody: React.FC<BotSettings> = ({
             semanticSearchSimilarityScore: data.semanticSearchSimilarityScore,
             autoResetSession: data.autoResetSession,
             inactivityTimeout: data.inactivityTimeout,
+            autoSyncDataSources: data.autoSyncDataSources,
           }}
           form={form}
           requiredMark={false}
@@ -452,6 +453,14 @@ export const SettingsBody: React.FC<BotSettings> = ({
                     style={{ width: "100%" }}
                     placeholder="Enter inactivity timeout"
                   />
+                </Form.Item>
+
+              <Form.Item
+                  name="autoSyncDataSources"
+                  label="Auto Sync Data Source(s)"
+                  tooltip="This will automatically re-fetch the URL-based data sources at a certain interval."
+                >
+                  <Switch />
                 </Form.Item>
               </div>
             </div>
