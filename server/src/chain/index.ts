@@ -21,6 +21,17 @@ type RetrievalChainInput = {
   question: string;
 };
 
+const updateTemplateVariables = (template: string) => {
+  // replace template {time} with current time
+  template = template.replace("{time}", new Date().toLocaleTimeString());
+  // replace template {date} with current date
+  template = template.replace("{date}", new Date().toLocaleDateString());
+  // replace template {day} with current day
+  template = template.replace("{day}", new Date().toLocaleString('en-us', { weekday: 'long' }));
+
+  return template;
+}
+
 export function groupMessagesByConversation(messages: any[]) {
   // check if messages are in even numbers if not remove the last message
   if (messages.length % 2 !== 0) {
@@ -109,12 +120,17 @@ export const createChain = ({
   retriever,
   response_template,
 }: {
-  llm: BaseLanguageModel<any> | BaseChatModel<any> ;
+  llm: BaseLanguageModel<any> | BaseChatModel<any>;
   question_llm: BaseLanguageModel<any> | BaseChatModel<any>;
   retriever: Runnable;
   question_template: string;
   response_template: string;
 }) => {
+
+  question_template = updateTemplateVariables(question_template);
+  
+  response_template = updateTemplateVariables(response_template);
+
   const retrieverChain = createRetrieverChain(
     question_llm,
     retriever,
