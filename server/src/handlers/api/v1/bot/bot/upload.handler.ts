@@ -124,7 +124,7 @@ export const createBotFileHandler = async (
       const path = `./uploads/${fileName}`;
       await fs.promises.mkdir("./uploads", { recursive: true });
       await pump(
-         file.file,
+        file.file,
         fs.createWriteStream(path) as any
       );
       const type = fileTypeFinder(file.mimetype);

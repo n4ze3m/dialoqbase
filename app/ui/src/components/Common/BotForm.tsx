@@ -35,7 +35,7 @@ type Props = {
   form: FormInstance<any>;
   showEmbeddingAndModels: boolean;
   newSelectedSource?: any;
-  botConfig: BotConfig
+  botConfig: BotConfig;
 };
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -47,7 +47,7 @@ export const BotForm = ({
   setSelectedSource,
   form,
   showEmbeddingAndModels,
-  botConfig
+  botConfig,
 }: Props) => {
   const youtubeMode = Form.useWatch(["options", "youtube_mode"], form);
   const url = Form.useWatch(["content"], form);
@@ -117,7 +117,7 @@ export const BotForm = ({
             }}
           >
             <Upload.Dragger
-              accept={`.pdf,.docx,.csv,.txt,.mp3,.mp4`}
+              accept={`.pdf,.docx,.csv,.txt,.mp3,.mp4,.zip`}
               multiple={true}
               maxCount={botConfig?.fileUploadSizeLimit}
               beforeUpload={(file) => {
@@ -130,6 +130,8 @@ export const BotForm = ({
                   "audio/mp4",
                   "video/mp4",
                   "video/mpeg",
+                  "application/zip",
+                  "application/x-zip-compressed",
                 ]
                   .map((type) => type.toLowerCase())
                   .join(", ");
@@ -161,12 +163,13 @@ export const BotForm = ({
                   <InboxIcon className="h-10 w-10 text-gray-400" />
                 </p>
                 <p className="ant-upload-text">
-                  Click or drag PDF, Docx, CSV , TXT, MP3, MP4 files to this
+                  Click or drag PDF, Docx, CSV , TXT, MP3, MP4, Zip files to
+                  this
                 </p>
                 <p className="ant-upload-hint">
-                  Support is available for a single or bulk upload of up to 10
+                  {`Support is available for a single or bulk upload of up to ${botConfig?.fileUploadSizeLimit}
                   files. Please note that file upload is in beta, so if you
-                  encounter any issues, kindly report them.
+                  encounter any issues, kindly report them.`}
                 </p>
               </div>
             </Upload.Dragger>

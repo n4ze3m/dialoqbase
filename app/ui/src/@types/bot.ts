@@ -21,6 +21,7 @@ export type BotSettings = {
     semanticSearchSimilarityScore: string;
     inactivityTimeout: number;
     autoResetSession: boolean;
+    autoSyncDataSources: boolean;
   };
   chatModel: {
     label: string;

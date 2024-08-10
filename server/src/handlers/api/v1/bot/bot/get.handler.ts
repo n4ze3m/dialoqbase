@@ -63,7 +63,7 @@ export const getDatasourceByBotId = async (
     where: {
       botId: id,
       type: {
-        notIn: ["crawl", "sitemap"],
+        notIn: ["crawl", "sitemap", "zip"],
       },
     },
     orderBy: {
@@ -77,7 +77,7 @@ export const getDatasourceByBotId = async (
     where: {
       botId: id,
       type: {
-        notIn: ["crawl", "sitemap"],
+        notIn: ["crawl", "sitemap", "zip"],
       },
     },
   });
@@ -119,10 +119,9 @@ export const getAllBotsHandler = async (
   reply: FastifyReply
 ) => {
   const prisma = request.server.prisma;
-
   const bots = await prisma.bot.findMany({
     where: {
-      user_id: request.user?.is_admin ? undefined : request.user?.user_id
+      user_id: request.user?.user_id
     },
     orderBy: {
       createdAt: "desc",

@@ -29,6 +29,7 @@ export default function SettingsApplicationRoot() {
       dynamicallyFetchOllamaModels: boolean;
       ollamaURL: string;
       fileUploadSizeLimit: number;
+      refetchDatasource: boolean;
     };
   });
 
@@ -173,9 +174,15 @@ export default function SettingsApplicationRoot() {
                     ]}
                     tooltip="Default is 10"
                   >
-
                     <InputNumber size="large" style={{ width: "100%" }} />
-
+                  </Form.Item>
+                  <Form.Item
+                    label="Refetch Data Source"
+                    name="refetchDatasource"
+                    valuePropName="checked"
+                    help="This will refetch the data source at a specific interval."
+                  >
+                    <Switch />
                   </Form.Item>
                 </div>
                 <div className="bg-gray-50 border-x border-b rounded-b-md rounded-x-md px-4 py-3 text-right sm:px-6 dark:bg-[#141414] dark:border-gray-600">

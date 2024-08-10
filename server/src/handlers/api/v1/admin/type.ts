@@ -5,6 +5,7 @@ export type UpdateDialoqbaseSettingsRequest = {
     allowUserToRegister: boolean;
     usePuppeteerFetch: boolean;
     fileUploadSizeLimit: number;
+    refetchDatasource: boolean;
   };
 };
 
