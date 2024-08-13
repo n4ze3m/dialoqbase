@@ -73,7 +73,9 @@ export default class TelegramBot {
           user_id
         );
 
-        return await ctx.reply(message);
+        return await ctx.reply(message, {
+           parse_mode: "MarkdownV2",
+        });
       });
 
       bot.on("message:voice", async (ctx) => {
@@ -100,7 +102,9 @@ export default class TelegramBot {
             user_id
           );
 
-          return await ctx.reply(message);
+          return await ctx.reply(message, {
+            parse_mode: "MarkdownV2",
+          });
         } catch (error) {
           console.log(error);
           return await ctx.reply("Opps! Something went wrong");
