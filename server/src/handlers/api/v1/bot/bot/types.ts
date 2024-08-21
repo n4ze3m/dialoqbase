@@ -150,5 +150,6 @@ export type GetDatasourceByBotId  = {
   Querystring: {
       limit: number;
       page: number;
+      search?: string
   }
 }

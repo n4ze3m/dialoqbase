@@ -18,6 +18,7 @@ import { YoutubeIcon } from "../../Icons/YoutubeIcon";
 import { ApiIcon } from "../../Icons/ApiIcon";
 export const DsTable = ({
   data,
+  searchNode
 }: {
   data: {
     id: string;
@@ -25,6 +26,7 @@ export const DsTable = ({
     content: string;
     status: string;
   }[];
+  searchNode: React.ReactNode;
 }) => {
   const statusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -134,6 +136,8 @@ export const DsTable = ({
       <div className="mt-8 flex flex-col">
         <div className="-my-2 -mx-4 overflow-x-auto  sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full p-2 align-middle md:px-6 lg:px-8">
+          {searchNode}
+            
             <div className="overflow-hidden bg-white ring-1 ring-black ring-opacity-5 rounded-lg dark:bg-[#262626]">
               {data.length === 0 && (
                 <Empty description="No data sources found." className="m-8" />
