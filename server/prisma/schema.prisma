@@ -87,6 +87,7 @@ model User {
   isFirstLogin    Boolean      @default(true)
   isAdministrator Boolean      @default(false)
   createdAt       DateTime     @default(now())
+  isSuspended     Boolean      @default(false)
   bots            Bot[]
   apiKeys         UserApiKey[]
 }

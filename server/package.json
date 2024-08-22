@@ -79,6 +79,7 @@
     "jsonwebtoken": "^9.0.2",
     "langchain": "^0.1.25",
     "mammoth": "^1.6.0",
+    "ml-distance": "^4.0.1",
     "pdf-parse": "^1.1.1",
     "pdfjs-dist": "^3.7.107",
     "pubsub-js": "^1.9.4",

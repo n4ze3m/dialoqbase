@@ -2,6 +2,8 @@ import { Document } from "@langchain/core/documents";
 import { PrismaClient } from "@prisma/client";
 import { Embeddings } from "@langchain/core/embeddings";
 import { VectorStore } from "@langchain/core/vectorstores";
+import { Callbacks } from "langchain/callbacks";
+import { searchInternet } from "../internet";
 const prisma = new PrismaClient();
 export interface DialoqbaseLibArgs {
   botId: string;
@@ -92,7 +94,8 @@ export class DialoqbaseVectorStore extends VectorStore {
   async similaritySearchVectorWithScore(
     query: number[],
     k: number,
-    filter?: this["FilterType"] | undefined
+    filter?: this["FilterType"] | undefined,
+    originalQuery?: string | undefined
   ): Promise<[Document<Record<string, any>>, number][]> {
     if (!query) {
       return [];
@@ -114,10 +117,8 @@ export class DialoqbaseVectorStore extends VectorStore {
     const data = await prisma.$queryRaw`
      SELECT * FROM "similarity_search_v2"(query_embedding := ${vector}::vector, botId := ${bot_id}::text,match_count := ${match_count}::int)
     `;
-    
-    const result: [Document, number][] = (
-      data as SearchEmbeddingsResponse[]
-    ).map((resp) => [
+
+    const result = (data as SearchEmbeddingsResponse[]).map((resp) => [
       new Document({
         metadata: resp.metadata,
         pageContent: resp.content,
@@ -125,15 +126,42 @@ export class DialoqbaseVectorStore extends VectorStore {
       resp.similarity,
     ]);
 
-    if (semanticSearchSimilarityScore === "none") {
-      return result;
+    let internetSearchResults = [];
+    if (botInfo.internetSearchEnabled) {
+      internetSearchResults = await searchInternet(this.embeddings, {
+        query: originalQuery,
+      });
     }
 
-    const valueInFloat = parseFloat(semanticSearchSimilarityScore);
-    const filteredResult = result.filter(
-      ([, similarity]) => similarity >= valueInFloat
+    const combinedResults = [...result, ...internetSearchResults];
+    combinedResults.sort((a, b) => b[1] - a[1]);
+
+    const topResults = combinedResults.slice(0, k);
+
+    if (semanticSearchSimilarityScore === "none") {
+      return topResults;
+    }
+
+    const similarityThreshold = parseFloat(semanticSearchSimilarityScore);
+    const filteredResults = topResults.filter(
+      ([, similarity]) => similarity >= similarityThreshold
     );
-    return filteredResult;
+    return filteredResults;
+  }
+
+  async similaritySearch(
+    query: string,
+    k = 4,
+    filter: this["FilterType"] | undefined = undefined,
+    _callbacks: Callbacks | undefined = undefined // implement passing to embedQuery later
+  ): Promise<any[]> {
+    const results = await this.similaritySearchVectorWithScore(
+      await this.embeddings.embedQuery(query),
+      k,
+      filter,
+      query
+    );
+    return results.map((result) => result[0]);
   }
 
   _vectorstoreType(): string {
