@@ -117,7 +117,7 @@ const searchProviders = {
 
 export const searchInternet = async (embedding: Embeddings, { query }: { query: string }) => {
 
-    if(process.env.DISABLE_INTERNET_SEARCH == "true") {
+    if (process.env.DISABLE_INTERNET_SEARCH == "true") {
         return [];
     }
 
@@ -127,7 +127,9 @@ export const searchInternet = async (embedding: Embeddings, { query }: { query: 
     }
     const datat = await searchProvider(query);
 
-    const results = datat.slice(0, TOTAL_RESULTS_LIMIT);
+    const data = datat.filter((doc) => doc?.content.length > 0);
+
+    const results = data.slice(0, TOTAL_RESULTS_LIMIT)
 
     const [docEmbeddings, queryEmbedding] = await Promise.all([
         embedding.embedDocuments(results.map((doc) => doc.content)),

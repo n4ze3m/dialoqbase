@@ -56,7 +56,7 @@ export const PlaygroundMessage = (props: Props) => {
               <Markdown message={props.message} />
             </div>
 
-            {props.isBot && (
+            {props.isBot && props?.sources && props?.sources?.length > 0 && (
               <Collapse
                 className="mt-6"
                 ghost
