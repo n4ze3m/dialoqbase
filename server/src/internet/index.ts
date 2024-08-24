@@ -116,6 +116,11 @@ const searchProviders = {
 };
 
 export const searchInternet = async (embedding: Embeddings, { query }: { query: string }) => {
+
+    if(process.env.DISABLE_INTERNET_SEARCH == "true") {
+        return [];
+    }
+
     const searchProvider = searchProviders[SERACH_PROVIDER];
     if (!searchProvider) {
         throw new Error(`Search provider ${SERACH_PROVIDER} not found`);

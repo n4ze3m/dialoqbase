@@ -169,6 +169,7 @@ export const SettingsBody: React.FC<BotSettings> = ({
             autoResetSession: data.autoResetSession,
             inactivityTimeout: data.inactivityTimeout,
             autoSyncDataSources: data.autoSyncDataSources,
+            internetSearchEnabled: data.internetSearchEnabled,
           }}
           form={form}
           requiredMark={false}
@@ -226,7 +227,24 @@ export const SettingsBody: React.FC<BotSettings> = ({
                     options={chatModel}
                   />
                 </Form.Item>
-
+                <Form.Item
+                  label={"Embedding Method"}
+                  name="embedding"
+                  help={
+                    <>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        If you change the embedding method, make sure to
+                        re-fetch the data source or choose a model with the same
+                        dimensions
+                      </p>
+                    </>
+                  }
+                >
+                  <Select
+                    placeholder="Select an embedding method"
+                    options={embeddingModel}
+                  />
+                </Form.Item>
                 <Form.Item
                   hasFeedback={!isStreamingSupported(currentModel)}
                   help={
@@ -266,23 +284,14 @@ export const SettingsBody: React.FC<BotSettings> = ({
                   />
                 </Form.Item>
 
+               
                 <Form.Item
-                  label={"Embedding Method"}
-                  name="embedding"
-                  help={
-                    <>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        If you change the embedding method, make sure to
-                        re-fetch the data source or choose a model with the same
-                        dimensions
-                      </p>
-                    </>
-                  }
+                  name="internetSearchEnabled"
+                  label="Enable internet search"
+                  valuePropName="checked"
+                  help="This is experimental and may not work as expected."
                 >
-                  <Select
-                    placeholder="Select an embedding method"
-                    options={embeddingModel}
-                  />
+                  <Switch />
                 </Form.Item>
 
                 <Form.Item
@@ -455,7 +464,7 @@ export const SettingsBody: React.FC<BotSettings> = ({
                   />
                 </Form.Item>
 
-              <Form.Item
+                <Form.Item
                   name="autoSyncDataSources"
                   label="Auto Sync Data Source(s)"
                   tooltip="This will automatically re-fetch the URL-based data sources at a certain interval."

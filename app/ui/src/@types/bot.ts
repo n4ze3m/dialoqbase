@@ -22,6 +22,7 @@ export type BotSettings = {
     inactivityTimeout: number;
     autoResetSession: boolean;
     autoSyncDataSources: boolean;
+    internetSearchEnabled: boolean;
   };
   chatModel: {
     label: string;
