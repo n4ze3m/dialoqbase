@@ -10,11 +10,13 @@ services:
     environment:
       DATABASE_URL: postgres://postgres:postgres@dialoqbase-pg:5432/dialoqbase?connection_limit=15&pool_timeout=0
       DB_REDIS_URL: redis://redis:6379
+      DB_SEARXNG_URL: http://searxng:8080
     env_file:
       - .env
     depends_on:
       - dialoqbase-pg
       - redis
+      - searxng
     volumes:
       - .uploads:/app/uploads
 
@@ -35,3 +37,9 @@ services:
     restart: unless-stopped
     volumes:
       - .redis:/data
+  
+  searxng:
+    image: searxng/searxng
+    volumes:
+      - ./searxng:/etc/searxng:rw
+    restart: unless-stopped

@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions"]
+  previewFeatures = ["postgresqlExtensions", "fullTextSearch"]
 }
 
 datasource db {
@@ -30,7 +30,8 @@ model Bot {
   streaming                     Boolean          @default(false)
   showRef                       Boolean          @default(false)
   inactivityTimeout             Int?             @default(3600)
-  autoResetSession              Boolean          @default(false) 
+  autoResetSession              Boolean          @default(false)
+  internetSearchEnabled         Boolean?         @default(false)
   questionGeneratorPrompt       String           @default("Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.   Chat History: {chat_history} Follow Up Input: {question} Standalone question:")
   qaPrompt                      String           @default("You are a helpful AI assistant. Use the following pieces of context to answer the question at the end. If you don't know the answer, just say you don't know. DO NOT try to make up an answer. If the question is not related to the context, politely respond that you are tuned to only answer questions that are related to the context.  {context}  Question: {question} Helpful answer in markdown:")
   voice_to_text_type            String           @default("web_api")
@@ -44,7 +45,7 @@ model Bot {
   bot_api_key                   String?
   bot_model_api_key             String?
   options                       Json?            @default("{}") @db.Json
-  autoSyncDataSources           Boolean?          @default(false)
+  autoSyncDataSources           Boolean?         @default(false)
   BotAppearance                 BotAppearance[]
   document                      BotDocument[]
   BotIntegration                BotIntegration[]
@@ -86,6 +87,7 @@ model User {
   isFirstLogin    Boolean      @default(true)
   isAdministrator Boolean      @default(false)
   createdAt       DateTime     @default(now())
+  isSuspended     Boolean      @default(false)
   bots            Bot[]
   apiKeys         UserApiKey[]
 }
@@ -96,13 +98,14 @@ model DialoqbaseSettings {
   allowUserToCreateBots        Boolean  @default(true)
   allowUserToRegister          Boolean  @default(false)
   numberOfDocuments            Int      @default(10)
-  fileUploadSizeLimit          Int?      @default(10)
+  fileUploadSizeLimit          Int?     @default(10)
   legacyMode                   Boolean  @default(false)
   hidePlayground               Boolean  @default(false)
   defaultChunkSize             Int?     @default(1000)
   defaultChunkOverlap          Int?     @default(200)
   dynamicallyFetchOllamaModels Boolean? @default(false)
   hideDefaultModels            Boolean? @default(false)
+  internetSearchEnabled        Boolean? @default(false)
   defaultChatModel             String   @default("gpt-3.5-turbo-dbase")
   defaultEmbeddingModel        String   @default("dialoqbase_eb_text-embedding-ada-002")
   ollamaURL                    String?  @default("http://host.docker.internal:11434")

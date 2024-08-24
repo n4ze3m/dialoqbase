@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { Embeddings } from "langchain/embeddings/base";
 import { BaseRetriever, BaseRetrieverInput } from "@langchain/core/retrievers";
 import { CallbackManagerForRetrieverRun, Callbacks } from "langchain/callbacks";
+import { searchInternet } from "../internet";
 const prisma = new PrismaClient();
 export interface DialoqbaseLibArgs extends BaseRetrieverInput {
   botId: string;
@@ -47,7 +48,11 @@ export class DialoqbaseHybridRetrival extends BaseRetriever {
 
       const vector = `[${embeddedQuery.join(",")}]`;
       const bot_id = this.botId;
-
+      const botInfo = await prisma.bot.findFirst({
+        where: {
+          id: bot_id,
+        },
+      });
       const data = await prisma.$queryRaw`
      SELECT * FROM "similarity_search_v2"(query_embedding := ${vector}::vector, botId := ${bot_id}::text,match_count := ${k}::int)
     `;
@@ -62,8 +67,17 @@ export class DialoqbaseHybridRetrival extends BaseRetriever {
         resp.similarity * 10,
         resp.id,
       ]);
+      let internetSearchResults = [];
+      if (botInfo.internetSearchEnabled) {
+        internetSearchResults = await searchInternet(this.embeddings, {
+          query: query,
+        });
+      }
 
-      return result;
+      const combinedResults = [...result, ...internetSearchResults];
+      combinedResults.sort((a, b) => b[1] - a[1]);
+      const topResults = combinedResults.slice(0, k);
+      return topResults;
     } catch (e) {
       console.log(e);
       return [];

@@ -3,7 +3,15 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { GetBotRequestById, GetDatasourceByBotId } from "./types";
 import { getSettings } from "../../../../../utils/common";
 import { getAllOllamaModels } from "../../../../../utils/ollama";
-
+const preprocessSearchTerms = (searchTerm: string) => {
+  const tsquerySpecialChars = /[()|&:*!]/g
+  const search =  searchTerm
+    .trim()
+    .replace(tsquerySpecialChars, ' ')
+    .split(/\s+/)
+    .join(' | ')
+    return search
+}
 export const getBotByIdEmbeddingsHandler = async (
   request: FastifyRequest<GetBotRequestById>,
   reply: FastifyReply
@@ -14,7 +22,7 @@ export const getBotByIdEmbeddingsHandler = async (
   const bot = await prisma.bot.findFirst({
     where: {
       id,
-      user_id: request.user?.is_admin ? undefined : request.user?.user_id
+      user_id: request.user?.is_admin ? undefined : request.user?.user_id,
     },
   });
 
@@ -45,11 +53,12 @@ export const getDatasourceByBotId = async (
   const id = request.params.id;
   const { limit, page } = request.query;
   const skip = (page - 1) * limit;
+  const search = request.query.search;
 
   const bot = await prisma.bot.findFirst({
     where: {
       id,
-      user_id: request.user?.is_admin ? undefined : request.user?.user_id
+      user_id: request.user?.user_id,
     },
   });
 
@@ -58,35 +67,74 @@ export const getDatasourceByBotId = async (
       message: "Bot not found",
     });
   }
-
-  const sources = await prisma.botSource.findMany({
-    where: {
-      botId: id,
-      type: {
-        notIn: ["crawl", "sitemap", "zip"],
+  const [sources, totalCount] = await Promise.all([
+    prisma.botSource.findMany({
+      where: {
+        botId: id,
+        type: {
+          notIn: ["crawl", "sitemap", "zip"],
+        },
+        OR: search
+          ? [
+            {
+              content: {
+                search:  preprocessSearchTerms(search),
+              },
+            },
+            {
+              document: {
+                some: {
+                  content: {
+                    search: preprocessSearchTerms(search),
+                  },
+                },
+              },
+            },
+          ]
+          : undefined,
       },
-    },
-    orderBy: {
-      createdAt: 'desc'
-    },
-    skip,
-    take: limit,
-  });
-
-  const totalCount = await prisma.botSource.count({
-    where: {
-      botId: id,
-      type: {
-        notIn: ["crawl", "sitemap", "zip"],
+      orderBy: {
+        createdAt: "desc",
       },
-    },
-  });
+      skip,
+      take: limit,
+      include: {
+        document: true,
+      },
+    }),
+    prisma.botSource.count({
+      where: {
+        botId: id,
+        type: {
+          notIn: ["crawl", "sitemap", "zip"],
+        },
+        OR: search
+          ? [
+            {
+              content: {
+                search: preprocessSearchTerms(search),
+              },
+            },
+            {
+              document: {
+                some: {
+                  content: {
+                    search: preprocessSearchTerms(search),
+                  },
+                },
+              },
+            },
+          ]
+          : undefined,
+      },
+    }),
+  ]);
 
   return {
     data: sources,
     total: totalCount,
     next: page * limit < totalCount ? page + 1 : null,
-    prev: page > 1 ? page - 1 : null
+    prev: page > 1 ? page - 1 : null,
   };
 };
 
@@ -100,7 +148,7 @@ export const getBotByIdHandler = async (
   const bot = await prisma.bot.findFirst({
     where: {
       id,
-      user_id: request.user?.is_admin ? undefined : request.user?.user_id
+      user_id: request.user?.is_admin ? undefined : request.user?.user_id,
     },
   });
 
@@ -121,7 +169,7 @@ export const getAllBotsHandler = async (
   const prisma = request.server.prisma;
   const bots = await prisma.bot.findMany({
     where: {
-      user_id: request.user?.user_id
+      user_id: request.user?.user_id,
     },
     orderBy: {
       createdAt: "desc",
@@ -201,7 +249,7 @@ export const getCreateBotConfigHandler = async (
     embeddingModel,
     defaultChatModel: settings?.defaultChatModel,
     defaultEmbeddingModel: settings?.defaultEmbeddingModel,
-    fileUploadSizeLimit: settings?.fileUploadSizeLimit
+    fileUploadSizeLimit: settings?.fileUploadSizeLimit,
   };
 };
 
@@ -215,7 +263,7 @@ export const getBotByIdSettingsHandler = async (
   const bot = await prisma.bot.findFirst({
     where: {
       id,
-      user_id: request.user?.is_admin ? undefined : request.user?.user_id
+      user_id: request.user?.is_admin ? undefined : request.user?.user_id,
     },
   });
   if (!bot) {
@@ -291,7 +339,7 @@ export const isBotReadyHandler = async (
   const bot = await prisma.bot.findFirst({
     where: {
       id,
-      user_id: request.user?.is_admin ? undefined : request.user?.user_id
+      user_id: request.user?.is_admin ? undefined : request.user?.user_id,
     },
   });
 

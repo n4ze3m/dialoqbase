@@ -9,6 +9,7 @@ import { convertTextToAudio } from "./handlers/utils/audio-to-text";
 import { FileFlavor, hydrateFiles } from "@grammyjs/files";
 import * as fs from "fs/promises";
 import { convertOggToWave } from "../utils/ffmpeg";
+import { telegramFormat } from "../utils/telegram-format";
 type DialoqBaseContext = FileFlavor<Context>;
 export default class TelegramBot {
   static get clients() {
@@ -73,7 +74,14 @@ export default class TelegramBot {
           user_id
         );
 
-        return await ctx.reply(message);
+        if (process.env.DB_TELEGEAM_PARSE_MODE === "normal") {
+          return await ctx.reply(message);
+        }
+
+        return await ctx.reply(telegramFormat(message),
+          {
+            parse_mode: "HTML",
+          });
       });
 
       bot.on("message:voice", async (ctx) => {
@@ -100,7 +108,15 @@ export default class TelegramBot {
             user_id
           );
 
-          return await ctx.reply(message);
+
+          if (process.env.DB_TELEGEAM_PARSE_MODE === "normal") {
+            return await ctx.reply(message);
+          }
+
+          return await ctx.reply(telegramFormat(message),
+            {
+              parse_mode: "HTML",
+            });
         } catch (error) {
           console.log(error);
           return await ctx.reply("Opps! Something went wrong");
