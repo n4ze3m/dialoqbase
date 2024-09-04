@@ -75,3 +75,9 @@ export type UpdateDialoqbaseRAGSettingsRequest = {
     defaultChunkOverlap: number;
   };
 };
+
+export type DeleteUserRequest = {
+  Body: {
+    user_id: number;
+  };
+};
