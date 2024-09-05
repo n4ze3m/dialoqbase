@@ -7,3 +7,4 @@ export * from "./copy.handler";
 export * from "./api.handler"
 export * from "./chat.handler"
 export * from "./settings.handler"
+export * from "./search.handler"

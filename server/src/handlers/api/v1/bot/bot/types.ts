@@ -153,3 +153,14 @@ export type GetDatasourceByBotId  = {
       search?: string
   }
 }
+
+
+export type SearchRequest = {
+  Body: {
+    query: string;
+    total_results: number;
+  }
+  Params: {
+    id: string;
+  }
+}

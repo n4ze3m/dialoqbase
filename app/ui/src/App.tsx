@@ -24,6 +24,7 @@ import SettingsTeamsRoot from "./routes/settings/teams";
 import BotIntegrationAPIRoot from "./routes/bot/api";
 import SettingsModelRoot from "./routes/settings/model";
 import { useDarkMode } from "./hooks/useDarkmode";
+import BotSearchRoot from "./routes/bot/serach";
 
 const router = createHashRouter([
   {
@@ -55,6 +56,14 @@ const router = createHashRouter([
     element: (
       <BotLayout>
         <BotPreviewRoot />
+      </BotLayout>
+    ),
+  },
+  {
+    path: "/bot/:id/search",
+    element: (
+      <BotLayout>
+        <BotSearchRoot />
       </BotLayout>
     ),
   },
