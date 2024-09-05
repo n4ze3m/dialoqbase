@@ -117,7 +117,7 @@ export const BotForm = ({
             }}
           >
             <Upload.Dragger
-              accept={`.pdf,.docx,.csv,.txt,.mp3,.mp4,.zip`}
+              accept={`.pdf,.docx,.csv,.txt,.mp3,.mp4,.zip,.json`}
               multiple={true}
               maxCount={botConfig?.fileUploadSizeLimit}
               beforeUpload={(file) => {
@@ -132,6 +132,7 @@ export const BotForm = ({
                   "video/mpeg",
                   "application/zip",
                   "application/x-zip-compressed",
+                  "application/json",
                 ]
                   .map((type) => type.toLowerCase())
                   .join(", ");
@@ -163,8 +164,8 @@ export const BotForm = ({
                   <InboxIcon className="h-10 w-10 text-gray-400" />
                 </p>
                 <p className="ant-upload-text">
-                  Click or drag PDF, Docx, CSV , TXT, MP3, MP4, Zip files to
-                  this
+                  Click or drag PDF, Docx, CSV, TXT, MP3, MP4, Zip, or JSON
+                  files to this area
                 </p>
                 <p className="ant-upload-hint">
                   {`Support is available for a single or bulk upload of up to ${botConfig?.fileUploadSizeLimit}
