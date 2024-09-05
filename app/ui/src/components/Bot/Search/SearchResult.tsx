@@ -15,7 +15,7 @@ export function SearchResult({
   score,
 }: SearchResultProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const maxLength = 250;
+  const maxLength = 300;
 
   const toggleReadMore = () => {
     setIsExpanded(!isExpanded);
@@ -48,8 +48,8 @@ export function SearchResult({
         {icon}
         <span className="ml-2">{source}</span>
       </div>
-      <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between bg-gray-50 dark:bg-[#2a2a2a] rounded-b-lg -mx-4 -mb-4 px-4 py-2">
-        <span className="text-sm text-gray-600 dark:text-gray-300">
+      <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700 flex items-center justify-end bg-gray-50 dark:bg-[#2a2a2a] rounded-b-lg -mx-4 -mb-4 px-4 py-2">
+        <span className="text-xs text-gray-600 dark:text-gray-300">
           Similarity: {`${score}%`}
         </span> 
       </div>
