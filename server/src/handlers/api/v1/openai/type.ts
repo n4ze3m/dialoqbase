@@ -7,5 +7,9 @@ export interface OpenaiRequestType {
         model: string;
         stream: boolean;
         temperature: number;
+        tools?: {
+            type?: "knowledge_base",
+            value?: string[]
+        }[]
     }
 }
