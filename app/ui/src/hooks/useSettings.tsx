@@ -8,6 +8,7 @@ export const useSettings = () => {
       const response = await api.get("/user/info");
       return response.data as {
         isRegistrationAllowed: boolean;
+        
       };
     },
     {
