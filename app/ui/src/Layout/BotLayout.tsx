@@ -8,12 +8,13 @@ import {
   SparklesIcon,
   PuzzlePieceIcon,
   EyeDropperIcon,
-  ChatBubbleLeftRightIcon
+  ChatBubbleLeftRightIcon,
+  //MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import {  Tooltip } from "antd";
+import { Tooltip } from "antd";
 import { ApplicationMenu } from "./ApplicationMenu";
 
 const navigation = [
@@ -22,6 +23,11 @@ const navigation = [
     href: "/bot/:id",
     icon: SparklesIcon,
   },
+  // {
+  //   name: "Search (Beta)",
+  //   href: "/bot/:id/search",
+  //   icon: MagnifyingGlassIcon,
+  // },
   {
     name: "Data Sources",
     href: "/bot/:id/data-sources",
@@ -65,7 +71,7 @@ export default function BotLayout({
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { isLogged,  } = useAuth();
+  const { isLogged } = useAuth();
 
   React.useEffect(() => {
     if (!isLogged) {
@@ -183,11 +189,9 @@ export default function BotLayout({
           </Dialog>
         </Transition.Root>
 
-    
-
         <div className="flex flex-col">
           <div className="sticky top-0 z-[999] flex h-14  bg-white border-b border-gray-200 dark:bg-[#171717] dark:border-gray-600">
-          <button
+            <button
               type="button"
               className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden dark:border-gray-600 dark:text-gray-200"
               onClick={() => setSidebarOpen(true)}
@@ -209,7 +213,7 @@ export default function BotLayout({
 
             <div className="flex flex-1 justify-end px-4">
               <div className="ml-4 flex items-center md:ml-6">
-              <ApplicationMenu />
+                <ApplicationMenu />
               </div>
             </div>
           </div>

@@ -26,6 +26,8 @@ function getMimeType(filename: string): string {
             return "audio/mpeg";
         case ".zip":
             return "application/zip";
+        case ".json":
+            return "application/json";
         default:
             return "none";
     }

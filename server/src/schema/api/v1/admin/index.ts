@@ -180,3 +180,31 @@ export const updateDialoqbaseRAGSettings: FastifySchema = {
     },
   },
 };
+
+
+export const deleteUserSchema: FastifySchema = {
+  tags: ["Admin"],
+  summary: "API to delete user",
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
+  body: {
+    type: "object",
+    properties: {
+      user_id: { type: "number" },
+    },
+    required: ["user_id"],
+  },
+  response: {
+    200: {
+      type: "object",
+      properties: {
+        message: { type: "string" },
+      },
+    },
+  },
+};

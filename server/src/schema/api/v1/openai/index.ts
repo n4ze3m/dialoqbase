@@ -30,6 +30,25 @@ export const createChatCompletionSchema: FastifySchema = {
             },
             temperature: {
                 type: "number"
+            },
+            tools: {
+                type: "array",
+                items: {
+                    type: "object",
+                    required: ["type"],
+                    properties: {
+                        type: {
+                            type: "string"
+                        },
+                        value: {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            }
+                        }
+                    }
+                },
+                default: []
             }
         }
     }

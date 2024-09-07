@@ -10,7 +10,6 @@ import { createChain, groupMessagesByConversation } from "../../../../../chain";
 import { getModelInfo } from "../../../../../utils/get-model-info";
 import { nextTick } from "../../../../../utils/nextTick";
 
-
 async function getBotAndEmbedding(request: FastifyRequest<ChatAPIRequest>) {
   const bot_id = request.params.id;
   const user_id = request.user.user_id;
@@ -43,7 +42,7 @@ async function getBotAndEmbedding(request: FastifyRequest<ChatAPIRequest>) {
   return { bot, embeddingModel };
 }
 
-async function getRetriever(bot, embeddingModel) {
+async function getRetriever(bot, embeddingModel, knowledge_base_ids) {
   let resolveWithDocuments: (value: Document[]) => void;
   const documentPromise = new Promise<Document[]>((resolve) => {
     resolveWithDocuments = resolve;
@@ -63,11 +62,16 @@ async function getRetriever(bot, embeddingModel) {
       botId: bot.id,
       sourceId: null,
       callbacks,
+      knowledge_base_ids,
     });
   } else {
     const vectorstore = await DialoqbaseVectorStore.fromExistingIndex(
       embeddingModel,
-      { botId: bot.id, sourceId: null }
+      {
+        botId: bot.id,
+        sourceId: null,
+        knowledge_base_ids,
+      }
     );
     retriever = vectorstore.asRetriever({ callbacks });
   }
@@ -105,9 +109,18 @@ async function handleChatRequest(
   try {
     const { message, history } = request.body;
     const { bot, embeddingModel } = await getBotAndEmbedding(request);
+    let knowledge_base_ids: string[] = [];
+
+    if (
+      request.body.knowledge_base_ids &&
+      request.body.knowledge_base_ids.length > 0
+    ) {
+      knowledge_base_ids = request.body.knowledge_base_ids;
+    }
     const { retriever, documentPromise } = await getRetriever(
       bot,
-      embeddingModel
+      embeddingModel,
+      knowledge_base_ids
     );
     const model = await getModel(bot, request.server.prisma);
 

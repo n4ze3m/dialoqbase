@@ -130,6 +130,7 @@ export interface ChatAPIRequest {
       role: string;
       text: string;
     }[];
+    knowledge_base_ids?: string[]
   };
 }
 
@@ -151,5 +152,16 @@ export type GetDatasourceByBotId  = {
       limit: number;
       page: number;
       search?: string
+  }
+}
+
+
+export type SearchRequest = {
+  Body: {
+    query: string;
+    total_results: number;
+  }
+  Params: {
+    id: string;
   }
 }

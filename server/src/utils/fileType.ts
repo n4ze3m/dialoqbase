@@ -20,6 +20,8 @@ export const fileTypeFinder = (mimeType: string) => {
       return "zip";
     case "application/x-zip-compressed":
       return "zip";
+    case "application/json":
+      return "json";
     default:
       return "none";
   }

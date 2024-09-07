@@ -9,6 +9,7 @@ import {
   EyeDropperIcon,
   SparklesIcon,
   ChatBubbleLeftRightIcon,
+  // MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
@@ -22,6 +23,11 @@ const navigation = [
     href: "/bot/:id",
     icon: SparklesIcon,
   },
+  // {
+  //   name: "Search (Beta)",
+  //   href: "/bot/:id/search",
+  //   icon: MagnifyingGlassIcon,
+  // },
   {
     name: "Data Sources",
     href: "/bot/:id/data-sources",
@@ -160,7 +166,7 @@ export default function BotPlaygroundLayout({
                           )}
                         >
                           <item.icon
-                             className={classNames(
+                            className={classNames(
                               location.pathname ===
                                 item.href.replace(":id", params.id!)
                                 ? "text-gray-500"
@@ -187,7 +193,7 @@ export default function BotPlaygroundLayout({
           <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5 dark:bg-[#171717] dark:border-gray-600">
             <div className="mt-14 flex flex-grow flex-col">
               <nav className="flex-1 space-y-1 px-2 pb-4">
-              {navigation.map((item) => (
+                {navigation.map((item) => (
                   <Tooltip placement="right" key={item.name} title={item.name}>
                     <Link
                       to={{
@@ -222,7 +228,7 @@ export default function BotPlaygroundLayout({
 
         <div className="flex flex-col min-h-screen">
           <div className="sticky top-0 z-[9999] flex h-14  bg-white border-b border-gray-200 dark:bg-[#171717] dark:border-gray-600">
-          <button
+            <button
               type="button"
               className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden dark:border-gray-600 dark:text-gray-200"
               onClick={() => setSidebarOpen(true)}
@@ -241,7 +247,6 @@ export default function BotPlaygroundLayout({
                 {`v${__APP_VERSION__}`}
               </span>
             </Link>
-
 
             <div className="flex flex-1 justify-end px-4">
               <div className="ml-4 flex items-center md:ml-6">

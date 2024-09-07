@@ -83,8 +83,8 @@ export const getDatasourceByBotIdSchema: FastifySchema = {
   querystring: {
     type: "object",
     properties: {
-      page: { type: "number" , default: 1},
-      limit: { type: "number" , default: 10},
+      page: { type: "number", default: 1 },
+      limit: { type: "number", default: 10 },
     },
   }
 };
@@ -364,5 +364,39 @@ export const updateBotPasswordSettingsSchema: FastifySchema = {
         type: "string",
       },
     },
+  },
+};
+
+
+export const searchBotSchema: FastifySchema = {
+  tags: ["Bot"],
+  headers: {
+    type: "object",
+    properties: {
+      Authorization: { type: "string" },
+    },
+    required: ["Authorization"],
+  },
+  params: {
+    type: "object",
+    required: ["id"],
+    properties: {
+      id: {
+        type: "string",
+      },
+    },
+  },
+  body: {
+    type: "object",
+    properties: {
+      query: {
+        type: "string",
+      },
+      total_results: {
+        type: "number",
+        default: 10,
+      },
+    },
+    required: ["query"],
   },
 };

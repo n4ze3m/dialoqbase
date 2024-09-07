@@ -3,15 +3,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { GetBotRequestById, GetDatasourceByBotId } from "./types";
 import { getSettings } from "../../../../../utils/common";
 import { getAllOllamaModels } from "../../../../../utils/ollama";
-const preprocessSearchTerms = (searchTerm: string) => {
-  const tsquerySpecialChars = /[()|&:*!]/g
-  const search =  searchTerm
-    .trim()
-    .replace(tsquerySpecialChars, ' ')
-    .split(/\s+/)
-    .join(' | ')
-    return search
-}
+
 export const getBotByIdEmbeddingsHandler = async (
   request: FastifyRequest<GetBotRequestById>,
   reply: FastifyReply
@@ -77,18 +69,7 @@ export const getDatasourceByBotId = async (
         OR: search
           ? [
             {
-              content: {
-                search:  preprocessSearchTerms(search),
-              },
-            },
-            {
-              document: {
-                some: {
-                  content: {
-                    search: preprocessSearchTerms(search),
-                  },
-                },
-              },
+              content: search,
             },
           ]
           : undefined,
@@ -111,18 +92,7 @@ export const getDatasourceByBotId = async (
         OR: search
           ? [
             {
-              content: {
-                search: preprocessSearchTerms(search),
-              },
-            },
-            {
-              document: {
-                some: {
-                  content: {
-                    search: preprocessSearchTerms(search),
-                  },
-                },
-              },
+              content: search,
             },
           ]
           : undefined,

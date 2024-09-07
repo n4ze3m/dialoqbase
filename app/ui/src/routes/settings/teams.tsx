@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { SettingsLayout } from "../../Layout/SettingsLayout";
 import { SkeletonLoading } from "../../components/Common/SkeletonLoading";
 import { useNavigate } from "react-router-dom";
-import { KeyIcon } from "@heroicons/react/24/outline";
+import { KeyIcon, TrashIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 
 export default function SettingsTeamsRoot() {
@@ -18,6 +18,8 @@ export default function SettingsTeamsRoot() {
   const [resetPasswordUserId, setResetPasswordUserId] = React.useState(0);
 
   const [newUserModal, setNewUserModal] = React.useState(false);
+  const [deleteUserModal, setDeleteUserModal] = React.useState(false);
+  const [deleteUserId, setDeleteUserId] = React.useState(0);
 
   const queryClient = useQueryClient();
 
@@ -80,6 +82,15 @@ export default function SettingsTeamsRoot() {
     return response.data;
   };
 
+  const onDeleteUser = async (value: { user_id: number }) => {
+    const response = await api.delete(`/admin/user/delete`, {
+      data: {
+        user_id: value.user_id,
+      },
+    });
+    return response.data;
+  };
+
   const { mutateAsync: createUser, isLoading: createUserLoading } = useMutation(
     onCreateUser,
     {
@@ -110,6 +121,30 @@ export default function SettingsTeamsRoot() {
     }
   );
 
+  const { mutateAsync: deleteUser, isLoading: deleteUserLoading } = useMutation(
+    {
+      mutationFn: onDeleteUser,
+      onSuccess: (data) => {
+        queryClient.invalidateQueries(["fetchAllUsers"]);
+        setDeleteUserModal(false);
+        notification.success({
+          message: "Success",
+          description: data.message,
+        });
+      },
+      onError: (error) => {
+        if (axios.isAxiosError(error)) {
+          const message = error.response?.data?.message;
+          notification.error({
+            message: "Error",
+            description: message,
+          });
+          return;
+        }
+      },
+    }
+  );
+
   return (
     <SettingsLayout>
       {status === "success" && (
@@ -133,8 +168,8 @@ export default function SettingsTeamsRoot() {
 
             <dl className="mt-6 space-y-6 divide-y divide-gray-100 sm:overflow-x-none overflow-x-auto  text-sm leading-6 ">
               <div className="mt-5 md:col-span-2 md:mt-0">
-                <Table 
-                bordered
+                <Table
+                  bordered
                   columns={[
                     {
                       title: "Username",
@@ -161,18 +196,34 @@ export default function SettingsTeamsRoot() {
                     {
                       title: "Actions",
                       render: (_, user) => (
-                        <Tooltip title="Reset Password">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setResetPasswordUserId(user.user_id);
-                              setResetPasswordModal(true);
-                            }}
-                            className="text-red-400 hover:text-red-500"
-                          >
-                            <KeyIcon className="h-5 w-5" />
-                          </button>
-                        </Tooltip>
+                        <div className="flex space-x-2">
+                          <Tooltip title="Reset Password">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setResetPasswordUserId(user.user_id);
+                                setResetPasswordModal(true);
+                              }}
+                              className="text-red-400 hover:text-red-500"
+                            >
+                              <KeyIcon className="h-5 w-5" />
+                            </button>
+                          </Tooltip>
+                          {!user.is_admin && (
+                            <Tooltip title="Delete User">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setDeleteUserId(user.user_id);
+                                  setDeleteUserModal(true);
+                                }}
+                                className="text-red-400 hover:text-red-500"
+                              >
+                                <TrashIcon className="h-5 w-5" />
+                              </button>
+                            </Tooltip>
+                          )}
+                        </div>
                       ),
                     },
                   ]}
@@ -239,9 +290,7 @@ export default function SettingsTeamsRoot() {
                   },
                 ]}
               >
-                <Input
-                size="large"
-                />
+                <Input size="large" />
               </Form.Item>
               <Form.Item
                 label="Email"
@@ -253,10 +302,7 @@ export default function SettingsTeamsRoot() {
                   },
                 ]}
               >
-                <Input
-                size="large"  
-                  type="email"
-                />
+                <Input size="large" type="email" />
               </Form.Item>
               <Form.Item
                 label="Password"
@@ -268,9 +314,7 @@ export default function SettingsTeamsRoot() {
                   },
                 ]}
               >
-                <Input.Password
-                size="large"
-                />
+                <Input.Password size="large" />
               </Form.Item>
 
               <div className="flex justify-end">
@@ -283,6 +327,30 @@ export default function SettingsTeamsRoot() {
                 </button>
               </div>
             </Form>
+          </Modal>
+
+          <Modal
+            title="Delete User"
+            open={deleteUserModal}
+            onCancel={() => setDeleteUserModal(false)}
+            footer={null}
+          >
+            <p>Are you sure you want to delete this user?</p>
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={() => setDeleteUserModal(false)}
+                className="mr-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => deleteUser({ user_id: deleteUserId })}
+                disabled={deleteUserLoading}
+                className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              >
+                {deleteUserLoading ? "Deleting..." : "Delete"}
+              </button>
+            </div>
           </Modal>
         </>
       )}
