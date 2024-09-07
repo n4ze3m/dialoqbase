@@ -130,6 +130,7 @@ export interface ChatAPIRequest {
       role: string;
       text: string;
     }[];
+    knowledge_base_ids?: string[]
   };
 }
 

@@ -302,6 +302,10 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
             stream: {
               type: "boolean",
             },
+            knowledge_base_ids: {
+              type: "array",
+              default: [],
+            }
           },
         },
       },

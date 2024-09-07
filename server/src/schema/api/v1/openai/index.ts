@@ -47,7 +47,8 @@ export const createChatCompletionSchema: FastifySchema = {
                             }
                         }
                     }
-                }
+                },
+                default: []
             }
         }
     }
