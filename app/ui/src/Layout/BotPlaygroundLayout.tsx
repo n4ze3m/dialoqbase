@@ -9,7 +9,7 @@ import {
   EyeDropperIcon,
   SparklesIcon,
   ChatBubbleLeftRightIcon,
-  MagnifyingGlassIcon,
+  // MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
@@ -23,11 +23,11 @@ const navigation = [
     href: "/bot/:id",
     icon: SparklesIcon,
   },
-  {
-    name: "Search (Beta)",
-    href: "/bot/:id/search",
-    icon: MagnifyingGlassIcon,
-  },
+  // {
+  //   name: "Search (Beta)",
+  //   href: "/bot/:id/search",
+  //   icon: MagnifyingGlassIcon,
+  // },
   {
     name: "Data Sources",
     href: "/bot/:id/data-sources",
