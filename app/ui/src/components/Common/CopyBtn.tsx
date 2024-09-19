@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ClipboardIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { clcx } from "../../utils/classname";
+import { clipbardCopy } from "../../utils/clipboard";
 
 type Props = {
   value: string;
@@ -19,7 +20,7 @@ export const CopyBtn: React.FC<Props> = ({
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(value);
+      await clipbardCopy(value);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
