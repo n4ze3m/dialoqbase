@@ -54,7 +54,7 @@ const router = createHashRouter([
   {
     path: "/bot/:id",
     element: (
-      <BotLayout>
+      <BotLayout asideSpace="">
         <BotPreviewRoot />
       </BotLayout>
     ),
@@ -70,7 +70,7 @@ const router = createHashRouter([
   {
     path: "/bot/:id/playground/:history_id",
     element: (
-      <BotLayout>
+      <BotLayout asideSpace="">
         <BotPreviewRoot />
       </BotLayout>
     ),
