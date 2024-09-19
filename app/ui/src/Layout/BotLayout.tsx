@@ -62,9 +62,11 @@ function classNames(...classes) {
 
 export default function BotLayout({
   children,
+  asideSpace = "md:ml-16",
 }: {
   children: React.ReactNode;
   noPadding?: boolean;
+  asideSpace?: string;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const params = useParams<{ id: string }>();
@@ -190,7 +192,7 @@ export default function BotLayout({
         </Transition.Root>
 
         <div className="flex flex-col">
-          <div className="sticky top-0 z-[999] flex h-14  bg-white border-b border-gray-200 dark:bg-[#171717] dark:border-gray-600">
+          <header className="sticky top-0 z-[999] flex h-14 bg-white border-b border-gray-200 dark:bg-[#171717] dark:border-gray-600">
             <button
               type="button"
               className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden dark:border-gray-600 dark:text-gray-200"
@@ -210,55 +212,53 @@ export default function BotLayout({
                 {`v${__APP_VERSION__}`}
               </span>
             </Link>
-
             <div className="flex flex-1 justify-end px-4">
               <div className="ml-4 flex items-center md:ml-6">
                 <ApplicationMenu />
               </div>
             </div>
-          </div>
-          <main className="flex-1">
-            {children}
-            {/* <div className="py-4">
-                  <div className="h-96 rounded-lg border-4 border-dashed border-gray-200" />
-                </div> */}
-          </main>
-        </div>
-
-        <div className="hidden md:fixed md:inset-y-0 md:flex md:flex-col ">
-          <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5 dark:bg-[#171717] dark:border-gray-600">
-            <div className="mt-14 flex flex-grow flex-col">
-              <nav className="flex-1 space-y-1 px-2 pb-4">
-                {navigation.map((item) => (
-                  <Tooltip placement="right" key={item.name} title={item.name}>
-                    <Link
-                      to={{
-                        pathname: item.href.replace(":id", params.id!),
-                      }}
-                      className={classNames(
-                        location.pathname ===
-                          item.href.replace(":id", params.id!)
-                          ? "bg-gray-100 text-gray-900 dark:bg-[#262626] dark:text-white"
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white dark:hover:bg-[#262626]",
-                        "group  flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                      )}
-                    >
-                      <item.icon
-                        className={classNames(
-                          location.pathname ===
-                            item.href.replace(":id", params.id!)
-                            ? "text-gray-500 dark:text-white"
-                            : "text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-white",
-                          "flex-shrink-0 h-6 w-6"
-                        )}
-                        aria-hidden="true"
-                      />
-                      {/* {item.name} */}
-                    </Link>
-                  </Tooltip>
-                ))}
-              </nav>
-            </div>
+          </header>
+          <div className="flex flex-1">
+            <aside className="hidden md:flex md:flex-col md:w-16 md:fixed md:inset-y-0">
+              <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5 dark:bg-[#171717] dark:border-gray-600">
+                <div className="mt-14 flex flex-grow flex-col">
+                  <nav className="flex-1 space-y-1 px-2 pb-4">
+                    {navigation.map((item) => (
+                      <Tooltip
+                        placement="right"
+                        key={item.name}
+                        title={item.name}
+                      >
+                        <Link
+                          to={{
+                            pathname: item.href.replace(":id", params.id!),
+                          }}
+                          className={classNames(
+                            location.pathname ===
+                              item.href.replace(":id", params.id!)
+                              ? "bg-gray-100 text-gray-900 dark:bg-[#262626] dark:text-white"
+                              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white dark:hover:bg-[#262626]",
+                            "group flex items-center justify-center px-2 py-2 text-sm font-medium rounded-md"
+                          )}
+                        >
+                          <item.icon
+                            className={classNames(
+                              location.pathname ===
+                                item.href.replace(":id", params.id!)
+                                ? "text-gray-500 dark:text-white"
+                                : "text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-white",
+                              "flex-shrink-0 h-6 w-6"
+                            )}
+                            aria-hidden="true"
+                          />
+                        </Link>
+                      </Tooltip>
+                    ))}
+                  </nav>
+                </div>
+              </div>
+            </aside>
+            <main className={`flex-1 ${asideSpace}`}>{children}</main>
           </div>
         </div>
       </div>

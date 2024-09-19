@@ -96,6 +96,16 @@ export interface CreateBotAPIRequest {
     system_prompt?: string;
     question_generator_prompt?: string;
     temperature?: number;
+    options?: {
+      noOfDocumentsToRetrieve?: number,
+      noOfChatHistoryInContext?: number,
+      publicBotPwdProtected? : boolean,
+      semanticSearchSimilarityScore?: "none" |"0.2" |"0.5" |"0.7"
+      autoResetSession?: boolean,
+      internetSearchEnabled?: boolean
+      use_hybrid_search?: boolean
+      autoSyncDataSources?: boolean
+    }
   };
 }
 

@@ -244,6 +244,38 @@ export const createBotAPISchema: FastifySchema = {
       temperature: {
         type: "number",
       },
+      options: {
+        type: "object",
+        properties: {
+          noOfDocumentsToRetrieve: {
+            type: "number",
+          },
+          noOfChatHistoryInContext: {
+            type: "number",
+          },
+          semanticSearchSimilarityScore: {
+            type: "string",
+            enum: ["none", "0.2", "0.5", "0.7"],
+            default: "none"
+          },
+          autoResetSession: {
+            type: "boolean",
+            default: false,
+          },
+          internetSearchEnabled: {
+            type: "boolean",
+            default: false,
+          },
+          use_hybrid_search: {
+            type: "boolean",
+            default: false,
+          },
+          autoSyncDataSources: {
+            type: "boolean",
+            default: false,
+          },
+        },
+      },
     },
   },
 };

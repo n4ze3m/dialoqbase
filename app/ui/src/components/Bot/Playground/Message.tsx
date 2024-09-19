@@ -11,6 +11,7 @@ import { removeUUID } from "../../../utils/filename";
 import { useSpeechSynthesis } from "../../../hooks/useSpeechSynthesis";
 import { useElevenLabsTTS } from "../../../hooks/useElevenLabsTTS";
 import { Collapse } from "antd";
+import { clipbardCopy } from "../../../utils/clipboard";
 
 type Props = Message & {
   onSourceClick(source: any): void;
@@ -98,8 +99,8 @@ export const PlaygroundMessage = (props: Props) => {
             <div className="flex space-x-2">
               {!props.hideCopy && (
                 <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(props.message);
+                  onClick={async () => {
+                    await clipbardCopy(props.message);
                     setIsBtnPressed(true);
                     setTimeout(() => {
                       setIsBtnPressed(false);

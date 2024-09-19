@@ -29,6 +29,7 @@ export const createBotAPIHandler = async (
     question_generator_prompt,
     system_prompt,
     temperature,
+    options
   } = request.body;
 
   const prisma = request.server.prisma;
@@ -112,6 +113,7 @@ export const createBotAPIHandler = async (
 
   const bot = await prisma.bot.create({
     data: {
+      ...options,
       name,
       embedding: embeddingInfo.model_id,
       model: modelInfo.model_id,

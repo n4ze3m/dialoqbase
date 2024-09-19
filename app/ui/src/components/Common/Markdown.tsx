@@ -10,6 +10,7 @@ import React from "react";
 import { Modal, Tooltip } from "antd";
 import Mermaid from "./Mermaid";
 import { useMessage } from "../../hooks/useMessage";
+import { clipbardCopy } from "../../utils/clipboard";
 
 export default function Markdown({ message }: { message: string }) {
   const [isBtnPressed, setIsBtnPressed] = React.useState(false);
@@ -64,8 +65,8 @@ export default function Markdown({ message }: { message: string }) {
                     )}
                     <Tooltip title="Copy to clipboard">
                       <button
-                        onClick={() => {
-                          navigator.clipboard.writeText(children[0] as string);
+                        onClick={async () => {
+                          await clipbardCopy(children[0] as string);
                           setIsBtnPressed(true);
                         }}
                         className="flex gap-1.5 items-center rounded bg-none p-1 text-xs text-gray-200 hover:bg-gray-700 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-100"

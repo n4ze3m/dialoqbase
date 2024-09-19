@@ -8,6 +8,7 @@ import axios from "axios";
 import { ClipboardIcon } from "@heroicons/react/24/outline";
 // import Switch from antd as AntdSwitch
 import { Switch as AntdSwitch } from "antd";
+import { clipbardCopy } from "../../../utils/clipboard";
 
 //@ts-ignore
 function classNames(...classes) {
@@ -163,8 +164,8 @@ export const IntegrationForm: React.FC<Props> = ({ onClose, data }) => {
                   <div className="flex-shrink-0 ml-3">
                     <button
                       type="button"
-                      onClick={() => {
-                        navigator.clipboard.writeText(
+                      onClick={async () => {
+                        await clipbardCopy(
                           `${hostUrl}/api/v1/bot/integration/${params.id}/whatsapp`
                         );
                         notification.success({

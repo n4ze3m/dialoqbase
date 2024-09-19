@@ -11,6 +11,7 @@ import {
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { nightOwl } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { useMessage } from "../../hooks/useMessage";
+import { clipbardCopy } from "../../utils/clipboard";
 mermaid.initialize({
   startOnLoad: true,
   flowchart: {
@@ -112,8 +113,8 @@ const Mermaid = React.memo((props: { code: string }) => {
 
           <Tooltip title="Copy to clipboard">
             <button
-              onClick={() => {
-                navigator.clipboard.writeText(props.code);
+              onClick={async () => {
+                await clipbardCopy(props.code);
                 setIsBtnCopied(true);
 
                 setTimeout(() => {
