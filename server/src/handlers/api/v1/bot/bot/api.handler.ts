@@ -124,6 +124,7 @@ export const createBotAPIHandler = async (
       qaPrompt: system_prompt || HELPFUL_ASSISTANT_WITH_CONTEXT_PROMPT,
       questionGeneratorPrompt:
         question_generator_prompt || QUESTION_GENERATOR_PROMPT,
+      haveDataSourcesBeenAdded: true
     },
   });
 
