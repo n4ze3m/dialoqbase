@@ -284,7 +284,6 @@ export const SettingsBody: React.FC<BotSettings> = ({
                   />
                 </Form.Item>
 
-               
                 <Form.Item
                   name="internetSearchEnabled"
                   label="Enable internet search"
@@ -293,7 +292,6 @@ export const SettingsBody: React.FC<BotSettings> = ({
                 >
                   <Switch />
                 </Form.Item>
-
                 <Form.Item
                   name="noOfDocumentsToRetrieve"
                   label="Number of documents to retrieve"

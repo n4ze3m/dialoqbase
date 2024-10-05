@@ -8,11 +8,15 @@ export const useSettings = () => {
       const response = await api.get("/user/info");
       return response.data as {
         isRegistrationAllowed: boolean;
-        
+        internalSearchEnabled: boolean;
       };
     },
     {
       suspense: true,
+      placeholderData: {
+        isRegistrationAllowed: false,
+        internalSearchEnabled: false,
+      },
     }
   );
 };

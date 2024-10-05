@@ -3,10 +3,11 @@ import { SearchRequest } from "./types";
 import { getModelInfo } from "../../../../../utils/get-model-info";
 import { embeddings } from "../../../../../utils/embeddings";
 import { DialoqbaseVectorStore } from "../../../../../utils/store";
+import { getSettings } from "../../../../../utils/common";
 export function removeUUID(filename: string) {
     return filename.replace(/^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}-/, "");
-  }
-  
+}
+
 export const aiSearhRequestHandler = async (
     request: FastifyRequest<SearchRequest>,
     reply: FastifyReply
@@ -16,6 +17,12 @@ export const aiSearhRequestHandler = async (
         const bot_id = request.params.id;
         const user = request.user;
         const prisma = request.server.prisma;
+
+        const setting = await getSettings(prisma);
+
+        if (!setting.internalSearchEnabled) {
+            return reply.status(400).send({ message: "Internal search is not enabled" });
+        }
 
         const bot = await prisma.bot.findFirst({
             where: { id: bot_id, user_id: !user.is_admin ? user.user_id : undefined },

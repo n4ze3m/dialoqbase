@@ -274,6 +274,10 @@ export const createBotAPISchema: FastifySchema = {
             type: "boolean",
             default: false,
           },
+          internalSearchEnabled: {
+            type: "boolean",
+            default: false,
+          }
         },
       },
     },

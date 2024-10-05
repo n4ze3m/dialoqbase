@@ -6,6 +6,7 @@ export type UpdateDialoqbaseSettingsRequest = {
     usePuppeteerFetch: boolean;
     fileUploadSizeLimit: number;
     refetchDatasource: boolean;
+    internalSearchEnabled: boolean;
   };
 };
 

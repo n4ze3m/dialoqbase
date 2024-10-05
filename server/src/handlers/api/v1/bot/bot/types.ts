@@ -105,6 +105,7 @@ export interface CreateBotAPIRequest {
       internetSearchEnabled?: boolean
       use_hybrid_search?: boolean
       autoSyncDataSources?: boolean
+      internalSearchEnabled?: boolean
     }
   };
 }
