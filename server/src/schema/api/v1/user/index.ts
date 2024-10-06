@@ -73,6 +73,7 @@ export const isRegisterationAllowedSchema: FastifySchema = {
       type: "object",
       properties: {
         isRegistrationAllowed: { type: "boolean" },
+        internalSearchEnabled: { type: "boolean" },
       },
     }
   }

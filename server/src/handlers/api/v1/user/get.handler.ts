@@ -10,6 +10,7 @@ export const isRegisterationAllowedHandler = async (
 
   return {
     isRegistrationAllowed: settings?.allowUserToRegister || false,
+    internalSearchEnabled: settings.internalSearchEnabled
   };
 };
 

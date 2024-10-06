@@ -25,6 +25,7 @@ export const dialoqbaseSettingsSchema: FastifySchema = {
       usePuppeteerFetch: { type: "boolean" },
       fileUploadSizeLimit: { type: "number" },
       refetchDatasource: { type: "boolean" },
+      internalSearchEnabled: { type: "boolean" },
     },
   },
 };
@@ -53,6 +54,7 @@ export const updateDialoqbaseSettingsSchema: FastifySchema = {
       usePuppeteerFetch: { type: "boolean" },
       fileUploadSizeLimit: { type: "number" },
       refetchDatasource: { type: "boolean" },
+      internalSearchEnabled: { type: "boolean" },
     },
   },
   response: {

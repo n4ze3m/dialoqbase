@@ -23,6 +23,7 @@ export type BotSettings = {
     autoResetSession: boolean;
     autoSyncDataSources: boolean;
     internetSearchEnabled: boolean;
+    internalSearchEnabled: boolean;
   };
   chatModel: {
     label: string;

@@ -30,6 +30,7 @@ export default function SettingsApplicationRoot() {
       ollamaURL: string;
       fileUploadSizeLimit: number;
       refetchDatasource: boolean;
+      internalSearchEnabled: boolean;
     };
   });
 
@@ -181,6 +182,15 @@ export default function SettingsApplicationRoot() {
                     name="refetchDatasource"
                     valuePropName="checked"
                     help="This will refetch the data source at a specific interval."
+                  >
+                    <Switch />
+                  </Form.Item>
+
+                  <Form.Item
+                    name="internalSearchEnabled"
+                    label="Enable internal search"
+                    valuePropName="checked"
+                    help="This is experimental and may not work as expected."
                   >
                     <Switch />
                   </Form.Item>

@@ -8,13 +8,15 @@ import { ISearchResult } from "./types";
 import { useMutation } from "@tanstack/react-query";
 import { notification } from "antd";
 import axios from "axios";
+import { useSettings } from "../../../hooks/useSettings";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
 export const BotSearchFeature = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [defaultSearchBox, setDefaultSearchBox] = useState(true);
   const params = useParams<{ id: string }>();
   const [data, setData] = useState<ISearchResult>([]);
-
+  const { data: settings, status } = useSettings();
   const onSearch = async (query: string) => {
     const res = await api.post(`/bot/${params.id}/search`, {
       query,
@@ -36,7 +38,17 @@ export const BotSearchFeature = () => {
       });
     },
   });
-
+  if (status === "success" && !settings.internalSearchEnabled) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <ExclamationTriangleIcon className="h-12 w-12 text-yellow-500 mb-4" />
+        <p className="text-center text-gray-900 dark:text-white">
+          Internal search needs to be enabled by an admin in order to use this
+          feature.
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="mx-auto my-3 w-full max-w-7xl">
       <div className="sm:flex sm:items-center">
