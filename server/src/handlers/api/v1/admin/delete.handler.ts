@@ -132,6 +132,11 @@ export const adminDeleteUserHandler = async (
           },
         });
       }
+      await tx.userApiKey.deleteMany({
+        where: {
+          user_id: request.body.user_id,
+        },
+      });
       await tx.user.delete({
         where: {
           user_id: request.body.user_id,
