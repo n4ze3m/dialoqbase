@@ -107,7 +107,6 @@ export const useMessage = () => {
       method: "POST",
       body: JSON.stringify({
         message,
-        history,
         history_id: historyId,
       }),
       headers: {

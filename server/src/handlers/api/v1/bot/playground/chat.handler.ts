@@ -17,7 +17,8 @@ export const chatRequestHandler = async (
   reply: FastifyReply
 ) => {
   const { id: bot_id } = request.params;
-  const { message, history, history_id } = request.body;
+  const { message, history_id } = request.body;
+  let history = [];
 
   try {
     const prisma = request.server.prisma;
@@ -31,6 +32,30 @@ export const chatRequestHandler = async (
         message,
         "You are in the wrong place, buddy."
       );
+    }
+
+
+    if (history_id) {
+      const details = await prisma.botPlayground.findFirst({
+        where: {
+          id: history_id,
+          botId: bot_id,
+        },
+        include: {
+          BotPlaygroundMessage: {
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
+        },
+      });
+
+      const botMessages = details?.BotPlaygroundMessage.map((message) => ({
+        type: message.type,
+        text: message.message,
+      }));
+
+      history = botMessages || [];
     }
 
     const embeddingInfo = await getModelInfo({
@@ -117,7 +142,8 @@ export const chatRequestStreamHandler = async (
   reply: FastifyReply
 ) => {
   const { id: bot_id } = request.params;
-  const { message, history, history_id } = request.body;
+  const { message, history_id } = request.body;
+  let history = [];
 
   try {
     const prisma = request.server.prisma;
@@ -133,6 +159,32 @@ export const chatRequestStreamHandler = async (
       );
     }
 
+
+    if (history_id) {
+      const details = await prisma.botPlayground.findFirst({
+        where: {
+          id: history_id,
+          botId: bot_id,
+        },
+        include: {
+          BotPlaygroundMessage: {
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
+        },
+      });
+
+      const botMessages = details?.BotPlaygroundMessage.map((message) => ({
+        type: message.type,
+        text: message.message,
+      }));
+
+      history = botMessages || [];
+    }
+
+
+
     const embeddingInfo = await getModelInfo({
       model: bot.embedding,
       prisma,
@@ -143,7 +195,7 @@ export const chatRequestStreamHandler = async (
       return handleErrorResponse(
         history,
         message,
-        "There was an error processing your request."
+        "No embedding model found"
       );
     }
 
@@ -165,7 +217,7 @@ export const chatRequestStreamHandler = async (
       return handleErrorResponse(
         history,
         message,
-        "There was an error processing your request."
+        "Not model found"
       );
     }
 
@@ -236,11 +288,10 @@ export const chatRequestStreamHandler = async (
     await nextTick();
     return reply.raw.end();
   } catch (e) {
-    console.error(e);
     return handleErrorResponse(
       history,
       message,
-      "There was an error processing your request."
+      "Internal Server Error"
     );
   }
 };

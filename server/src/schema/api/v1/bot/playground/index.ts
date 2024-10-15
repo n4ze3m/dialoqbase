@@ -26,9 +26,6 @@ export const chatRequestSchema: FastifySchema = {
       message: {
         type: "string",
       },
-      history: {
-        type: "array",
-      },
       history_id: {
         type: "string",
       },
