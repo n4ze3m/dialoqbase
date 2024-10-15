@@ -195,7 +195,7 @@ export const chatRequestStreamHandler = async (
       return handleErrorResponse(
         history,
         message,
-        "There was an error processing your request."
+        "No embedding model found"
       );
     }
 
@@ -217,7 +217,7 @@ export const chatRequestStreamHandler = async (
       return handleErrorResponse(
         history,
         message,
-        "There was an error processing your request."
+        "Not model found"
       );
     }
 
@@ -288,11 +288,10 @@ export const chatRequestStreamHandler = async (
     await nextTick();
     return reply.raw.end();
   } catch (e) {
-    console.error(e);
     return handleErrorResponse(
       history,
       message,
-      "There was an error processing your request."
+      "Internal Server Error"
     );
   }
 };
