@@ -1,8 +1,9 @@
 import { BaseDocumentLoader } from "langchain/document_loaders/base";
 import { Document } from "langchain/document";
-import { exec } from "node:child_process";
+import { execFile } from "node:child_process";
 import * as fs from "fs/promises";
 import * as path from "path";
+import { promisify } from "node:util";
 
 export interface GithubRepoLoaderParams {
   branch: string;
@@ -14,6 +15,7 @@ export class DialoqbaseGithub
   extends BaseDocumentLoader
   implements GithubRepoLoaderParams
 {
+  private readonly execFileAsync = promisify(execFile);
   branch: string;
   url: string;
   isPrivate: boolean;
@@ -67,8 +69,14 @@ export class DialoqbaseGithub
 
     await this.deleteFolder(outputPath);
 
-    const command = `git clone --single-branch --branch ${this.branch} ${repoUrl} ${outputPath}`;
-    await this.execCommand(command);
+    await this.execCommand([
+      "clone",
+      "--single-branch",
+      "--branch",
+      this.branch,
+      repoUrl,
+      outputPath,
+    ]);
 
     return outputPath;
   }
@@ -82,19 +90,16 @@ export class DialoqbaseGithub
     }
   }
 
-  private async execCommand(command: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      exec(command, (error, stdout, stderr) => {
-        if (error) {
-          console.error(`Error: ${error.message}`);
-          return reject(error);
-        }
-        if (stderr) {
-          console.error(`stderr: ${stderr}`);
-        }
-        resolve();
-      });
-    });
+  private async execCommand(args: string[]): Promise<void> {
+    try {
+      const { stderr } = await this.execFileAsync("git", args);
+      if (stderr) {
+        console.error(`stderr: ${stderr}`);
+      }
+    } catch (error) {
+      console.error(`Error: ${error.message}`);
+      throw error;
+    }
   }
 
   private async getRepoFilesData(

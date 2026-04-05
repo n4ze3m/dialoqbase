@@ -1,5 +1,6 @@
 const WEBSITE_REGEX = /^(http|https):\/\/[^ "]+$/;
-const GITHUB_REGEX = "^(https?://)?(www.)?github.com/([a-zA-Z0-9-]+)/([a-zA-Z0-9_-]+)(.git)?$";
+const GITHUB_REGEX = /^(https?:\/\/)?(www\.)?github\.com\/[A-Za-z0-9-]+\/[A-Za-z0-9_.-]+(?:\.git)?$/;
+const GITHUB_BRANCH_REGEX = /^(?!-)(?!.*\.\.)(?!.*\/\/)[A-Za-z0-9._/-]+$/;
 const YOUTUBE_REGEX = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/
 
 
@@ -31,7 +32,7 @@ export const validateDataSource = (source: {
         if (s.type === "github") {
             if (!s.content || s.content.trim().length === 0) {
                 errors.push("Content is required for github source");
-            } else if (RegExp(GITHUB_REGEX).test(s.content)) {
+            } else if (!GITHUB_REGEX.test(s.content)) {
                 errors.push("Invalid github URL for github source");
             }
 
@@ -46,6 +47,8 @@ export const validateDataSource = (source: {
                     errors.push("branch is required for github source");
                 } else if (typeof s.options.branch !== "string") {
                     errors.push("branch must be a string for github source");
+                } else if (!GITHUB_BRANCH_REGEX.test(s.options.branch)) {
+                    errors.push("branch contains invalid characters for github source");
                 }
             } else {
                 errors.push("options is required for github source");
