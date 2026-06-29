@@ -1,6 +1,11 @@
 import { FastifyPluginAsync } from "fastify";
 import * as fs from "fs/promises";
-import { join } from "path";
+import { resolve, sep } from "path";
+
+// All user-uploaded assets are written to `./uploads/` relative to the
+// process working directory (see upload.handler.ts). Confine every read to
+// that directory so a wildcard like `../../../etc/passwd` cannot escape it.
+const UPLOADS_DIR = resolve(process.cwd(), "uploads");
 
 const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
   fastify.get(
@@ -13,10 +18,23 @@ const root: FastifyPluginAsync = async (fastify, _): Promise<void> => {
     async (request, reply) => {
       try {
         //@ts-ignore
-        const filePath = request.params["*"];
-        const path = join(__dirname, `../../../../../${filePath}`);
+        const filePath: string = request.params["*"] || "";
+
+        // Strip any leading reference to the uploads dir the client may send
+        // (e.g. "uploads/x", "./uploads/x" or "app/uploads/x") so the path is
+        // always resolved relative to UPLOADS_DIR.
+        const requested = filePath.replace(/^(\.\/)?(app\/)?uploads\//, "");
+
+        // Resolve and ensure the result stays inside UPLOADS_DIR. resolve()
+        // collapses any `..` segments, so the prefix check below rejects every
+        // traversal attempt.
+        const path = resolve(UPLOADS_DIR, requested);
+        if (path !== UPLOADS_DIR && !path.startsWith(UPLOADS_DIR + sep)) {
+          return reply.status(404).send("Not Found");
+        }
+
         const file = await fs.readFile(path);
-        const ext = filePath.split(".").pop();
+        const ext = requested.split(".").pop();
         // set content type
         if (ext === "pdf") {
           reply.header("Content-Type", "application/pdf");
